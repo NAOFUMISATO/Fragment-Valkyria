@@ -1,0 +1,3 @@
+[submodule "AppFrame"]
+	path = AppFrame
+	url = https://github.com/NAOFUMISATO/AppFrame
