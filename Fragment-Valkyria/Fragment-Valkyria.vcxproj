@@ -101,6 +101,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +133,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,18 +159,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="CreatorBase.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="ModeInGame.h" />
+    <ClInclude Include="ModelAnimeComponent.h" />
+    <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="ModeTitle.h" />
     <ClInclude Include="ObjectBase.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ObjectServer.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerCreator.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageCreator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="ModeInGame.cpp" />
+    <ClCompile Include="ModelAnimeComponent.cpp" />
+    <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="ModeTitle.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectServer.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerCreator.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageCreator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

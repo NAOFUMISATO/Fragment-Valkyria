@@ -31,6 +31,36 @@
     <Filter Include="ヘッダー ファイル\Object">
       <UniqueIdentifier>{402e4c57-f443-4de0-8a9a-676e9751c39c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Player">
+      <UniqueIdentifier>{53733215-2bf1-41cc-bdbb-6e078c50f745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{91cada99-8e7c-40e3-aa9e-ca6baa3b7fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage">
+      <UniqueIdentifier>{0a526d2e-6850-4036-9dd8-f588e60c3c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Stage">
+      <UniqueIdentifier>{1784dfd9-02de-4d6b-a5ee-4bfaa29d19dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Create">
+      <UniqueIdentifier>{83c88a7f-0a41-4322-bccf-f1daaf1f9adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Camera">
+      <UniqueIdentifier>{f9569b6a-c601-4942-8835-a90789350a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{508829b3-aa1b-4036-b697-b300269a1424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Create">
+      <UniqueIdentifier>{0bba3ffb-97ce-44f7-bf5f-e934b11076db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Model">
+      <UniqueIdentifier>{acb6379a-6893-4404-bb8f-279a97498050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Model">
+      <UniqueIdentifier>{7956fc73-099d-4bd2-9e4c-27cbfb6a8157}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -48,6 +78,33 @@
     <ClInclude Include="ObjectServer.h">
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CreatorBase.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFactory.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="StageCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelComponent.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelAnimeComponent.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -64,6 +121,30 @@
     </ClCompile>
     <ClCompile Include="ObjectServer.cpp">
       <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFactory.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="StageCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelComponent.cpp">
+      <Filter>ソース ファイル\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelAnimeComponent.cpp">
+      <Filter>ソース ファイル\Model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

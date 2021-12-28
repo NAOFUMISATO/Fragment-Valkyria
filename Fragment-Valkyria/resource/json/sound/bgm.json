@@ -1,0 +1,10 @@
+{
+	"bgm": [
+		{
+			"keyname": "TitleBgm",
+			"filename": "sublight.wav",
+			"isload": true,
+			"volume": 50
+		}
+	]
+}

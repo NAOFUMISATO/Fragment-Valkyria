@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fragment-Valkyria", "Fragment-Valkyria\Fragment-Valkyria.vcxproj", "{EC2CEA09-B337-4149-966E-CE5786ADF3E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{97B17FF9-543E-4A17-B3A7-BE59E787F72E} = {97B17FF9-543E-4A17-B3A7-BE59E787F72E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppFrame", "AppFrame\AppFrame.vcxproj", "{97B17FF9-543E-4A17-B3A7-BE59E787F72E}"
 EndProject
