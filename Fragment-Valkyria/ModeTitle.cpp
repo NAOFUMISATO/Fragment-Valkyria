@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "ModeTitle.h"
 #include "GameMain.h"
-#include "ResourceLoadJson.h"
+#include "LoadJson.h"
 using namespace FragmentValkyria::Mode;
 
 namespace {

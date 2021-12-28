@@ -12,7 +12,7 @@
 #include "GameMain.h"
 #include "PlayerCreator.h"
 #include "StageCreator.h"
-#include "ResourceLoadJson.h"
+#include "LoadJson.h"
 using namespace FragmentValkyria::Mode;
 
 ModeInGame::ModeInGame(Game::GameMain& game) : ModeBase(game), _gameMain(game) {
