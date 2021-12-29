@@ -9,9 +9,11 @@
 #include "LoadJson.h"
 #include <tuple>
 #include <string_view>
+#ifdef _DEBUG
 #include <stdexcept>
-#include <fstream>
 #include <windows.h>
+#endif
+#include <fstream>
 #include "GameBase.h"
 #include "PathServer.h"
 #include "ResourceServer.h"

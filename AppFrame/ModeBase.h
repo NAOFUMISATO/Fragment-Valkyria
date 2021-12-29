@@ -94,15 +94,16 @@ namespace AppFrame {
           */
          Sound::SoundServer& GetSoundServer() const { return _gameBase.soundServer(); }
          /**
-          * \brief フェード時間の設定
-          * \param fadeType フェード時間を指定する文字
-          */
-         void fadeType(char fadeType) { _fadeType = fadeType; };
-         /**
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照
           */
          Resource::LoadJson& GetLoadJson() const { return _gameBase.loadJson(); }
+         /**
+          * \brief フェード時間の設定
+          * \param fadeType フェード時間を指定する文字
+          */
+         void fadeType(char fadeType) { _fadeType = fadeType; };
+
       protected:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
          char _fadeType{ 'M' };       //!< フェード時間を指定する文字

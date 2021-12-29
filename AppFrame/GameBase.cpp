@@ -32,12 +32,12 @@ namespace AppFrame {
       };
       bool GameBase::Initialize(HINSTANCE hinstance) {
          //デバッグモードならウインドウモードに設定及び、デバッグログの出力を行う
-#ifdef _DEBUG
-         AppWindowMode(true);
-         OutputDebugLog(true);
-#else
+#ifndef _DEBUG
          AppWindowMode(false);
          OutputDebugLog(false);
+#else
+         AppWindowMode(true);
+         OutputDebugLog(true);
 #endif
          //画面サイズ設定
          auto [width, height, depth] = GraphSize();

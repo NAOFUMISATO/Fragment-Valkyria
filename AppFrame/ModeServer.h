@@ -55,7 +55,7 @@ namespace AppFrame {
           * \param key 登録済みのモードに関連付けた文字列
           * \param fadeType フェード時間の種別
           */
-         void GoToMode(std::string_view key, char fadeType);
+         void GoToMode(std::string_view key, char fadeType= 'M' );
          /**
           * \brief モードリストの一番後ろの真下にモード挿入
           * \param key 登録済みのモードに関連付けた文字列

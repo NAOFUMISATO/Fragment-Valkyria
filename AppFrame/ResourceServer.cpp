@@ -6,6 +6,10 @@
  * \date   November 2021
  *********************************************************************/
 #include "ResourceServer.h"
+#ifdef _DEBUG
+#include <stdexcept>
+#include <windows.h>
+#endif
 #include <DxLib.h>
 #include "GameBase.h"
 #include "PathServer.h"
@@ -60,18 +64,42 @@ namespace AppFrame {
       }
 
       int ResourceServer::GetTexture(std::string_view key, int no) {
+#ifndef _DEBUG
          if (!_textures.contains(key.data())) {
             return -1;   // 画像情報コンテナに指定のキーが無ければ、-1を返す
          }
+#else
+         try {
+            if (!_textures.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー["+ message +"]が画像情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto&& [divGraph, handles] = _textures[key.data()];
          auto handle = handles.at(no);    // 画像情報コンテナno番目の要素の参照を返す
          return handle;                   // 上記のハンドルを返す
       }
 
       Texture ResourceServer::GetTextureInfo(std::string_view& key) {
+#ifndef _DEBUG
          if (!_textures.contains(key.data())) {
             return Texture();    // 画像情報コンテナに指定のキーが無ければ、画像情報の空のクラスを返す
          }
+#else
+         try {
+            if (!_textures.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー["+ message +"]が画像情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto&& [divGraph, handles] = _textures[key.data()];
          return divGraph;        // 指定のキーの画像情報のクラスを返す
       }
@@ -119,10 +147,21 @@ namespace AppFrame {
       }
 
       std::pair<int, int> ResourceServer::GetModel(std::string_view key, int no) {
+#ifndef _DEBUG
          if (!_models.contains(key.data())) {
-            // キーが未登録
-            return std::make_pair(-1, no);
+            return std::make_pair(-1, no);   // キーが未登録
          }
+#else
+         try {
+            if (!_models.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー["+ message +"]がモデル情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto& [filename, handles] = _models[key.data()];
          if (no < handles.size()) {
             return std::make_pair(handles[no], no); // 既存noの場合
@@ -134,9 +173,21 @@ namespace AppFrame {
       }
 
       void ResourceServer::LoadSound(std::string_view key, std::tuple<std::string, bool, int> filename_isLoad_volume) {
+#ifndef _DEBUG
          if (_sounds.contains(key.data())) {
             return;   // 指定のキーが有れば返す
          }
+#else
+         try {
+            if (!_sounds.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー["+ message +"]が音源コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto&& [filename, isLoad, volume] = filename_isLoad_volume;
          auto handle = -1;
          if (isLoad) {
@@ -148,10 +199,21 @@ namespace AppFrame {
 
       /// 音ファイル情報の取得
       std::tuple<std::string, int, int> ResourceServer::GetSoundInfo(std::string_view key) {
+#ifndef _DEBUG
          if (!_sounds.contains(key.data())) {
-            // キーが未登録
-            return std::make_tuple("", -1, 0);
+            return std::make_tuple("", -1, 0);   // キーが未登録
          }
+#else
+         try {
+            if (!_sounds.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]が音源コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          return _sounds[key.data()];
       }
    }
