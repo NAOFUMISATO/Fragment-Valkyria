@@ -17,6 +17,7 @@
 #include "GameBase.h"
 #include "PathServer.h"
 #include "ResourceServer.h"
+#include "Vector4.h"
 #include "Texture.h"
  /**
   * \brief アプリケーションフレーム
@@ -144,6 +145,62 @@ namespace AppFrame {
             return param;
          }
          return -1;
+      }
+
+      void LoadJson::LoadVecParam(const std::string_view key,Math::Vector4 vec) {
+         if (_vecParams.contains(key.data())) {
+            _vecParams.erase(key.data());
+         }
+         _vecParams.emplace(key, vec);
+      }
+
+      void LoadJson::LoadVecParams(const std::filesystem::path jsonName) {
+         auto jsonDirectory = _gameBase.pathServer().GetPath("ParamJson");
+         auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
+         std::ifstream reading(jsonPath, std::ios::in);
+#ifdef _DEBUG
+         try {
+            if (reading.fail()) {
+               throw std::logic_error("----------" + jsonPath + "ファイルが開けませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& e) {
+            OutputDebugString(e.what());
+         }
+#endif
+         nlohmann::json value;
+         reading >> value;
+         reading.close();
+         auto vecArray = value[jsonName.generic_string()];
+         for (auto& vecData : vecArray) {
+            auto keyName = vecData["keyname"];
+            auto x = vecData["x"];
+            auto y = vecData["y"];
+            auto z = vecData["z"];
+            Vector4 vec = Vector4();
+            vec.SetXYZ(std::make_tuple(x,y,z));
+            LoadVecParam(keyName, vec);
+         }
+      }
+
+      Math::Vector4 LoadJson::GetVecParam(const std::string_view key) {
+#ifndef _DEBUG
+         if (!_vecParams.contains(key.data())) {
+            return Vector4();
+         }
+#else
+         try {
+            if (!_vecParams.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]がVector4コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+         auto vec = _vecParams[key.data()];
+         return vec;
       }
    }
 }

@@ -19,7 +19,7 @@ namespace AppFrame {
    namespace Math {
 
       Vector4::Vector4() {
-         _x = 0.0f; _y = 0.0f; _z = 0.0f; _w = 1.0f;
+         _x = 0.0; _y = 0.0; _z = 0.0; _w = 1.0;
       }
 
       void Vector4::Set(const Vector4& vector) {
