@@ -37,6 +37,9 @@ ObjectServer& ObjectBase::GetObjServer() {
    return _gameMain.objServer();
 }
 
+AppFrame::Resource::LoadJson& ObjectBase::GetLoadJson() {
+   return _gameMain.loadJson();
+}
 
 void ObjectBase::stateServer(std::unique_ptr<StateServer> state) {
    _stateServer = std::move(state);

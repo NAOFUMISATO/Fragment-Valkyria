@@ -19,27 +19,26 @@ ModeInGame::ModeInGame(Game::GameMain& game) : ModeBase(game), _gameMain(game) {
 }
 
 void ModeInGame::Init() {
-   auto& rj = GetResJson();
-   rj.LoadModels("player");
-   rj.LoadModels("skysphere");
-   rj.LoadModels("ground");
-
+   auto& loadJson = GetLoadJson();
+   loadJson.LoadModels("player");
+   loadJson.LoadModels("skysphere");
+   loadJson.LoadModels("ground");
 }
 
 void ModeInGame::Enter() {
 
-   auto& of = objFactory();
-   of.Register("Player", std::make_unique<Create::PlayerCreator>());
-   of.Register("Stage", std::make_unique<Create::StageCreator>());
+   auto& objFac = objFactory();
+   objFac.Register("Player", std::make_unique<Create::PlayerCreator>());
+   objFac.Register("Stage", std::make_unique<Create::StageCreator>());
 
-   auto player = of.Create("Player");
+   auto player = objFac.Create("Player");
    // アクターサーバーに登録※個別アクセス用
-   auto& os = objServer();
-   os.Register("Player", player->position());
-   os.Add(std::move(player));
+   auto& objSer = objServer();
+   objSer.Register("Player", player->position());
+   objSer.Add(std::move(player));
 
-   auto stage = of.Create("Stage");
-   os.Add(std::move(stage));
+   auto stage = objFac.Create("Stage");
+   objSer.Add(std::move(stage));
 
    Update();
 }

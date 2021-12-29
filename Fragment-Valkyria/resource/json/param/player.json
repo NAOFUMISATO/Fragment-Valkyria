@@ -1,8 +1,8 @@
 {
 	"player": [
 		{
-			"runspeed": 10.0,
-			"rotspeed": 10.0
+			"runspeed":10.0,
+			"rotspeed":10.0
 		}
-	]
+	]	
 }

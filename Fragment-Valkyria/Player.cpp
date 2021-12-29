@@ -18,6 +18,7 @@ namespace {
 }
 
 Player::Player(Game::GameMain& appMain) : ObjectBase{ appMain } {
+
 }
 
 void Player::Input(InputManager& input) {
@@ -25,10 +26,10 @@ void Player::Input(InputManager& input) {
    _cameraComponent->Input(input);
    _rotateSpeed = 0;
    if (input.GetKeyboard().APress()) {
-      _rotateSpeed -= RotateSpeed;
+      _rotateSpeed -= GetLoadJson().GetParam("player","rotspeed");
    }
    else if (input.GetKeyboard().DPress()) {
-      _rotateSpeed += RotateSpeed;
+      _rotateSpeed += GetLoadJson().GetParam("player", "rotspeed");
    }
    _stateServer->Input(input);
 }

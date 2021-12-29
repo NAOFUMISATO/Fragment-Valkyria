@@ -36,8 +36,8 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _objFactory = std::make_unique<Create::ObjectFactory>(*this);
 
 
-   auto& ps = pathServer();
-   auto& rs = resServer();
+   auto& pathSer = pathServer();
+   auto& resSer = resServer();
 
    const AppFrame::Path::PathServer::PathMap pathToUsed{
       {"Model",{"resource/model"}},
@@ -45,10 +45,11 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
       {"Sound",{"resource/sound"}},
       {"TextureJson",{"resource/json/graphic" }},
       {"ModelJson",{"resource/json/model" }},
-      {"SoundJson",{"resource/json/sound" }}
+      {"SoundJson",{"resource/json/sound" }},
+      {"ParamJson",{"resource/json/param"}}
    };
 
-   ps.RegistPath(pathToUsed);
+   pathSer.RegistPath(pathToUsed);
 
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("InGame", std::make_shared<Mode::ModeInGame>(*this));

@@ -98,7 +98,7 @@ namespace FragmentValkyria {
           * \brief ゲームの参照を返す
           * \return ゲームの参照
           */
-         Game::GameMain& gameMain() { return _gameMain; }
+         Game::GameMain& gameMain() const { return _gameMain; }
          /**
           * \brief ワールド行列の設定
           */
@@ -168,22 +168,27 @@ namespace FragmentValkyria {
           * \brief 状態一括管理クラスの取得
           * \return 状態管理クラス
           */
-         StateServer& stateServer() { return *_stateServer; }
+         StateServer& stateServer() const { return *_stateServer; }
          /**
           * \brief アニメーション一括管理クラスの取得
           * \return アニメーション管理クラス
           */
-         Model::ModelAnimeComponent& modelAnimeComponent() { return *_modelAnimeComponent; }
+         Model::ModelAnimeComponent& modelAnimeComponent() const { return *_modelAnimeComponent; }
          /**
           * \brief カメラ管理クラスの取得
           * \return カメラ管理クラス
           */
-         Camera::CameraComponent& cameraComponent() { return *_cameraComponent; }
+         Camera::CameraComponent& cameraComponent() const { return *_cameraComponent; }
          /**
           * \brief オブジェクト一括管理クラスの参照をゲーム本体を経由し取得
           * \return オブジェクト一括管理クラスの参照
           */
          ObjectServer& GetObjServer();
+         /**
+          * \brief jsonファイル管理クラスの参照をゲーム本体経由で取得
+          * \return jsonファイル管理クラスの参照
+          */
+         AppFrame::Resource::LoadJson& GetLoadJson();
 
       protected:
          /**

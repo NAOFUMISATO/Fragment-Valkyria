@@ -27,17 +27,17 @@ ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 
 void ModeTitle::Init() {
 
-   auto& rj = GetResJson();
-   rj.LoadTextures("title");
-   rj.LoadSounds("bgm");
+   auto& loadJson = GetLoadJson();
+   loadJson.LoadTextures("title");
+   loadJson.LoadSounds("bgm");
 
-   auto& rs = GetResServer();
-   _bgGrHandle = rs.GetTexture("TitleBg");
-   _titleGrHandle = rs.GetTexture("GameTitle");
-   _guideGrHandle = rs.GetTexture("StartGuide");
+   auto& resServer = GetResServer();
+   _bgGrHandle = resServer.GetTexture("TitleBg");
+   _titleGrHandle = resServer.GetTexture("GameTitle");
+   _guideGrHandle = resServer.GetTexture("StartGuide");
 
-   auto& ss = GetSoundServer();
-   ss.Play("TitleBgm");
+   auto& soundServer = GetSoundServer();
+   soundServer.Play("TitleBgm");
 
 }
 
