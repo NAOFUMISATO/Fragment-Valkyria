@@ -7,6 +7,10 @@
  * \date   December 2021
  *********************************************************************/
 #include "PathServer.h"
+#ifdef _DEBUG
+#include <stdexcept>
+#include <windows.h>
+#endif
  /**
   * \brief アプリケーションフレーム
   */
@@ -38,8 +42,14 @@ namespace AppFrame {
       }
 
       std::filesystem::path PathServer::GetPath(std::string_view key) {
-         if (!_paths.contains(key.data())) {
-            return "";
+         try {
+            if (!_paths.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
          }
          return _paths[key.data()];
       }

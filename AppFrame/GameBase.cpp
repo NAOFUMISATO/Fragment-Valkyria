@@ -34,10 +34,8 @@ namespace AppFrame {
          //デバッグモードならウインドウモードに設定及び、デバッグログの出力を行う
 #ifndef _DEBUG
          AppWindowMode(false);
-         OutputDebugLog(false);
 #else
          AppWindowMode(true);
-         OutputDebugLog(true);
 #endif
          //画面サイズ設定
          auto [width, height, depth] = GraphSize();
