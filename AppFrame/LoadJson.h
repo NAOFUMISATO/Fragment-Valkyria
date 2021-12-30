@@ -67,27 +67,10 @@ namespace AppFrame {
           * \return データ
           */
          nlohmann::json GetParam(const std::filesystem::path jsonName, const std::string_view paramName);
-         /**
-          * \brief Vector4クラスのデータを読み込む
-          * \param key キーとなる任意の文字列
-          * \param vec Vector4クラス
-          */
-         void LoadVecParam(const std::string_view jsonName,const std::string_view key, Vector4 vec);
-         /**
-          * \brief jsonファイルからVector4クラスのデータを読み込む
-          * \param jsonName jsonファイル名
-          */
-         void LoadVecParams(const std::filesystem::path jsonName);
-         /**
-          * \brief Vector4データの取得
-          * \param key キー
-          * \return Vector4データ
-          */
-         Vector4 GetVecParam(const std::string_view jsonName,const std::string_view key);
+         Vector4 GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
-         std::unordered_map<std::string, std::unordered_map<std::string,Vector4>> _vecParams;  //!< Vector4のデータを格納する連想配列
       };
    }
 }
