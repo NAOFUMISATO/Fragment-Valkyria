@@ -107,7 +107,7 @@ namespace AppFrame {
          bool LeftStickY() { return _key.ThumbLY; }
          /**
           * \brief 右スティックのX軸入力量を返す(-32768 ～ 32767)
-          * \return 左スティックのX軸入力量
+          * \return 右スティックのX軸入力量
           */
          bool RightStickX() { return _key.ThumbRX; }
          /**

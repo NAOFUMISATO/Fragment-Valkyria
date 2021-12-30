@@ -23,6 +23,8 @@ namespace FragmentValkyria {
       class CameraComponent {
          using Vector4 = AppFrame::Math::Vector4;
          using Matrix44 = AppFrame::Math::Matrix44;
+         using InputManager = AppFrame::Input::InputManager;
+         using StateServer = AppFrame::State::StateServer;
       public:
          /**
           * \brief コンストラクタ
@@ -69,6 +71,10 @@ namespace FragmentValkyria {
             return vec;
          }
 
+         void stateServer(std::unique_ptr<StateServer> state) {
+             _stateServer = std::move(state);
+         }
+
       private:
          /**
           * \brief カメラのビュー行列の設定
@@ -94,6 +100,55 @@ namespace FragmentValkyria {
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離
          std::tuple<double, double, double> _nearFarFov{   //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
             std::make_tuple(10.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(50.0)) };
+
+         std::unique_ptr<StateServer> _stateServer;                        //!< 状態の一括管理クラスのポインタ
+
+      public:
+          /**
+          * \class カメラの状態の基底クラス
+          * \brief 各カメラの状態はこれを派生して定義する
+          */
+          class StateBase : public AppFrame::State::StateBaseRoot {
+          public:
+              /**
+              * \brief コンストラクタ
+              * \param owner カメラの参照
+              */
+              StateBase(CameraComponent& owner) : _owner{ owner } {};
+              /**
+               * \brief 描画処理
+               */
+              void Draw() override;
+
+          protected:
+              CameraComponent& _owner;   //!< プレイヤーの参照
+          };
+          /**
+          * \class 通常状態クラス
+          * \brief 通常状態の処理を回す
+          */
+          class StateNormal : public StateBase
+          {
+          public:
+              /**
+               * \brief コンストラクタ
+               * \param owner プレイヤーの参照
+               */
+              StateNormal(CameraComponent& owner) : StateBase{ owner } {};
+              /**
+               * \brief 入口処理
+               */
+              void Enter() override;
+              /**
+               * \brief 入力処理
+               * \param input 入力一括管理クラスの参照
+               */
+              void Input(InputManager& input) override;
+              /**
+               * \brief 更新処理
+               */
+              void Update() override;
+          };
       };
    }
 }

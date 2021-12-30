@@ -21,8 +21,12 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create(Game::GameMain& gameMa
    camera->SetPosition({ 0, 50, -200 });
    camera->SetTarget({ 0, 50, 0 });
 
+   auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
+   camera->stateServer(std::move(camerastate));
+
    // ƒvƒŒƒCƒ„[‚Ì¶¬
    auto player = std::make_unique<Player::Player>(gameMain);
+   /*player->position(gameMain.loadJson().GetVecParam())*/
    player->cameraComponent(camera);
 
    auto model = std::make_unique<Model::ModelAnimeComponent>(*player);

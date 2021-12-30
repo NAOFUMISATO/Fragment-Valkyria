@@ -21,19 +21,7 @@ void CameraComponent::Input(AppFrame::Input::InputManager& input) {
 }
 
 void CameraComponent::Update() {
-   //プレイヤーの背部にカメラ位置を設定する
-   auto forward = _forwardOfTarget;
-   auto fromTarget = forward * -_targetDistance;
-   fromTarget.SetY(_vertDistance);
-   _position = _target + fromTarget;
-   //ビュー行列の設定
-   auto cameraMatrix = GetCameraViewMatrix(_position, _target, _up);
-   SetCameraViewMatrix(ToDX(cameraMatrix));
-
-   //投影行列の設定
-   auto [cameraNear, cameraFar, fov] = _nearFarFov;
-   auto projectionMatrix = GetCameraProjectionMatrix(cameraNear, cameraFar, fov);
-   SetupCamera_ProjectionMatrix(ToDX(projectionMatrix));
+	_stateServer->Update();
 }
 
 void CameraComponent::Draw() {
@@ -55,4 +43,32 @@ AppFrame::Math::Matrix44 CameraComponent::GetCameraProjectionMatrix(double camer
    projection_matrix.Perspective(fov, aspect, cameraNear, cameraFar);
 
    return projection_matrix;
+}
+
+void CameraComponent::StateBase::Draw() {
+	_owner.Draw();
+}
+
+void FragmentValkyria::Camera::CameraComponent::StateNormal::Enter() {
+
+}
+
+void FragmentValkyria::Camera::CameraComponent::StateNormal::Input(InputManager& input) {
+
+}
+
+void FragmentValkyria::Camera::CameraComponent::StateNormal::Update() {
+	//プレイヤーの背部にカメラ位置を設定する
+	auto forward = _owner._forwardOfTarget;
+	auto fromTarget = forward * - _owner._targetDistance;
+	fromTarget.SetY(_owner._vertDistance);
+	_owner._position = _owner._target + fromTarget;
+	//ビュー行列の設定
+	auto cameraMatrix = _owner.GetCameraViewMatrix(_owner._position, _owner._target, _owner._up);
+	SetCameraViewMatrix(ToDX(cameraMatrix));
+
+	//投影行列の設定
+	auto [cameraNear, cameraFar, fov] = _owner._nearFarFov;
+	auto projectionMatrix = _owner.GetCameraProjectionMatrix(cameraNear, cameraFar, fov);
+	SetupCamera_ProjectionMatrix(ToDX(projectionMatrix));
 }
