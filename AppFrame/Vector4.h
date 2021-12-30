@@ -51,7 +51,7 @@ namespace AppFrame {
          const std::tuple<double, double, double> GetXYZ() const { return { _x, _y, _z }; }
          void SetXYZ(std::tuple<double, double, double> xyz) {
             auto [x, y, z] = xyz;
-            std::make_tuple(_x=x,_y=y,_z=z); };
+            _x=x,_y=y,_z=z; }
          const double GetY() const { return _y; }
          const double GetW() const { return _w; }
          void SetY(double y) { _y = y; }
