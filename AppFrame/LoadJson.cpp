@@ -147,11 +147,15 @@ namespace AppFrame {
          return -1;
       }
 
-      void LoadJson::LoadVecParam(const std::string_view key,Math::Vector4 vec) {
-         if (_vecParams.contains(key.data())) {
-            _vecParams.erase(key.data());
+      void LoadJson::LoadVecParam(const std::string_view jsonName, const std::string_view key,Math::Vector4 vec) {
+         if (_vecParams.contains(jsonName.data())) {
+            _vecParams.erase(jsonName.data());
          }
-         _vecParams.emplace(key, vec);
+         if (_vecParams[jsonName.data()].contains(key.data())) {
+            _vecParams[jsonName.data()].erase(key.data());
+         }
+         auto vecMap = _vecParams[jsonName.data()].emplace(key,vec);
+         _vecParams.emplace(jsonName, vecMap);
       }
 
       void LoadJson::LoadVecParams(const std::filesystem::path jsonName) {
@@ -179,27 +183,34 @@ namespace AppFrame {
             auto z = vecData["z"];
             Vector4 vec = Vector4();
             vec.SetXYZ(std::make_tuple(x,y,z));
-            LoadVecParam(keyName, vec);
+            LoadVecParam(jsonName.generic_string(),keyName, vec);
          }
       }
 
-      Math::Vector4 LoadJson::GetVecParam(const std::string_view key) {
+      Math::Vector4 LoadJson::GetVecParam(const std::string_view jsonName ,const std::string_view key) {
 #ifndef _DEBUG
-         if (!_vecParams.contains(key.data())) {
+         if (!_vecParams.contains(jsonName.data())) {
+            return Vector4();
+         }
+         if (!_vecParams[jsonName.data()].contains(key.data())) {
             return Vector4();
          }
 #else
          try {
-            if (!_vecParams.contains(key.data())) {
+            if (!_vecParams.contains(jsonName.data())) {
+               std::string message = jsonName.data();
+               throw std::logic_error("----------ファイルキー[" + message +"]がVector4コンテナに存在しませんでした。----------\n");
+            }
+            if (!_vecParams[jsonName.data()].contains(key.data())) {
                std::string message = key.data();
-               throw std::logic_error("----------キー[" + message + "]がVector4コンテナに存在しませんでした。----------\n");
+               throw std::logic_error("----------値キー[" + message + "]がVector4コンテナに存在しませんでした。----------\n");
             }
          }
          catch (std::logic_error& error) {
             OutputDebugString(error.what());
          }
 #endif
-         auto vec = _vecParams[key.data()];
+         auto vec = _vecParams[jsonName.data()][key.data()];
          return vec;
       }
    }

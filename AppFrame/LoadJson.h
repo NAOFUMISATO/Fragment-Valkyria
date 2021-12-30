@@ -72,7 +72,7 @@ namespace AppFrame {
           * \param key キーとなる任意の文字列
           * \param vec Vector4クラス
           */
-         void LoadVecParam(const std::string_view key, Vector4 vec);
+         void LoadVecParam(const std::string_view jsonName,const std::string_view key, Vector4 vec);
          /**
           * \brief jsonファイルからVector4クラスのデータを読み込む
           * \param jsonName jsonファイル名
@@ -83,11 +83,11 @@ namespace AppFrame {
           * \param key キー
           * \return Vector4データ
           */
-         Vector4 GetVecParam(const std::string_view key);
+         Vector4 GetVecParam(const std::string_view jsonName,const std::string_view key);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
-         std::unordered_map<std::string, Vector4> _vecParams;  //!< Vector4のデータを格納する連想配列
+         std::unordered_map<std::string, std::unordered_map<std::string,Vector4>> _vecParams;  //!< Vector4のデータを格納する連想配列
       };
    }
 }
