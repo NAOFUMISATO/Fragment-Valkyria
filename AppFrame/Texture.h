@@ -60,7 +60,7 @@ namespace AppFrame {
           * \brief DxLib::LoadDivGraphに必要な情報の設定
           * \param divParams 画像の総分割数,画像の横分割数,画像の縦分割数,分割された画像一つの横サイズ,分割された画像一つの縦サイズ
           */
-         void SetDivParams(std::tuple<int, int, int, int, int> divParams) {
+         inline void SetDivParams(std::tuple<int, int, int, int, int> divParams) {
             auto [allNum, xNum, yNum, xSize, ySize] = divParams; {
                _allNum = allNum; _xNum = xNum; _yNum = yNum; _xSize = xSize; _ySize = ySize;
             }

@@ -67,6 +67,12 @@ namespace AppFrame {
           * \return データ
           */
          nlohmann::json GetParam(const std::filesystem::path jsonName, const std::string_view paramName);
+         /**
+          * \brief jsonファイルからVecotor4データを取得する
+          * \param jsonName jsonファイル名
+          * \param vecName データ名
+          * \return データ
+          */
          Vector4 GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName);
 
       private:

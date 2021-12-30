@@ -38,7 +38,7 @@ namespace AppFrame {
 #ifdef _DEBUG
          try {
             if (reading.fail()) {
-               throw std::logic_error("----------" + jsonPath + "ファイルは見つかりませんでした。----------\n");
+               throw std::logic_error("----------" + jsonPath + "ファイルが開けませんでした。----------\n");
             }
          }
          catch (std::logic_error& e) {
@@ -166,14 +166,14 @@ namespace AppFrame {
          reading.close();
          auto vecArray = value[jsonName.generic_string()];
          for (auto& vecData : vecArray) {
-            auto param = vecData[vecName.data()];
-            for (auto& vec : param) {
-               auto x = vec["x"];
-               auto y = vec["y"];
-               auto z = vec["z"];
-               Vector4 vector = Vector4();
-               vector.SetXYZ(std::make_tuple(x, y, z));
-               return vector;
+            auto paramArray = vecData[vecName.data()];
+            for (auto& vecParam : paramArray) {
+               auto x = vecParam["x"];
+               auto y = vecParam["y"];
+               auto z = vecParam["z"];
+               Vector4 vec = Vector4();
+               vec.SetXYZ(std::make_tuple(x, y, z));
+               return vec;
             }
          }
          return {0,0,0};

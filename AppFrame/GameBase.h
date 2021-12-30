@@ -92,37 +92,37 @@ namespace AppFrame {
           * \brief ゲームの基底クラスのインスタンスを取得
           * \return ゲームの基底クラスのインスタンス
           */
-         static GameBase* gameInstance() { return _gameInstance; }
+         inline static GameBase* gameInstance() { return _gameInstance; }
          /**
           * \brief モードサーバーの参照を取得
           * \return モードサーバーの参照
           */
-         Mode::ModeServer& modeServer() const { return *_modeServer; }
+         inline Mode::ModeServer& modeServer() const { return *_modeServer; }
          /**
           * \brief リソースサーバーの参照を取得
           * \return リソースサーバーの参照
           */
-         Resource::ResourceServer& resServer() const { return *_resServer; }
+         inline Resource::ResourceServer& resServer() const { return *_resServer; }
          /**
           * \brief 入力の一括管理クラスの参照を取得
           * \return 入力の一括管理クラスの参照
           */
-         Input::InputManager& inputManager() const { return *_inputManager; }
+         inline Input::InputManager& inputManager() const { return *_inputManager; }
          /**
           * \brief パスサーバーの参照を取得
           * \return パスサーバーの参照
           */
-         Path::PathServer& pathServer() const { return *_pathServer; }
+         inline Path::PathServer& pathServer() const { return *_pathServer; }
          /**
           * \brief サウンド管理サーバーの参照を取得
           * \return サウンド管理サーバーの参照
           */
-         Sound::SoundServer& soundServer() const { return *_soundServer; }
+         inline Sound::SoundServer& soundServer() const { return *_soundServer; }
          /**
           * \brief jsonファイル管理の参照を取得
           * \return jsonファイル管理の参照
           */
-         Resource::LoadJson& loadJson() const { return *_loadJson; }
+         inline Resource::LoadJson& loadJson() const { return *_loadJson; }
          /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行

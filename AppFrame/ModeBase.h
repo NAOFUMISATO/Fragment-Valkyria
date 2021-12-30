@@ -77,32 +77,32 @@ namespace AppFrame {
           * \brief ゲームベースの参照を取得
           * \return ゲームベースの参照
           */
-         Game::GameBase& GetGameBase() const { return _gameBase; }
+         inline Game::GameBase& GetGameBase() const { return _gameBase; }
          /**
           * \brief モード一括管理クラスの参照をゲームベース経由で取得
           * \return モード管理クラスの参照
           */
-         ModeServer& GetModeServer() const { return _gameBase.modeServer(); };
+         inline ModeServer& GetModeServer() const { return _gameBase.modeServer(); };
          /**
           * \brief リソース一括管理クラスの参照をゲームベース経由で取得
           * \return リソース一括管理クラスの参照
           */
-         Resource::ResourceServer& GetResServer() const { return _gameBase.resServer(); }
+         inline Resource::ResourceServer& GetResServer() const { return _gameBase.resServer(); }
          /**
           * \brief 音源一括管理クラスの参照をゲームベース経由で取得
           * \return
           */
-         Sound::SoundServer& GetSoundServer() const { return _gameBase.soundServer(); }
+         inline Sound::SoundServer& GetSoundServer() const { return _gameBase.soundServer(); }
          /**
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照
           */
-         Resource::LoadJson& GetLoadJson() const { return _gameBase.loadJson(); }
+         inline Resource::LoadJson& GetLoadJson() const { return _gameBase.loadJson(); }
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字
           */
-         void fadeType(char fadeType) { _fadeType = fadeType; };
+         inline void fadeType(char fadeType) { _fadeType = fadeType; };
 
       protected:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
