@@ -62,7 +62,7 @@ namespace FragmentValkyria {
           */
          void ComputeWorldTransform() override;
 
-      protected:
+      private:
          /**
           * \brief ˆÚ“®ˆ—
           */
