@@ -11,6 +11,7 @@
 #include <windows.h>
 #endif
 #include <DxLib.h>
+#include <EffekseerForDXLib.h>
 #include "GameBase.h"
 #include "PathServer.h"
  /**
@@ -32,6 +33,8 @@ namespace AppFrame {
       void ResourceServer::Release() {
          ClearTextures();  // 画像情報の解放
          ClearModels();    // モデル情報の解放
+         ClearSounds();
+         ClearEffects();
       }
 
       /*----------2D関係----------*/
@@ -84,7 +87,7 @@ namespace AppFrame {
          return handle;                   // 上記のハンドルを返す
       }
 
-      Texture ResourceServer::GetTextureInfo(std::string_view& key) {
+      Texture ResourceServer::GetTextureInfo(std::string_view key) {
 #ifndef _DEBUG
          if (!_textures.contains(key.data())) {
             return Texture();    // 画像情報コンテナに指定のキーが無ければ、画像情報の空のクラスを返す
@@ -172,23 +175,25 @@ namespace AppFrame {
          return std::make_pair(handle, static_cast<int>(handles.size()) - 1);
       }
 
-      void ResourceServer::LoadSound(std::string_view key, std::tuple<std::string, bool, int> filename_isLoad_volume) {
-#ifndef _DEBUG
+
+      /*-----------音源関係----------*/
+
+
+      void ResourceServer::ClearSounds() {
+         for (auto&& [key, sound] : _sounds) {
+            auto&& [filename, handle, volume] = sound;
+            DeleteSoundMem(handle);
+         }
+         _sounds.clear();
+      }
+
+      void ResourceServer::LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo) {
          if (_sounds.contains(key.data())) {
-            return;   // 指定のキーが有れば返す
+            auto&& [filename, handle, volume] = _sounds[key.data()];
+            DeleteSoundMem(handle);
+            _sounds.erase(key.data());
          }
-#else
-         try {
-            if (!_sounds.contains(key.data())) {
-               std::string message = key.data();
-               throw std::logic_error("----------キー["+ message +"]が音源コンテナに存在しませんでした。----------\n");
-            }
-         }
-         catch (std::logic_error& error) {
-            OutputDebugString(error.what());
-         }
-#endif
-         auto&& [filename, isLoad, volume] = filename_isLoad_volume;
+         auto [filename, isLoad, volume] = soundInfo;
          auto handle = -1;
          if (isLoad) {
             handle = LoadSoundMem(filename.c_str());
@@ -215,6 +220,48 @@ namespace AppFrame {
          }
 #endif
          return _sounds[key.data()];
+      }
+
+
+      /*---------エフェクト関係---------*/
+
+
+      void ResourceServer::ClearEffects() {
+         for (auto&& [key, effect] : _effects) {
+            auto&& [filename, handle] = effect;
+            DeleteEffekseerEffect(handle);
+         }
+         _effects.clear();
+      }
+
+      void ResourceServer::LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo) {
+         if (_effects.contains(key.data())) {
+            auto&& [fileName, handle] = _effects[key.data()];
+            DeleteEffekseerEffect(handle);
+            _effects.erase(key.data());  // 指定したキーの削除
+         }
+         auto [fileName,scale] = effectInfo;
+         auto handle = LoadEffekseerEffect(fileName.c_str(), static_cast<float>(scale));
+         _effects.emplace(key, std::make_pair(fileName, handle));
+      }
+
+      std::pair<std::string, int> ResourceServer::GetEffectInfo(std::string_view key) {
+#ifndef _DEBUG
+         if (!_effects.contains(key.data())) {
+            return std::make_pair("", -1);   // キーが未登録
+         }
+#else
+         try {
+            if (!_effects.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]がエフェクトコンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+         return _effects[key.data()];
       }
    }
 }

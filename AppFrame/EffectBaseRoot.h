@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Vector4.h"
 namespace AppFrame{
    namespace Game {
       class GameBase;
@@ -29,6 +29,11 @@ namespace AppFrame{
       protected:
          Game::GameBase& _gameBase;
          EffectState _efcState{ EffectState::Active };
+         int _efcHandle{ -1 };
+         Math::Vector4 _position{ 0,0,0 };
+         Math::Vector4 _rotation{ 0,0,0 };
+
+
       };
 }
 }

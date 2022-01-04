@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "GameBase.h"
 #include <DxLib.h>
+#include <EffekseerForDxLib.h>
 #include "ModeServer.h"
 #include "InputManager.h"
 #include "ResourceServer.h"
@@ -40,6 +41,10 @@ namespace AppFrame {
          //画面サイズ設定
          auto [width, height, depth] = GraphSize();
          SetGraphMode(width, height, depth);
+
+         // DirectX11を使用可(Effekseerを使用する為)
+         SetUseDirect3DVersion(DX_DIRECT3D_11);
+
          //エラーが起きたら直ちに終了
          if (DxLib_Init() == -1) {
             return false;
@@ -47,6 +52,19 @@ namespace AppFrame {
          SetBackgroundColor(0, 0, 255);
          //描画先を裏画面にセット
          SetDrawScreen(DX_SCREEN_BACK);
+
+         // Effekseerの初期化
+         if (Effekseer_Init(8000) == -1)
+         {
+            DxLib_End();
+            return -1;
+         }
+
+         // フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ
+         SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+         // DXライブラリのデバイスロストした時のコールバックの設定
+         Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+
          // Ｚバッファを有効にする
          SetUseZBuffer3D(TRUE);
          // Ｚバッファへの書き込みを有効にする
@@ -75,6 +93,7 @@ namespace AppFrame {
       }
 
       void GameBase::ShutDown() {
+         Effkseer_End();
          DxLib_End();
       }
 

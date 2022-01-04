@@ -72,7 +72,7 @@ namespace AppFrame {
           * \param key キー
           * \return    画像情報
           */
-         virtual Texture GetTextureInfo(std::string_view& key);
+         virtual Texture GetTextureInfo(std::string_view key);
 
 
          /*----------3D関係----------*/
@@ -99,12 +99,21 @@ namespace AppFrame {
           * \return    モデルハンドルを返す、無い場合は-1を返す
           */
          virtual std::pair<int, int> GetModel(std::string_view key, int no = 0);
+
+
+         /*----------音源関係----------*/
+
+
+         /**
+          * \brief サウンドコンテナの解放
+          */
+         virtual void ClearSounds();
          /**
           * \brief                 音ファイルの読み込み
           * \param key             キーとなる任意の文字列
           * \param filename_isLoad ファイル名と事前読み込み有無のペア
           */
-         virtual void LoadSound(std::string_view key, std::tuple<std::string, bool, int> filename_isLoad_volume);
+         virtual void LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo);
          /**
           * \brief     音ファイル情報の取得
           * \param key キー
@@ -112,11 +121,19 @@ namespace AppFrame {
           */
          virtual std::tuple<std::string, int, int> GetSoundInfo(std::string_view key);
 
+
+         /*----------エフェクト関係----------*/
+
+
+         virtual void ClearEffects();
+         virtual void LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo);
+         virtual std::pair<std::string, int> GetEffectInfo(std::string_view key);
       private:
          Game::GameBase& _gameBase;          //!< ゲームベースの参照
          std::unordered_map<std::string, std::pair<Texture, std::vector<int>>> _textures;    //!< 任意の文字列をキーにしてDivGraphと画像ハンドルのペアを管理
          std::unordered_map<std::string, std::pair<std::string, std::vector<int>>> _models;  //!< 任意の文字列をキーにしてモデルファイル名とハンドルのペアを管理
          std::unordered_map<std::string, std::tuple<std::string, int, int>> _sounds;         //!< 任意の文字列をキーにして音ファイル名とハンドルと初期音量を管理
+         std::unordered_map<std::string, std::pair<std::string, int>> _effects;              //!< 任意の文字列をキーにしてエフェクトファイル名とハンドルと初期拡大率を管理
       };
    }
 }
