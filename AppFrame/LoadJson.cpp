@@ -122,6 +122,34 @@ namespace AppFrame {
          }
       }
 
+      void LoadJson::LoadEffects(const std::filesystem::path jsonName) {
+         auto jsonDirectory = _gameBase.pathServer().GetPath("EffectJson");
+         auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
+         std::ifstream reading(jsonPath, std::ios::in);
+#ifdef _DEBUG
+         try {
+            if (reading.fail()) {
+               throw std::logic_error("----------" + jsonPath + "ファイルが開けませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& e) {
+            OutputDebugString(e.what());
+         }
+#endif
+         nlohmann::json value;
+         reading >> value;
+         reading.close();
+         auto effectArray = value[jsonName.generic_string()];
+         auto effectDirectory = _gameBase.pathServer().GetPath("Effect") / jsonName;
+         for (auto& effectData : effectArray) {
+            auto keyName = effectData["keyname"];
+            auto fileName = effectData["filename"];
+            auto scale = effectData["scale"];
+            auto effectPath = (effectDirectory / fileName).generic_string();
+            _gameBase.resServer().LoadEffect(keyName, std::make_pair(effectPath, scale));
+         }
+      }
+
       nlohmann::json LoadJson::GetParam(const std::filesystem::path jsonName, const std::string_view paramName) {
          auto jsonDirectory = _gameBase.pathServer().GetPath("ParamJson");
          auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";

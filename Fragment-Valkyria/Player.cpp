@@ -113,7 +113,7 @@ void Player::StateIdle::Update() {
 /// ‘–‚è
 void Player::StateRun::Enter() {
    /*_owner._forwardSpeed = 10.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("Run", true);
+   _owner._modelAnime@Component->ChangeAnime("Run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
     auto moved = false;
