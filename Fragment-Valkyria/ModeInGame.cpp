@@ -49,6 +49,11 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
       GetModeServer().GoToMode("Title", 'L');
    }
    objServer().Input(input);
+
+#ifdef _DEBUG
+   _padLeftX = input.GetXJoypad().LeftStickX();
+   _padLeftY = input.GetXJoypad().LeftStickY();
+#endif
 }
 
 void ModeInGame::Update() {
@@ -57,6 +62,10 @@ void ModeInGame::Update() {
 
 void ModeInGame::Render() {
    objServer().Render();
+#ifdef _DEBUG
+   DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
+#endif
+  
 }
 
 void ModeInGame::Exit() {

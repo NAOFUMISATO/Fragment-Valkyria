@@ -121,7 +121,7 @@ namespace FragmentValkyria {
               void Draw() override;
 
           protected:
-              CameraComponent& _owner;   //!< プレイヤーの参照
+              CameraComponent& _owner;   //!< カメラの参照
           };
           /**
           * \class 通常状態クラス
@@ -132,7 +132,7 @@ namespace FragmentValkyria {
           public:
               /**
                * \brief コンストラクタ
-               * \param owner プレイヤーの参照
+               * \param owner カメラの参照
                */
               StateNormal(CameraComponent& owner) : StateBase{ owner } {};
               /**

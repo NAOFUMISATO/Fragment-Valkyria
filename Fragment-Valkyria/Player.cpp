@@ -13,12 +13,15 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Player;
 
-namespace {
-   constexpr auto RotateSpeed = 2.0;
+Player::Player(Game::GameMain& appMain) : ObjectBase{ appMain } {
+    Init();
 }
 
-Player::Player(Game::GameMain& appMain) : ObjectBase{ appMain } {
-
+void Player::Player::Init()
+{
+    _rightRotation.RotateY(90.0, true);
+    _leftRotation.RotateY(-90.0, true);
+    _backRotation.RotateY(180.0, true);
 }
 
 void Player::Input(InputManager& input) {
@@ -31,6 +34,7 @@ void Player::Input(InputManager& input) {
    else if (input.GetKeyboard().DPress()) {
       _rotateSpeed += GetLoadJson().GetParam("player", "rotspeed");
    }
+
    _stateServer->Input(input);
 }
 
@@ -70,9 +74,8 @@ void Player::ComputeWorldTransform() {
 }
 
 void Player::Move() {
-   // 前進方向単位ベクトルにスピードかける
-   auto delta = GetForward() * _forwardSpeed;
-   _position = _position + delta;
+    _moved.Normalized();
+    _position = _position + (_moved * _moveSpeed);
 }
 
 void Player::StateBase::Draw() {
@@ -80,7 +83,7 @@ void Player::StateBase::Draw() {
 }
 /// 待機
 void Player::StateIdle::Enter() {
-   _owner._forwardSpeed = 0.0;
+   /*_owner._forwardSpeed = 0.0;*/
    _owner._modelAnimeComponent->ChangeAnime("Idle", true);
 }
 void Player::StateIdle::Input(InputManager& input) {
@@ -88,8 +91,20 @@ void Player::StateIdle::Input(InputManager& input) {
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
    }
-   if (input.GetKeyboard().WPress()) {
+   /*if (input.GetKeyboard().WPress()) {
       _owner._stateServer->PushBack("Run");
+   }*/
+   if (input.GetXJoypad().LeftStickX() == 1) {
+       _owner._stateServer->PushBack("Run");
+   }
+   if (input.GetXJoypad().LeftStickX() == -1) {
+       _owner._stateServer->PushBack("Run");
+   }
+   if (input.GetXJoypad().LeftStickY() == 1) {
+       _owner._stateServer->PushBack("Run");
+   }
+   if (input.GetXJoypad().LeftStickY() == -1) {
+       _owner._stateServer->PushBack("Run");
    }
 }
 void Player::StateIdle::Update() {
@@ -98,18 +113,42 @@ void Player::StateIdle::Update() {
 
 /// 走り
 void Player::StateRun::Enter() {
-   _owner._forwardSpeed = 10.0;
+   /*_owner._forwardSpeed = 10.0;*/
    _owner._modelAnimeComponent->ChangeAnime("Run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
+    auto moved = false;
+    // カメラから前進方向単位ベクトルをもとめる
+    auto camForward = _owner._cameraComponent->GetForward();
+    auto [x, y, z] = camForward.GetXYZ();
+    _owner._direction = Vector4(x, 0.0, z);
+    _owner._moved = Vector4();
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
       return;
    }
-   if (input.GetKeyboard().WPress()) {
+   /*if (input.GetKeyboard().WPress()) {
       return;
+   }*/
+   if (input.GetXJoypad().LeftStickX() == 1) {
+       _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+       moved = true;
    }
-   _owner._stateServer->PopBack();
+   if (input.GetXJoypad().LeftStickX() == -1) {
+       _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+       moved = true;
+   }
+   if (input.GetXJoypad().LeftStickY() == 1) {
+       _owner._moved = _owner._moved + _owner._direction;
+       moved = true;
+   }
+   if (input.GetXJoypad().LeftStickY() == -1) {
+       _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+       moved = true;
+   }
+   if (!moved) {
+       _owner._stateServer->PopBack();
+   }
 }
 void Player::StateRun::Update() {
    _owner.Move();
@@ -117,7 +156,7 @@ void Player::StateRun::Update() {
 
 /// 攻撃
 void Player::StateAttack::Enter() {
-   _owner._forwardSpeed = 0.f;
+   /*_owner._forwardSpeed = 0.f;*/
    _owner._modelAnimeComponent->ChangeAnime("Attack");
 }
 void Player::StateAttack::Update() {

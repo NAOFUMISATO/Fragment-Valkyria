@@ -41,22 +41,27 @@ namespace FragmentValkyria {
           */
          virtual ~Player() override = default;
          /**
-          * \brief  オブジェクトの種類を返す
+          * \brief オブジェクトの種類を返す
           * \return プレイヤー
           */
          ObjectType GetObjType() const override { return ObjectType::Player; };
          /**
           * \brief 初期化処理
           */
-         virtual void Input(InputManager& input)override;
+         virtual void Init() override;
+         /**
+          * \brief 入力処理
+          * \param input 入力一括管理クラスの参照
+          */
+         virtual void Input(InputManager& input) override;
          /**
           * \brief 更新処理
           */
-         virtual void Update()override;
+         virtual void Update() override;
          /**
           * \brief 描画処理
           */
-         void Draw()override;
+         void Draw() override;
          /**
           * \brief ワールド行列の取得
           */
@@ -68,8 +73,15 @@ namespace FragmentValkyria {
           */
          virtual void Move();
 
-         double _forwardSpeed{ 0 };      //!< 前進速度
+         const double _moveSpeed{ GetLoadJson().GetParam("player", "movespeed") };      //!< 移動速度
          double _rotateSpeed{ 0 };       //!< 回転速度
+
+         Vector4 _moved{ Vector4() };
+         Vector4 _direction{ Vector4() };
+
+         Matrix44 _rightRotation{ Matrix44() };
+         Matrix44 _leftRotation{ Matrix44() };
+         Matrix44 _backRotation{ Matrix44() };
 
       public:
          /**
