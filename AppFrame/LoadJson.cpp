@@ -38,7 +38,7 @@ namespace AppFrame {
 #ifdef _DEBUG
          try {
             if (reading.fail()) {
-               throw std::logic_error("----------" + jsonPath + "ファイルは見つかりませんでした。----------\n");
+               throw std::logic_error("----------" + jsonPath + "ファイルが開けませんでした。----------\n");
             }
          }
          catch (std::logic_error& e) {
@@ -147,18 +147,7 @@ namespace AppFrame {
          return -1;
       }
 
-      void LoadJson::LoadVecParam(const std::string_view jsonName, const std::string_view key,Math::Vector4 vec) {
-         if (_vecParams.contains(jsonName.data())) {
-            _vecParams.erase(jsonName.data());
-         }
-         if (_vecParams[jsonName.data()].contains(key.data())) {
-            _vecParams[jsonName.data()].erase(key.data());
-         }
-         auto vecMap = _vecParams[jsonName.data()].emplace(key,vec);
-         _vecParams.emplace(jsonName, vecMap);
-      }
-
-      void LoadJson::LoadVecParams(const std::filesystem::path jsonName) {
+      Math::Vector4 LoadJson::GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName) {
          auto jsonDirectory = _gameBase.pathServer().GetPath("ParamJson");
          auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
          std::ifstream reading(jsonPath, std::ios::in);
@@ -177,41 +166,17 @@ namespace AppFrame {
          reading.close();
          auto vecArray = value[jsonName.generic_string()];
          for (auto& vecData : vecArray) {
-            auto keyName = vecData["keyname"];
-            auto x = vecData["x"];
-            auto y = vecData["y"];
-            auto z = vecData["z"];
-            Vector4 vec = Vector4();
-            vec.SetXYZ(std::make_tuple(x,y,z));
-            LoadVecParam(jsonName.generic_string(),keyName, vec);
-         }
-      }
-
-      Math::Vector4 LoadJson::GetVecParam(const std::string_view jsonName ,const std::string_view key) {
-#ifndef _DEBUG
-         if (!_vecParams.contains(jsonName.data())) {
-            return Vector4();
-         }
-         if (!_vecParams[jsonName.data()].contains(key.data())) {
-            return Vector4();
-         }
-#else
-         try {
-            if (!_vecParams.contains(jsonName.data())) {
-               std::string message = jsonName.data();
-               throw std::logic_error("----------ファイルキー[" + message +"]がVector4コンテナに存在しませんでした。----------\n");
-            }
-            if (!_vecParams[jsonName.data()].contains(key.data())) {
-               std::string message = key.data();
-               throw std::logic_error("----------値キー[" + message + "]がVector4コンテナに存在しませんでした。----------\n");
+            auto paramArray = vecData[vecName.data()];
+            for (auto& vecParam : paramArray) {
+               auto x = vecParam["x"];
+               auto y = vecParam["y"];
+               auto z = vecParam["z"];
+               Vector4 vec = Vector4();
+               vec.SetXYZ(std::make_tuple(x, y, z));
+               return vec;
             }
          }
-         catch (std::logic_error& error) {
-            OutputDebugString(error.what());
-         }
-#endif
-         auto vec = _vecParams[jsonName.data()][key.data()];
-         return vec;
+         return {0,0,0};
       }
    }
 }

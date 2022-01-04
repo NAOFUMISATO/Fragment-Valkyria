@@ -74,7 +74,6 @@ void Player::ComputeWorldTransform() {
 }
 
 void Player::Move() {
-    _moved.Normalized();
     _position = _position + (_moved * _moveSpeed);
 }
 
@@ -148,6 +147,9 @@ void Player::StateRun::Input(InputManager& input) {
    }
    if (!moved) {
        _owner._stateServer->PopBack();
+   }
+   else {
+       _owner._moved.Normalized();
    }
 }
 void Player::StateRun::Update() {

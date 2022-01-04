@@ -33,17 +33,17 @@ namespace AppFrame {
           * \brief キーボードの入力管理クラスの参照を取得
           * \return キーボードの入力管理クラスの参照
           */
-         KeyboardInput GetKeyboard() { return _keyboardInput; }
+         inline KeyboardInput GetKeyboard() { return _keyboardInput; }
          /**
           * \brief マウスの入力管理クラスの参照を取得
           * \return マウスの入力管理クラスの参照
           */
-         MouseInput GetMouse() { return _mouseInput; }
+         inline MouseInput GetMouse() { return _mouseInput; }
          /**
           * \brief XInputジョイパッドの入力管理クラスの参照を取得
           * \return XInputジョイパッドの入力管理クラスの参照
           */
-         XJoypadInput GetXJoypad() { return _xJoypadInput; }
+         inline XJoypadInput GetXJoypad() { return _xJoypadInput; }
 
       private:
          KeyboardInput _keyboardInput; //!< キーボードの入力管理クラス
