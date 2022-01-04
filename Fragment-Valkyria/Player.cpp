@@ -93,16 +93,16 @@ void Player::StateIdle::Input(InputManager& input) {
    /*if (input.GetKeyboard().WPress()) {
       _owner._stateServer->PushBack("Run");
    }*/
-   if (input.GetXJoypad().LeftStickX() == 1) {
+   if (input.GetXJoypad().LeftStickX() <= -3000) {
        _owner._stateServer->PushBack("Run");
    }
-   if (input.GetXJoypad().LeftStickX() == -1) {
+   if (input.GetXJoypad().LeftStickX() >= 3000) {
        _owner._stateServer->PushBack("Run");
    }
-   if (input.GetXJoypad().LeftStickY() == 1) {
+   if (input.GetXJoypad().LeftStickY() >= 3000) {
        _owner._stateServer->PushBack("Run");
    }
-   if (input.GetXJoypad().LeftStickY() == -1) {
+   if (input.GetXJoypad().LeftStickY() <= -3000) {
        _owner._stateServer->PushBack("Run");
    }
 }
@@ -129,19 +129,19 @@ void Player::StateRun::Input(InputManager& input) {
    /*if (input.GetKeyboard().WPress()) {
       return;
    }*/
-   if (input.GetXJoypad().LeftStickX() == 1) {
+   if (input.GetXJoypad().LeftStickX() >= 3000) {
        _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
        moved = true;
    }
-   if (input.GetXJoypad().LeftStickX() == -1) {
+   if (input.GetXJoypad().LeftStickX() <= -3000) {
        _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
        moved = true;
    }
-   if (input.GetXJoypad().LeftStickY() == 1) {
+   if (input.GetXJoypad().LeftStickY() >= 3000) {
        _owner._moved = _owner._moved + _owner._direction;
        moved = true;
    }
-   if (input.GetXJoypad().LeftStickY() == -1) {
+   if (input.GetXJoypad().LeftStickY() <= -3000) {
        _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
        moved = true;
    }
