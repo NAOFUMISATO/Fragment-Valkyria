@@ -99,32 +99,32 @@ namespace AppFrame {
           * \brief 左スティックのX軸入力量を返す(-32768 ～ 32767)
           * \return 左スティックのX軸入力量
           */
-         inline short LeftStickX() { return _key.ThumbLX; }
+         inline bool LeftStickX() { return _key.ThumbLX; }
          /**
           * \brief 左スティックのY軸入力量を返す(-32768 ～ 32767)
           * \return 左スティックのY軸入力量
           */
-         inline short LeftStickY() { return _key.ThumbLY; }
+         inline bool LeftStickY() { return _key.ThumbLY; }
          /**
           * \brief 右スティックのX軸入力量を返す(-32768 ～ 32767)
           * \return 左スティックのX軸入力量
           */
-         inline short RightStickX() { return _key.ThumbRX; }
+         inline bool RightStickX() { return _key.ThumbRX; }
          /**
           * \brief 右スティックのY軸入力量を返す(-32768 ～ 32767)
           * \return 右スティックのY軸入力量
           */
-         inline short RightStickY() { return _key.ThumbRY; }
+         inline bool RightStickY() { return _key.ThumbRY; }
          /**
           * \brief 左トリガーの入力量を返す(0 ～ 255)
           * \return 左トリガーの入力量
           */
-         inline unsigned char LeftTrigger() { return _key.LeftTrigger; }
+         inline bool LeftTrigger() { return _key.LeftTrigger; }
          /**
           * \brief 右トリガーの入力量を返す(0 ～ 255)
           * \return 右トリガーの入力量
           */
-         inline unsigned char RightTrigger() { return _key.RightTrigger; }
+         inline bool RightTrigger() { return _key.RightTrigger; }
 
       private:
          XINPUT_STATE _key{ 0 };   //!< XInputジョイパッドの押下判定
