@@ -7,6 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include "Player.h"
+#include <cmath>
 #include "ObjectServer.h"
 #include "CameraComponent.h"
 #include "ModelAnimeComponent.h"
@@ -28,21 +29,11 @@ void Player::Input(InputManager& input) {
    namespace AppMath = AppFrame::Math;
    _cameraComponent->Input(input);
    _rotateSpeed = 0;
-   if (input.GetKeyboard().APress()) {
-      _rotateSpeed -= GetLoadJson().GetParam("player","rotspeed");
-   }
-   else if (input.GetKeyboard().DPress()) {
-      _rotateSpeed += GetLoadJson().GetParam("player", "rotspeed");
-   }
 
    _stateServer->Input(input);
 }
 
 void Player::Update() {
-   auto angle = rotation();
-   auto ry = angle.GetY();
-   angle.SetY(ry += _rotateSpeed);
-   rotation(angle);
    // 状態の更新
    _stateServer->Update();
    // ワールド行列の更新
@@ -50,7 +41,8 @@ void Player::Update() {
    // モデルの更新
    _modelAnimeComponent->Update();
    // カメラの更新
-   _cameraComponent->SetTarget(_position, GetForward());
+   _cameraComponent->SetTarget(_position);
+   _cameraComponent->SetPlyPos(_position);
    _cameraComponent->Update();
    // アクターサーバーに位置を通知
    GetObjServer().Register("Player", _position);
@@ -90,9 +82,7 @@ void Player::StateIdle::Input(InputManager& input) {
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
    }
-   /*if (input.GetKeyboard().WPress()) {
-      _owner._stateServer->PushBack("Run");
-   }*/
+   //左スティックが動いていたら走り状態へ
    if (input.GetXJoypad().LeftStickX() <= -3000) {
        _owner._stateServer->PushBack("Run");
    }
@@ -150,6 +140,9 @@ void Player::StateRun::Input(InputManager& input) {
    }
    else {
        _owner._moved.Normalized();
+       auto [x, y, z] = _owner._moved.GetXYZ();
+       auto radian = std::atan2(x, z);
+       _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
    }
 }
 void Player::StateRun::Update() {

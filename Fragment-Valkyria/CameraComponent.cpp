@@ -11,10 +11,11 @@
 using namespace FragmentValkyria::Camera;
 
 CameraComponent::CameraComponent() {
-   Init();
 }
 
 void CameraComponent::Init() {
+	_plyToTarget = _target - _plyPos;
+	_plyToPos = _position - _plyPos;
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
@@ -59,10 +60,8 @@ void FragmentValkyria::Camera::CameraComponent::StateNormal::Input(InputManager&
 
 void FragmentValkyria::Camera::CameraComponent::StateNormal::Update() {
 	//プレイヤーの背部にカメラ位置を設定する
-	auto forward = _owner._forwardOfTarget;
-	auto fromTarget = forward * -_owner._targetDistance;
-	fromTarget.SetY(_owner._vertDistance);
-	_owner._position = _owner._target + fromTarget;
+	_owner._target = _owner._plyPos + _owner._plyToTarget;
+	_owner._position = _owner._plyPos + _owner._plyToPos;
 	//ビュー行列の設定
 	auto cameraMatrix = _owner.GetCameraViewMatrix(_owner._position, _owner._target, _owner._up);
 	SetCameraViewMatrix(ToDX(cameraMatrix));
