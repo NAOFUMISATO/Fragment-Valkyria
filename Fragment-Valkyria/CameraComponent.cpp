@@ -60,7 +60,7 @@ void FragmentValkyria::Camera::CameraComponent::StateNormal::Input(InputManager&
 void FragmentValkyria::Camera::CameraComponent::StateNormal::Update() {
 	//プレイヤーの背部にカメラ位置を設定する
 	auto forward = _owner._forwardOfTarget;
-	auto fromTarget = forward * - _owner._targetDistance;
+	auto fromTarget = forward * -_owner._targetDistance;
 	fromTarget.SetY(_owner._vertDistance);
 	_owner._position = _owner._target + fromTarget;
 	//ビュー行列の設定

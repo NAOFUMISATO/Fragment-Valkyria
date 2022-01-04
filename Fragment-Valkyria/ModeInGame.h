@@ -77,6 +77,11 @@ namespace FragmentValkyria {
 
       private:
          Game::GameMain& _gameMain;  //!< ゲーム本体クラスの参照
+
+#ifdef _DEBUG
+         short _padLeftX{ 0 };
+         short _padLeftY{ 0 };
+#endif
       };
    }
 }
