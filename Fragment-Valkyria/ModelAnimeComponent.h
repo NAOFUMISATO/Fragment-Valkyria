@@ -35,12 +35,6 @@ namespace FragmentValkyria {
           */
          void Init() override;
          /**
-          * \brief モデルのアニメーションの登録
-          * \param key アニメーションに関連付ける任意の文字列
-          * \param animeIndex 関連付けるアニメ番号
-          */
-         void Register(std::string_view key, int animeIndex);
-         /**
           * \brief 更新処理
           */
          void Update() override;
@@ -77,7 +71,6 @@ namespace FragmentValkyria {
          void timeRate(float timeRate) { _timeRate = timeRate; };
 
       private:
-         std::unordered_map<std::string, int> _animeRegistry;   //!< モデルアニメーションを登録する連想配列
          int _animIndex{ -1 };      //!< アニメ番号
          int _attachIndex{ -1 };    //!< アタッチするアニメ番号
          float _playTime{ 0 };      //!< アニメーションの再生時間

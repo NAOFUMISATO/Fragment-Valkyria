@@ -22,13 +22,6 @@ ModelAnimeComponent::~ModelAnimeComponent() {
 void ModelAnimeComponent::Init() {
 }
 
-void ModelAnimeComponent::Register(std::string_view key, int animIndex) {
-   if (_animeRegistry.contains(key.data())) {
-      _animeRegistry.erase(key.data());
-   }
-   _animeRegistry.emplace(key, animIndex);
-}
-
 void ModelAnimeComponent::Update() {
    // Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é
    MV1SetAttachAnimTime(_modelHandle, _attachIndex, _playTime);

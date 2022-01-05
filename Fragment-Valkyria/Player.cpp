@@ -83,7 +83,7 @@ void Player::StateBase::Draw() {
 /// ‘Ò‹@
 void Player::StateIdle::Enter() {
    /*_owner._forwardSpeed = 0.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("Idle", true);
+   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
 }
 void Player::StateIdle::Input(InputManager& input) {
 
@@ -113,7 +113,7 @@ void Player::StateIdle::Update() {
 /// ‘–‚è
 void Player::StateRun::Enter() {
    /*_owner._forwardSpeed = 10.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("Run", true);
+   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
     auto moved = false;
@@ -159,7 +159,7 @@ void Player::StateRun::Update() {
 /// UŒ‚
 void Player::StateAttack::Enter() {
    /*_owner._forwardSpeed = 0.f;*/
-   _owner._modelAnimeComponent->ChangeAnime("Attack");
+   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_attack");
 }
 void Player::StateAttack::Update() {
    auto cnt = _owner._modelAnimeComponent->repeatedCount();
