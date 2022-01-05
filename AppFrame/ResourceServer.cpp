@@ -111,11 +111,12 @@ namespace AppFrame {
 
       void ResourceServer::ClearModels() {
          for (auto&& [key, model] : _models) {
-            auto&& [filename, handles] = model;
+            auto&& [handles,animes] = model;
             for (auto handle : handles) {
                MV1DeleteModel(handle);  // モデル情報のコンテナを全て回し、モデルの削除を行う
             }
             handles.clear();            // 画像ハンドルコンテナの解放
+            animes.clear();
          }
          _models.clear();               // モデル情報のコンテナの解放
       }
@@ -136,16 +137,25 @@ namespace AppFrame {
 
       int ResourceServer::LoadModel(std::string_view key, const std::string_view filename) {
          if (_models.contains(key.data())) {
-            auto& [filename, handles] = _models[key.data()];
+            auto& [handles,animes] = _models[key.data()];
             for (auto handle : handles) {
                MV1DeleteModel(handle);   // 登録済みの場合はモデルを削除
             }
             handles.clear();             // モデルハンドルコンテナの解放
+            animes.clear();
             _models.erase(key.data());   // 指定したキーの削除
          }
          auto handle = MV1LoadModel(filename.data());   // // DxLib::MV1LoadModelをコピーする
          std::vector<int> handles{ handle };
-         _models.emplace(key, std::make_pair(filename.data(), handles)); // モデル情報コンテナに作成したハンドルを格納する
+
+         auto animNum = MV1GetAnimNum(handle);
+         std::unordered_map<std::string, int> animes;
+         for (int i = 0; i < animNum; ++i) {
+            auto animName = MV1GetAnimName(handle, i);
+            animes.emplace(animName, i);
+         }
+
+         _models.emplace(key, std::make_pair(handles,animes)); // モデル情報コンテナに作成したハンドルを格納する
          return handle;    // モデルハンドルを返す
       }
 
@@ -165,7 +175,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto& [filename, handles] = _models[key.data()];
+         auto& [handles,animes] = _models[key.data()];
          if (no < handles.size()) {
             return std::make_pair(handles[no], no); // 既存noの場合
          }
@@ -175,6 +185,18 @@ namespace AppFrame {
          return std::make_pair(handle, static_cast<int>(handles.size()) - 1);
       }
 
+      int ResourceServer::GetModelAnimIndex(std::string_view key, std::string_view animName) {
+         if (!_models.contains(key.data())) {
+            // キーが未登録
+            return -1;
+         }
+         auto& [handles, animes] = _models[key.data()];
+         if (!animes.contains(animName.data())) {
+            // アニメの名前が未登録
+            return -1;
+         }
+         return animes[animName.data()];
+      }
 
       /*-----------音源関係----------*/
 
