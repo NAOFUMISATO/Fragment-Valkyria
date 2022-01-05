@@ -15,6 +15,7 @@
 #include "SoundServer.h"
 #include "PathServer.h"
 #include "LoadJson.h"
+#include "EffectServer.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -34,8 +35,10 @@ namespace AppFrame {
       bool GameBase::Initialize(HINSTANCE hinstance) {
          //デバッグモードならウインドウモードに設定及び、デバッグログの出力を行う
 #ifndef _DEBUG
+         OutputDebugLog(false);
          AppWindowMode(false);
 #else
+         OutputDebugLog(true);
          AppWindowMode(true);
 #endif
          //画面サイズ設定
@@ -80,12 +83,14 @@ namespace AppFrame {
 
          _loadJson = std::make_unique<Resource::LoadJson>(*this);
 
+         _efcServer = std::make_unique<Effect::EffectServer>();
+
          return true;
       }
 
       void GameBase::Run() {
          //メインループ
-         while (_gState != GAME_STATE::QUIT) {
+         while (_gState != GameState::Quit) {
             Input();  // 入力
             Update(); // 更新
             Render(); // 描画
@@ -100,12 +105,12 @@ namespace AppFrame {
 
       void GameBase::Input() {
          if (ProcessMessage() == -1) {
-            _gState = GAME_STATE::QUIT;  // -1 が返ってきたのでゲームを終了する
+            _gState = GameState::Quit;  // -1 が返ってきたのでゲームを終了する
          }
          // 入力状態の更新
          _inputManager->Update();
          if (_inputManager->GetKeyboard().EscClick()) {
-            _gState = GAME_STATE::QUIT;  // ESC押されたのでゲームを終了する
+            _gState = GameState::Quit;  // ESC押されたのでゲームを終了する
          }
          _modeServer->Input(*_inputManager);    // モードサーバーの入力処理を実行
       }
