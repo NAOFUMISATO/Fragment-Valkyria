@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CreatorBase.h" />
+    <ClInclude Include="EffectBase.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="ModeInGame.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
@@ -180,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="EffectBase.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="ModeInGame.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />

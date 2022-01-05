@@ -123,7 +123,7 @@ namespace AppFrame {
 
       void ResourceServer::DeleteDuplicateModels() {
          for (auto&& [key, model] : _models) {
-            auto&& [filename, handles] = model;
+            auto&& [handles,animes] = model;
             auto original = handles[0];
             erase_if(handles, [original](auto handle) {
                if (original != handle) {
