@@ -25,6 +25,9 @@ namespace AppFrame {
    namespace Sound {
       class SoundServer;
    }
+   namespace Object {
+      class ObjectServer;
+   }
    /**
     * \brief モード関係
     */
@@ -98,6 +101,7 @@ namespace AppFrame {
           * \return jsonファイル管理クラスの参照
           */
          inline Resource::LoadJson& GetLoadJson() const { return _gameBase.loadJson(); }
+         inline Object::ObjectServer& GetObjServer() const { return _gameBase.objServer(); }
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字

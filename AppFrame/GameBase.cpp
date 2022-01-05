@@ -16,6 +16,7 @@
 #include "PathServer.h"
 #include "LoadJson.h"
 #include "EffectServer.h"
+#include "ObjectServer.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -84,6 +85,8 @@ namespace AppFrame {
          _loadJson = std::make_unique<Resource::LoadJson>(*this);
 
          _efcServer = std::make_unique<Effect::EffectServer>();
+
+         _objServer = std::make_unique<Object::ObjectServer>();
 
          return true;
       }

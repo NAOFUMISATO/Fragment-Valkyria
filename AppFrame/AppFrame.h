@@ -19,3 +19,5 @@
 #include "LoadJson.h"
 #include "EffectBaseRoot.h"
 #include "EffectServer.h"
+#include "ObjectBaseRoot.h"
+#include "ObjectServer.h"

@@ -1,17 +1,10 @@
 #pragma once
-/*****************************************************************//**
- * \file   ObjectServer.h
- * \brief  オブジェクトの一括管理クラス
- *
- * \author NAOFUMISATO
- * \date   December 2021
- *********************************************************************/
-#include "AppFrame.h"
-#include "ObjectBase.h"
+#include "ObjectBaseRoot.h"
+#include "Vector4.h"
 /**
  * \brief プロジェクト名
  */
-namespace FragmentValkyria {
+namespace AppFrame {
    /**
     * \brief オブジェクト関係
     */
@@ -21,13 +14,13 @@ namespace FragmentValkyria {
        * \brief ObjectBaseで登録するオブジェクトを一括管理する
        */
       class ObjectServer {
-         using Vector4 = AppFrame::Math::Vector4;
+         using Vector4 = Math::Vector4;
       public:
          /**
           * \brief オブジェクトを動的配列に追加する
           * \param object 追加するオブジェクト
           */
-         void Add(std::unique_ptr<ObjectBase> object);
+         void Add(std::unique_ptr<ObjectBaseRoot> object);
          /**
           * \brief _runObjectsに登録されているActive状態のオブジェクトの入力処理を回す
           * \param input 入力一括管理クラスの参照
@@ -54,7 +47,7 @@ namespace FragmentValkyria {
          /**
           * \brief オブジェクトの処理を回す動的配列を取得する
           */
-         std::vector<std::unique_ptr<ObjectBase>>& runObjects() { return _runObjects; };
+         std::vector<std::unique_ptr<ObjectBaseRoot>>& runObjects() { return _runObjects; };
          /**
           * \brief レジストリに登録したオブジェクトの位置を取得する
           * \param key オブジェクトに関連付けた任意の文字列
@@ -70,9 +63,9 @@ namespace FragmentValkyria {
 
       private:
          bool _updating{ false };   //!< 更新しているかのフラグ
-         std::vector<std::unique_ptr<ObjectBase>> _runObjects;      //!< オブジェクトの処理を回す用の動的配列
-         std::vector<std::unique_ptr<ObjectBase>> _pendingObjects;  //!< 保留中のオブジェクトを登録しておく動的配列
-         std::unordered_map<std::string, Vector4> _objRegistry;     //!< オブジェクトのVector4データを登録しておく連想配列
+         std::vector<std::unique_ptr<ObjectBaseRoot>> _runObjects;      //!< オブジェクトの処理を回す用の動的配列
+         std::vector<std::unique_ptr<ObjectBaseRoot>> _pendingObjects;  //!< 保留中のオブジェクトを登録しておく動的配列
+         std::unordered_map<std::string, Vector4> _objRegistry;         //!< オブジェクトのVector4データを登録しておく連想配列
       };
    }
 }

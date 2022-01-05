@@ -66,11 +66,6 @@ namespace FragmentValkyria {
          void Exit() override;
 
          /**
-          * \brief オブジェクト一括管理クラスの参照をゲームメイン経由で取得
-          * \return オブジェクト一括管理クラスの参照
-          */
-         Object::ObjectServer& objServer() const { return _gameMain.objServer(); }
-         /**
           * \brief オブジェクト生成一括管理クラスの参照をゲームメイン経由で取得
           * \return オブジェクト生成一括管理クラスの参照
           */

@@ -13,6 +13,7 @@
 #include "PlayerCreator.h"
 #include "StageCreator.h"
 #include "LoadJson.h"
+#include "ObjectBase.h"
 using namespace FragmentValkyria::Mode;
 
 ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
@@ -33,7 +34,7 @@ void ModeInGame::Enter() {
 
    auto player = objFac.Create("Player");
    // アクターサーバーに登録※個別アクセス用
-   auto& objSer = objServer();
+   auto& objSer = GetObjServer();
    objSer.Register("Player", player->position());
    objSer.Add(std::move(player));
 
@@ -48,7 +49,7 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
       // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("Title", 'L');
    }
-   objServer().Input(input);
+   GetObjServer().Input(input);
 
 #ifdef _DEBUG
    _padLeftX = input.GetXJoypad().LeftStickX();
@@ -57,11 +58,11 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeInGame::Update() {
-   objServer().Update();
+   GetObjServer().Update();
 }
 
 void ModeInGame::Render() {
-   objServer().Render();
+   GetObjServer().Render();
 #ifdef _DEBUG
    DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
 #endif
@@ -70,7 +71,7 @@ void ModeInGame::Render() {
 
 void ModeInGame::Exit() {
    // アクターを削除
-   objServer().Clear();
+   GetObjServer().Clear();
    // デュプリケートしたモデルだけ削除
    GetResServer().DeleteDuplicateModels();
    // クリエイターを削除

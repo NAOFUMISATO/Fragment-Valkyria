@@ -61,11 +61,7 @@ namespace FragmentValkyria {
           */
          void Render()override;
 
-         /**
-          * \brief オブジェクトの一括管理クラスの取得
-          * \return オブジェクトの一括管理クラスの参照
-          */
-         Object::ObjectServer& objServer() const { return *_objServer; }
+         
          /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
@@ -73,7 +69,6 @@ namespace FragmentValkyria {
          Create::ObjectFactory& objFactory() const { return *_objFactory; }
 
       private:
-         std::unique_ptr<Object::ObjectServer> _objServer;    //!< オブジェクト一括管理クラスののユニークポインタ
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
       };
    }

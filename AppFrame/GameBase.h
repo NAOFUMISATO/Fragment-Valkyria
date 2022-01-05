@@ -38,6 +38,9 @@ namespace AppFrame {
    namespace Effect {
       class EffectServer;
    }
+   namespace Object {
+      class ObjectServer;
+   }
    /**
     * \brief ゲームベース
     */
@@ -131,6 +134,7 @@ namespace AppFrame {
           * \return エフェクトサーバーの参照
           */
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
+         inline Object::ObjectServer& objServer() const { return *_objServer; }
          /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
@@ -157,6 +161,7 @@ namespace AppFrame {
          std::unique_ptr<Sound::SoundServer> _soundServer;      //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadJson> _loadJson;         //!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス
+         std::unique_ptr<Object::ObjectServer> _objServer;
       };
    }
 }
