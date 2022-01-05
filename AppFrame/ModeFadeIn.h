@@ -25,7 +25,7 @@ namespace AppFrame {
           * \brief コンストラクタ
           * \param appBase アプリケーションフレーム基底クラスの参照
           */
-         ModeFadeIn(Game::GameBase& appBase);
+         ModeFadeIn(Game::GameBase& gameBase);
          /**
           * \brief デフォルトデストラクタ
           */

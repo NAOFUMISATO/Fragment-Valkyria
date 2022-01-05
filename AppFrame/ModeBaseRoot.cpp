@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   October 2021
  *********************************************************************/
-#include "ModeBase.h"
+#include "ModeBaseRoot.h"
 #include "ModeServer.h"
 #include "GameBase.h"
  /**
@@ -17,10 +17,10 @@ namespace AppFrame {
     * \brief ÉÇÅ[Éhä÷åW
     */
    namespace Mode {
-      ModeBase::ModeBase(Game::GameBase& gameBase) :_gameBase{ gameBase } {
+      ModeBaseRoot::ModeBaseRoot(Game::GameBase& gameBase) :_gameBase{ gameBase } {
       };
 
-      ModeBase::~ModeBase() {
+      ModeBaseRoot::~ModeBaseRoot() {
       }
    }
 }

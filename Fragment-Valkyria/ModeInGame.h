@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "AppFrame.h"
 #include "GameMain.h"
+#include "ModeBase.h"
  /**
   * \brief プロジェクト名
   */
@@ -27,7 +28,7 @@ namespace FragmentValkyria {
        * \class モードインゲームクラス
        * \brief インゲームの処理を回す
        */
-      class ModeInGame : public AppFrame::Mode::ModeBase {
+      class ModeInGame : public Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ
@@ -76,8 +77,6 @@ namespace FragmentValkyria {
          Create::ObjectFactory& objFactory() const { return _gameMain.objFactory(); }
 
       private:
-         Game::GameMain& _gameMain;  //!< ゲーム本体クラスの参照
-
 #ifdef _DEBUG
          short _padLeftX{ 0 };
          short _padLeftY{ 0 };

@@ -75,7 +75,7 @@
     <ClCompile Include="GameBase.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="ModeBase.cpp">
+    <ClCompile Include="ModeBaseRoot.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="ModeFade.cpp">
@@ -128,7 +128,7 @@
     <ClInclude Include="GameBase.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ModeBase.h">
+    <ClInclude Include="ModeBaseRoot.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
     <ClInclude Include="ModeFadeBase.h">

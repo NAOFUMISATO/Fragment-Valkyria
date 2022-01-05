@@ -27,7 +27,7 @@ namespace AppFrame {
          constexpr auto LONGFADE_TIME = 90.f;  //!< フェード時間（大）
       }
 
-      ModeFadeBase::ModeFadeBase(Game::GameBase& appBase) : ModeBase(appBase),
+      ModeFadeBase::ModeFadeBase(Game::GameBase& appBase) : ModeBaseRoot(appBase),
          _color(GetColor(0, 0, 0)) {
       }
 
@@ -50,7 +50,7 @@ namespace AppFrame {
          SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
       }
 
-      ModeFadeIn::ModeFadeIn(Game::GameBase& appBase) : ModeFadeBase(appBase) {
+      ModeFadeIn::ModeFadeIn(Game::GameBase& gameBase) : ModeFadeBase(gameBase) {
       }
 
       void ModeFadeIn::Enter() {
@@ -76,7 +76,7 @@ namespace AppFrame {
          }
       }
 
-      ModeFadeOut::ModeFadeOut(Game::GameBase& appBase) : ModeFadeBase(appBase) {
+      ModeFadeOut::ModeFadeOut(Game::GameBase& gameBase) : ModeFadeBase(gameBase) {
       }
 
       void ModeFadeOut::Enter() {

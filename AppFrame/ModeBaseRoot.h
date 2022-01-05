@@ -36,17 +36,17 @@ namespace AppFrame {
        * \brief ModeServerに登録するモードの基底クラス
        *        このクラスを継承してモードを定義する
        */
-      class ModeBase {
+      class ModeBaseRoot {
       public:
          /**
           * \brief コンストラクタ
           * \param appBase ゲームベースの参照
           */
-         ModeBase(Game::GameBase& gameBase);
+         ModeBaseRoot(Game::GameBase& gameBase);
          /**
           * \brief デストラクタ
           */
-         virtual ~ModeBase();
+         virtual ~ModeBaseRoot();
          /**
           * \brief 初期化処理
           */
