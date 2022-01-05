@@ -17,3 +17,5 @@
 #include "SoundServer.h"
 #include "InputManager.h"
 #include "LoadJson.h"
+#include "EffectBaseRoot.h"
+#include "EffectServer.h"

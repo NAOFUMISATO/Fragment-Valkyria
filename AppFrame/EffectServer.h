@@ -13,7 +13,7 @@ namespace AppFrame {
          void Add(std::unique_ptr<EffectBaseRoot> efc);
          
          void Input(Input::InputManager& input);
-        
+         
          void Update();
          
          void Render();

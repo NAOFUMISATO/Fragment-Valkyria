@@ -227,8 +227,7 @@ namespace AppFrame {
 
 
       void ResourceServer::ClearEffects() {
-         for (auto&& [key, effect] : _effects) {
-            auto&& [filename, handle] = effect;
+         for (auto&& [key, handle] : _effects) {
             DeleteEffekseerEffect(handle);
          }
          _effects.clear();
@@ -236,19 +235,18 @@ namespace AppFrame {
 
       void ResourceServer::LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo) {
          if (_effects.contains(key.data())) {
-            auto&& [fileName, handle] = _effects[key.data()];
-            DeleteEffekseerEffect(handle);
+            DeleteEffekseerEffect(_effects[key.data()]);
             _effects.erase(key.data());  // éwíËÇµÇΩÉLÅ[ÇÃçÌèú
          }
          auto [fileName,scale] = effectInfo;
          auto handle = LoadEffekseerEffect(fileName.c_str(), static_cast<float>(scale));
-         _effects.emplace(key, std::make_pair(fileName, handle));
+         _effects.emplace(key, handle);
       }
 
-      std::pair<std::string, int> ResourceServer::GetEffectInfo(std::string_view key) {
+      int ResourceServer::GetEffectHandle(std::string_view key) {
 #ifndef _DEBUG
          if (!_effects.contains(key.data())) {
-            return std::make_pair("", -1);   // ÉLÅ[Ç™ñ¢ìoò^
+            return -1;   // ÉLÅ[Ç™ñ¢ìoò^
          }
 #else
          try {

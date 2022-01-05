@@ -127,13 +127,14 @@ namespace AppFrame {
 
          virtual void ClearEffects();
          virtual void LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo);
-         virtual std::pair<std::string, int> GetEffectInfo(std::string_view key);
+         virtual int GetEffectHandle(std::string_view key);
+
       private:
          Game::GameBase& _gameBase;          //!< ゲームベースの参照
          std::unordered_map<std::string, std::pair<Texture, std::vector<int>>> _textures;    //!< 任意の文字列をキーにしてDivGraphと画像ハンドルのペアを管理
          std::unordered_map<std::string, std::pair<std::string, std::vector<int>>> _models;  //!< 任意の文字列をキーにしてモデルファイル名とハンドルのペアを管理
          std::unordered_map<std::string, std::tuple<std::string, int, int>> _sounds;         //!< 任意の文字列をキーにして音ファイル名とハンドルと初期音量を管理
-         std::unordered_map<std::string, std::pair<std::string, int>> _effects;              //!< 任意の文字列をキーにしてエフェクトファイル名とハンドルと初期拡大率を管理
+         std::unordered_map<std::string, int> _effects;    //!< 任意の文字列をキーにしてエフェクトハンドルを管理
       };
    }
 }

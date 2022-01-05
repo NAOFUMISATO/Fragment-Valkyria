@@ -1,5 +1,5 @@
 #include "EffectServer.h"
-
+#include <EffekseerForDxLib.h>
 namespace AppFrame {
    namespace Effect {
       void EffectServer::Add(std::unique_ptr<EffectBaseRoot> efc) {
@@ -26,33 +26,36 @@ namespace AppFrame {
 
       void EffectServer::Update() {
          _updating = true;
-         // _runEffectsに登録されているActive状態のオブジェクトの更新処理を回す
+         // _runEffectsに登録されているActive状態のエフェクトの更新処理を回す
          for (auto&& efc : _runEffects) {
             if (efc->IsActive()) {
                efc->Update();
             }
          }
+         UpdateEffekseer3D();
          _updating = false;
 
-         // 保留中のオブジェクトを_runEffectsに移動する
+         // 保留中のエフェクトを_runEffectsに移動する
          _runEffects.insert(_runEffects.end(),
             make_move_iterator(_pendingEffects.begin()),
             make_move_iterator(_pendingEffects.end()));
 
-         // 保留中のオブジェクトを削除する
+         // 保留中のエフェクトを削除する
          _pendingEffects.clear();
 
-         // 死んだアクターを削除する
+         // 死んだエフェクトを削除する
          erase_if(_runEffects, [](auto&& act) { return act->IsDead(); });
       }
 
       void EffectServer::Render() {
          for (auto&& efc : _runEffects) {
-            // _runObjectsに登録されているActive状態のオブジェクトの描画処理を回す
+            // _runObjectsに登録されているActive状態のエフェクトの描画処理を回す
             if (efc->IsActive()) {
                efc->Draw();
             }
          }
+         Effekseer_Sync3DSetting();
+         DrawEffekseer3D();
       }
 
       void EffectServer::Clear() {
