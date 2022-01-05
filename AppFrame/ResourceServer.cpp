@@ -186,15 +186,39 @@ namespace AppFrame {
       }
 
       int ResourceServer::GetModelAnimIndex(std::string_view key, std::string_view animName) {
+#ifndef _DEBUG
          if (!_models.contains(key.data())) {
-            // キーが未登録
-            return -1;
+            return -1;   // キーが未登録
          }
+#else
+         try {
+            if (!_models.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------アニメーションを検索しようとしましたが、キー[" + message + "]がモデル情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+
          auto& [handles, animes] = _models[key.data()];
-         if (!animes.contains(animName.data())) {
-            // アニメの名前が未登録
-            return -1;
+
+#ifndef _DEBUG
+         if (!animes.contains(key.data())) {
+            return -1;   // キーが未登録
          }
+#else
+         try {
+            if (!animes.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]がアニメ情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          return animes[animName.data()];
       }
 
