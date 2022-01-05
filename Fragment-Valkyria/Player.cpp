@@ -27,7 +27,7 @@ void Player::Player::Init()
 
 void Player::Input(InputManager& input) {
    namespace AppMath = AppFrame::Math;
-   _cameraComponent->Input(input);
+   _cameraComponent->stateServer()->Input(input);
    _rotateSpeed = 0;
 
    _stateServer->Input(input);
@@ -66,7 +66,7 @@ void Player::ComputeWorldTransform() {
 }
 
 void Player::Move() {
-    _position = _position + (_moved * _moveSpeed);
+    _position = _position + (_moved * MoveSpeed);
 }
 
 void Player::StateBase::Draw() {
@@ -83,10 +83,10 @@ void Player::StateIdle::Input(InputManager& input) {
       _owner._stateServer->PushBack("Attack");
    }
    //左スティックが動いていたら走り状態へ
-   if (input.GetXJoypad().LeftStickX() <= -3000) {
+   if (input.GetXJoypad().LeftStickX() >= 3000) {
        _owner._stateServer->PushBack("Run");
    }
-   if (input.GetXJoypad().LeftStickX() >= 3000) {
+   if (input.GetXJoypad().LeftStickX() <= -3000) {
        _owner._stateServer->PushBack("Run");
    }
    if (input.GetXJoypad().LeftStickY() >= 3000) {

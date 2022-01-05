@@ -212,7 +212,7 @@ namespace FragmentValkyria {
          Matrix44 _worldTransform{ Matrix44() }; //!< ƒ|ƒ‹ƒhs—ñ
          Vector4 _position{ 0,0,0 };               //!< ˆÊ’u
          Vector4 _rotation{ 0,0,0 };             //!< ‰ñ“]
-         Vector4 _scale{ 1,1,1 };                //!< Šg‘å—¦
+         Vector4 _scale{ 1, 1, 1 };                //!< Šg‘å—¦
       };
 
    }

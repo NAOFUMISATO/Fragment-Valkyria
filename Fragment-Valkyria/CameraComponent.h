@@ -77,6 +77,8 @@ namespace FragmentValkyria {
              _stateServer = std::move(state);
          }
 
+         inline std::unique_ptr<StateServer>& const stateServer() { return _stateServer; }
+
       private:
          /**
           * \brief カメラのビュー行列の設定

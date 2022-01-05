@@ -73,7 +73,7 @@ namespace FragmentValkyria {
           */
          virtual void Move();
 
-         const double _moveSpeed{ GetLoadJson().GetParam("player", "movespeed") };      //!< ˆÚ“®‘¬“x
+         const double MoveSpeed{ GetLoadJson().GetParam("player", "movespeed") };      //!< ˆÚ“®‘¬“x
          double _rotateSpeed{ 0 };       //!< ‰ñ“]‘¬“x
 
          Vector4 _moved{ Vector4() };
