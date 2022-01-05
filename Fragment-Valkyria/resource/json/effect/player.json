@@ -1,8 +1,8 @@
 {
-	"player_effect": [
+	"player": [
 		{
-			"keyname": "Attack",
-			"filename": "Attack.efkefc",
+			"keyname": "Shot",
+			"filename": "test.efkefc",
 			"scale": 10.0
 		},
 		{

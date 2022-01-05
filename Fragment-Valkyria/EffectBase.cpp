@@ -3,7 +3,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBase::EffectBase(Game::GameMain& gameMain) : EffectBase{ gameMain } {
+EffectBase::EffectBase(Game::GameMain& gameMain) : EffectBaseRoot{ gameMain }, _gameMain{gameMain} {
 }
 
 EffectBase::~EffectBase() {

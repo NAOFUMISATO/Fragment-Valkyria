@@ -10,7 +10,7 @@ namespace FragmentValkyria {
       public:
          enum class EffectType {
             Effect=0,
-            PlayerAttack
+            PlayerShot
          };
          EffectBase(Game::GameMain& gameMain);
          virtual ~EffectBase() override ;

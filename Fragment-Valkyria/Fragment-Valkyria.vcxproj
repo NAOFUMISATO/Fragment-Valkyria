@@ -166,6 +166,7 @@
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CreatorBase.h" />
     <ClInclude Include="EffectBase.h" />
+    <ClInclude Include="EffectPlayerShot.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="ModeInGame.h" />
     <ClInclude Include="ModelAnimeComponent.h" />

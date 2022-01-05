@@ -33,7 +33,7 @@ namespace FragmentValkyria {
           * \brief コンストラクタ
           * \param game ゲーム本体の参照
           */
-         ModeInGame(Game::GameMain& game);
+         ModeInGame(Game::GameMain& gameMain);
          /**
           * \brief デフォルトデストラクタ
           */

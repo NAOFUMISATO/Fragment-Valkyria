@@ -17,7 +17,7 @@ namespace AppFrame {
     * \brief ÉÇÅ[Éhä÷åW
     */
    namespace Mode {
-      ModeBase::ModeBase(Game::GameBase& gameBase) :_gameBase(gameBase) {
+      ModeBase::ModeBase(Game::GameBase& gameBase) :_gameBase{ gameBase } {
       };
 
       ModeBase::~ModeBase() {

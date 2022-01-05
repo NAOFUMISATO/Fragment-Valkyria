@@ -15,7 +15,7 @@
 #include "LoadJson.h"
 using namespace FragmentValkyria::Mode;
 
-ModeInGame::ModeInGame(Game::GameMain& game) : ModeBase(game), _gameMain(game) {
+ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain }, _gameMain{gameMain} {
 }
 
 void ModeInGame::Init() {
