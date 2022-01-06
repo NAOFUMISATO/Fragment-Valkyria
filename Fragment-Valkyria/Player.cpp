@@ -27,7 +27,7 @@ void Player::Player::Init()
 
 void Player::Input(InputManager& input) {
    namespace AppMath = AppFrame::Math;
-   _cameraComponent->stateServer()->Input(input);
+   _cameraComponent->Input(input);
    _rotateSpeed = 0;
 
    _stateServer->Input(input);
@@ -46,6 +46,7 @@ void Player::Update() {
    _cameraComponent->Update();
    // アクターサーバーに位置を通知
    GetObjServer().Register("Player", _position);
+   GetObjServer().Register("CamTarget", _cameraComponent->GetTarget());
 }
 
 void Player::Draw() {

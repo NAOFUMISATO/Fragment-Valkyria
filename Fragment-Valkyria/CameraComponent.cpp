@@ -19,6 +19,7 @@ void CameraComponent::Init() {
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
+	_stateServer->Input(input);
 }
 
 void CameraComponent::Update() {
@@ -66,14 +67,14 @@ void CameraComponent::StateNormal::Enter() {
 void CameraComponent::StateNormal::Input(InputManager& input) {
 	if (input.GetXJoypad().RightStickX() >= 10000) {
 		auto rightMatrix = Matrix44();
-		rightMatrix.RotateY(-2.0, true);
+		rightMatrix.RotateY(2.0, true);
 
 		_owner._plyToTarget = _owner._plyToTarget * rightMatrix;
 		_owner._plyToPos = _owner._plyToPos * rightMatrix;
 	}
 	if (input.GetXJoypad().RightStickX() <= -10000) {
 		auto leftMatrix = Matrix44();
-		leftMatrix.RotateY(2.0, true);
+		leftMatrix.RotateY(-2.0, true);
 
 		_owner._plyToTarget = _owner._plyToTarget * leftMatrix;
 		_owner._plyToPos = _owner._plyToPos * leftMatrix;

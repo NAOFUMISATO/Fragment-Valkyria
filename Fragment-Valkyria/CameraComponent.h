@@ -63,6 +63,8 @@ namespace FragmentValkyria {
          inline void SetTarget(Vector4 target) {
              _target = target;
          }
+
+         inline Vector4 GetTarget() const { return _target; }
          /**
           * \brief 注視点方向のベクトルの取得
           * \return 注視点方向の単位ベクトル
