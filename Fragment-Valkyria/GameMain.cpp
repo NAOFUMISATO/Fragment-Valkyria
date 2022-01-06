@@ -31,8 +31,6 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    SetMaterialParam(material);
 #endif
 
-   _objServer = std::make_unique<Object::ObjectServer>();
-
    _objFactory = std::make_unique<Create::ObjectFactory>(*this);
 
    auto& pathSer = pathServer();

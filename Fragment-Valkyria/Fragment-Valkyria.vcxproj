@@ -176,7 +176,6 @@
     <ClInclude Include="ModeTitle.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectFactory.h" />
-    <ClInclude Include="ObjectServer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCreator.h" />
     <ClInclude Include="Stage.h" />
@@ -194,7 +193,6 @@
     <ClCompile Include="ModeTitle.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
-    <ClCompile Include="ObjectServer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCreator.cpp" />
     <ClCompile Include="Stage.cpp" />

@@ -173,6 +173,8 @@
     <ClInclude Include="ModeFadeOut.h" />
     <ClInclude Include="ModeServer.h" />
     <ClInclude Include="MouseInput.h" />
+    <ClInclude Include="ObjectBaseRoot.h" />
+    <ClInclude Include="ObjectServer.h" />
     <ClInclude Include="PathServer.h" />
     <ClInclude Include="LoadJson.h" />
     <ClInclude Include="ResourceServer.h" />
@@ -193,6 +195,8 @@
     <ClCompile Include="Matrix44.cpp" />
     <ClCompile Include="ModeBaseRoot.cpp" />
     <ClCompile Include="ModeFade.cpp" />
+    <ClCompile Include="ObjectBaseRoot.cpp" />
+    <ClCompile Include="ObjectServer.cpp" />
     <ClCompile Include="PathServer.cpp" />
     <ClCompile Include="LoadJson.cpp" />
     <ClCompile Include="ResourceServer.cpp" />
