@@ -14,7 +14,7 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Player;
 
-Player::Player(Game::GameMain& appMain) : ObjectBase{ appMain } {
+Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
     Init();
 }
 

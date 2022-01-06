@@ -42,7 +42,8 @@ namespace FragmentValkyria {
             Object = 0,   //!< オブジェクト
             Player,       //!< プレイヤー
             Enemy,        //!< 敵
-            Stage         //!< ステージ
+            Stage,         //!< ステージ
+            LargeEnemy
          };
          /**
           * \brief コンストラクタ

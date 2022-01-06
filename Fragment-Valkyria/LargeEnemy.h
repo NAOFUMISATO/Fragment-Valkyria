@@ -6,14 +6,92 @@
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
-
+#include "ObjectBase.h"
 namespace FragmentValkyria {
 
     namespace LargeEnemy {
 
-        class LargeEnemy
-        {
+        class LargeEnemy : public Object::ObjectBase {
+            using Vector4 = AppFrame::Math::Vector4;
+            using Matrix44 = AppFrame::Math::Matrix44;
+            using InputManager = AppFrame::Input::InputManager;
+        public:
+            LargeEnemy(Game::GameMain& gameMain);
+            virtual ~LargeEnemy() override = default;
 
+            ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
+
+            /**
+          * \brief 初期化処理
+          */
+            virtual void Init() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            virtual void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            virtual void Update() override;
+            /**
+             * \brief 描画処理
+             */
+            void Draw() override;
+            /**
+             * \brief ワールド行列の取得
+             */
+            void ComputeWorldTransform() override;
+
+        private:
+
+        public:
+            /**
+            * \class ラージエネミーの状態の基底クラス
+            * \brief 各ラージエネミーの状態はこれを派生して定義する
+            */
+            class StateBase : public AppFrame::State::StateBaseRoot
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateBase(LargeEnemy& owner) : _owner{ owner } {};
+                /**
+                 * \brief 描画処理
+                 */
+                void Draw() override;
+
+            protected:
+                LargeEnemy& _owner;   //!< ラージエネミーの参照
+            };
+            /**
+            * \class 待機状態クラス
+            * \brief 待機状態の処理を回す
+            */
+            class StateIdle : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateIdle(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 入力処理
+                 * \param input 入力一括管理クラスの参照
+                 */
+                void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
         };
     }
 }
