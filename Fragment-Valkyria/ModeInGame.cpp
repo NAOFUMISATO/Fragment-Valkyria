@@ -66,7 +66,7 @@ void ModeInGame::Render() {
    objServer().Render();
 #ifdef _DEBUG
    DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
-   DrawFormatString(0, 10, GetColor(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
+   DrawFormatString(0, 15, GetColor(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
    using Vector4 = AppFrame::Math::Vector4;
    namespace AppMath = AppFrame::Math;
    auto startX = Vector4(-10000.0, 0.0, 0.0);
