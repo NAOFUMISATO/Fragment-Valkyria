@@ -74,12 +74,12 @@ namespace FragmentValkyria {
             vec.Normalized();
             return vec;
          }
-
+         
          void stateServer(std::unique_ptr<StateServer> state) {
              _stateServer = std::move(state);
          }
 
-         inline std::unique_ptr<StateServer>& const stateServer() { return _stateServer; }
+         inline StateServer& stateServer() { return *_stateServer; }
 
       private:
          /**
