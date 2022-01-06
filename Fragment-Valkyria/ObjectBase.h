@@ -214,7 +214,5 @@ namespace FragmentValkyria {
          Vector4 _rotation{ 0,0,0 };             //!< ‰ñ“]
          Vector4 _scale{ 1, 1, 1 };                //!< Šg‘å—¦
       };
-
    }
-
 }

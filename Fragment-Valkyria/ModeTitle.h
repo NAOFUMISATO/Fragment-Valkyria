@@ -7,6 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include "AppFrame.h"
+#include "ModeBase.h"
  /**
   * \brief プロジェクト名
   */
@@ -23,7 +24,7 @@ namespace FragmentValkyria {
        * \class モードタイトルクラス
        * \brief ゲームのタイトル処理を回す
        */
-      class ModeTitle : public AppFrame::Mode::ModeBase {
+      class ModeTitle : public Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

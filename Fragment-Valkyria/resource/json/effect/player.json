@@ -1,0 +1,19 @@
+{
+	"player": [
+		{
+			"keyname": "Shot",
+			"filename": "test.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "Gun",
+			"filename": "Gun.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "Run",
+			"filename": "Run.efkefc",
+			"scale": 10.0
+		}
+	]
+}

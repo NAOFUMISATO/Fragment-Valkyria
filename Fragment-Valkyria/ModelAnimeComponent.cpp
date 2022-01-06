@@ -7,6 +7,8 @@
  * \date   December 2021
  *********************************************************************/
 #include "ModelAnimeComponent.h"
+#include "GameMain.h"
+#include "ObjectBase.h"
 using namespace FragmentValkyria::Model;
 
 ModelAnimeComponent::ModelAnimeComponent(Object::ObjectBase& owner) : ModelComponent{ owner } {
@@ -18,13 +20,6 @@ ModelAnimeComponent::~ModelAnimeComponent() {
 }
 
 void ModelAnimeComponent::Init() {
-}
-
-void ModelAnimeComponent::Register(std::string_view key, int animIndex) {
-   if (_animeRegistry.contains(key.data())) {
-      _animeRegistry.erase(key.data());
-   }
-   _animeRegistry.emplace(key, animIndex);
 }
 
 void ModelAnimeComponent::Update() {
@@ -55,8 +50,8 @@ void ModelAnimeComponent::Draw() {
    MV1DrawModel(_modelHandle);
 }
 
-void ModelAnimeComponent::ChangeAnime(std::string_view key, bool repeate) {
-   auto newAnimIndex = _animeRegistry[key.data()];
+void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate) {
+   auto newAnimIndex = _owner.gameMain().resServer().GetModelAnimIndex(_key, animeName);
    if (_animIndex == newAnimIndex) {
       return;
    }

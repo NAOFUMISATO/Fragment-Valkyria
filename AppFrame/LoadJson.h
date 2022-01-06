@@ -47,19 +47,24 @@ namespace AppFrame {
          ~LoadJson() = default;
          /**
           * \brief jsonファイルから画像情報を読み込み、リソースサーバーに登録する
-          * \param jsonFileName jsonファイル名
+          * \param jsonName jsonファイル名
           */
          void LoadTextures(const std::filesystem::path jsonName);
          /**
           * \brief jsonファイルからモデル情報を読み込み、リソースサーバーに登録する
-          * \param jsonFileName jsonファイル名
+          * \param jsonName jsonファイル名
           */
          void LoadModels(const std::filesystem::path jsonName);
          /**
           * \brief jsonファイルから音源情報を読み込み、リソースサーバーに登録する
-          * \param jsonFileName jsonファイル名
+          * \param jsonName jsonファイル名
           */
          void LoadSounds(const std::filesystem::path jsonName);
+         /**
+          * \brief jsonファイルからエフェクト情報を読み込み、リソースサーバーに登録する
+          * \param jsonName jsonファイル名
+          */
+         void LoadEffects(const std::filesystem::path jsonName);
          /**
           * \brief jsonファイルからデータを取得する
           * \param jsonName jsonファイル名

@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   November 2021
  *********************************************************************/
-#include "ModeBase.h"
+#include "ModeBaseRoot.h"
 namespace {
    constexpr auto BOX_WIDTH = 1920;  //!< DxLib::DrawBox横サイズ
    constexpr auto BOX_HEIGHT = 1080; //!< DxLib::DrawBox縦サイズ
@@ -23,7 +23,7 @@ namespace AppFrame {
        * \class モードのフェード基底クラス
        * \brief フェード用モードの基底クラス
        */
-      class ModeFadeBase :public ModeBase {
+      class ModeFadeBase :public ModeBaseRoot {
       public:
          /**
           * \brief コンストラクタ

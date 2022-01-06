@@ -21,7 +21,7 @@ namespace AppFrame {
    }
    namespace Mode {
       /** 二重インクルード防止 */
-      class ModeBase;
+      class ModeBaseRoot;
       /**
        * \class モードの一括管理クラス
        * \brief モードを登録し、一括管理を行う
@@ -33,13 +33,13 @@ namespace AppFrame {
           * \param key モードのインスタンスを関連付ける任意の文字列
           * \param mode モードのインスタンス
           */
-         ModeServer(std::string_view key, std::shared_ptr<ModeBase> mode);
+         ModeServer(std::string_view key, std::shared_ptr<ModeBaseRoot> mode);
          /**
           * \brief モードの登録
           * \param key モードのインスタンスに関連付ける任意の文字列
           * \param mode モードのインスタンス
           */
-         void Register(std::string_view key, std::shared_ptr<ModeBase> mode);
+         void Register(std::string_view key, std::shared_ptr<ModeBaseRoot> mode);
 
          /**
           * \brief モードリストの一番後ろにモード挿入
@@ -66,7 +66,7 @@ namespace AppFrame {
           * \param key 登録済みのモードに関連付けた文字列
           * \return モードのインスタンス
           */
-         std::shared_ptr<ModeBase> GetMode(std::string_view key);
+         std::shared_ptr<ModeBaseRoot> GetMode(std::string_view key);
          /**
           * \brief 入力処理
           * \param input 入力一括管理クラスの参照
@@ -95,8 +95,8 @@ namespace AppFrame {
           */
          void FadePushBack(std::string_view key, char fadeType);
 
-         std::unordered_map<std::string, std::shared_ptr<ModeBase>> _modeRegistry;  //!< モードを登録する連想配列
-         std::list<std::shared_ptr<ModeBase>> _modeList;                            //!< モードの処理を回す双方向配列
+         std::unordered_map<std::string, std::shared_ptr<ModeBaseRoot>> _modeRegistry;  //!< モードを登録する連想配列
+         std::list<std::shared_ptr<ModeBaseRoot>> _modeList;                            //!< モードの処理を回す双方向配列
       };
    }
 }

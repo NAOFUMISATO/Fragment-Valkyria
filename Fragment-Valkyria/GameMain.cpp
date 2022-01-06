@@ -35,17 +35,17 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    _objFactory = std::make_unique<Create::ObjectFactory>(*this);
 
-
    auto& pathSer = pathServer();
-   auto& resSer = resServer();
 
    const AppFrame::Path::PathServer::PathMap pathToUsed{
       {"Model",{"resource/model"}},
       {"Texture",{"resource/graphic"}},
       {"Sound",{"resource/sound"}},
+      {"Effect",{"resource/effect"}},
       {"TextureJson",{"resource/json/graphic" }},
       {"ModelJson",{"resource/json/model" }},
       {"SoundJson",{"resource/json/sound" }},
+      {"EffectJson",{"resource/json/effect"}},
       {"ParamJson",{"resource/json/param"}}
    };
 

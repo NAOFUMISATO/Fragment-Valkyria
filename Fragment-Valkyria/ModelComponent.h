@@ -96,6 +96,7 @@ namespace FragmentValkyria {
 
       protected:
          Object::ObjectBase& _owner;   //!< オブジェクトの基底クラスの参照
+         std::string _key;             //!< モデル及びアニメーションで使用するキー
          int _modelHandle{ -1 };       //!< モデルハンドル
          bool _isLighting{ true };     //!< ライティングを行うかのフラグ
       };

@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <windows.h>
 #endif
-#include "ModeBase.h"
+#include "ModeBaseRoot.h"
 #include "ModeFadeIn.h"
 #include "ModeFadeOut.h"
  /**
@@ -22,7 +22,7 @@ namespace AppFrame {
     * \brief モード関係
     */
    namespace Mode {
-      ModeServer::ModeServer(std::string_view key, std::shared_ptr<ModeBase> mode) {
+      ModeServer::ModeServer(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
          Register("FadeIn", std::make_shared<ModeFadeIn>(mode->GetGameBase()));
          Register("FadeOut", std::make_shared<ModeFadeOut>(mode->GetGameBase()));
          Register(key, mode);
@@ -30,7 +30,7 @@ namespace AppFrame {
          PushBack("FadeIn");      // 最初のシーンの上にフェードインをプッシュバック
       }
 
-      void ModeServer::Register(std::string_view key, std::shared_ptr<ModeBase> mode) {
+      void ModeServer::Register(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
          if (_modeRegistry.contains(key.data())) {
             _modeRegistry.erase(key.data());       // レジストリを走査し、指定のキーがあれば削除する
          }
@@ -105,7 +105,7 @@ namespace AppFrame {
          _modeList.insert(std::prev(_modeList.end()), insertmode);   // 指定のモードをリストの末尾分、後方に進んだ位置に挿入する
       }
 
-      std::shared_ptr<ModeBase> ModeServer::GetMode(std::string_view key) {
+      std::shared_ptr<ModeBaseRoot> ModeServer::GetMode(std::string_view key) {
 #ifndef _DEBUG
          if (!_modeRegistry.contains(key.data())) {
             return nullptr;   //指定のキーがなければnullを返す

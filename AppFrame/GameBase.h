@@ -35,6 +35,9 @@ namespace AppFrame {
    namespace Sound {
       class SoundServer;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief ゲームベース
     */
@@ -48,10 +51,10 @@ namespace AppFrame {
          /**
           * \brief ゲームの状態列挙
           */
-         enum class GAME_STATE {
-            PLAY,    //!< 実行中
-            PAUSED,  //!< 一時停止
-            QUIT     //!< 終了
+         enum class GameState {
+            Play,    //!< 実行中
+            Paused,  //!< 一時停止
+            Quit     //!< 終了
          };
          /**
           * \brief コンストラクタ
@@ -124,6 +127,11 @@ namespace AppFrame {
           */
          inline Resource::LoadJson& loadJson() const { return *_loadJson; }
          /**
+          * \brief エフェクトサーバーの参照を取得
+          * \return エフェクトサーバーの参照
+          */
+         inline Effect::EffectServer& efcServer() const { return *_efcServer; }
+         /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
           */
@@ -141,13 +149,14 @@ namespace AppFrame {
 
       protected:
          static GameBase* _gameInstance;        //!< ゲームのインスタンス
-         GAME_STATE _gState{ GAME_STATE::PLAY };                //!< ゲーム状態
+         GameState _gState{ GameState::Play };                  //!< ゲーム状態
          std::unique_ptr<Mode::ModeServer> _modeServer;         //!< モードの一括管理クラス
          std::unique_ptr<Resource::ResourceServer> _resServer;  //!< リソースの一括管理クラス
          std::unique_ptr<Input::InputManager> _inputManager;    //!< 入力の一括管理クラス
          std::unique_ptr<Path::PathServer> _pathServer;         //!< パスの一括管理クラス
          std::unique_ptr<Sound::SoundServer> _soundServer;      //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadJson> _loadJson;         //!< jsonファイル管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス
       };
    }
 }

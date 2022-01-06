@@ -161,11 +161,13 @@
   <ItemGroup>
     <ClInclude Include="AppFrame.h" />
     <ClInclude Include="DxUtility.h" />
+    <ClInclude Include="EffectBaseRoot.h" />
+    <ClInclude Include="EffectServer.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
     <ClInclude Include="Matrix44.h" />
-    <ClInclude Include="ModeBase.h" />
+    <ClInclude Include="ModeBaseRoot.h" />
     <ClInclude Include="ModeFadeBase.h" />
     <ClInclude Include="ModeFadeIn.h" />
     <ClInclude Include="ModeFadeOut.h" />
@@ -184,10 +186,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DxUtility.cpp" />
+    <ClCompile Include="EffectBaseRoot.cpp" />
+    <ClCompile Include="EffectServer.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Matrix44.cpp" />
-    <ClCompile Include="ModeBase.cpp" />
+    <ClCompile Include="ModeBaseRoot.cpp" />
     <ClCompile Include="ModeFade.cpp" />
     <ClCompile Include="PathServer.cpp" />
     <ClCompile Include="LoadJson.cpp" />
@@ -206,11 +210,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets" Condition="Exists('packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets')" />
+    <Import Project="..\packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets'))" />
+    <Error Condition="!Exists('..\packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.10.4\build\native\nlohmann.json.targets'))" />
   </Target>
 </Project>

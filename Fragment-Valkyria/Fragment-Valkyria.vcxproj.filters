@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\Model">
       <UniqueIdentifier>{7956fc73-099d-4bd2-9e4c-27cbfb6a8157}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Effect">
+      <UniqueIdentifier>{098a5d69-a0a7-45da-aaa9-573683b7e1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Effect">
+      <UniqueIdentifier>{168e9368-c1d0-4688-b465-9a00861b1dd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -105,6 +111,15 @@
     <ClInclude Include="ModelAnimeComponent.h">
       <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
+    <ClInclude Include="EffectBase.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPlayerShot.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeBase.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -145,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="ModelAnimeComponent.cpp">
       <Filter>ソース ファイル\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectBase.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeBase.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
