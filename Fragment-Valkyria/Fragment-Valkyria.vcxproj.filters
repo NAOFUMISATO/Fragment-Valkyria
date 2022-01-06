@@ -67,6 +67,12 @@
     <Filter Include="ヘッダー ファイル\Effect">
       <UniqueIdentifier>{168e9368-c1d0-4688-b465-9a00861b1dd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\LargeEnemy">
+      <UniqueIdentifier>{69872ee0-fcb1-4b05-b7d9-862a9579ad5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\LargeEnemy">
+      <UniqueIdentifier>{98f359af-d23d-46ec-940e-faa7a7361cb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -120,6 +126,9 @@
     <ClInclude Include="ModeBase.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="LargeEnemy.h">
+      <Filter>ヘッダー ファイル\LargeEnemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -166,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="ModeBase.cpp">
       <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="LargeEnemy.cpp">
+      <Filter>ソース ファイル\LargeEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
