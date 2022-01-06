@@ -26,7 +26,7 @@ namespace FragmentValkyria {
        * \class プレイヤークラス
        * \brief プレイヤーを管理する
        */
-      class Player :public Object::ObjectBase {
+      class Player : public Object::ObjectBase {
          using Vector4 = AppFrame::Math::Vector4;
          using Matrix44 = AppFrame::Math::Matrix44;
          using InputManager = AppFrame::Input::InputManager;
