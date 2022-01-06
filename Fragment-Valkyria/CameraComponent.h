@@ -53,14 +53,18 @@ namespace FragmentValkyria {
           * \param position カメラの位置
           */
          void SetPosition(Vector4 position) { _position = position; }
+
+         void SetPlyPos(Vector4 plyPos) { _plyPos = plyPos; }
          /**
           * \brief カメラの注視点を設定する
           * \param target 注視点になる座標
           * \param forward カメラの向き
           */
-         void SetTarget(Vector4 target, Vector4 forward = { 0,0,0 }) {
-            _target = target, _forwardOfTarget = forward;
+         inline void SetTarget(Vector4 target) {
+             _target = target;
          }
+
+         inline Vector4 GetTarget() const { return _target; }
          /**
           * \brief 注視点方向のベクトルの取得
           * \return 注視点方向の単位ベクトル
@@ -70,10 +74,12 @@ namespace FragmentValkyria {
             vec.Normalized();
             return vec;
          }
-
+         
          void stateServer(std::unique_ptr<StateServer> state) {
              _stateServer = std::move(state);
          }
+
+         inline StateServer& stateServer() { return *_stateServer; }
 
       private:
          /**
@@ -95,11 +101,14 @@ namespace FragmentValkyria {
          Vector4 _position{ 0, 0, 0 };        //!< 位置
          Vector4 _target{ 0, 0, 0 };          //!< 注視点
          Vector4 _up{ 0, 1 ,0 };              //!< 上方向
-         Vector4 _forwardOfTarget{ 0, 0, 0 }; //!< 注視点オブジェクトの向き
+         Vector4 _forwardOfTarget{ 0, 0, 1}; //!< 注視点オブジェクトの向き
+         Vector4 _plyToPos{ 0, 0, 0 };
+         Vector4 _plyToTarget{ 0, 0, 0 };
+         Vector4 _plyPos{ 0, 0, 0 };
          double _targetDistance{ 500 };       //!< 注視点オブジェクトとのZ座標の距離
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離
          std::tuple<double, double, double> _nearFarFov{   //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
-            std::make_tuple(10.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(50.0)) };
+            std::make_tuple(2.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
 
          std::unique_ptr<StateServer> _stateServer;                        //!< 状態の一括管理クラスのポインタ
 

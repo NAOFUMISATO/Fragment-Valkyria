@@ -17,9 +17,9 @@ using namespace FragmentValkyria::Create;
 
 std::unique_ptr<Object::ObjectBase> PlayerCreator::Create(Game::GameMain& gameMain) {
    auto camera = std::make_shared<Camera::CameraComponent>();
+   camera->SetPosition({ 0, 120, -500 });
+   camera->SetTarget({ 100, 50, 1000 });
    camera->Init();
-   camera->SetPosition({ 0, 50, -200 });
-   camera->SetTarget({ 0, 50, 0 });
 
    auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
    camera->stateServer(std::move(camerastate));
