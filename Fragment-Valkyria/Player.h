@@ -98,7 +98,7 @@ namespace FragmentValkyria {
             /**
              * \brief 描画処理
              */
-            void Draw() override;
+            virtual void Draw() override;
 
          protected:
             Player& _owner;   //!< プレイヤーの参照

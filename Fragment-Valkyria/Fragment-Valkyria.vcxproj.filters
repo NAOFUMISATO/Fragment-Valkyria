@@ -73,6 +73,12 @@
     <Filter Include="ソース ファイル\LargeEnemy">
       <UniqueIdentifier>{98f359af-d23d-46ec-940e-faa7a7361cb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\FallObject">
+      <UniqueIdentifier>{2a52c357-b78b-4e60-8790-35aadeb1ade6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\FallObject">
+      <UniqueIdentifier>{8e8539eb-0686-4d8b-98fa-eab1b44e2dd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -126,6 +132,15 @@
     <ClInclude Include="LargeEnemy.h">
       <Filter>ヘッダー ファイル\LargeEnemy</Filter>
     </ClInclude>
+    <ClInclude Include="LargeEnemyCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObject.h">
+      <Filter>ヘッダー ファイル\FallObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObjectCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -172,6 +187,15 @@
     </ClCompile>
     <ClCompile Include="LargeEnemy.cpp">
       <Filter>ソース ファイル\LargeEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="LargeEnemyCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObject.cpp">
+      <Filter>ソース ファイル\FallObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObjectCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,9 +7,11 @@
  * \date   December 2021
  *********************************************************************/
 #include "ModeInGame.h"
+#include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
 #include "GameMain.h"
+#include "LargeEnemyCreator.h"
 #include "PlayerCreator.h"
 #include "StageCreator.h"
 #include "LoadJson.h"
@@ -21,6 +23,7 @@ ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
 
 void ModeInGame::Init() {
    auto& loadJson = GetLoadJson();
+   loadJson.LoadModels("largeEnemy");
    loadJson.LoadModels("player");
    loadJson.LoadModels("skysphere");
    loadJson.LoadModels("ground");
@@ -29,8 +32,10 @@ void ModeInGame::Init() {
 void ModeInGame::Enter() {
 
    auto& objFac = objFactory();
+   objFac.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>());
    objFac.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFac.Register("Stage", std::make_unique<Create::StageCreator>());
+   objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>());
 
    auto player = objFac.Create("Player");
    // アクターサーバーに登録※個別アクセス用
@@ -40,6 +45,9 @@ void ModeInGame::Enter() {
 
    auto stage = objFac.Create("Stage");
    objSer.Add(std::move(stage));
+
+   auto largeEnemy = objFac.Create("LargeEnemy");
+   objSer.Add(std::move(largeEnemy));
 
    Update();
 }

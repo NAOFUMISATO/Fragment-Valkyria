@@ -167,8 +167,11 @@
     <ClInclude Include="CreatorBase.h" />
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectPlayerShot.h" />
+    <ClInclude Include="FallObject.h" />
+    <ClInclude Include="FallObjectCreator.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="LargeEnemy.h" />
+    <ClInclude Include="LargeEnemyCreator.h" />
     <ClInclude Include="ModeBase.h" />
     <ClInclude Include="ModeInGame.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
@@ -184,8 +187,11 @@
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="EffectBase.cpp" />
+    <ClCompile Include="FallObject.cpp" />
+    <ClCompile Include="FallObjectCreator.cpp" />
     <ClCompile Include="LargeEnemy.cpp" />
     <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="LargeEnemyCreator.cpp" />
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeInGame.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />

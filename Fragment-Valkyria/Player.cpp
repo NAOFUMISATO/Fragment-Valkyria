@@ -98,7 +98,7 @@ void Player::StateIdle::Input(InputManager& input) {
    }
 }
 void Player::StateIdle::Update() {
-   _owner._modelAnimeComponent->Update();
+   
 }
 
 /// ‘–‚è

@@ -1,83 +1,85 @@
 #pragma once
 /*****************************************************************//**
- * \file   LargeEnemy.h
+ * \file   FallObject.h
  * \brief  
  * 
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
+
 namespace FragmentValkyria {
 
-    namespace LargeEnemy {
+	namespace FallObject {
 
-        class LargeEnemy : public Object::ObjectBase {
-            using Vector4 = AppFrame::Math::Vector4;
-            using Matrix44 = AppFrame::Math::Matrix44;
+		class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;
-        public:
-            LargeEnemy(Game::GameMain& gameMain);
-            virtual ~LargeEnemy() override = default;
+		public:
+			FallObject(Game::GameMain& gameMain);
+			virtual ~FallObject() override = default;
 
-            ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
+			/**
+		    * \brief オブジェクトの種類を返す
+		    * \return 落ちてくるオブジェクト
+		    */
+			ObjectType GetObjType() const override { return ObjectType::FallObject; };
 
             /**
             * \brief 初期化処理
             */
             virtual void Init() override;
             /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
+            * \brief 入力処理
+            * \param input 入力一括管理クラスの参照
+            */
             virtual void Input(InputManager& input) override;
             /**
-             * \brief 更新処理
-             */
+            * \brief 更新処理
+            */
             virtual void Update() override;
             /**
-             * \brief 描画処理
-             */
+            * \brief 描画処理
+            */
             void Draw() override;
 
         private:
 
-            void CreateFallObject();
-
-            int _stateCnt{ 0 };
+            const double Gravity{ 0.01 };
+            double _fallTimer{ 0.0 };
 
         public:
             /**
-            * \class ラージエネミーの状態の基底クラス
-            * \brief 各ラージエネミーの状態はこれを派生して定義する
+            * \class プレイヤー状態の基底クラス
+            * \brief 各プレイヤーの状態はこれを派生して定義する
             */
             class StateBase : public AppFrame::State::StateBaseRoot
             {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner ラージエネミーの参照
+                 * \param owner 落ちてくるオブジェクトの参照
                  */
-                StateBase(LargeEnemy& owner) : _owner{ owner } {};
+                StateBase(FallObject& owner) : _owner{ owner } {};
                 /**
                  * \brief 描画処理
                  */
                 virtual void Draw() override;
 
             protected:
-                LargeEnemy& _owner;   //!< ラージエネミーの参照
+                FallObject& _owner;   //!< プレイヤーの参照
             };
             /**
-            * \class 待機状態クラス
-            * \brief 待機状態の処理を回す
-            */
+             * \class 待機状態クラス
+             * \brief 待機状態の処理を回す
+             */
             class StateIdle : public StateBase
             {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner ラージエネミーの参照
+                 * \param owner 落ちてくるオブジェクトの参照
                  */
-                StateIdle(LargeEnemy& owner) : StateBase{ owner } {};
+                StateIdle(FallObject& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */
@@ -93,17 +95,17 @@ namespace FragmentValkyria {
                 void Update() override;
             };
             /**
-            * \class 待機状態クラス
-            * \brief 待機状態の処理を回す
-            */
-            class StateFallObject : public StateBase
+             * \class 落下状態クラス
+             * \brief 落下状態の処理を回す
+             */
+            class StateFall : public StateBase
             {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner ラージエネミーの参照
+                 * \param owner プレイヤーの参照
                  */
-                StateFallObject(LargeEnemy& owner) : StateBase{ owner } {};
+                StateFall(FallObject& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */
@@ -118,6 +120,6 @@ namespace FragmentValkyria {
                  */
                 void Update() override;
             };
-        };
-    }
+		};
+	}
 }
