@@ -18,6 +18,18 @@ namespace AppFrame {
          _playHandle = PlayEffekseer3DEffect(_loadHandle);
       }
 
+      bool EffectBaseRoot::IsPlaying() {
+       auto nowPlaying = IsEffekseer3DEffectPlaying(_playHandle);
+       if (nowPlaying != -1) {
+          return true;
+       }
+       return false;
+      }
+
+      void EffectBaseRoot::StopEffect() {
+         StopEffekseer3DEffect(_playHandle);
+      }
+
       void EffectBaseRoot::SetPosition(Math::Vector4 pos){
          _position = pos;
          auto [x, y, z] = _position.GetXYZ();

@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="EffectBase.cpp" />
+    <ClCompile Include="EffectPlayerShot.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeInGame.cpp" />

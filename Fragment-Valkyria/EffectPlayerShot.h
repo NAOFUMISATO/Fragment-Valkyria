@@ -5,8 +5,8 @@ namespace FragmentValkyria {
    namespace Effect {
       class EffectPlayerShot :public EffectBase{
       public:
-         EffectPlayerShot();
-         ~EffectPlayerShot();
+         EffectPlayerShot(Game::GameMain& gameMain);
+         ~EffectPlayerShot()override;
 
          EffectType GetEfcType() const override { return EffectType::PlayerShot; }
 
