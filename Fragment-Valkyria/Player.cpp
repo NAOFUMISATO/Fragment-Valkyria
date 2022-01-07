@@ -44,9 +44,10 @@ void Player::Update() {
    _cameraComponent->SetTarget(_position);
    _cameraComponent->SetPlyPos(_position);
    _cameraComponent->Update();
-   // アクターサーバーに位置を通知
+   // オブジェクトサーバーに位置を通知
    GetObjServer().Register("Player", _position);
    GetObjServer().Register("CamTarget", _cameraComponent->GetTarget());
+   GetObjServer().Register("CamPos", _cameraComponent->GetPos());
 }
 
 void Player::Draw() {

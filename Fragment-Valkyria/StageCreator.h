@@ -20,12 +20,17 @@ namespace FragmentValkyria {
        * \brief スカイスフィア及び地面の生成を行う
        */
       class StageCreator : public CreatorBase {
+      public:
+          
+          StageCreator(Game::GameMain& gameMain);
+
+      private:
          /**
           * \brief スカイスフィア及び地面の生成を行う
           * \param gameMain ゲーム本体クラスの参照
           * \return ステージのインスタンス
           */
-         virtual std::unique_ptr<Object::ObjectBase> Create(Game::GameMain& gameMain);
+         virtual std::unique_ptr<Object::ObjectBase> Create();
       };
    }
 }

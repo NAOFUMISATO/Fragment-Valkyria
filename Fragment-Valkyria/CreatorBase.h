@@ -7,6 +7,8 @@
  * \date   December 2021
  *********************************************************************/
 #include <memory>
+#include "AppFrame.h"
+
  /**
   * \brief プロジェクト名
   */
@@ -28,6 +30,7 @@ namespace FragmentValkyria {
        */
       class CreatorBase {
       public:
+          CreatorBase(Game::GameMain& gameMain);
          /**
           * \brief デフォルトデストラクタ
           */
@@ -37,7 +40,13 @@ namespace FragmentValkyria {
           * \param game ゲーム本体クラスの参照
           * \return 派生先で定義
           */
-         virtual std::unique_ptr<Object::ObjectBase> Create(Game::GameMain& game) = 0;
+         virtual std::unique_ptr<Object::ObjectBase> Create() = 0;
+
+         inline AppFrame::Resource::LoadJson& GetLoadJson() const;
+      
+      protected:
+          Game::GameMain& _gameMain;
+      
       };
    }
 }

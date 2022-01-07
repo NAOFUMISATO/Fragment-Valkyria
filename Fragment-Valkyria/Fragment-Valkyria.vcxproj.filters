@@ -79,6 +79,12 @@
     <Filter Include="ヘッダー ファイル\FallObject">
       <UniqueIdentifier>{8e8539eb-0686-4d8b-98fa-eab1b44e2dd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Enemy">
+      <UniqueIdentifier>{60ee9adb-e056-4540-a00f-72988ca44ef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Enemy">
+      <UniqueIdentifier>{e4e3ffc7-e8f3-479c-92b8-640b2da3dd3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -141,6 +147,12 @@
     <ClInclude Include="FallObjectCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
+    <ClInclude Include="Gatling.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GatlingCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -195,6 +207,15 @@
       <Filter>ソース ファイル\FallObject</Filter>
     </ClCompile>
     <ClCompile Include="FallObjectCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="CreatorBase.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="Gatling.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="GatlingCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
   </ItemGroup>

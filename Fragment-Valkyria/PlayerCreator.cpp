@@ -15,7 +15,11 @@
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-std::unique_ptr<Object::ObjectBase> PlayerCreator::Create(Game::GameMain& gameMain) {
+PlayerCreator::PlayerCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
+
+}
+
+std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    auto camera = std::make_shared<Camera::CameraComponent>();
    camera->SetPosition({ 0, 120, -500 });
    camera->SetTarget({ 150, 100, 2000 });
@@ -25,7 +29,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create(Game::GameMain& gameMa
    camera->stateServer(std::move(camerastate));
 
    // ƒvƒŒƒCƒ„[‚Ì¶¬
-   auto player = std::make_unique<Player::Player>(gameMain);
+   auto player = std::make_unique<Player::Player>(_gameMain);
    /*player->position(gameMain.loadJson().GetVecParam())*/
    player->cameraComponent(camera);
 

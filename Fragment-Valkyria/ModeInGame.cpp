@@ -19,6 +19,7 @@
 using namespace FragmentValkyria::Mode;
 
 ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
+
 }
 
 void ModeInGame::Init() {
@@ -32,10 +33,10 @@ void ModeInGame::Init() {
 void ModeInGame::Enter() {
 
    auto& objFac = objFactory();
-   objFac.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>());
-   objFac.Register("Player", std::make_unique<Create::PlayerCreator>());
-   objFac.Register("Stage", std::make_unique<Create::StageCreator>());
-   objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>());
+   objFac.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
+   objFac.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
+   objFac.Register("Stage", std::make_unique<Create::StageCreator>(_gameMain));
+   objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
 
    auto player = objFac.Create("Player");
    // アクターサーバーに登録※個別アクセス用

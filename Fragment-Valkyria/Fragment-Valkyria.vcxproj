@@ -170,6 +170,8 @@
     <ClInclude Include="FallObject.h" />
     <ClInclude Include="FallObjectCreator.h" />
     <ClInclude Include="GameMain.h" />
+    <ClInclude Include="Gatling.h" />
+    <ClInclude Include="GatlingCreator.h" />
     <ClInclude Include="LargeEnemy.h" />
     <ClInclude Include="LargeEnemyCreator.h" />
     <ClInclude Include="ModeBase.h" />
@@ -186,9 +188,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
+    <ClCompile Include="Gatling.cpp" />
     <ClCompile Include="FallObject.cpp" />
     <ClCompile Include="FallObjectCreator.cpp" />
+    <ClCompile Include="GatlingCreator.cpp" />
     <ClCompile Include="LargeEnemy.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LargeEnemyCreator.cpp" />

@@ -1,6 +1,6 @@
 #pragma once
 /*****************************************************************//**
- * \file   LargeEnemyCreator.h
+ * \file   GatlingCreator.h
  * \brief  
  * 
  * \author AHMD2000
@@ -12,15 +12,17 @@ namespace FragmentValkyria {
 
 	namespace Create {
 
-		class LargeEnemyCreator : public CreatorBase{
-		public:
-			LargeEnemyCreator(Game::GameMain& gameMain);
-
+		class GatlingCreator : public CreatorBase {
+         public:
+			 GatlingCreator(Game::GameMain& gameMain);
 		private:
-
+			/**
+		    * \brief プレイヤーの位置、アニメーション、状態の登録を行う
+		    * \param game ゲーム本体クラスの参照
+		    * \return プレイヤーのインスタンス
+		    */
 			virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
 		};
-
-		}
+	}
 }

@@ -44,7 +44,8 @@ namespace FragmentValkyria {
             Enemy,        //!< 敵
             Stage,         //!< ステージ
             LargeEnemy,
-            FallObject
+            FallObject,
+            Gatling
          };
          /**
           * \brief コンストラクタ

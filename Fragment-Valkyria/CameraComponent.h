@@ -64,6 +64,8 @@ namespace FragmentValkyria {
              _target = target;
          }
 
+         inline Vector4 GetPos() const { return _position; }
+
          inline Vector4 GetTarget() const { return _target; }
          /**
           * \brief 注視点方向のベクトルの取得
