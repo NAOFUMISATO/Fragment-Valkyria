@@ -30,7 +30,7 @@ std::unique_ptr<Object::ObjectBase> ObjectFactory::Create(std::string_view type)
       return nullptr;
    }
    auto&& creator = _creatorMap[type.data()];
-   return creator->Create(_gameMain);
+   return creator->Create();
 }
 
 void ObjectFactory::Clear() {

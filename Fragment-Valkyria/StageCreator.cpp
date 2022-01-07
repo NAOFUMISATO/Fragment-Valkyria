@@ -13,8 +13,12 @@
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-std::unique_ptr<Object::ObjectBase> StageCreator::Create(Game::GameMain& gameMain) {
+StageCreator::StageCreator(Game::GameMain& gameMain) : CreatorBase{gameMain} {
+
+}
+
+std::unique_ptr<Object::ObjectBase> StageCreator::Create() {
    /// ステージの生成
-   auto stage = std::make_unique<Stage::Stage>(gameMain);
+   auto stage = std::make_unique<Stage::Stage>(_gameMain);
    return std::move(stage);
 }

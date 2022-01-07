@@ -19,13 +19,17 @@ namespace FragmentValkyria {
        * \class プレイヤーの生成管理クラス
        * \brief プレイヤーの位置、アニメーション、状態の登録を行う
        */
-      class PlayerCreator :public CreatorBase {
+      class PlayerCreator : public CreatorBase {
+      public:
+          PlayerCreator(Game::GameMain& gameMain);
+
+      private:
          /**
           * \brief プレイヤーの位置、アニメーション、状態の登録を行う
           * \param game ゲーム本体クラスの参照
           * \return プレイヤーのインスタンス
           */
-         virtual std::unique_ptr<Object::ObjectBase> Create(Game::GameMain& game);
+         virtual std::unique_ptr<Object::ObjectBase> Create() override;
       };
    }
 }

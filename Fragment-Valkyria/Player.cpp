@@ -14,7 +14,7 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Player;
 
-Player::Player(Game::GameMain& appMain) : ObjectBase{ appMain } {
+Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
     Init();
 }
 
@@ -44,9 +44,10 @@ void Player::Update() {
    _cameraComponent->SetTarget(_position);
    _cameraComponent->SetPlyPos(_position);
    _cameraComponent->Update();
-   // アクターサーバーに位置を通知
+   // オブジェクトサーバーに位置を通知
    GetObjServer().Register("Player", _position);
    GetObjServer().Register("CamTarget", _cameraComponent->GetTarget());
+   GetObjServer().Register("CamPos", _cameraComponent->GetPos());
 }
 
 void Player::Draw() {
@@ -98,7 +99,7 @@ void Player::StateIdle::Input(InputManager& input) {
    }
 }
 void Player::StateIdle::Update() {
-   _owner._modelAnimeComponent->Update();
+   
 }
 
 /// 走り
