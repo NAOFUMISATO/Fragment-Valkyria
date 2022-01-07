@@ -84,29 +84,79 @@ namespace AppFrame{
           * \param key ResourceServerのエフェクトハンドルに関連付けている任意の文字列
           */
          void SetEffectLoadHandle(std::string_view key);
+         /**
+          * \brief エフェクトを再生する
+          */
          void PlayEffect();
+         /**
+          * \brief エフェクトが再生中かの判定
+          * \return 再生中ならtrue,でなければfalse
+          */
          bool IsPlaying();
+         /**
+          * \brief エフェクトを停止する
+          */
          void StopEffect();
+         /**
+          * \brief エフェクトの位置の取得
+          * \return エフェクトの位置
+          */
          inline Math::Vector4 position() { return _position; }
+         /**
+          * \brief エフェクトの位置の設定
+          * \param pos エフェクトを設定する位置
+          */
          void SetPosition(Math::Vector4 pos);
+         /**
+          * \brief エフェクトの回転角の取得
+          * \return エフェクトの回転角
+          */
          inline Math::Vector4 rotation() { return _rotation; }
+         /**
+          * \brief エフェクトの回転角の設定
+          * \param rot エフェクトを設定する回転角
+          */
          void SetRotation(Math::Vector4 rot);
+         /**
+          * \brief エフェクトの拡大率の取得
+          * \return エフェクトの拡大率
+          */
          inline Math::Vector4 scale() { return _scale; }
+         /**
+          * \brief エフェクトの拡大率の設定
+          * \param sca エフェクトを設定する拡大率
+          */
          void SetScale(Math::Vector4 sca);
+         /**
+          * \brief エフェクトの再生速度の取得
+          * \return エフェクトの再生速度
+          */
          double GetSpeed();
+         /**
+          * \brief エフェクトの再生速度の設定
+          * \param speed エフェクトを設定する再生速度
+          */
          void SetSpeed(double speed);
+         /**
+          * \brief エフェクトの色の取得
+          * \return エフェクトの色
+          */
          std::tuple<int, int, int, int> GetEfcColor() { return _color; }
+         /**
+          * \brief エフェクトの色(RGBA)を設定
+          * \param color エフェクトを設定する色(RGBA)
+          */
          void SetEfcColor(std::tuple<int, int, int, int> color);
 
       protected:
-         Game::GameBase& _gameBase;
-         EffectState _efcState{ EffectState::Active };
-         int _loadHandle{ -1 };
-         int _playHandle{ -1 };
-         Math::Vector4 _position{ 0,0,0 };
-         Math::Vector4 _rotation{ 0,0,0 };
-         Math::Vector4 _scale{ 0,0,0 };
-         std::tuple<int, int, int, int> _color{255,255,255,255};
+         Game::GameBase& _gameBase;                    //!< ゲームベースの参照
+         EffectState _efcState{ EffectState::Active }; //!< エフェクトの状態
+         int _loadHandle{ -1 };                        //!< エフェクトを読み込むハンドル
+         int _playHandle{ -1 };                        //!< エフェクトを再生するハンドル
+         Math::Vector4 _position{ 0,0,0 };             //!< 位置
+         Math::Vector4 _rotation{ 0,0,0 };             //!< 回転角
+         Math::Vector4 _scale{ 0,0,0 };                //!< 拡大率
+         std::tuple<int, int, int, int> _color{255,255,255,255};  //!< 色(RGBA)
       };
    }
 } 

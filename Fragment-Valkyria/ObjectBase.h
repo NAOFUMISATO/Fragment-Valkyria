@@ -76,8 +76,11 @@ namespace FragmentValkyria {
           * \return 派生先で定義
           */
          virtual ObjectType GetObjType() const = 0;
-         
-         Game::GameMain& gameMain() const { return _gameMain; }
+         /**
+          * \brief ゲームクラスの参照を取得
+          * \return ゲームクラスの参照
+          */
+         inline Game::GameMain& gameMain() const { return _gameMain; }
          /**
           * \brief アニメーション一括管理クラスの設定
           * \param model アニメーション管理クラスのインスタンス

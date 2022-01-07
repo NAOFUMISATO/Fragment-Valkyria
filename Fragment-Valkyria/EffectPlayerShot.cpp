@@ -12,7 +12,7 @@ EffectPlayerShot::~EffectPlayerShot() {
 void EffectPlayerShot::Init() {
    SetEffectLoadHandle("Shot");
    PlayEffect();
-   SetPosition();
+   SetPosition({0,0,0});
 }
 
 void EffectPlayerShot::Input(AppFrame::Input::InputManager& input) {

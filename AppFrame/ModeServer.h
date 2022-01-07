@@ -12,13 +12,13 @@
  * \brief アプリケーションフレーム
  */
 namespace AppFrame {
-   /**
-    * \brief モード関係
-    */
    //二重インクルード防止
    namespace Input {
       class InputManager;
    }
+   /**
+    * \brief モード関係
+    */
    namespace Mode {
       /** 二重インクルード防止 */
       class ModeBaseRoot;

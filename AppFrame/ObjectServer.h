@@ -1,6 +1,8 @@
 #pragma once
 #include "ObjectBaseRoot.h"
 #include "Vector4.h"
+#include <vector>
+#include <unordered_map>
 /**
  * \brief プロジェクト名
  */

@@ -100,40 +100,44 @@ namespace AppFrame {
           */
          inline static GameBase* gameInstance() { return _gameInstance; }
          /**
-          * \brief モードサーバーの参照を取得
-          * \return モードサーバーの参照
+          * \brief モードサーバーのポインタを取得
+          * \return モードサーバーのポインタ
           */
          inline Mode::ModeServer& modeServer() const { return *_modeServer; }
          /**
-          * \brief リソースサーバーの参照を取得
-          * \return リソースサーバーの参照
+          * \brief リソースサーバーのポインタを取得
+          * \return リソースサーバーのポインタ
           */
          inline Resource::ResourceServer& resServer() const { return *_resServer; }
          /**
-          * \brief 入力の一括管理クラスの参照を取得
-          * \return 入力の一括管理クラスの参照
+          * \brief 入力の一括管理クラスのポインタを取得
+          * \return 入力の一括管理クラスのポインタ
           */
          inline Input::InputManager& inputManager() const { return *_inputManager; }
          /**
-          * \brief パスサーバーの参照を取得
-          * \return パスサーバーの参照
+          * \brief パスサーバーのポインタを取得
+          * \return パスサーバーのポインタ
           */
          inline Path::PathServer& pathServer() const { return *_pathServer; }
          /**
-          * \brief サウンド管理サーバーの参照を取得
-          * \return サウンド管理サーバーの参照
+          * \brief サウンド管理サーバーのポインタを取得
+          * \return サウンド管理サーバーのポインタ
           */
          inline Sound::SoundServer& soundServer() const { return *_soundServer; }
          /**
-          * \brief jsonファイル管理の参照を取得
-          * \return jsonファイル管理の参照
+          * \brief jsonファイル管理のポインタを取得
+          * \return jsonファイル管理のポインタ
           */
          inline Resource::LoadJson& loadJson() const { return *_loadJson; }
          /**
-          * \brief エフェクトサーバーの参照を取得
-          * \return エフェクトサーバーの参照
+          * \brief エフェクトサーバーのポインタを取得
+          * \return エフェクトサーバーのポインタ
           */
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
+         /**
+          * \brief オブジェクトサーバーのポインタを取得
+          * \return オブジェクトサーバーのポインタ
+          */
          inline Object::ObjectServer& objServer() const { return *_objServer; }
          /**
           * \brief ウィンドウモードに設定するか

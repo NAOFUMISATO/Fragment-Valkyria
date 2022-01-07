@@ -22,5 +22,25 @@ namespace AppFrame {
 
       ModeBaseRoot::~ModeBaseRoot() {
       }
+
+      Resource::LoadJson& ModeBaseRoot::GetLoadJson() const{ 
+         return _gameBase.loadJson();
+      }
+
+      Mode::ModeServer& ModeBaseRoot::GetModeServer() const {
+         return _gameBase.modeServer(); 
+      }
+
+      Object::ObjectServer& ModeBaseRoot::GetObjServer() const {
+         return _gameBase.objServer(); 
+      }
+
+      Resource::ResourceServer& ModeBaseRoot::GetResServer() const {
+         return _gameBase.resServer(); 
+      }
+
+      Sound::SoundServer& ModeBaseRoot::GetSoundServer() const {
+         return _gameBase.soundServer(); 
+      }
    }
 }

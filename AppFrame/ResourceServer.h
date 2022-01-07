@@ -32,7 +32,7 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param appBase アプリケーションの基底クラスの参照
+          * \param gameBase ゲームベースクラスの参照
           */
          ResourceServer(Game::GameBase& gameBase);
          /**
@@ -55,22 +55,22 @@ namespace AppFrame {
           */
          virtual void ClearTextures();
          /**
-          * \brief         画像の読み込み
-          * \param key     キーとなる任意の文字列
+          * \brief 画像の読み込み
+          * \param key キーとなる任意の文字列
           * \param texture DxLib::LoadDivGraph用クラス
           */
          virtual void LoadTexture(std::string_view key, Texture& texture);
          /**
-          * \brief     画像ハンドルの取得
+          * \brief 画像ハンドルの取得
           * \param key キー
-          * \param no  ハンドル番号
-          * \return    画像ハンドルを返す、無い場合は-1を返す
+          * \param no ハンドル番号
+          * \return 画像ハンドルを返す、無い場合は-1を返す
           */
          virtual int GetTexture(const std::string_view key, int no = 0);
          /**
-          * \brief     画像情報の取得
+          * \brief 画像情報の取得
           * \param key キー
-          * \return    画像情報
+          * \return 画像情報
           */
          virtual Texture GetTextureInfo(std::string_view key);
 
@@ -86,17 +86,17 @@ namespace AppFrame {
           */
          virtual void DeleteDuplicateModels();
          /**
-          * \brief          モデルの読み込み
-          * \param key      キーとなる任意の文字列
+          * \brief モデルの読み込み
+          * \param key キーとなる任意の文字列
           * \param filename モデルファイル名
-          * \return         モデルハンドル
+          * \return モデルハンドル
           */
          virtual int LoadModel(std::string_view key, const std::string_view filename);
          /**
-          * \brief     モデルハンドル
+          * \brief モデルハンドル
           * \param key キー
-          * \param no  ハンドル番号
-          * \return    モデルハンドルを返す、無い場合は-1を返す
+          * \param no ハンドル番号
+          * \return モデルハンドルを返す、無い場合は-1を返す
           */
          virtual std::pair<int, int> GetModel(std::string_view key, int no = 0);
          virtual int GetModelAnimIndex(std::string_view key, std::string_view animName);
@@ -109,15 +109,15 @@ namespace AppFrame {
           */
          virtual void ClearSounds();
          /**
-          * \brief                 音ファイルの読み込み
-          * \param key             キーとなる任意の文字列
+          * \brief 音ファイルの読み込み
+          * \param key キーとなる任意の文字列
           * \param filename_isLoad ファイル名と事前読み込み有無のペア
           */
          virtual void LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo);
          /**
-          * \brief     音ファイル情報の取得
+          * \brief 音ファイル情報の取得
           * \param key キー
-          * \return    音ファイル名, ハンドル
+          * \return 音ファイル名, ハンドル
           */
          virtual std::tuple<std::string, int, int> GetSoundInfo(std::string_view key);
 
@@ -125,8 +125,21 @@ namespace AppFrame {
          /*----------エフェクト関係----------*/
 
 
+         /**
+          * \brief エフェクトコンテナの解放
+          */
          virtual void ClearEffects();
+         /**
+          * \brief エフェクトを連想配列に登録する
+          * \param key キーとなる任意の文字列
+          * \param effectInfo ファイル名と初期拡大率のペア
+          */
          virtual void LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo);
+         /**
+          * \brief 連想配列に登録したエフェクトのハンドル
+          * \param key ハンドルに関連付けた任意の文字列
+          * \return エフェクトハンドル
+          */
          virtual int GetEffectHandle(std::string_view key);
 
       private:

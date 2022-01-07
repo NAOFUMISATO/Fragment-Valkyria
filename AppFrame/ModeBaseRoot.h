@@ -1,17 +1,17 @@
 #pragma once
 /*****************************************************************//**
- * \file   ModeBase.h
+ * \file   ModeBaseRoot.h
  * \brief  各モードの基底クラス
  *
  * \author NAOFUMISATO
  * \date   October 2021
  *********************************************************************/
 #include <memory>
-#include "GameBase.h"
  /**
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
+   // 二重インクルード防止
    namespace Game {
       class GameBase;
    }
@@ -85,23 +85,27 @@ namespace AppFrame {
           * \brief モード一括管理クラスの参照をゲームベース経由で取得
           * \return モード管理クラスの参照
           */
-         inline ModeServer& GetModeServer() const { return _gameBase.modeServer(); };
+         ModeServer& GetModeServer() const;
          /**
           * \brief リソース一括管理クラスの参照をゲームベース経由で取得
           * \return リソース一括管理クラスの参照
           */
-         inline Resource::ResourceServer& GetResServer() const { return _gameBase.resServer(); }
+         Resource::ResourceServer& GetResServer() const;
          /**
           * \brief 音源一括管理クラスの参照をゲームベース経由で取得
           * \return
           */
-         inline Sound::SoundServer& GetSoundServer() const { return _gameBase.soundServer(); }
+         Sound::SoundServer& GetSoundServer() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照
           */
-         inline Resource::LoadJson& GetLoadJson() const { return _gameBase.loadJson(); }
-         inline Object::ObjectServer& GetObjServer() const { return _gameBase.objServer(); }
+         Resource::LoadJson& GetLoadJson() const;
+         /**
+          * \brief オブジェクト一括管理クラスの参照をゲームベース経由で取得
+          * \return オブジェクト一括管理クラスの参照
+          */
+         Object::ObjectServer& GetObjServer() const;
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字

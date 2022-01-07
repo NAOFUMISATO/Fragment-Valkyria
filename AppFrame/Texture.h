@@ -65,6 +65,7 @@ namespace AppFrame {
                _allNum = allNum; _xNum = xNum; _yNum = yNum; _xSize = xSize; _ySize = ySize;
             }
          }
+
       private:
          std::string _textureName; //!< ƒtƒ@ƒCƒ‹–¼
          int _allNum;              //!< ‰æ‘œ‚Ì‘•ªŠ„”

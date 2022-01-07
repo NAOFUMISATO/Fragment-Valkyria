@@ -79,12 +79,12 @@ namespace FragmentValkyria {
           * \brief モデルハンドルの設定
           * \param handle モデルハンドル
           */
-         void modelHandle(int handle) { _modelHandle = handle; }
+         inline void modelHandle(int handle) { _modelHandle = handle; }
          /**
           * \brief モデルハンドルの取得
           * \return モデルハンドル
           */
-         int modelHandle() { return _modelHandle; }
+         inline int modelHandle() { return _modelHandle; }
          /**
           * \brief モデルの自己発光色の設定
           * \param index 設定する同一モデルの通し番号

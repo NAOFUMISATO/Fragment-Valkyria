@@ -53,22 +53,22 @@ namespace FragmentValkyria {
           * \brief アニメーションの総時間の取得
           * \return アニメーションの総時間
           */
-         float GetPlayProgress() const { return _playTime / _totalTime; }
+         inline float GetPlayProgress() const { return _playTime / _totalTime; }
          /**
           * \brief アニメーションを繰り返した回数の取得
           * \return アニメーションを繰り返した回数
           */
-         int repeatedCount() const { return _repeatedCount; }
+         inline int repeatedCount() const { return _repeatedCount; }
          /**
           * \brief アニメーション時間を取得
           * \return アニメーション時間
           */
-         float playTime() const { return _playTime; }
+         inline float playTime() const { return _playTime; }
          /**
           * \brief 再生時間の掛率の設定
           * \param 再生時間の掛率
           */
-         void timeRate(float timeRate) { _timeRate = timeRate; };
+         inline void timeRate(float timeRate) { _timeRate = timeRate; };
 
       private:
          int _animIndex{ -1 };      //!< アニメ番号

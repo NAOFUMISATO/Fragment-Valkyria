@@ -2,7 +2,6 @@
 #include <memory>
 #include "Vector4.h"
 #include "Matrix44.h"
-#include "StateServer.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -17,10 +16,14 @@ namespace AppFrame {
    namespace Resource {
       class LoadJson;
    }
+   namespace State {
+      class StateServer;
+   }
    /**
     * \brief オブジェクト関係
     */
    namespace Object {
+      //二重インクルード防止
       class ObjectServer;
       /**
        * \class オブジェクトの基底クラス
@@ -70,21 +73,21 @@ namespace AppFrame {
           * \brief オブジェクトの死亡判定を返す
           * \return オブジェクトの状態がDeadならばTrue、でなければfalseを返す
           */
-         bool IsDead() { return (_objState == ObjectState::Dead); }
+         inline bool IsDead() { return (_objState == ObjectState::Dead); }
          /**
           * \brief オブジェクトの生存判定を返す
           * \return オブジェクトの状態がActiveならばTrue、でなければfalseを返す
           */
-         bool IsActive() { return (_objState == ObjectState::Active); }
+         inline bool IsActive() { return (_objState == ObjectState::Active); }
          /**
           * \brief オブジェクトを死亡状態に設定
           */
-         void SetDead() { _objState = ObjectState::Dead; }
+         inline void SetDead() { _objState = ObjectState::Dead; }
          /**
           * \brief ゲームの参照を返す
           * \return ゲームの参照
           */
-         Game::GameBase& gameBase() const { return _gameBase; }
+         inline Game::GameBase& gameBase() const { return _gameBase; }
          /**
           * \brief ワールド行列の設定
           */
@@ -93,7 +96,7 @@ namespace AppFrame {
           * \brief ワールド行列の取得
           * \return ワールド行列
           */
-         Matrix44& worldTransform() { return _worldTransform; }
+         inline Matrix44& worldTransform() { return _worldTransform; }
          /**
           * \brief オブジェクトの向きの取得
           * \return オブジェクトの回転ベクトル
@@ -110,32 +113,32 @@ namespace AppFrame {
           * \brief オブジェクト位置の設定
           * \param pos オブジェクト位置
           */
-         void position(const Vector4& objPosition) { _position = objPosition; }
+         inline void position(const Vector4& objPosition) { _position = objPosition; }
          /**
           * \brief オブジェクト位置を取得
           * \return オブジェクト位置
           */
-         Vector4 position() const { return _position; }
+         inline Vector4 position() const { return _position; }
          /**
           * \brief オブジェクトの回転角の設定
           * \param rot オブジェクトの回転
           */
-         void rotation(const Vector4& objRotation) { _rotation = objRotation; }
+         inline void rotation(const Vector4& objRotation) { _rotation = objRotation; }
          /**
           * \brief オブジェクトの回転角を取得
           * \return オブジェクトの回転
           */
-         Vector4 rotation() const { return _rotation; }
+         inline Vector4 rotation() const { return _rotation; }
          /**
           * \brief オブジェクトの拡大率の設定
           * \param sca オブジェクトの拡大率
           */
-         void scale(const Vector4& objScale) { _scale = objScale; }
+         inline void scale(const Vector4& objScale) { _scale = objScale; }
          /**
           * \brief オブジェクトの拡大率の取得
           * \return オブジェクトの拡大率
           */
-         Vector4 scale() const { return _scale; }
+         inline Vector4 scale() const { return _scale; }
          /**
           * \brief 状態一括管理クラスの設定
           * \param state 各状態クラスのインスタンス
@@ -145,29 +148,29 @@ namespace AppFrame {
           * \brief 状態一括管理クラスの取得
           * \return 状態管理クラス
           */
-         StateServer& stateServer() const { return *_stateServer; }
+         inline StateServer& stateServer() const { return *_stateServer; }
          /**
           * \brief オブジェクト一括管理クラスの参照をゲーム本体を経由し取得
           * \return オブジェクト一括管理クラスの参照
           */
-         ObjectServer& GetObjServer();
+         ObjectServer& GetObjServer() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲーム本体経由で取得
           * \return jsonファイル管理クラスの参照
           */
-         AppFrame::Resource::LoadJson& GetLoadJson();
+         AppFrame::Resource::LoadJson& GetLoadJson() const;
 
       protected:
          /**
           * \brief オブジェクトの状態を取得
           * \return オブジェクトの状態
           */
-         ObjectState objState() const { return _objState; }
+         inline ObjectState objState() const { return _objState; }
          /**
           * \brief オブジェクトの状態を設定
           * \param state オブジェクトの状態
           */
-         void objState(ObjectState state) { _objState = state; }
+         inline void objState(ObjectState state) { _objState = state; }
 
 
          ObjectState _objState{ ObjectState::Active }; //!< オブジェクトの種別変数

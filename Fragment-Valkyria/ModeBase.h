@@ -43,7 +43,7 @@ namespace FragmentValkyria {
          void Render() override {};
 
       protected:
-         Game::GameMain& _gameMain;
+         Game::GameMain& _gameMain; //!< ゲームクラスの参照
       };
    }
 }

@@ -2,6 +2,7 @@
 #include "ObjectBaseRoot.h"
 #include "GameBase.h"
 #include "ObjectServer.h"
+#include "StateServer.h"
 
 namespace AppFrame {
    namespace Object {
@@ -25,11 +26,11 @@ namespace AppFrame {
          _worldTransform = world;
       }
 
-      ObjectServer& ObjectBaseRoot::GetObjServer() {
+      ObjectServer& ObjectBaseRoot::GetObjServer() const {
          return _gameBase.objServer();
       }
 
-      AppFrame::Resource::LoadJson& ObjectBaseRoot::GetLoadJson() {
+      AppFrame::Resource::LoadJson& ObjectBaseRoot::GetLoadJson() const{
          return _gameBase.loadJson();
       }
 
