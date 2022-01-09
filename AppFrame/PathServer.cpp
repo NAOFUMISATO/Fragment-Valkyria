@@ -42,6 +42,11 @@ namespace AppFrame {
       }
 
       std::filesystem::path PathServer::GetPath(std::string_view key) {
+#ifndef _DEBUG
+         if (!_paths.contains(key.data())) {
+            return "";
+         }
+#else
          try {
             if (!_paths.contains(key.data())) {
                std::string message = key.data();
@@ -51,6 +56,7 @@ namespace AppFrame {
          catch (std::logic_error& error) {
             OutputDebugString(error.what());
          }
+#endif
          return _paths[key.data()];
       }
    }
