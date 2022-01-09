@@ -37,9 +37,9 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	constexpr double distance = 1000.0;
 
 	std::array<Vector4, 3> startPosition = {
-		_gameMain.objServer().GetPosition("Player") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
-		_gameMain.objServer().GetPosition("Player") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
-		_gameMain.objServer().GetPosition("Player") + Vector4(0.0, 500.0, 0.0)
+		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
+		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0)
 	};
 
 	for (auto i = 0; i < 3; ++i) {

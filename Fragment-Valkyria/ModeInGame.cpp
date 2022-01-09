@@ -16,6 +16,7 @@
 #include "StageCreator.h"
 #include "LoadJson.h"
 #include "ObjectBase.h"
+#include "EffectPlayerShot.h" //仮
 using namespace FragmentValkyria::Mode;
 
 ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
@@ -61,6 +62,12 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
    }
    GetObjServer().Input(input);
 
+   //エフェクト仮描画
+   if (input.GetKeyboard().APress()) {
+      auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain);
+      GetEfcServer().Add(std::move(efcShot));
+   }
+   GetEfcServer().Input(input);
 #ifdef _DEBUG
    _padLeftX = input.GetXJoypad().LeftStickX();
    _padLeftY = input.GetXJoypad().LeftStickY();
@@ -71,10 +78,12 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
 
 void ModeInGame::Update() {
    GetObjServer().Update();
+   GetEfcServer().Update();
 }
 
 void ModeInGame::Render() {
    GetObjServer().Render();
+   GetEfcServer().Render();
 #ifdef _DEBUG
    DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
    DrawFormatString(0, 15, GetColor(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
@@ -106,6 +115,7 @@ void ModeInGame::Render() {
 void ModeInGame::Exit() {
    // アクターを削除
    GetObjServer().Clear();
+   GetEfcServer().Clear();
    // デュプリケートしたモデルだけ削除
    GetResServer().DeleteDuplicateModels();
    // クリエイターを削除

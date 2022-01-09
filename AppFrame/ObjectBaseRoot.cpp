@@ -30,6 +30,10 @@ namespace AppFrame {
          return _gameBase.objServer();
       }
 
+      Effect::EffectServer& ObjectBaseRoot::GetEfcServer() const {
+         return _gameBase.efcServer();
+      }
+
       AppFrame::Resource::LoadJson& ObjectBaseRoot::GetLoadJson() const{
          return _gameBase.loadJson();
       }

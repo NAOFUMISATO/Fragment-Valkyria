@@ -16,7 +16,7 @@ Gatling::Gatling(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
 void Gatling::Init() {
-	_moveDirection = GetObjServer().GetPosition("Player") - _position;
+	_moveDirection = GetObjServer().GetPosition("PlayerPos") - _position;
 	auto [x, y, z] = _moveDirection.GetXYZ();
 	_moveDirection = Vector4(x, 0.0, z);
 	_moveDirection.Normalized();

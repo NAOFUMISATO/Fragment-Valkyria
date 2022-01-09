@@ -190,6 +190,7 @@
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
+    <ClCompile Include="EffectPlayerShot.cpp" />
     <ClCompile Include="Gatling.cpp" />
     <ClCompile Include="FallObject.cpp" />
     <ClCompile Include="FallObjectCreator.cpp" />

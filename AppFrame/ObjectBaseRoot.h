@@ -19,6 +19,9 @@ namespace AppFrame {
    namespace State {
       class StateServer;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief オブジェクト関係
     */
@@ -154,6 +157,11 @@ namespace AppFrame {
           * \return オブジェクト一括管理クラスの参照
           */
          ObjectServer& GetObjServer() const;
+         /**
+          * \brief エフェクト一括管理クラスの参照をゲーム本体経由で取得
+          * \return エフェクト一括管理クラスの参照
+          */
+         Effect::EffectServer& GetEfcServer() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲーム本体経由で取得
           * \return jsonファイル管理クラスの参照

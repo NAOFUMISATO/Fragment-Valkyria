@@ -29,7 +29,7 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
 
 void Stage::Update() {
    // スカイスフィアをプレイヤと同じ位置にする
-   _skySphere->SetPosition(GetObjServer().GetPosition("Player"));
+   _skySphere->SetPosition(GetObjServer().GetPosition("PlayerPos"));
 }
 
 void Stage::Draw() {

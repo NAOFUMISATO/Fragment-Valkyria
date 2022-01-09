@@ -42,5 +42,9 @@ namespace AppFrame {
       Sound::SoundServer& ModeBaseRoot::GetSoundServer() const {
          return _gameBase.soundServer(); 
       }
+
+      Effect::EffectServer& ModeBaseRoot::GetEfcServer() const {
+         return _gameBase.efcServer();
+      }
    }
 }

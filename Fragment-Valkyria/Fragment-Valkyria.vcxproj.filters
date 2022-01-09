@@ -218,6 +218,9 @@
     <ClCompile Include="GatlingCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
+    <ClCompile Include="EffectPlayerShot.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

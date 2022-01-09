@@ -28,6 +28,9 @@ namespace AppFrame {
    namespace Object {
       class ObjectServer;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief モード関係
     */
@@ -106,6 +109,11 @@ namespace AppFrame {
           * \return オブジェクト一括管理クラスの参照
           */
          Object::ObjectServer& GetObjServer() const;
+         /**
+          * \brief エフェクト一括管理クラスの参照をゲームベース経由で取得
+          * \return エフェクト一括管理クラスの参照
+          */
+         Effect::EffectServer& GetEfcServer() const;
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字
