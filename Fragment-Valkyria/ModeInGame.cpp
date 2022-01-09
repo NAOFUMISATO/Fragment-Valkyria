@@ -63,7 +63,7 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
    GetObjServer().Input(input);
 
    //エフェクト仮描画
-   if (input.GetKeyboard().APress()) {
+   if (input.GetKeyboard().ZClick()) {
       auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain);
       GetEfcServer().Add(std::move(efcShot));
    }
