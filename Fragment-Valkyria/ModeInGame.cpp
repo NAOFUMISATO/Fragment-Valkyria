@@ -28,6 +28,7 @@ void ModeInGame::Init() {
    loadJson.LoadModels("player");
    loadJson.LoadModels("skysphere");
    loadJson.LoadModels("ground");
+   loadJson.LoadEffects("player");
 }
 
 void ModeInGame::Enter() {

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectBaseRoot.cpp
+ * \brief  エフェクトの基底の基底
+ * 
+ * \author NAOFUMISATO
+ * \date   January 2022
+ *********************************************************************/
 #include "EffectBaseRoot.h"
 #include "GameBase.h"
 #include "ResourceServer.h"

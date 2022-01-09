@@ -1,6 +1,15 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectBase.h
+ * \brief  エフェクトの基底クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   January 2022
+ *********************************************************************/
 #include "AppFrame.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
    namespace Game {
       class GameMain;

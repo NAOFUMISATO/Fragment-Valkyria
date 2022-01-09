@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   ModeBaseRoot.h
- * \brief  各モードの基底クラス
+ * \brief  モード基底クラスの基底クラス
  *
  * \author NAOFUMISATO
  * \date   October 2021

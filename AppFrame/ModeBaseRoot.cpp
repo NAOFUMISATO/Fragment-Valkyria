@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
- * \file   ModeBase.cpp
- * \brief  各モードの基底
+ * \file   ModeBaseRoot.cpp
+ * \brief  モードの基底の基底
  *
  * \author NAOFUMISATO
  * \date   October 2021
