@@ -38,7 +38,7 @@ namespace AppFrame {
       }
 
       // 矩形と線分の当たり判定
-      collision Utility::CollisionPolygonLine(const Vector4& polygon_point0, const Vector4& polygon_point1,
+      Collision Utility::CollisionPolygonLine(const Vector4& polygon_point0, const Vector4& polygon_point1,
          const Vector4& polygon_point2, const Vector4& polygon_point3,
          const Vector4& line_start, const Vector4& line_end) {
          // 平面の情報をセット
@@ -108,7 +108,7 @@ namespace AppFrame {
       }
 
       // 平面と線分の当たり判定
-      bool Utility::CollisionPlaneLine(const plane& p, const Vector4& line_start, const Vector4& line_end, collision& result) {
+      bool Utility::CollisionPlaneLine(const Plane& p, const Vector4& line_start, const Vector4& line_end, Collision& result) {
          const Vector4 plane_point = std::get<0>(p);
          const Vector4 plane_normal = std::get<1>(p);
          auto point_to_start = line_start - plane_point;
@@ -133,6 +133,18 @@ namespace AppFrame {
          }
 
          return ret;
+      }
+      bool Utility::CollisionSpherePoint(const Vector4& point, const Sphere& s)
+      {
+          auto [pos, radian] = s;
+
+          auto sphereFromPoint = pos - point;
+
+          auto [x, y, z] = sphereFromPoint.GetXYZ();
+
+          auto checkSize = x * x + y * y + z * z;
+
+          return (checkSize) <= (radian * radian);
       }
    }
 }

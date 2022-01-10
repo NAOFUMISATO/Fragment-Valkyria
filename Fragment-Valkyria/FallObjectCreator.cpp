@@ -43,7 +43,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	};
 
 	for (auto i = 0; i < 3; ++i) {
-		auto fallObject = std::make_unique<FallObject::FallObject>(_gameMain);
+		auto fallObject = std::make_unique<Enemy::FallObject>(_gameMain);
 
 		fallObject->position(startPosition[i]);
 
@@ -51,8 +51,8 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		model->SetModel("LargeEnemy", 1000);
 		fallObject->modelAnimeComponent(std::move(model));
 
-		auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<FallObject::FallObject::StateFall>(*fallObject));
-		state->Register("Idle", std::make_shared<FallObject::FallObject::StateIdle>(*fallObject));
+		auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::FallObject::StateFall>(*fallObject));
+		state->Register("Idle", std::make_shared<Enemy::FallObject::StateIdle>(*fallObject));
 		fallObject->stateServer(std::move(state));
 		
 		if (i < 2) {

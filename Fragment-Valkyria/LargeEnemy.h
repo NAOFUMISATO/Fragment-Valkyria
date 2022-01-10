@@ -9,7 +9,7 @@
 #include "ObjectBase.h"
 namespace FragmentValkyria {
 
-    namespace LargeEnemy {
+    namespace Enemy {
 
         class LargeEnemy : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
@@ -42,8 +42,12 @@ namespace FragmentValkyria {
         private:
 
             void CreateFallObject();
+            void CreateGatling();
 
             int _stateCnt{ 0 };
+            int _gatlingCnt{ 0 };
+            const int GatlingFrame{ 60 };
+            bool _fallObjectflag{ false };
 
         public:
             /**
@@ -93,8 +97,8 @@ namespace FragmentValkyria {
                 void Update() override;
             };
             /**
-            * \class 待機状態クラス
-            * \brief 待機状態の処理を回す
+            * \class オブジェクト落下状態クラス
+            * \brief オブジェクト落下の処理を回す
             */
             class StateFallObject : public StateBase
             {
@@ -113,6 +117,27 @@ namespace FragmentValkyria {
                  * \param input 入力一括管理クラスの参照
                  */
                 void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+            * \class ガトリング攻撃状態クラス
+            * \brief ガトリング攻撃状態の処理を回す
+            */
+            class StateGatling : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateGatling(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
                 /**
                  * \brief 更新処理
                  */

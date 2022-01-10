@@ -67,23 +67,17 @@
     <Filter Include="ヘッダー ファイル\Effect">
       <UniqueIdentifier>{168e9368-c1d0-4688-b465-9a00861b1dd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\LargeEnemy">
-      <UniqueIdentifier>{69872ee0-fcb1-4b05-b7d9-862a9579ad5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\LargeEnemy">
-      <UniqueIdentifier>{98f359af-d23d-46ec-940e-faa7a7361cb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\FallObject">
-      <UniqueIdentifier>{2a52c357-b78b-4e60-8790-35aadeb1ade6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\FallObject">
-      <UniqueIdentifier>{8e8539eb-0686-4d8b-98fa-eab1b44e2dd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{60ee9adb-e056-4540-a00f-72988ca44ef1}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Enemy">
       <UniqueIdentifier>{e4e3ffc7-e8f3-479c-92b8-640b2da3dd3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Collision">
+      <UniqueIdentifier>{9306959f-fd46-4eec-9e2e-158b4d673e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Collision">
+      <UniqueIdentifier>{0c7ca877-ca62-49a3-98f6-2921ba728779}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -135,14 +129,8 @@
     <ClInclude Include="ModeBase.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="LargeEnemy.h">
-      <Filter>ヘッダー ファイル\LargeEnemy</Filter>
-    </ClInclude>
     <ClInclude Include="LargeEnemyCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
-    </ClInclude>
-    <ClInclude Include="FallObject.h">
-      <Filter>ヘッダー ファイル\FallObject</Filter>
     </ClInclude>
     <ClInclude Include="FallObjectCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
@@ -152,6 +140,15 @@
     </ClInclude>
     <ClInclude Include="GatlingCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="LargeEnemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObject.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,14 +194,8 @@
     <ClCompile Include="ModeBase.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-    <ClCompile Include="LargeEnemy.cpp">
-      <Filter>ソース ファイル\LargeEnemy</Filter>
-    </ClCompile>
     <ClCompile Include="LargeEnemyCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
-    </ClCompile>
-    <ClCompile Include="FallObject.cpp">
-      <Filter>ソース ファイル\FallObject</Filter>
     </ClCompile>
     <ClCompile Include="FallObjectCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
@@ -220,6 +211,15 @@
     </ClCompile>
     <ClCompile Include="EffectPlayerShot.cpp">
       <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="LargeEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObject.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

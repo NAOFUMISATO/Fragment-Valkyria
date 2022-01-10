@@ -23,7 +23,7 @@ LargeEnemyCreator::LargeEnemyCreator(Game::GameMain& gameMain) : CreatorBase{ ga
 std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	using Vector4 = AppFrame::Math::Vector4;
 
-	auto largeEnemy = std::make_unique<LargeEnemy::LargeEnemy>(_gameMain);
+	auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
 	largeEnemy->position(Vector4(0.0, 0.0, 1000.0));
 	largeEnemy->scale(Vector4(3.0, 3.0, 3.0));
 	largeEnemy->rotation(Vector4(0.0, 180.0, 0.0));
@@ -32,8 +32,9 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	model->SetModel("LargeEnemy", 1000);
 	largeEnemy->modelAnimeComponent(std::move(model));
 
-	auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<LargeEnemy::LargeEnemy::StateIdle>(*largeEnemy));
-	state->Register("FallObject", std::make_shared<LargeEnemy::LargeEnemy::StateFallObject>(*largeEnemy));
+	auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
+	state->Register("FallObject", std::make_shared<Enemy::LargeEnemy::StateFallObject>(*largeEnemy));
+	state->Register("Gatling", std::make_shared<Enemy::LargeEnemy::StateGatling>(*largeEnemy));
 	largeEnemy->stateServer(std::move(state));
 
 	return std::move(largeEnemy);

@@ -32,7 +32,7 @@ void Gatling::Update() {
 	// ワールド行列の更新
 	ComputeWorldTransform();
 	// モデルの更新
-	_modelAnimeComponent->Update();
+	/*_modelAnimeComponent->Update();*/
 }
 
 void Gatling::Draw() {
@@ -45,8 +45,10 @@ void Gatling::Move() {
 }
 
 void Gatling::StateBase::Draw() {
-	_owner._modelAnimeComponent->Draw();
-	DrawSphere3D(AppFrame::Math::ToDX(_owner._position), static_cast<float>(_owner._radian), 0, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+	/*_owner._modelAnimeComponent->Draw();*/
+	auto position = AppFrame::Math::ToDX(_owner._position);
+	auto radian = static_cast<float>(_owner._radian);
+	DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
 }
 
 void Gatling::StateChase::Enter() {

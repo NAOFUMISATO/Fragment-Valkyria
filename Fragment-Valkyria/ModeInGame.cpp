@@ -14,6 +14,7 @@
 #include "LargeEnemyCreator.h"
 #include "PlayerCreator.h"
 #include "StageCreator.h"
+#include "GatlingCreator.h"
 #include "LoadJson.h"
 #include "ObjectBase.h"
 #include "EffectPlayerShot.h" //仮
@@ -39,6 +40,7 @@ void ModeInGame::Enter() {
    objFac.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
    objFac.Register("Stage", std::make_unique<Create::StageCreator>(_gameMain));
    objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
+   objFac.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
 
    auto player = objFac.Create("Player");
    // アクターサーバーに登録※個別アクセス用
