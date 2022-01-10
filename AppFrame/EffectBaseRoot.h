@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "Vector4.h"
+#include "Color.h"
 #include <string_view>
 #include <EffekseerForDXLib.h>
 #include <tuple>
@@ -49,9 +50,10 @@ namespace AppFrame{
           */
          virtual ~EffectBaseRoot();
          /**
-          * \brief 初期化処理
+          * \brief 初期化及び_loadHandleにエフェクトハンドルを登録する
+          * \param key ResourceServerに登録済みの任意の文字列
           */
-         virtual void Init() {};
+         virtual void Init(std::string_view key);
          /**
           * \brief 入力処理
           * \param input 入力一括管理クラスの参照
@@ -141,22 +143,23 @@ namespace AppFrame{
           * \brief エフェクトの色の取得
           * \return エフェクトの色
           */
-         std::tuple<int, int, int, int> GetEfcColor() { return _color; }
+         inline Color::Color color() { return _color; }
          /**
           * \brief エフェクトの色(RGBA)を設定
           * \param color エフェクトを設定する色(RGBA)
           */
-         void SetEfcColor(std::tuple<int, int, int, int> color);
+         void SetEfcColor(Color::Color _color );
 
       protected:
          Game::GameBase& _gameBase;                    //!< ゲームベースの参照
          EffectState _efcState{ EffectState::Active }; //!< エフェクトの状態
          int _loadHandle{ -1 };                        //!< エフェクトを読み込むハンドル
          int _playHandle{ -1 };                        //!< エフェクトを再生するハンドル
+         double _speed{ 10.0 };                        //!< 再生速度
          Math::Vector4 _position{ 0,0,0 };             //!< 位置
          Math::Vector4 _rotation{ 0,0,0 };             //!< 回転角
-         Math::Vector4 _scale{ 0,0,0 };                //!< 拡大率
-         std::tuple<int, int, int, int> _color{255,255,255,255};  //!< 色(RGBA)
+         Math::Vector4 _scale{ 1.0,1.0,1.0 };          //!< 拡大率
+         Color::Color _color{ Color::Color() };        //!< 色(RGBA)
       };
    }
 } 

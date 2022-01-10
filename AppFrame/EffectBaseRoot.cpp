@@ -22,6 +22,10 @@ namespace AppFrame {
          _loadHandle = handle;
       }
 
+      void EffectBaseRoot::Init(std::string_view key) {
+         SetEffectLoadHandle(key);
+      }
+
       void EffectBaseRoot::PlayEffect() {
          _playHandle = PlayEffekseer3DEffect(_loadHandle);
       }
@@ -68,17 +72,19 @@ namespace AppFrame {
       double EffectBaseRoot::GetSpeed() {
          auto speed = GetSpeedPlayingEffekseer3DEffect(_playHandle);
          auto cSpeed = static_cast<double>(speed);
-         return cSpeed;
+         _speed = cSpeed;
+         return _speed;
       }
 
       void EffectBaseRoot::SetSpeed(double speed) {
-         auto cSpeed = static_cast<float>(speed);
+         _speed = speed;
+         auto cSpeed = static_cast<float>(_speed);
          SetSpeedPlayingEffekseer3DEffect(_playHandle, cSpeed);
       }
 
-      void EffectBaseRoot::SetEfcColor(std::tuple<int, int, int, int> color){
+      void EffectBaseRoot::SetEfcColor(Color::Color color){
          _color = color;
-         auto [red, green, blue, alpha] = _color;
+         auto [red, green, blue, alpha] = _color.GetColor();
          SetColorPlayingEffekseer3DEffect(_playHandle, red, green, blue, alpha);
       }
    }

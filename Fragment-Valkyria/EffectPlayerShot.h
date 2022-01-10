@@ -10,11 +10,10 @@ namespace FragmentValkyria {
 
          EffectType GetEfcType() const override { return EffectType::PlayerShot; }
 
-         void Init()override;
-         void Input(AppFrame::Input::InputManager& input)override;
+         void Init(std::string_view key)override;
+         void Input(AppFrame::Input::InputManager& input)override {};
          void Update()override;
          void Draw()override;
-
       };
    }
 

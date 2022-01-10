@@ -53,6 +53,7 @@ namespace AppFrame {
          if (DxLib_Init() == -1) {
             return false;
          }
+
          SetBackgroundColor(0, 0, 255);
          //•`‰ææ‚ğ— ‰æ–Ê‚ÉƒZƒbƒg
          SetDrawScreen(DX_SCREEN_BACK);

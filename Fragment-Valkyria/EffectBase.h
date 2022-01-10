@@ -24,10 +24,10 @@ namespace FragmentValkyria {
          EffectBase(Game::GameMain& gameMain);
          virtual ~EffectBase() override ;
 
-         void Init() override {};
+         void Init(std::string_view key) override ;
          void Input(AppFrame::Input::InputManager& input) override {};
          void Update() override {};
-         void Draw() override {};
+         void Draw() override ;
          virtual EffectType GetEfcType() const = 0;
 
       protected:

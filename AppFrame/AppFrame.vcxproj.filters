@@ -73,6 +73,9 @@
     <Filter Include="ヘッダー ファイル\Object">
       <UniqueIdentifier>{31c94a4e-8c38-4c01-b9c8-ee86094ae978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Color">
+      <UniqueIdentifier>{d393c3d5-fea6-4a3e-9033-2b4582f30018}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -125,9 +128,6 @@
     </ClCompile>
     <ClCompile Include="EffectServer.cpp">
       <Filter>ソース ファイル\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>ソース ファイル\Sound</Filter>
     </ClCompile>
     <ClCompile Include="ObjectBaseRoot.cpp">
       <Filter>ソース ファイル\Object</Filter>
@@ -214,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="ObjectServer.h">
       <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>ヘッダー ファイル\Color</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
