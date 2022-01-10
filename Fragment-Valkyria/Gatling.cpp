@@ -46,7 +46,7 @@ void Gatling::Move() {
 
 void Gatling::StateBase::Draw() {
 	_owner._modelAnimeComponent->Draw();
-	DrawSphere3D(AppFrame::Math::ToDX(_owner._position), _owner.Radian, 0, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+	DrawSphere3D(AppFrame::Math::ToDX(_owner._position), static_cast<float>(_owner._radian), 0, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
 }
 
 void Gatling::StateChase::Enter() {
