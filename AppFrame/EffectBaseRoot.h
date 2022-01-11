@@ -53,7 +53,7 @@ namespace AppFrame{
           * \brief 初期化及び_loadHandleにエフェクトハンドルを登録する
           * \param key ResourceServerに登録済みの任意の文字列
           */
-         virtual void Init(std::string_view key);
+         virtual void Init(std::string_view key) {};
          /**
           * \brief 入力処理
           * \param input 入力一括管理クラスの参照
@@ -103,7 +103,7 @@ namespace AppFrame{
           * \brief エフェクトの位置の取得
           * \return エフェクトの位置
           */
-         inline Math::Vector4 position() { return _position; }
+         inline Math::Vector4 position() const { return _position; }
          /**
           * \brief エフェクトの位置の設定
           * \param pos エフェクトを設定する位置
@@ -113,7 +113,7 @@ namespace AppFrame{
           * \brief エフェクトの回転角の取得
           * \return エフェクトの回転角
           */
-         inline Math::Vector4 rotation() { return _rotation; }
+         inline Math::Vector4 rotation() const { return _rotation; }
          /**
           * \brief エフェクトの回転角の設定
           * \param rot エフェクトを設定する回転角
@@ -123,7 +123,7 @@ namespace AppFrame{
           * \brief エフェクトの拡大率の取得
           * \return エフェクトの拡大率
           */
-         inline Math::Vector4 scale() { return _scale; }
+         inline Math::Vector4 scale() const { return _scale; }
          /**
           * \brief エフェクトの拡大率の設定
           * \param sca エフェクトを設定する拡大率
@@ -143,7 +143,7 @@ namespace AppFrame{
           * \brief エフェクトの色の取得
           * \return エフェクトの色
           */
-         inline Color::Color color() { return _color; }
+         inline Color::Color color() const { return _color; }
          /**
           * \brief エフェクトの色(RGBA)を設定
           * \param color エフェクトを設定する色(RGBA)

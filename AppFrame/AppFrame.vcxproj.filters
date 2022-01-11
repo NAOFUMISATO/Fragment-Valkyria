@@ -76,6 +76,9 @@
     <Filter Include="ヘッダー ファイル\Color">
       <UniqueIdentifier>{d393c3d5-fea6-4a3e-9033-2b4582f30018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Color">
+      <UniqueIdentifier>{a135d2f8-6901-4063-ab44-1a48ecfb2d12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -132,8 +135,11 @@
     <ClCompile Include="ObjectBaseRoot.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>ソース ファイル\Color</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectServer.cpp">
-      <Filter>ソース ファイル\Object</Filter>
+      <Filter>ソース ファイル\Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectBase.cpp
+ * \brief  エフェクトの基底
+ * 
+ * \author NAOFUMISATO
+ * \date   January 2022
+ *********************************************************************/
 #include "EffectBase.h"
 #include "GameMain.h"
 
@@ -10,7 +18,7 @@ EffectBase::~EffectBase() {
 }
 
 void EffectBase::Init(std::string_view key) {
-   EffectBaseRoot::Init(key);
+   SetEffectLoadHandle(key);
 }
 
 void EffectBase::Draw() {

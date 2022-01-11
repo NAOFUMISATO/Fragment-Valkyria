@@ -45,10 +45,10 @@ namespace FragmentValkyria {
 
          /**
           * \brief アニメーションの変更
-          * \param key 変更先のアニメーションに関連付けた任意の文字列
+          * \param animeName アニメーション名
           * \param repeate アニメーションをループ再生するかのフラグ
           */
-         void ChangeAnime(std::string_view key, bool repeate = false);
+         void ChangeAnime(std::string_view animeName, bool repeate = false);
          /**
           * \brief アニメーションの総時間の取得
           * \return アニメーションの総時間
@@ -64,6 +64,11 @@ namespace FragmentValkyria {
           * \return アニメーション時間
           */
          inline float playTime() const { return _playTime; }
+         /**
+          * \brief 再生時間の掛率の取得
+          * \return 再生時間の掛率
+          */
+         inline float timeRate() const { return _timeRate; }
          /**
           * \brief 再生時間の掛率の設定
           * \param 再生時間の掛率

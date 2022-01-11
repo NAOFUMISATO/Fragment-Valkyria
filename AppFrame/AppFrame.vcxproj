@@ -188,6 +188,7 @@
     <ClInclude Include="XJoypadInput.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="DxUtility.cpp" />
     <ClCompile Include="EffectBaseRoot.cpp" />
     <ClCompile Include="EffectServer.cpp" />

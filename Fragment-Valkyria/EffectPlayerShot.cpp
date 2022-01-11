@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectPlayerShot.cpp
+ * \brief  プレイヤーの射撃エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   January 2022
+ *********************************************************************/
 #include "EffectPlayerShot.h"
 #include "GameMain.h"
 

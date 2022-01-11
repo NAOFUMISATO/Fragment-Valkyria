@@ -22,10 +22,6 @@ namespace AppFrame {
          _loadHandle = handle;
       }
 
-      void EffectBaseRoot::Init(std::string_view key) {
-         SetEffectLoadHandle(key);
-      }
-
       void EffectBaseRoot::PlayEffect() {
          _playHandle = PlayEffekseer3DEffect(_loadHandle);
       }
@@ -84,7 +80,7 @@ namespace AppFrame {
 
       void EffectBaseRoot::SetEfcColor(Color::Color color){
          _color = color;
-         auto [red, green, blue, alpha] = _color.GetColor();
+         auto [red, green, blue, alpha] = _color.GetColorA();
          SetColorPlayingEffekseer3DEffect(_playHandle, red, green, blue, alpha);
       }
    }

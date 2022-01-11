@@ -30,32 +30,32 @@ namespace AppFrame {
           * \brief 左ボタンクリック判定を返す
           * \return 押されたならTRUEを返す
           */
-         inline bool LeftClick() { return _trg & MOUSE_INPUT_LEFT; }
+         inline bool LeftClick() const { return _trg & MOUSE_INPUT_LEFT; }
          /**
           * \brief 右ボタンクリック判定を返す
           * \return 押されたならTRUEを返す
           */
-         inline bool RightClick() { return _trg & MOUSE_INPUT_RIGHT; }
+         inline bool RightClick() const { return _trg & MOUSE_INPUT_RIGHT; }
          /**
           * \brief 左ボタン押下判定を返す
           * \return 押されているならTRUEを返す
           */
-         inline bool LeftPress() { return _key & MOUSE_INPUT_LEFT; }
+         inline bool LeftPress() const { return _key & MOUSE_INPUT_LEFT; }
          /**
           * \brief 右ボタン押下判定を返す
           * \return 押されているならTRUEを返す
           */
-         inline bool RightPress() { return _key & MOUSE_INPUT_RIGHT; }
+         inline bool RightPress() const { return _key & MOUSE_INPUT_RIGHT; }
          /**
           * \brief マウスポインターの座標の取得
           * \return マウスポインターの座標
           */
-         inline Math::Vector4 GetPosition() { return _position; }
+         inline Math::Vector4 GetPosition() const { return _position; }
          /**
           * \brief 座標の変化量の取得
           * \return 座標の変化量
           */
-         inline Math::Vector4 GetDelta() { return _delta; }
+         inline Math::Vector4 GetDelta() const { return _delta; }
 
       private:
          int _key{ 0 };   //!< 押下判定

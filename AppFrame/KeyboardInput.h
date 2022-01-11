@@ -29,72 +29,72 @@ namespace AppFrame {
           * \brief キーボードの下矢印キーの押下判定を返す
           * \return 下矢印キーの押下判定
           */
-         inline bool DownPress() { return _key & PAD_INPUT_DOWN; }
+         inline bool DownPress() const { return _key & PAD_INPUT_DOWN; }
          /**
           * \brief キーボードの左矢印キーの押下判定を返す
           * \return 左矢印キーの押下判定
           */
-         inline bool LeftPress() { return _key & PAD_INPUT_LEFT; }
+         inline bool LeftPress() const { return _key & PAD_INPUT_LEFT; }
          /**
           * \brief キーボードの右矢印キーの押下判定を返す
           * \return 右矢印キーの押下判定
           */
-         inline bool RightPress() { return _key & PAD_INPUT_RIGHT; }
+         inline bool RightPress() const { return _key & PAD_INPUT_RIGHT; }
          /**
           * \brief キーボードの上矢印キーの押下判定を返す
           * \return 上矢印キーの押下判定
           */
-         inline bool UpPress() { return _key & PAD_INPUT_UP; }
+         inline bool UpPress() const { return _key & PAD_INPUT_UP; }
          /**
           * \brief キーボードのZキーのトリガ判定を返す
           * \return Zキーのトリガ判定
           */
-         inline bool ZClick() { return _trg & PAD_INPUT_1; }
+         inline bool ZClick() const { return _trg & PAD_INPUT_1; }
          /**
           * \brief キーボードのXキーのトリガ判定を返す
           * \return Xキーのトリガ判定
           */
-         inline bool XClick() { return _trg & PAD_INPUT_2; }
+         inline bool XClick() const { return _trg & PAD_INPUT_2; }
          /**
           * \brief キーボードのCキーのトリガ判定を返す
           * \return Cキーのトリガ判定
           */
-         inline bool CClick() { return _trg & PAD_INPUT_3; }
+         inline bool CClick() const { return _trg & PAD_INPUT_3; }
          /**
           * \brief キーボードのAキーの押下判定を返す
           * \return Aキーの押下判定
           */
-         inline bool APress() { return _key & PAD_INPUT_4; }
+         inline bool APress() const { return _key & PAD_INPUT_4; }
          /**
           * \brief キーボードのSキーの押下判定を返す
           * \return Sキーの押下判定
           */
-         inline bool SPress() { return _key & PAD_INPUT_5; }
+         inline bool SPress() const { return _key & PAD_INPUT_5; }
          /**
           * \brief キーボードのDキーの押下判定を返す
           * \return Dキーの押下判定
           */
-         inline bool DPress() { return _key & PAD_INPUT_6; }
+         inline bool DPress() const { return _key & PAD_INPUT_6; }
          /**
           * \brief キーボードのQキーのトリガ判定を返す
           * \return Qキーのトリガ判定
           */
-         inline bool QClick() { return _trg & PAD_INPUT_7; }
+         inline bool QClick() const { return _trg & PAD_INPUT_7; }
          /**
           * \brief キーボードのWキーの押下判定を返す
           * \return Wキーの押下判定
           */
-         inline bool WPress() { return _key & PAD_INPUT_8; }
+         inline bool WPress() const { return _key & PAD_INPUT_8; }
          /**
           * \brief キーボードのESCキーのトリガ判定を返す
           * \return ESCキーのトリガ判定
           */
-         inline bool EscClick() { return _trg & PAD_INPUT_9; }
+         inline bool EscClick() const { return _trg & PAD_INPUT_9; }
          /**
           * \brief キーボードのSpaceキーのトリガ判定を返す
           * \return Spaceキーのトリガ判定
           */
-         inline bool SpaceClick() { return _trg & PAD_INPUT_10; }
+         inline bool SpaceClick() const { return _trg & PAD_INPUT_10; }
 
       private:
          int _key = 0;   //!< 押下判定
