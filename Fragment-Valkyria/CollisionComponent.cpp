@@ -16,18 +16,25 @@ CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owne
 }
 
 void CollisionComponent::ObjectRangeFromPlayer() {
-	auto objectPos = _owner.position();
-	auto objectRadian = /*_owner.GetLoadJson()*/100.0;
-	AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+	auto plyPoint = _owner.position();
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
 
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
 			continue;
 		}
-		if (1) {
+		if (objectBase.collisionComponent().report().id() == ReportId::HitFromPlayer) {
+			continue;
+		}
 
+		auto objectPos = objectBase.position();
+		auto objectRadian = /*_owner.GetLoadJson()*/100.0;
+		AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+
+		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
+			break;
 		}
 	}
 }
