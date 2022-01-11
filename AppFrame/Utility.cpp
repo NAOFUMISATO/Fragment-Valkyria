@@ -136,6 +136,7 @@ namespace AppFrame {
 
          return ret;
       }
+
       bool Utility::CollisionSpherePoint(const Vector4& point, const Sphere& s) {
          auto [pos, radian] = s;
          auto sphereFromPoint = pos - point;
@@ -143,6 +144,7 @@ namespace AppFrame {
          auto checkSize = x * x + y * y + z * z;
          return (checkSize) <= (radian * radian);
       }
+
       unsigned int Utility::GetColorCode(unsigned char red, unsigned char green, unsigned char blue) {
          std::array<unsigned char, 3> color = { red,green,blue };
          std::string redCode;

@@ -22,10 +22,11 @@ namespace AppFrame {
 
       class Vector4;
 
-      using plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
-      using collision = std::tuple<bool, Vector4>;
+      using Plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
+      using Sphere = std::tuple<Vector4 /*position*/, double/*radian*/>;
+      using Collision = std::tuple<bool, Vector4>;
 
-
+      /**
        * \class 有用算術クラス
        * \brief 全て静的メンバで構成
        */
@@ -84,14 +85,14 @@ namespace AppFrame {
          static bool CollisionPlaneLine(const Plane& p, const Vector4& lineStart, const Vector4& lineEnd, Collision& result);
          //球と点の当たり判定
          static bool CollisionSpherePoint(const Vector4& point, const Sphere& s);
-         /**
+        /**
          * \brief 指定したRGBのカラーコードの取得
          * \param r 赤値
          * \param g 緑値
          * \param b 青値
          * \return カラーコード
-         static bool CollisionPlaneLine(const plane& p, const Vector4& lineStart, const Vector4& lineEnd, collision& result);
-         static bool CollisionSpherePoint(const Vector4& point, const Sphere& s);
+         */
+         unsigned int GetColorCode(unsigned char red, unsigned char green, unsigned char blue);
 
       private:
          Utility() = default;
