@@ -11,7 +11,7 @@
 #include "ObjectFactory.h"
 #include "ModelAnimeComponent.h"
 
-using namespace FragmentValkyria::LargeEnemy;
+using namespace FragmentValkyria::Enemy;
 
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 	
@@ -32,6 +32,8 @@ void LargeEnemy::Update() {
 	ComputeWorldTransform();
 	// ƒ‚ƒfƒ‹‚ÌXV
 	_modelAnimeComponent->Update();
+
+	GetObjServer().Register("EnemyPos", _position);
 }
 
 void LargeEnemy::Draw() {
@@ -41,6 +43,11 @@ void LargeEnemy::Draw() {
 void LargeEnemy::CreateFallObject() {
 	auto fallObject = gameMain().objFactory().Create("FallObject");
 	gameMain().objServer().Add(std::move(fallObject));
+}
+
+void LargeEnemy::CreateGatling() {
+	auto gatling = gameMain().objFactory().Create("Gatling");
+	gameMain().objServer().Add(std::move(gatling));
 }
 
 void LargeEnemy::StateBase::Draw() {
@@ -59,7 +66,12 @@ void LargeEnemy::StateIdle::Input(InputManager& input) {
 void LargeEnemy::StateIdle::Update() {
 
 	if (_owner._stateCnt >= 1 && _owner._stateCnt % 600 == 0) {
-		_owner._stateServer->PushBack("FallObject");
+		if (!_owner._fallObjectflag) {
+			_owner._stateServer->PushBack("FallObject");
+		}
+		else {
+			_owner._stateServer->PushBack("Gatling");
+		}
 	}
 
 	++_owner._stateCnt;
@@ -67,6 +79,7 @@ void LargeEnemy::StateIdle::Update() {
 
 void LargeEnemy::StateFallObject::Enter() {
 	_owner._stateCnt = 0;
+	_owner._fallObjectflag = true;
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Attack", true);
 }
 
@@ -85,6 +98,26 @@ void LargeEnemy::StateFallObject::Update() {
 	}
 
 	/*_owner._stateServer->PopBack();*/
+
+	++_owner._stateCnt;
+}
+
+void LargeEnemy::StateGatling::Enter() {
+	_owner._stateCnt = 0;
+	_owner._gatlingCnt = 10;
+	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+}
+
+void LargeEnemy::StateGatling::Update() {
+	if (_owner._stateCnt % _owner.GatlingFrame == 0) {
+		_owner.CreateGatling();
+		--_owner._gatlingCnt;
+	}
+
+	if (_owner._gatlingCnt <= 0) {
+		_owner._stateServer->PopBack();
+		_owner._fallObjectflag = false;
+	}
 
 	++_owner._stateCnt;
 }

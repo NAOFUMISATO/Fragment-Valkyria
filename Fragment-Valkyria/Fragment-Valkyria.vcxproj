@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CreatorBase.h" />
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectPlayerShot.h" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
     <ClCompile Include="EffectPlayerShot.cpp" />

@@ -9,7 +9,7 @@
 #include "FallObject.h"
 #include "ModelAnimeComponent.h"
 
-using namespace FragmentValkyria::FallObject;
+using namespace FragmentValkyria::Enemy;
 
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 

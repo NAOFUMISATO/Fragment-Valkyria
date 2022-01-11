@@ -10,7 +10,7 @@
 
 namespace FragmentValkyria {
 
-	namespace FallObject {
+	namespace Enemy {
 
 		class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;

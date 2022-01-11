@@ -51,7 +51,7 @@ namespace FragmentValkyria {
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
 
             const double Speed{ 2.0 };
-            const double Radian{ 100.0 };
+            double _radian{ 100.0 };
 
 		public:
             /**

@@ -21,8 +21,9 @@ namespace AppFrame {
       static constexpr double PI = std::numbers::pi;
       class Vector4;
 
-      using plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
-      using collision = std::tuple<bool, Vector4>;
+      using Plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
+      using Sphere = std::tuple<Vector4 /*position*/, double/*radian*/>;
+      using Collision = std::tuple<bool, Vector4>;
 
       class Utility {
       public:
@@ -39,7 +40,7 @@ namespace AppFrame {
          static float GetRandom(const float min, const float max);
 
          // ‹éŒ`‚Æü•ª‚Ì“–‚½‚è”»’è
-         static collision CollisionPolygonLine(const Vector4& polygonPoint0, const Vector4& polygonPoint1,
+         static Collision CollisionPolygonLine(const Vector4& polygonPoint0, const Vector4& polygonPoint1,
             const Vector4& polygonPoint2, const Vector4& polygonPoint3,
             const Vector4& lineStart, const Vector4& lineEnd);
 
@@ -51,7 +52,9 @@ namespace AppFrame {
             const Vector4& trianglePoint2, const Vector4& point);
 
          // •½–Ê‚Æü•ª‚Ì•Ó‚è”»’è
-         static bool CollisionPlaneLine(const plane& p, const Vector4& lineStart, const Vector4& lineEnd, collision& result);
+         static bool CollisionPlaneLine(const Plane& p, const Vector4& lineStart, const Vector4& lineEnd, Collision& result);
+         //‹…‚Æ“_‚Ì“–‚½‚è”»’è
+         static bool CollisionSpherePoint(const Vector4& point, const Sphere& s);
 
       private:
          Utility() = default;
