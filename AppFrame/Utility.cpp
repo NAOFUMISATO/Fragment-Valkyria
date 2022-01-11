@@ -9,6 +9,8 @@
 #include <random>
 #include <algorithm>
 #include <cmath>
+#include <array>
+#include <string>
 #include "vector4.h"
 #include "utility.h"
 namespace {
@@ -134,17 +136,84 @@ namespace AppFrame {
 
          return ret;
       }
-      bool Utility::CollisionSpherePoint(const Vector4& point, const Sphere& s)
-      {
-          auto [pos, radian] = s;
+      bool Utility::CollisionSpherePoint(const Vector4& point, const Sphere& s) {
+         auto [pos, radian] = s;
+         auto sphereFromPoint = pos - point;
+         auto [x, y, z] = sphereFromPoint.GetXYZ();
+         auto checkSize = x * x + y * y + z * z;
+         return (checkSize) <= (radian * radian);
+      }
+      unsigned int Utility::GetColorCode(unsigned char red, unsigned char green, unsigned char blue) {
+         std::array<unsigned char, 3> color = { red,green,blue };
+         std::string redCode;
+         std::string greenCode;
+         std::string blueCode;
+         for (int i = 0; i < 3; i++) {
+            std::string front;
+            auto div = color[i] / 16;
+            switch (div) {
+            default:
+               front = std::to_string(div);
+               break;
+            case 10:
+               front = "A";
+               break;
+            case 11:
+               front = "B";
+               break;
+            case 12:
+               front = "C";
+               break;
+            case 13:
+               front = "D";
+               break;
+            case 14:
+               front = "E";
+               break;
+            case 15:
+               front = "F";
+               break;
+            }
+            std::string back;
+            auto rem = color[i] % 16;
 
-          auto sphereFromPoint = pos - point;
+            switch (rem) {
+            default:
+               back = std::to_string(rem);
+               break;
+            case 10:
+               back = "A";
+               break;
+            case 11:
+               back = "B";
+               break;
+            case 12:
+               back = "C";
+               break;
+            case 13:
+               back = "D";
+               break;
+            case 14:
+               back = "E";
+               break;
+            case 15:
+               back = "F";
+               break;
+            }
 
-          auto [x, y, z] = sphereFromPoint.GetXYZ();
-
-          auto checkSize = x * x + y * y + z * z;
-
-          return (checkSize) <= (radian * radian);
+            if (i == 0) {
+               redCode = front + back;
+            }
+            if (i == 1) {
+               greenCode = front + back;
+            }
+            if (i == 2) {
+               blueCode = front + back;
+            }
+         }
+         auto strCode = "0x" + redCode + greenCode + blueCode;
+         unsigned int colorCode = std::stoi(strCode, nullptr, 16);
+         return colorCode;
       }
    }
 }
