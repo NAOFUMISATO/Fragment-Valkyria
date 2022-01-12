@@ -190,6 +190,14 @@ namespace AppFrame {
          if (!_models.contains(key.data())) {
             return -1;   // キーが未登録
          }
+
+         auto& [handles, animes] = _models[key.data()];
+
+         if (!animes.contains(animName.data())) {
+             return -1;   // キーが未登録
+         }
+
+         return animes[animName.data()];
 #else
          try {
             if (!_models.contains(key.data())) {
@@ -200,26 +208,21 @@ namespace AppFrame {
          catch (std::logic_error& error) {
             OutputDebugString(error.what());
          }
-#endif
 
          auto& [handles, animes] = _models[key.data()];
 
-#ifndef _DEBUG
-         if (!animes.contains(key.data())) {
-            return -1;   // キーが未登録
-         }
-#else
          try {
-            if (!animes.contains(key.data())) {
-               std::string message = key.data();
-               throw std::logic_error("----------キー[" + message + "]がアニメ情報コンテナに存在しませんでした。----------\n");
-            }
+             if (!animes.contains(animName.data())) {
+                 std::string message = animName.data();
+                 throw std::logic_error("----------キー[" + message + "]がアニメ情報コンテナに存在しませんでした。----------\n");
+             }
          }
          catch (std::logic_error& error) {
-            OutputDebugString(error.what());
+             OutputDebugString(error.what());
          }
-#endif
+
          return animes[animName.data()];
+#endif
       }
 
       /*-----------音源関係----------*/

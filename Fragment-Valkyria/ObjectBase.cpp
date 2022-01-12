@@ -10,6 +10,7 @@
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
 #include "CameraComponent.h"
+#include "CollisionComponent.h"
 #include "ObjectServer.h"
 
 using namespace FragmentValkyria::Object;

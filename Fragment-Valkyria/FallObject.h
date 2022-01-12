@@ -14,6 +14,7 @@ namespace FragmentValkyria {
 
 		class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;
+            using Vector4 = AppFrame::Math::Vector4;
 		public:
 			FallObject(Game::GameMain& gameMain);
 			virtual ~FallObject() override = default;
@@ -43,9 +44,21 @@ namespace FragmentValkyria {
             void Draw() override;
 
         private:
+            void HitCheckFromPlayerPoint();
+            void Save();
+            void Up();
 
             const double Gravity{ 0.01 };
+            const double UpSpeed{ 10.0 };
+            const double RotateAngle{ 180.0 };
+            const double UpDownRange{ 30.0 };
             double _fallTimer{ 0.0 };
+            double _range{ 300.0 };
+            double _upDownAngle{ 0.0 };
+            double _rotateAngle{ 0.0 };
+            bool _saveFlag{ false };
+
+            Vector4 _VecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
 
         public:
             /**
@@ -106,6 +119,32 @@ namespace FragmentValkyria {
                  * \param owner プレイヤーの参照
                  */
                 StateFall(FallObject& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 入力処理
+                 * \param input 入力一括管理クラスの参照
+                 */
+                void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+             * \class 浮く状態のクラス
+             * \brief 浮く状態の処理を回す
+             */
+            class StateSave : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner プレイヤーの参照
+                 */
+                StateSave(FallObject& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */

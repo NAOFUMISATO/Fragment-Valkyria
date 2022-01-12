@@ -40,6 +40,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
    state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
    state->Register("Attack", std::make_shared<Player::Player::StateAttack>(*player));
+   state->Register("ShootReady", std::make_shared<Player::Player::StateShootReady>(*player));
    player->stateServer(std::move(state));
 
    return std::move(player);

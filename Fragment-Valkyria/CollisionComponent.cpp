@@ -8,6 +8,10 @@
  *********************************************************************/
 #include "CollisionComponent.h"
 #include "ObjectBase.h"
+#ifdef _DEBUG
+#include <stdexcept>
+#include <windows.h>
+#endif
 
 using namespace FragmentValkyria::Collision;
 
@@ -19,22 +23,69 @@ void CollisionComponent::ObjectRangeFromPlayer() {
 	auto plyPoint = _owner.position();
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
+
+		auto& objectBase = ObjectBaseCast(*object);
 
 		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
 			continue;
 		}
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromPlayer) {
+		/*if (objectBase.collisionComponent().report().id() == ReportId::HitFromPlayer) {
 			continue;
-		}
+		}*/
 
 		auto objectPos = objectBase.position();
-		auto objectRadian = /*_owner.GetLoadJson()*/100.0;
+		auto objectRadian = /*_owner.GetLoadJson()*/300.0;
 		AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
 
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
 			break;
 		}
+		else {
+			objectBase.collisionComponent().report().id(ReportId::None);
+		}
 	}
+}
+
+void CollisionComponent::PlayerFromObjectRange() {
+
+	auto objectPos = _owner.position();
+	auto objectRadian = 300.0;
+	AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+			continue;
+		}
+
+		auto plyPoint = objectBase.position();
+		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromObjectRange);
+			break;
+		}
+		else {
+			objectBase.collisionComponent().report().id(ReportId::None);
+		}
+	}
+}
+
+FragmentValkyria::Object::ObjectBase& CollisionComponent::ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj) {
+#ifndef _DEBUG
+	auto& objectBase = dynamic_cast<Object::ObjectBase&>(obj);
+
+	return objectBase;
+	
+#else
+	try {
+		auto& objectBase = dynamic_cast<Object::ObjectBase&>(obj);
+
+		return objectBase;
+	}
+	catch (std::bad_cast&) {
+		OutputDebugString("----------ダウンキャスト失敗----------");
+	}
+#endif
 }

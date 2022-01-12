@@ -10,6 +10,7 @@
 #include <cmath>
 #include "ObjectServer.h"
 #include "CameraComponent.h"
+#include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "GameMain.h"
 using namespace FragmentValkyria::Player;
@@ -72,6 +73,24 @@ void Player::Move() {
     _position = _position + (_moved * MoveSpeed);
 }
 
+void Player::ShootRotate() {
+    // カメラから向く方向の単位ベクトルをもとめる
+    auto camForward = _cameraComponent->GetForward();
+
+    auto [x, y, z] = camForward.GetXYZ();
+    auto direction = Vector4(x, 0.0, z);
+    auto radian = std::atan2(x, z);
+    _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
+
+}
+
+void Player::HitCheckFromFallObjectRange() {
+    auto report = _collisionComponent->report();
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromObjectRange) {
+        _stateServer->PushBack("ShootReady");
+    }
+}
+
 void Player::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
 }
@@ -98,9 +117,13 @@ void Player::StateIdle::Input(InputManager& input) {
    if (input.GetXJoypad().LeftStickY() <= -3000) {
        _owner._stateServer->PushBack("Run");
    }
+
+   if (input.GetXJoypad().LeftTrigger() >= 20) {
+       _owner.HitCheckFromFallObjectRange();
+   }
 }
 void Player::StateIdle::Update() {
-   
+    _owner._collisionComponent->ObjectRangeFromPlayer();
 }
 
 /// 走り
@@ -138,6 +161,9 @@ void Player::StateRun::Input(InputManager& input) {
        _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
        moved = true;
    }
+   if (input.GetXJoypad().LeftTrigger() >= 20) {
+       _owner.HitCheckFromFallObjectRange();
+   }
    if (!moved) {
        _owner._stateServer->PopBack();
    }
@@ -150,6 +176,7 @@ void Player::StateRun::Input(InputManager& input) {
 }
 void Player::StateRun::Update() {
    _owner.Move();
+   _owner._collisionComponent->ObjectRangeFromPlayer();
 }
 
 /// 攻撃
@@ -170,4 +197,22 @@ void Player::StateAttack::Update() {
 }
 void Player::StateAttack::Draw() {
    _owner._modelAnimeComponent->Draw();
+}
+
+void Player::StateShootReady::Enter() {
+    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+}
+
+void Player::StateShootReady::Input(InputManager& input) {
+    if (input.GetXJoypad().RBClick()) {
+        _owner._stateServer->PopBack();
+    }
+}
+
+void Player::StateShootReady::Update() {
+    _owner.ShootRotate();
+}
+
+void Player::StateShootReady::Draw() {
+    _owner._modelAnimeComponent->Draw();
 }
