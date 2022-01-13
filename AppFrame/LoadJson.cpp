@@ -58,10 +58,8 @@ namespace AppFrame {
             auto yNum = textureData["ynum"];
             auto xSize = textureData["xsize"];
             auto ySize = textureData["ysize"];
-            Texture tex = Texture();
             auto texturePath = (textureDirectory / fileName).generic_string();
-            tex.SetTextureName(texturePath);
-            tex.SetDivParams(std::make_tuple(allNum, xNum, yNum, xSize, ySize));
+            Texture tex = Texture(texturePath, allNum, xNum, yNum, xSize, ySize);
             _gameBase.resServer().LoadTexture(keyName, tex);
          }
       }
@@ -199,8 +197,7 @@ namespace AppFrame {
                auto x = vecParam["x"];
                auto y = vecParam["y"];
                auto z = vecParam["z"];
-               Vector4 vec = Vector4();
-               vec.SetXYZ(std::make_tuple(x, y, z));
+               Vector4 vec = Vector4(x,y,z);
                return vec;
             }
          }

@@ -150,7 +150,7 @@ namespace AppFrame {
          std::string redCode;
          std::string greenCode;
          std::string blueCode;
-         for (int i = 0; i < 3; i++) {
+         for (int i = 0; i < color.size(); i++) {
             std::string front;
             auto div = color[i] / 16;
             switch (div) {

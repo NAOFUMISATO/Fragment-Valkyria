@@ -59,7 +59,7 @@ namespace AppFrame {
             handles.clear();        // 画像ハンドルコンテナの解放
             _textures.erase(key.data());  // 指定したキーの削除
          }
-         auto filename = texture.GetTextureName().data();
+         auto filename = texture.textureName().data();
          auto [allnum, xnum, ynum, xsize, ysize] = texture.GetDivParams();
          std::vector<int> handles(allnum);
          LoadDivGraph(filename, allnum, xnum, ynum, xsize, ysize, handles.data());   // DxLib::LoadDivGraphをコピーする
@@ -219,6 +219,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
+
          return animes[animName.data()];
       }
 

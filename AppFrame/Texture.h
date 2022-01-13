@@ -47,12 +47,12 @@ namespace AppFrame {
           * \brief  ファイル名の取得
           * \return 画像ファイル名
           */
-         inline std::string_view GetTextureName() const { return _textureName; }
+         inline std::string_view textureName() const { return _textureName; }
          /**
           * \brief ファイル名の設定
           * \param textureName
           */
-         inline void SetTextureName(std::string_view textureName) { _textureName = textureName; }
+         inline void textureName(std::string_view textureName) { _textureName = textureName; }
          /**
           * \brief  DxLib::LoadDivGraphに必要な情報を返す
           * \return 画像の総分割数,画像の横分割数,画像の縦分割数,分割された画像一つの横サイズ,分割された画像一つの縦サイズ
