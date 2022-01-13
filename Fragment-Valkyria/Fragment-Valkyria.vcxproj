@@ -188,6 +188,7 @@
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageCreator.h" />
     <ClInclude Include="StageData.h" />
+    <ClInclude Include="StageModelComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="PlayerCreator.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageCreator.cpp" />
+    <ClCompile Include="StageModelComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

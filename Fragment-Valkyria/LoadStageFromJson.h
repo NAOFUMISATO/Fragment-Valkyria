@@ -2,12 +2,12 @@
 #include <filesystem>
 #include <utility>
 #include <unordered_map>
+#include "StageData.h"
 namespace FragmentValkyria{
    namespace Game {
       class GameMain;
    }
    namespace Stage {
-      class StageData;
       class LoadStageFromJson {
       public:
          LoadStageFromJson(Game::GameMain& gameMain);
@@ -20,6 +20,5 @@ namespace FragmentValkyria{
          Game::GameMain& _gameMain;
          std::unordered_map<std::string, std::vector<std::pair<int,StageData>>> _stageModelsMap;
       };
-
-}
+   }
 }

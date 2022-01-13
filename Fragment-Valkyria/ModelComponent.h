@@ -94,8 +94,6 @@ namespace FragmentValkyria {
           */
          void SetEmiColor(int index, float r, float g, float b);
 
-         void SetStageModels(std::string_view key);
-
       protected:
          Object::ObjectBase& _owner;   //!< オブジェクトの基底クラスの参照
          std::string _key;             //!< モデル及びアニメーションで使用するキー

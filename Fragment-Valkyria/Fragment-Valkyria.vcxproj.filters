@@ -156,6 +156,9 @@
     <ClInclude Include="StageData.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="StageModelComponent.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -228,6 +231,9 @@
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
     <ClCompile Include="LoadStageFromJson.cpp">
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageModelComponent.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,11 +17,11 @@ namespace FragmentValkyria {
       constexpr auto ScreenDepth = 32;     //!< ビット数
    }
    // 二重インクルード防止
-   namespace Object {
-      class ObjectServer;
-   }
    namespace Create {
       class ObjectFactory;
+   }
+   namespace Stage {
+      class LoadStageFromJson;
    }
    /**
     * \brief ゲーム本体
@@ -61,15 +61,20 @@ namespace FragmentValkyria {
           */
          void Render()override;
 
-         
          /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
           */
          Create::ObjectFactory& objFactory() const { return *_objFactory; }
+         /**
+          * \brief ステージ情報管理クラスの取得
+          * \return ステージ情報管理クラスの参照
+          */
+         Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
 
       private:
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
+         std::unique_ptr<Stage::LoadStageFromJson> _loadStage;//!< ステージ情報管理クラスのユニークポインタ
       };
    }
 }
