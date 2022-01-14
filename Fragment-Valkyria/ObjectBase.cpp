@@ -10,11 +10,13 @@
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
 #include "CameraComponent.h"
+#include "CollisionComponent.h"
 #include "ObjectServer.h"
 
 using namespace FragmentValkyria::Object;
 
 ObjectBase::ObjectBase(Game::GameMain& gameMain) :ObjectBaseRoot{ gameMain }, _gameMain{gameMain} {
+	_collisionComponent = std::make_unique<Collision::CollisionComponent>(*this);
 }
 
 ObjectBase::~ObjectBase() {

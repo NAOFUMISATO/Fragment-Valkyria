@@ -20,7 +20,7 @@ PlayerCreator::PlayerCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain }
 }
 
 std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
-   auto camera = std::make_shared<Camera::CameraComponent>();
+   auto camera = std::make_shared<Camera::CameraComponent>(_gameMain);
    camera->SetPosition({ 0, 120, -500 });
    camera->SetTarget({ 150, 100, 2000 });
    camera->Init();
@@ -40,6 +40,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
    state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
    state->Register("Attack", std::make_shared<Player::Player::StateAttack>(*player));
+   state->Register("ShootReady", std::make_shared<Player::Player::StateShootReady>(*player));
    player->stateServer(std::move(state));
 
    return std::move(player);

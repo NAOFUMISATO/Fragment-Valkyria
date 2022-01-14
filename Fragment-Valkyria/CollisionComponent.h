@@ -21,6 +21,7 @@ namespace FragmentValkyria {
 			enum class ReportId {
 				None,
 				HitFromPlayer,
+				HitFromObjectRange,
 			};
 
 			class Report {
@@ -38,9 +39,13 @@ namespace FragmentValkyria {
 
 			void ObjectRangeFromPlayer();
 
+			void PlayerFromObjectRange();
+
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }
 		private:
+
+			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
 
 			Object::ObjectBase& _owner;
 			std::unique_ptr<Report> _report;
