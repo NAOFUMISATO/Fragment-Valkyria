@@ -1,6 +1,6 @@
 #pragma once
 /*****************************************************************//**
- * \file   PathServer.h
+ * \file   CurrentPathServer.h
  * \brief  ファイルパス一括管理クラス
  *
  * \author NAOFUMISATO
@@ -22,20 +22,20 @@ namespace AppFrame {
        * \class ファイルパス一括管理クラス
        * \brief ファイルパスの登録、取得を行う
        */
-      class PathServer {
+      class CurrentPathServer {
       public:
          /**
           * \brief 任意の文字列をキーにしてファイルパスを管理
           */
-         using PathMap = std::unordered_map<std::string, std::filesystem::path>;
+         using CurrentPathMap = std::unordered_map<std::string, std::filesystem::path>;
          /**
           * \brief コンストラクタ
           */
-         PathServer();
+         CurrentPathServer();
          /**
           * \brief デストラクタ
           */
-         virtual ~PathServer() = default;
+         virtual ~CurrentPathServer() = default;
          /**
           * \brief 初期化処理
           */
@@ -48,16 +48,16 @@ namespace AppFrame {
           * \brief ファイルパスの一括登録
           * \param pathMap ファイルパスマップ
           */
-         void RegistPath(const PathMap& pathMap);
+         void RegistCurrentPath(const CurrentPathMap& pathMap);
          /**
           * \brief ファイルパスの取得
           * \param key キーとなる任意の文字列
           * \return ファイルパス
           */
-         std::filesystem::path GetPath(std::string_view key);
+         std::filesystem::path GetCurrentPath(std::string_view key);
 
       private:
-         std::unordered_map < std::string, std::filesystem::path > _paths;   //!< ファイルパスコンテナ
+         std::unordered_map < std::string, std::filesystem::path > _currentPaths;   //!< ファイルパスコンテナ
       };
    }
 }

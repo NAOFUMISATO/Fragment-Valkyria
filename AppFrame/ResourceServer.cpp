@@ -13,7 +13,7 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
 #include "GameBase.h"
-#include "PathServer.h"
+#include "CurrentPathServer.h"
  /**
   * \brief アプリケーションフレーム
   */

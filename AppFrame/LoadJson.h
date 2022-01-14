@@ -9,6 +9,8 @@
 #pragma once
 #include <DxLib.h>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 #include <string_view>
 #include <filesystem>
 #include <nlohmann/json.hpp>
@@ -79,9 +81,12 @@ namespace AppFrame {
           * \return データ
           */
          Vector4 GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName);
+         static std::unordered_map<std::string, nlohmann::json> GetParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> paramNames);
+         static std::unordered_map<std::string, Vector4> GetVecParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> vecParamNames);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
+         static const std::filesystem::path _paramJsonCurrentPath;
       };
    }
 }

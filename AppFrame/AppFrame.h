@@ -10,7 +10,7 @@
 #include "Matrix44.h"
 #include "Vector4.h"
 #include "DxUtility.h"
-#include "PathServer.h"
+#include "CurrentPathServer.h"
 #include "Utility.h"
 #include "StateServer.h"
 #include "StateBaseRoot.h"

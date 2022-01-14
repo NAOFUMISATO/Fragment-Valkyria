@@ -12,21 +12,31 @@
 using namespace FragmentValkyria::Mode;
 
 namespace {
-   constexpr auto TitleBgWidth = 1920;    //!< タイトル背景横サイズ
-   constexpr auto TitleBgHeight = 1080;   //!< タイトル背景縦サイズ
-   constexpr auto GameTitleWidth = 1553;  //!< ゲームタイトル横サイズ
-   constexpr auto GameTitleHeight = 224;  //!< ゲームタイトル縦サイズ
-   constexpr auto StartGuideWidth = 1135; //!< スタートガイド横サイズ
-   constexpr auto StartGuideHeight = 107; //!< スタートガイド縦サイズ
-   constexpr auto StartGuidePositionX = FragmentValkyria::ScreenWidth / 2 - StartGuideWidth / 2;   //!< スタートガイドX位置
-   constexpr auto StartGuidePositionY = 700 - StartGuideHeight / 2;              //!< スタートガイドY位置
+   auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("title",
+      { "bg_width","bg_height" ,"title_width" ,"title_height" ,
+      "guide_width" ,"guide_height", "guide_x" ,"guide_y" });
+
+   const int TitleBgWidth = paramMap["bg_width"];         //!< タイトル背景横サイズ
+   const int TitleBgHeight = paramMap["bg_height"];       //!< タイトル背景縦サイズ
+   const int GameTitleWidth = paramMap["title_width"];    //!< ゲームタイトル横サイズ
+   const int GameTitleHeight = paramMap["title_height"];  //!< ゲームタイトル縦サイズ
+   const int StartGuideWidth = paramMap["guide_width"];   //!< スタートガイド横サイズ
+   const int StartGuideHeight = paramMap["guide_height"]; //!< スタートガイド縦サイズ
+   const int StartGuidePositionX = paramMap["guide_x"];   //!< スタートガイドX位置
+   const int StartGuidePositionY = paramMap["guide_y"];   //!< スタートガイドY位置
+   //仮----------
+   auto vecParamMap = AppFrame::Resource::LoadJson::GetVecParamMap("player", { "init_pos" });
+   const auto PlayerInitPos = vecParamMap["init_pos"];   //!< プレイヤー初期位置
+   //------------
 }
 
 ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 }
 
 void ModeTitle::Init() {
-
+   //仮(値チェック用)-----------
+   auto vec = PlayerInitPos;
+   //---------------------------
    auto& loadJson = GetLoadJson();
    loadJson.LoadTextures("title");
    loadJson.LoadSounds("bgm");

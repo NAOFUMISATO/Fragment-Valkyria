@@ -1,12 +1,12 @@
 
 /*****************************************************************//**
- * \file   PathServer.cpp
+ * \file   CurrentPathServer.cpp
  * \brief  ファイルパスの一括管理
  *
  * \author Sato Naofumi
  * \date   December 2021
  *********************************************************************/
-#include "PathServer.h"
+#include "CurrentPathServer.h"
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
@@ -20,35 +20,35 @@ namespace AppFrame {
     */
    namespace Path {
 
-      PathServer::PathServer() {
+      CurrentPathServer::CurrentPathServer() {
          Init();
       }
 
-      void PathServer::Init() {
+      void CurrentPathServer::Init() {
          Clear();
       }
 
-      void PathServer::Clear() {
-         _paths.clear();
+      void CurrentPathServer::Clear() {
+         _currentPaths.clear();
       }
 
-      void PathServer::RegistPath(const PathMap& pathMap) {
+      void CurrentPathServer::RegistCurrentPath(const CurrentPathMap& pathMap) {
          for (auto&& [key, path] : pathMap) {
-            if (_paths.contains(key.data())) {
-               _paths.erase(key.data());
+            if (_currentPaths.contains(key.data())) {
+               _currentPaths.erase(key.data());
             }
-            _paths.emplace(key, path);
+            _currentPaths.emplace(key, path);
          }
       }
 
-      std::filesystem::path PathServer::GetPath(std::string_view key) {
+      std::filesystem::path CurrentPathServer::GetCurrentPath(std::string_view key) {
 #ifndef _DEBUG
          if (!_paths.contains(key.data())) {
             return "";
          }
 #else
          try {
-            if (!_paths.contains(key.data())) {
+            if (!_currentPaths.contains(key.data())) {
                std::string message = key.data();
                throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
             }
@@ -57,7 +57,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         return _paths[key.data()];
+         return _currentPaths[key.data()];
       }
    }
 }

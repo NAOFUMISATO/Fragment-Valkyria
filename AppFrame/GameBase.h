@@ -30,7 +30,7 @@ namespace AppFrame {
       class InputManager;
    }
    namespace Path {
-      class PathServer;
+      class CurrentPathServer;
    }
    namespace Sound {
       class SoundServer;
@@ -118,7 +118,7 @@ namespace AppFrame {
           * \brief パスサーバーのポインタを取得
           * \return パスサーバーのポインタ
           */
-         inline Path::PathServer& pathServer() const { return *_pathServer; }
+         inline Path::CurrentPathServer& pathServer() const { return *_pathServer; }
          /**
           * \brief サウンド管理サーバーのポインタを取得
           * \return サウンド管理サーバーのポインタ
@@ -161,7 +161,7 @@ namespace AppFrame {
          std::unique_ptr<Mode::ModeServer> _modeServer;         //!< モードの一括管理クラス
          std::unique_ptr<Resource::ResourceServer> _resServer;  //!< リソースの一括管理クラス
          std::unique_ptr<Input::InputManager> _inputManager;    //!< 入力の一括管理クラス
-         std::unique_ptr<Path::PathServer> _pathServer;         //!< パスの一括管理クラス
+         std::unique_ptr<Path::CurrentPathServer> _pathServer;         //!< パスの一括管理クラス
          std::unique_ptr<Sound::SoundServer> _soundServer;      //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadJson> _loadJson;         //!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス

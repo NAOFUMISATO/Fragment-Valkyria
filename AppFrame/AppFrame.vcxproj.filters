@@ -96,7 +96,7 @@
     <ClCompile Include="ModeServer.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-    <ClCompile Include="PathServer.cpp">
+    <ClCompile Include="CurrentPathServer.cpp">
       <Filter>ソース ファイル\Path</Filter>
     </ClCompile>
     <ClCompile Include="LoadJson.cpp">
@@ -139,7 +139,7 @@
       <Filter>ソース ファイル\Color</Filter>
     </ClCompile>
     <ClCompile Include="ObjectServer.cpp">
-      <Filter>ソース ファイル\Path</Filter>
+      <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,7 +161,7 @@
     <ClInclude Include="ModeServer.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="PathServer.h">
+    <ClInclude Include="CurrentPathServer.h">
       <Filter>ヘッダー ファイル\Path</Filter>
     </ClInclude>
     <ClInclude Include="LoadJson.h">

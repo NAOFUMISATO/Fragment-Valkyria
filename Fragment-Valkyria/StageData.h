@@ -13,12 +13,8 @@ namespace FragmentValkyria {
             StageData() {};
             ~StageData() = default;
             std::string_view stageName() const { return _stageName; }
-            void stageName(std::string_view stageName) { _stageName = stageName; }
             std::tuple<Vector4, Vector4, Vector4> GetStageParams() const { return { _position,_rotation,_scale }; }
-            void SetStageParams(std::tuple<Vector4, Vector4, Vector4> stageParams) {
-               auto [position, rotation, scale] = stageParams;
-               _position = position; _rotation = rotation; _scale = scale;
-            }
+
       private:
          std::string _stageName;
          Vector4 _position;

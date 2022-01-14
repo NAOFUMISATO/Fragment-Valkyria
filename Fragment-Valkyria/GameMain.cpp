@@ -18,6 +18,8 @@ using namespace FragmentValkyria::Game;
 
 GameMain gameMain;
 
+const std::filesystem::path AppFrame::Resource::LoadJson::_paramJsonCurrentPath= "resource/json/param";
+
 bool GameMain::Initialize(HINSTANCE hInstance) {
    if (!GameBase::Initialize(hInstance)) { return false; }
 
@@ -38,7 +40,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    auto& pathSer = pathServer();
 
-   const AppFrame::Path::PathServer::PathMap pathToUsed{
+   const AppFrame::Path::CurrentPathServer::CurrentPathMap pathToUsed{
       {"Model",{"resource/model"}},
       {"Texture",{"resource/graphic"}},
       {"Sound",{"resource/sound"}},
@@ -52,7 +54,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
       {"ParamJson",{"resource/json/param"}}
    };
 
-   pathSer.RegistPath(pathToUsed);
+   pathSer.RegistCurrentPath(pathToUsed);
 
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("InGame", std::make_shared<Mode::ModeInGame>(*this));

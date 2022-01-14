@@ -13,7 +13,7 @@
 #include "InputManager.h"
 #include "ResourceServer.h"
 #include "SoundServer.h"
-#include "PathServer.h"
+#include "CurrentPathServer.h"
 #include "LoadJson.h"
 #include "EffectServer.h"
 #include "ObjectServer.h"
@@ -81,7 +81,7 @@ namespace AppFrame {
 
          _soundServer = std::make_unique<Sound::SoundServer>(*this);
 
-         _pathServer = std::make_unique<Path::PathServer>();
+         _pathServer = std::make_unique<Path::CurrentPathServer>();
 
          _loadJson = std::make_unique<Resource::LoadJson>(*this);
 

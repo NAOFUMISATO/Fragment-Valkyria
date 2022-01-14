@@ -51,7 +51,7 @@ void LoadStageFromJson::LoadStageModel(std::string_view key, StageData& stageDat
 
 void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    namespace AppMath = AppFrame::Math;
-   auto jsonDirectory = _gameMain.pathServer().GetPath("StageJson");
+   auto jsonDirectory = _gameMain.pathServer().GetCurrentPath("StageJson");
    auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
    std::ifstream reading(jsonPath, std::ios::in);
 #ifdef _DEBUG
@@ -68,19 +68,19 @@ void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    reading >> value;
    reading.close();
    auto stageArray = value[jsonName.generic_string()];
-   auto stageDirectory = _gameMain.pathServer().GetPath("Stage") / jsonName;
+   auto stageDirectory = _gameMain.pathServer().GetCurrentPath("Stage") / jsonName;
    for (auto& stageParam : stageArray) {
-      auto fileName = stageParam["filename"];
-      auto tx = stageParam["tx"];
-      auto ty = stageParam["ty"];
-      auto tz = stageParam["tz"];
-      auto rx = stageParam["rx"];
-      auto ry = stageParam["ry"];
-      auto rz = stageParam["rz"];
-      auto sx = stageParam["sx"];
-      auto sy = stageParam["sy"];
-      auto sz = stageParam["sz"];
-      auto stagePath = (stageDirectory / fileName).generic_string();
+      const auto fileName = stageParam["filename"];
+      const auto tx = stageParam["tx"];
+      const auto ty = stageParam["ty"];
+      const auto tz = stageParam["tz"];
+      const auto rx = stageParam["rx"];
+      const auto ry = stageParam["ry"];
+      const auto rz = stageParam["rz"];
+      const auto sx = stageParam["sx"];
+      const auto sy = stageParam["sy"];
+      const auto sz = stageParam["sz"];
+      const auto stagePath = (stageDirectory / fileName).generic_string();
       AppMath::Vector4 position = AppMath::Vector4(tx, ty, tz);
       AppMath::Vector4 rotation = AppMath::Vector4(rx, ry, rz);
       AppMath::Vector4 scale = AppMath::Vector4(sx, sy, sz);
