@@ -1,0 +1,20 @@
+{
+	"ingame": [
+		{
+			"keyname": "Player",
+			"filename": "SDChar.mv1"
+		},
+		{
+			"keyname": "LargeEnemy",
+			"filename": "Spider_3.mv1"
+		},
+		{
+			"keyname": "SkySphere",
+			"filename": "skysphere.mv1"
+		},
+		{
+			"keyname": "Ground",
+			"filename": "ground.mv1"
+		}
+	]
+}

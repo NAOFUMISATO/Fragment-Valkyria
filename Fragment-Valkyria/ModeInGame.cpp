@@ -26,10 +26,7 @@ ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
 
 void ModeInGame::Init() {
    auto& loadJson = GetLoadJson();
-   loadJson.LoadModels("largeEnemy");
-   loadJson.LoadModels("player");
-   loadJson.LoadModels("skysphere");
-   loadJson.LoadModels("ground");
+   loadJson.LoadModels("ingame");
    loadJson.LoadEffects("player");
 }
 

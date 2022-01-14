@@ -81,12 +81,24 @@ namespace AppFrame {
           * \return データ
           */
          Vector4 GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName);
+         /**
+          * \brief jsonファイルから各データを連想配列にして返す
+          * \param jsonName jsonファイル名
+          * \param paramNames データ名群
+          * \return データをnlohmann::json型で登録した連想配列
+          */
          static std::unordered_map<std::string, nlohmann::json> GetParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> paramNames);
+         /**
+          * \brief jsonファイルからVector4データを連想配列にして返す
+          * \param jsonName jsonファイル名
+          * \param vecParamNames Vector4データ名群
+          * \return Vector4データを登録した連想配列
+          */
          static std::unordered_map<std::string, Vector4> GetVecParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> vecParamNames);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
-         static const std::filesystem::path _paramJsonCurrentPath;
+         static const std::filesystem::path _paramJsonCurrentPath;   //!< 各データを格納しているjsonファイルのパス
       };
    }
 }
