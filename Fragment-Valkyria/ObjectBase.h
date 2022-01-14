@@ -108,7 +108,9 @@ namespace FragmentValkyria {
           */
          Camera::CameraComponent& cameraComponent() const { return *_cameraComponent; }
 
-         Collision::CollisionComponent& collisionComponent() const { return *_collisionComponent; }
+         Collision::CollisionComponent& collisionComponent() { return *_collisionComponent; }
+
+         void  collisionComponent(std::shared_ptr<Collision::CollisionComponent> collision) { _collisionComponent = collision; }
 
       protected:
          Game::GameMain& _gameMain;              //!< ゲーム本体クラスの参照

@@ -56,7 +56,16 @@ void CollisionComponent::PlayerFromObjectRange() {
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 
 		auto& objectBase = ObjectBaseCast(*object);
-
+		if (objectBase.collisionComponent().report().id() == ReportId::HitFromPlayer) {
+			for (auto&& plyObject : _owner.GetObjServer().runObjects()) {
+				auto& ply = ObjectBaseCast(*plyObject);
+				if (ply.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+					continue;
+				}
+				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
+			}
+			break;
+		}
 		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
@@ -64,7 +73,6 @@ void CollisionComponent::PlayerFromObjectRange() {
 		auto plyPoint = objectBase.position();
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromObjectRange);
-			break;
 		}
 		else {
 			objectBase.collisionComponent().report().id(ReportId::None);

@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "FallObject.h"
 #include "CollisionComponent.h"
+#include "GameMain.h"
 #include "ModelAnimeComponent.h"
 
 using namespace FragmentValkyria::Enemy;
@@ -108,6 +109,8 @@ void FallObject::StateFall::Update() {
 		_owner._position = AppFrame::Math::Vector4(oldPosX, 0.0, oldPosZ);
 		_owner._stateServer->PushBack("Idle");
 	}
+
+	_owner._collisionComponent->PlayerFromObjectRange();
 
 	++_owner._fallTimer;
 }

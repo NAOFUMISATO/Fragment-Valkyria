@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "FallObjectCreator.h"
+#include "CollisionComponent.h"
 #include "FallObject.h"
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
@@ -37,9 +38,9 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	constexpr double distance = 1000.0;
 
 	std::array<Vector4, 3> startPosition = {
+		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0),
 		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
 		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
-		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0)
 	};
 
 	for (auto i = 0; i < 3; ++i) {
@@ -55,7 +56,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		state->Register("Idle", std::make_shared<Enemy::FallObject::StateIdle>(*fallObject));
 		state->Register("Save", std::make_shared<Enemy::FallObject::StateSave>(*fallObject));
 		fallObject->stateServer(std::move(state));
-		
+
 		if (i < 2) {
 			_gameMain.objServer().Add(std::move(fallObject));
 		}
