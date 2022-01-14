@@ -12,6 +12,9 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
+    namespace Game {
+        class GameMain;
+    }
    /**
     * \brief カメラ関係
     */
@@ -29,7 +32,7 @@ namespace FragmentValkyria {
          /**
           * \brief コンストラクタ
           */
-         CameraComponent();
+         CameraComponent(Game::GameMain& gameMain);
          /**
           * \brief 初期化処理
           */
@@ -107,6 +110,7 @@ namespace FragmentValkyria {
          Vector4 _plyToPos{ 0, 0, 0 };
          Vector4 _plyToTarget{ 0, 0, 0 };
          Vector4 _plyPos{ 0, 0, 0 };
+         Game::GameMain& _gameMain;
          double _targetDistance{ 500 };       //!< 注視点オブジェクトとのZ座標の距離
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離
          std::tuple<double, double, double> _nearFarFov{   //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)

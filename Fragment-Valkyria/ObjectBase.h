@@ -21,6 +21,9 @@ namespace FragmentValkyria {
    namespace Camera {
       class CameraComponent;
    }
+   namespace Collision {
+       class CollisionComponent;
+   }
    /**
     * \brief オブジェクト関係
     */
@@ -105,10 +108,15 @@ namespace FragmentValkyria {
           */
          Camera::CameraComponent& cameraComponent() const { return *_cameraComponent; }
 
+         Collision::CollisionComponent& collisionComponent() { return *_collisionComponent; }
+
+         void  collisionComponent(std::shared_ptr<Collision::CollisionComponent> collision) { _collisionComponent = collision; }
+
       protected:
          Game::GameMain& _gameMain;              //!< ゲーム本体クラスの参照
          std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent; //!< モデルのアニメーション管理クラスのポインタ
          std::shared_ptr<Camera::CameraComponent> _cameraComponent;        //!< カメラ管理クラスのポインタ
+         std::shared_ptr<Collision::CollisionComponent> _collisionComponent;
       };
    }
 }

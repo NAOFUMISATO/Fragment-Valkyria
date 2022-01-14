@@ -71,7 +71,11 @@ namespace FragmentValkyria {
          /**
           * \brief 移動処理
           */
-         virtual void Move();
+         void Move();
+
+         void ShootRotate();
+
+         void HitCheckFromFallObjectRange();
 
          const double MoveSpeed{ GetLoadJson().GetParam("player", "movespeed") };      //!< 移動速度
          double _rotateSpeed{ 0 };       //!< 回転速度
@@ -176,6 +180,36 @@ namespace FragmentValkyria {
              * \brief 描画処理
              */
             void Draw() override;
+         };
+         /**
+          * \class 射撃準備状態クラス
+          * \brief 射撃準備状態の処理を回す
+          */
+         class StateShootReady : public StateBase
+         {
+         public:
+             /**
+              * \brief コンストラクタ
+              * \param owner プレイヤーの参照
+              */
+             StateShootReady(Player& owner) : StateBase{ owner } {};
+             /**
+              * \brief 入口処理
+              */
+             void Enter() override;
+             /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+             void Input(InputManager& input) override;
+             /**
+              * \brief 更新処理
+              */
+             void Update() override;
+             /**
+              * \brief 描画処理
+              */
+             void Draw() override;
          };
       };
    }

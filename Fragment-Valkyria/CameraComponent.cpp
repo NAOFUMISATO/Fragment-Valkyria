@@ -10,7 +10,7 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Camera;
 
-CameraComponent::CameraComponent() {
+CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 
 void CameraComponent::Init() {
@@ -23,6 +23,7 @@ void CameraComponent::Input(AppFrame::Input::InputManager& input) {
 }
 
 void CameraComponent::Update() {
+
     _stateServer->Update();
 
     //ƒrƒ…[s—ñ‚Ìİ’è
@@ -33,6 +34,7 @@ void CameraComponent::Update() {
     auto [cameraNear, cameraFar, fov] = _nearFarFov;
     auto projectionMatrix = GetCameraProjectionMatrix(cameraNear, cameraFar, fov);
     SetupCamera_ProjectionMatrix(ToDX(projectionMatrix));
+
 }
 
 void CameraComponent::Draw() {
