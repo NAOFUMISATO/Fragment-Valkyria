@@ -3,7 +3,13 @@
 #include "GameBase.h"
 #include "ObjectServer.h"
 #include "StateServer.h"
+#include "DxUtility.h"
 
+namespace {
+   constexpr auto BillBoardPosX = 0.5f;
+   constexpr auto BillBoardPosY = 0.5f;
+   constexpr auto BillBoardTransFlag = true;
+}
 namespace AppFrame {
    namespace Object {
 
@@ -40,6 +46,11 @@ namespace AppFrame {
 
       void ObjectBaseRoot::stateServer(std::unique_ptr<StateServer> state) {
          _stateServer = std::move(state);
+      }
+
+      void ObjectBaseRoot::DrawBillBoard(AppFrame::Math::Vector4 pos, double size, double angle, int handle) {
+         DrawBillboard3D(AppFrame::Math::ToDX(pos), BillBoardPosX, BillBoardPosY,
+            static_cast<float>(size), static_cast<float>(angle),handle, BillBoardTransFlag);
       }
    }
 }

@@ -179,7 +179,14 @@ namespace AppFrame {
           * \param state オブジェクトの状態
           */
          inline void objState(ObjectState state) { _objState = state; }
-
+         /**
+          * \brief ビルボードの描画を行う
+          * \param pos 描画位置
+          * \param size 描画サイズ(横方向のサイズ、縦方向は縦横比により決定)
+          * \param angle 描画角度
+          * \param handle 画像ハンドル
+          */
+         void DrawBillBoard(Vector4 pos,double size,double angle,int handle);
 
          ObjectState _objState{ ObjectState::Active }; //!< オブジェクトの種別変数
          std::unique_ptr<StateServer> _stateServer;    //!< 状態の一括管理クラスのポインタ
