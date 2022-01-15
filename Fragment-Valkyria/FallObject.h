@@ -47,9 +47,11 @@ namespace FragmentValkyria {
             void HitCheckFromPlayerPoint();
             void Save();
             void Up();
+            void Shoot();
 
             const double Gravity{ 0.01 };
             const double UpSpeed{ 10.0 };
+            const double ShootSpeed{ 2.0 };
             const double RotateAngle{ 180.0 };
             const double UpDownRange{ 30.0 };
             double _fallTimer{ 0.0 };
@@ -58,7 +60,8 @@ namespace FragmentValkyria {
             double _rotateAngle{ 0.0 };
             bool _saveFlag{ false };
 
-            Vector4 _VecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
+            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
+            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };
 
         public:
             /**
@@ -145,6 +148,32 @@ namespace FragmentValkyria {
                  * \param owner プレイヤーの参照
                  */
                 StateSave(FallObject& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 入力処理
+                 * \param input 入力一括管理クラスの参照
+                 */
+                void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+             * \class 発射状態のクラス
+             * \brief 発射状態の処理を回す
+             */
+            class StateShoot : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner プレイヤーの参照
+                 */
+                StateShoot(FallObject& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */

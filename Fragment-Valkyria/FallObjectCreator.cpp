@@ -55,6 +55,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::FallObject::StateFall>(*fallObject));
 		state->Register("Idle", std::make_shared<Enemy::FallObject::StateIdle>(*fallObject));
 		state->Register("Save", std::make_shared<Enemy::FallObject::StateSave>(*fallObject));
+		state->Register("Shoot", std::make_shared<Enemy::FallObject::StateShoot>(*fallObject));
 		fallObject->stateServer(std::move(state));
 
 		if (i < 2) {

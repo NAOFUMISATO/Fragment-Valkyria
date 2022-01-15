@@ -56,7 +56,7 @@ void FallObject::Save() {
 	auto upDownRadian = AppFrame::Math::Utility::DegreeToRadian(_upDownAngle);
 	auto upDownSinValue = std::sin(upDownRadian);
 	auto y = UpDownRange * upDownSinValue;
-	_position = _VecBeforeSave + Vector4(0.0, 300.0 + y, 0.0);
+	_position = _vecBeforeSave + Vector4(0.0, 300.0 + y, 0.0);
 
 }
 
@@ -66,6 +66,11 @@ void FallObject::Up() {
 	if (_position.GetY() > 300.0) {
 		_saveFlag = true;
 	}
+}
+
+void FallObject::Shoot() {
+	auto move = _shootVec * ShootSpeed;
+	_position = _position + move;
 }
 
 void FallObject::StateBase::Draw() {
@@ -116,11 +121,13 @@ void FallObject::StateFall::Update() {
 }
 
 void FallObject::StateSave::Enter() {
-	_owner._VecBeforeSave = _owner._position;
+	_owner._vecBeforeSave = _owner._position;
 }
 
 void FallObject::StateSave::Input(InputManager& input) {
-
+	if (input.GetXJoypad().RBClick()) {
+		_owner._stateServer->PushBack("Shoot");
+	}
 }
 
 void FallObject::StateSave::Update() {
@@ -132,4 +139,17 @@ void FallObject::StateSave::Update() {
 		_owner.Save();
 	}
 	
+}
+
+void FallObject::StateShoot::Enter() {
+	_owner._shootVec = _owner.GetObjServer().GetPosition("CamTarget") - _owner._position;
+	_owner._shootVec.Normalized();
+}
+
+void FallObject::StateShoot::Input(InputManager& input) {
+
+}
+
+void FallObject::StateShoot::Update() {
+	_owner.Shoot();
 }
