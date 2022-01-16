@@ -15,6 +15,22 @@
 		{
 			"keyname": "Ground",
 			"filename": "ground.mv1"
+		},
+		{
+			"keyname": "Drum",
+			"filename": "drum.mv1"
+		},
+		{
+			"keyname": "Drum1",
+			"filename": "drum1.mv1"
+		},
+		{
+			"keyname": "Drum2",
+			"filename": "drum2.mv1"
+		},
+		{
+			"keyname": "Drum3",
+			"filename": "drum3.mv1"
 		}
 	]
 }

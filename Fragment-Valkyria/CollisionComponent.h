@@ -17,11 +17,13 @@ namespace FragmentValkyria {
 	namespace Collision {
 
 		class CollisionComponent {
+			using Vector4 = AppFrame::Math::Vector4;
 		public:
 			enum class ReportId {
 				None,
 				HitFromPlayer,
 				HitFromObjectRange,
+				HitFromIdleFallObject
 			};
 
 			class Report {
@@ -41,14 +43,22 @@ namespace FragmentValkyria {
 
 			void PlayerFromObjectRange();
 
+			void PlayerFromObjectModel();
+
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }
+
+			void hitPos(Vector4 pos) { _hitPos = pos; }
+
+			Vector4 hitPos() { return _hitPos; }
 		private:
 
 			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
 
 			Object::ObjectBase& _owner;
 			std::unique_ptr<Report> _report;
+
+			Vector4 _hitPos;
 
 		};
 

@@ -19,15 +19,18 @@
 #include "ResourceServer.h"
 #include "Vector4.h"
 #include "Texture.h"
+
+
  /**
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
+
    /**
     * \brief リソース関係
     */
    namespace Resource {
-
+       
       LoadJson::LoadJson(Game::GameBase& gameBase) :_gameBase{ gameBase } {
       };
 

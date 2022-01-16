@@ -10,6 +10,8 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Camera;
 
+
+
 CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 

@@ -77,7 +77,8 @@ namespace FragmentValkyria {
 
          void HitCheckFromFallObjectRange();
 
-         const double MoveSpeed{ GetLoadJson().GetParam("player", "movespeed") };      //!< ˆÚ“®‘¬“x
+         void HitCheckFromIdleFallObject();
+
          double _rotateSpeed{ 0 };       //!< ‰ñ“]‘¬“x
 
          Vector4 _moved{ Vector4() };
