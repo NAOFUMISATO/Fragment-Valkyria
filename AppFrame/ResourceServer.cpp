@@ -190,14 +190,6 @@ namespace AppFrame {
          if (!_models.contains(key.data())) {
             return -1;   // ÉLÅ[Ç™ñ¢ìoò^
          }
-
-         auto& [handles, animes] = _models[key.data()];
-
-         if (!animes.contains(animName.data())) {
-             return -1;   // ÉLÅ[Ç™ñ¢ìoò^
-         }
-
-         return animes[animName.data()];
 #else
          try {
             if (!_models.contains(key.data())) {
@@ -208,9 +200,15 @@ namespace AppFrame {
          catch (std::logic_error& error) {
             OutputDebugString(error.what());
          }
+#endif
 
          auto& [handles, animes] = _models[key.data()];
 
+#ifndef _DEBUG
+         if (!animes.contains(animName.data())) {
+             return -1;   // ÉLÅ[Ç™ñ¢ìoò^
+         }
+#else
          try {
              if (!animes.contains(animName.data())) {
                  std::string message = animName.data();
@@ -220,8 +218,6 @@ namespace AppFrame {
          catch (std::logic_error& error) {
              OutputDebugString(error.what());
          }
-
-         return animes[animName.data()];
 #endif
 
          return animes[animName.data()];

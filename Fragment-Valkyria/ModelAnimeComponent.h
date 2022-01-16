@@ -76,8 +76,12 @@ namespace FragmentValkyria {
          inline void timeRate(float timeRate) { _timeRate = timeRate; };
 
       private:
-         int _animIndex{ -1 };      //!< アニメ番号
-         int _attachIndex{ -1 };    //!< アタッチするアニメ番号
+         int _animIndex{ -1 };      //!< 現在のアニメ番号
+         int _newAnimIndex{ -1 };   //!< 新しくアタッチするアニメ番号
+         int _attachNum{ -1 };      //!< 現在のアタッチ番号
+         int _nextAttachNum{ -1 };  //!< アニメーションを切り替える際の次のアタッチ番号
+         bool _blending{ false };   //!< アニメーションブレンド中かの判定
+         float _blendRate{ 0.f };   //!< アニメーションブレンド率
          float _playTime{ 0 };      //!< アニメーションの再生時間
          float _totalTime{ 0 };     //!< アニメーションの総再生時間
          float _timeRate{ 1.f };    //!< 再生時間の掛率
