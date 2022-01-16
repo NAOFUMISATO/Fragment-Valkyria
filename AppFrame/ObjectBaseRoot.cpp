@@ -7,7 +7,7 @@
 
 namespace {
    constexpr auto BillBoardPosX = 0.5f;
-   constexpr auto BillBoardPosY = 0.5f;
+   constexpr auto BillBoardPosY = 1.0f;
    constexpr auto BillBoardTransFlag = true;
 }
 namespace AppFrame {

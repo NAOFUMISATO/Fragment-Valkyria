@@ -27,5 +27,6 @@ namespace AppFrame {
       MATRIX ToDX(Math::Matrix44& matrix);
 
       Math::Matrix44 ToMath(MATRIX& matrix);
+
    }
 }
