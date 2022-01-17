@@ -57,3 +57,36 @@ void ModelComponent::SetMatrix(Matrix44& world) {
 void ModelComponent::SetEmiColor(int index, float r, float g, float b) {
    MV1SetMaterialEmiColor(_modelHandle, index, GetColorF(r, g, b, 0.f));
 }
+
+int ModelComponent::FindFrame(std::string_view frameName) {
+   auto frame = MV1SearchFrame(_modelHandle, frameName.data());
+#ifdef _DEBUG
+   try {
+      if (frame < 0) {
+         std::string message = frameName.data();
+         throw std::logic_error("----------指定フレーム名「" + message + "」に一致するフレームは存在しませんでした。----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
+   return frame;
+}
+
+int ModelComponent::FindFrameChild(std::string_view frameName,std::string_view childName) {
+   auto child = MV1SearchFrameChild(_modelHandle, FindFrame(frameName.data()), childName.data());
+#ifdef _DEBUG
+   try {
+      if (child < 0) {
+         std::string message = childName.data();
+         throw std::logic_error("----------指定の子フレーム名「" + message + "」に一致する子フレームは存在しませんでした。----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
+   return child;
+}
+
