@@ -93,6 +93,19 @@ namespace FragmentValkyria {
           * \param b 青
           */
          void SetEmiColor(int index, float r, float g, float b);
+         /**
+          * \brief モデルから指定名のフレームを取得する
+          * \param frameName フレーム名
+          * \return フレーム番号
+          */
+         int FindFrame(std::string_view frameName);
+         /**
+          * \brief モデルの指定名のフレームから指定名の子フレームを取得する
+          * \param frameName フレーム名
+          * \param childName 子フレーム名
+          * \return フレーム番号
+          */
+         int FindFrameChild(std::string_view frameName, std::string_view childName);
 
       protected:
          Object::ObjectBase& _owner;   //!< オブジェクトの基底クラスの参照
