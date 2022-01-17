@@ -201,7 +201,7 @@ namespace AppFrame {
             _rowColumn[1][1] = cos;
          }
          else {
-            MatrixArray array{ {{cos, sin, 0, 0}, {-sin, cos, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}} };
+            MatrixArray array{ {{cos, sin, 0, 0}, {-sin, cos, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}} };
             Matrix44 rotZ(array);
 
             *this = *this * rotZ;

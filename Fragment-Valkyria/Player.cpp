@@ -102,8 +102,9 @@ void Player::HitCheckFromIdleFallObject() {
     auto report = _collisionComponent->report();
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
         auto hitPos = _collisionComponent->hitPos();
-        /*_position = _position + (_moved * -MoveSpeed);*/
-        _position = Vector4(0.0, 0.0, 0.0);
+        _position = _position + (_moved * -MoveSpeed);
+
+        _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
 }
 
@@ -124,6 +125,8 @@ void Player::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
 }
 void Player::StateIdle::Input(InputManager& input) {
+
+    _owner.HitCheckFromIdleFallObject();
 
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");

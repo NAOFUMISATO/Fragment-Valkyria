@@ -103,13 +103,20 @@ namespace FragmentValkyria {
           * \return カメラの投影行列
           */
          Matrix44 GetCameraProjectionMatrix(double cameraNear, double cameraFar, double fov);
+
+         void Rotate();
+
+         void Placement();
          Vector4 _position{ 0, 0, 0 };        //!< 位置
          Vector4 _target{ 0, 0, 0 };          //!< 注視点
          Vector4 _up{ 0, 1 ,0 };              //!< 上方向
          Vector4 _forwardOfTarget{ 0, 0, 1}; //!< 注視点オブジェクトの向き
          Vector4 _plyToPos{ 0, 0, 0 };
          Vector4 _plyToTarget{ 0, 0, 0 };
+         Vector4 _firstPlyToPos{ 0, 0, 0 };
+         Vector4 _firstPlyToTarget{ 0, 0, 0 };
          Vector4 _plyPos{ 0, 0, 0 };
+         Matrix44 _rotateMatrix{ Matrix44() };
          Game::GameMain& _gameMain;
          double _targetDistance{ 500 };       //!< 注視点オブジェクトとのZ座標の距離
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離

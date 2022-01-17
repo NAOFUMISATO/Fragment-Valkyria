@@ -75,7 +75,7 @@ void CollisionComponent::PlayerFromObjectRange() {
 					continue;
 				}
 				if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
-					continue;
+					break;
 				}
 				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
 			}
@@ -85,7 +85,7 @@ void CollisionComponent::PlayerFromObjectRange() {
 			continue;
 		}
 		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
-			continue;
+			break;
 		}
 
 		auto plyPoint = objectBase.position();
