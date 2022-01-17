@@ -115,6 +115,7 @@ void FallObject::StateIdle::Input(InputManager& input) {
 void FallObject::StateIdle::Update() {
 	_owner._collisionComponent->PlayerFromObjectModel();
 	_owner._collisionComponent->PlayerFromObjectRange();
+	_owner._collisionComponent->GatlingFromObjectModel();
 }
 
 void FallObject::StateFall::Enter() {

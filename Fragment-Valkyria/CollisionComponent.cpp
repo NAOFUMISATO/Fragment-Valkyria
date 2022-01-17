@@ -111,13 +111,37 @@ void FragmentValkyria::Collision::CollisionComponent::PlayerFromObjectModel() {
 		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 			continue;
 		}
-		// プレイヤー側のカプセルを設定※こっちはフレーム関係なく適当に
+		// プレイヤー側のカプセルを設定
 		auto plyPos = objectBase.position();
 		auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, 30.0, 0.0);
 		plyPos.Add(0.0, 60.0, 0.0);
 		auto radian = static_cast<float>(30.0);
 		
 		auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().hitPos(_owner.position());
+			objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+		}
+	}
+
+}
+
+void CollisionComponent::GatlingFromObjectModel() {
+	auto objectModel = _owner.modelAnimeComponent().modelHandle();
+	auto collision = MV1SearchFrame(objectModel, "drum_c");
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
+			continue;
+		}
+		// ガトリング側の球を設定
+		auto gatlingPos = objectBase.position();
+		auto radian = static_cast<float>(100.0);
+
+		auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
 
 		if (result.HitNum > 0) {
 			objectBase.collisionComponent().hitPos(_owner.position());

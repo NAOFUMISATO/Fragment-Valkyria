@@ -24,6 +24,7 @@ std::unique_ptr<Object::ObjectBase> GatlingCreator::Create() {
 	gatling->Init();
 
 	auto state = std::make_unique<AppFrame::State::StateServer>("Chase", std::make_shared<Enemy::Gatling::StateChase>(*gatling));
+	state->Register("Die", std::make_shared<Enemy::Gatling::StateDie>(*gatling));
 	gatling->stateServer(std::move(state));
 
 	return std::move(gatling);

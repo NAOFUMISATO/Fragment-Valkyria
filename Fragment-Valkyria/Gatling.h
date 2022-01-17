@@ -46,6 +46,7 @@ namespace FragmentValkyria {
 
 		private:
             void Move();
+            void HitCheckFromObjectModel();
 
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
@@ -100,7 +101,36 @@ namespace FragmentValkyria {
                  */
                 void Update() override;
             };
-
+            /**
+             * \class 死亡状態クラス
+             * \brief 死亡状態の処理を回す
+             */
+            class StateDie : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner プレイヤーの参照
+                 */
+                StateDie(Gatling& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 入力処理
+                 * \param input 入力一括管理クラスの参照
+                 */
+                void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+                /**
+                 * \brief 描画処理
+                 */
+                void Draw() override;
+            };
 
 		};
 	}
