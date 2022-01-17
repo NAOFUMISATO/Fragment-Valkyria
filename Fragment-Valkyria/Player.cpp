@@ -15,6 +15,13 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Player;
 
+namespace {
+    auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("player",
+        { "movespeed" });
+
+    const double MoveSpeed = paramMap["movespeed"];
+}
+
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
     Init();
 }
@@ -91,8 +98,26 @@ void Player::HitCheckFromFallObjectRange() {
     }
 }
 
+void Player::HitCheckFromIdleFallObject() {
+    auto report = _collisionComponent->report();
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
+        auto hitPos = _collisionComponent->hitPos();
+        _position = _position + (_moved * -MoveSpeed);
+
+        _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+    }
+}
+
 void Player::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
+#ifdef _DEBUG
+   auto pos1 = _owner._position + Vector4(0.0, 30.0, 0.0);
+   auto pos2 = _owner._position + Vector4(0.0, 60.0, 0.0);
+   auto radian = static_cast<float>(30.0);
+  
+   DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
+#endif
+
 }
 /// 待機
 void Player::StateIdle::Enter() {
@@ -100,6 +125,8 @@ void Player::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
 }
 void Player::StateIdle::Input(InputManager& input) {
+
+    _owner.HitCheckFromIdleFallObject();
 
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
@@ -132,6 +159,8 @@ void Player::StateRun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
+    _owner.HitCheckFromIdleFallObject();
+
     auto moved = false;
     // カメラから前進方向単位ベクトルをもとめる
     auto camForward = _owner._cameraComponent->GetForward();

@@ -10,12 +10,14 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Camera;
 
+
+
 CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 
 void CameraComponent::Init() {
-    _plyToTarget = _target - _plyPos;
-    _plyToPos = _position - _plyPos;
+    _firstPlyToTarget = _target - _plyPos;
+    _firstPlyToPos = _position - _plyPos;
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
@@ -58,6 +60,17 @@ AppFrame::Math::Matrix44 CameraComponent::GetCameraProjectionMatrix(double camer
    return projection_matrix;
 }
 
+void CameraComponent::Rotate() {
+    _plyToTarget = _firstPlyToTarget * _rotateMatrix;
+    _plyToPos = _firstPlyToPos * _rotateMatrix;
+}
+
+void CameraComponent::Placement() {
+    //プレイヤーの背部にカメラ位置を設定する
+    _target = _plyPos + _plyToTarget;
+    _position = _plyPos + _plyToPos;
+}
+
 void CameraComponent::StateBase::Draw() {
     _owner.Draw();
 }
@@ -67,25 +80,41 @@ void CameraComponent::StateNormal::Enter() {
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
+   /* _owner._rotateMatrix = Matrix44();*/
+    if (input.GetXJoypad().RightStickY() >= 10000) {
+        /*auto upMatrix = Matrix44();
+        upMatrix.RotateX(-2.0, true);
+
+        _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
+        _owner._rotateMatrix.RotateX(-2.0, false);
+    }
+    if (input.GetXJoypad().RightStickY() <= -10000) {
+        /*auto downMatrix = Matrix44();
+        downMatrix.RotateX(2.0, true);
+
+        _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
+        _owner._rotateMatrix.RotateX(2.0, false);
+    }
     if (input.GetXJoypad().RightStickX() >= 10000) {
-        auto rightMatrix = Matrix44();
+        /*auto rightMatrix = Matrix44();
         rightMatrix.RotateY(2.0, true);
 
-        _owner._plyToTarget = _owner._plyToTarget * rightMatrix;
-        _owner._plyToPos = _owner._plyToPos * rightMatrix;
+        _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
+
+        _owner._rotateMatrix.RotateY(2.0, false);
     }
     if (input.GetXJoypad().RightStickX() <= -10000) {
-        auto leftMatrix = Matrix44();
+        /*auto leftMatrix = Matrix44();
         leftMatrix.RotateY(-2.0, true);
 
-        _owner._plyToTarget = _owner._plyToTarget * leftMatrix;
-        _owner._plyToPos = _owner._plyToPos * leftMatrix;
+        _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
+
+        _owner._rotateMatrix.RotateY(-2.0, false);
     }
 }
 
 void CameraComponent::StateNormal::Update() {
-    //プレイヤーの背部にカメラ位置を設定する
-    _owner._target = _owner._plyPos + _owner._plyToTarget;
-    _owner._position = _owner._plyPos + _owner._plyToPos;
+    _owner.Rotate();
+    _owner.Placement();
     
 }

@@ -49,16 +49,12 @@ namespace FragmentValkyria {
             void Up();
             void Shoot();
 
-            const double Gravity{ 0.01 };
-            const double UpSpeed{ 10.0 };
-            const double ShootSpeed{ 2.0 };
-            const double RotateAngle{ 180.0 };
-            const double UpDownRange{ 30.0 };
             double _fallTimer{ 0.0 };
-            double _range{ 300.0 };
             double _upDownAngle{ 0.0 };
             double _rotateAngle{ 0.0 };
             bool _saveFlag{ false };
+
+            int _collision{ 0 };
 
             Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };

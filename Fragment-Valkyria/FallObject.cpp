@@ -13,12 +13,30 @@
 
 using namespace FragmentValkyria::Enemy;
 
+//namespace {
+//	auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("fallObject",
+//		{ "range", "gravity", "shootSpeed", "upSpeed", "rotateAngle",
+//		"upDownRange" });
+//
+//	const double Range = paramMap["range"];
+//	const double Gravity = paramMap["gravity"];
+//	const double ShootSpeed = paramMap["shootSpeed"];
+//	const double UpSpeed = paramMap["upSpeed"];
+//	const double RotateAngle = paramMap["rotateAngle"];
+//	const double UpDownRange = paramMap["upDownRange"];
+//}
+
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
 }
 
 void FallObject::Init() {
-	
+	auto modelHandle = _modelAnimeComponent->modelHandle();
+	_collision = MV1SearchFrame(modelHandle, "drum_c");
+	//// ナビメッシュを非表示
+	//MV1SetFrameVisible(modelHandle, _collision, FALSE);
+	// フレーム1をナビメッシュとして使用
+	MV1SetupCollInfo(modelHandle, _collision);
 }
 
 void FallObject::Input(InputManager& input) {
@@ -26,6 +44,8 @@ void FallObject::Input(InputManager& input) {
 }
 
 void FallObject::Update() {
+	//コリジョン情報の更新
+	MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collision);
 	// 状態の更新
 	_stateServer->Update();
 	// ワールド行列の更新
@@ -49,19 +69,19 @@ void FallObject::Save() {
 	_rotateAngle += 0.01;
 	auto radian = AppFrame::Math::Utility::DegreeToRadian(_rotateAngle);
 	auto sinValue = std::sin(radian);
-	auto xyz = RotateAngle * AppFrame::Math::DEGREES_180 * sinValue;
+	auto xyz = /*RotateAngle*/180.0 * AppFrame::Math::DEGREES_180 * sinValue;
 	_rotation = Vector4(xyz, xyz, xyz);
 
 	_upDownAngle += 2.0;
 	auto upDownRadian = AppFrame::Math::Utility::DegreeToRadian(_upDownAngle);
 	auto upDownSinValue = std::sin(upDownRadian);
-	auto y = UpDownRange * upDownSinValue;
+	auto y = /*UpDownRange*/30.0 * upDownSinValue;
 	_position = _vecBeforeSave + Vector4(0.0, 300.0 + y, 0.0);
 
 }
 
 void FallObject::Up() {
-	_position.Add(0.0, UpSpeed, 0.0);
+	_position.Add(0.0, /*UpSpeed*/3.0, 0.0);
 
 	if (_position.GetY() > 300.0) {
 		_saveFlag = true;
@@ -69,7 +89,7 @@ void FallObject::Up() {
 }
 
 void FallObject::Shoot() {
-	auto move = _shootVec * ShootSpeed;
+	auto move = _shootVec * /*ShootSpeed*/3.0;
 	_position = _position + move;
 }
 
@@ -77,7 +97,7 @@ void FallObject::StateBase::Draw() {
 	_owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
 	auto pos = AppFrame::Math::ToDX(_owner._position);
-	auto radian = static_cast<float>(_owner._range);
+	auto radian = static_cast<float>(/*Range*/300.0);
 	DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
 #endif
 }
@@ -93,6 +113,7 @@ void FallObject::StateIdle::Input(InputManager& input) {
 }
 
 void FallObject::StateIdle::Update() {
+	_owner._collisionComponent->PlayerFromObjectModel();
 	_owner._collisionComponent->PlayerFromObjectRange();
 }
 
@@ -105,7 +126,7 @@ void FallObject::StateFall::Input(InputManager& input) {
 }
 
 void FallObject::StateFall::Update() {
-	auto posY = (0.5 * _owner.Gravity * _owner._fallTimer * _owner._fallTimer);
+	auto posY = (0.5 * 0.01/*Gravity*/ *_owner._fallTimer * _owner._fallTimer);
 
 	_owner._position.Add(0.0, -posY, 0.0);
 
@@ -115,7 +136,7 @@ void FallObject::StateFall::Update() {
 		_owner._stateServer->PushBack("Idle");
 	}
 
-	_owner._collisionComponent->PlayerFromObjectRange();
+	/*_owner._collisionComponent->PlayerFromObjectRange();*/
 
 	++_owner._fallTimer;
 }

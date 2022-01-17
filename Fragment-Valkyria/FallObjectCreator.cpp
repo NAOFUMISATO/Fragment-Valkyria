@@ -49,8 +49,10 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		fallObject->position(startPosition[i]);
 
 		auto model = std::make_unique<Model::ModelAnimeComponent>(*fallObject);
-		model->SetModel("LargeEnemy", 1000);
+		model->SetModel("Drum1", 1000);
 		fallObject->modelAnimeComponent(std::move(model));
+
+		fallObject->Init();
 
 		auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::FallObject::StateFall>(*fallObject));
 		state->Register("Idle", std::make_shared<Enemy::FallObject::StateIdle>(*fallObject));

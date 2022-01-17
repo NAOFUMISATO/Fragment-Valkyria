@@ -1,0 +1,30 @@
+{
+	"fallObject": [
+		{
+			"range": 300.0,
+			"gravity": 0.01,
+            "shootSpeed": 2.0,
+            "upSpeed": 3.0,
+            "rotateAngle": 180.0,
+            "upDownRange": 30.0
+		}
+	],
+	"fallObject_vec": [
+		{
+			"init_pos": [
+				{
+					"x": 10.0,
+					"y": 10.0,
+					"z": 10.0
+				}
+			],
+			"next_pos": [
+				{
+					"x": 50.0,
+					"y": 50.0,
+					"z": 50.0
+				}
+			]
+		}
+	]
+}

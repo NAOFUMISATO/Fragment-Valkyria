@@ -23,7 +23,8 @@ namespace AppFrame {
       class Vector4;
 
       using Plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
-      using Sphere = std::tuple<Vector4 /*position*/, double/*radian*/>;
+      using Sphere = std::tuple<Vector4/*position*/, double/*radian*/>;
+      using Capsule = std::tuple<Vector4/*position1*/, Vector4/*position2*/, double/*radian*/>;
       using Collision = std::tuple<bool, Vector4>;
 
       /**
