@@ -1,0 +1,13 @@
+{
+	"ingame": [
+		{
+			"keyname": "FallPoint",
+			"filename": "fall_point.png",
+			"allnum": 20,
+			"xnum": 17,
+			"ynum": 2,
+			"xsize": 60,
+			"ysize": 180
+		}
+	]
+}
