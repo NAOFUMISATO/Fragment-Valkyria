@@ -67,6 +67,7 @@ namespace AppFrame {
           * \return 画像ハンドルを返す、無い場合は-1を返す
           */
          virtual int GetTexture(const std::string_view key, int no = 0);
+         virtual std::vector<int> GetTextures(std::string_view key);
          /**
           * \brief 画像情報の取得
           * \param key キー

@@ -48,7 +48,11 @@ namespace AppFrame {
          _stateServer = std::move(state);
       }
 
-      void ObjectBaseRoot::DrawBillBoard(AppFrame::Math::Vector4 pos, double size, double angle, int handle) {
+      void ObjectBaseRoot::DrawBillBoard(AppFrame::Math::Vector4 pos, double size, double angle, std::vector<int> handle,double deltaTime) {
+         _cnt++;
+         auto animeNo = handle.begin();
+         auto animeMax = handle.size();
+         
          DrawBillboard3D(AppFrame::Math::ToDX(pos), BillBoardPosX, BillBoardPosY,
             static_cast<float>(size), static_cast<float>(angle),handle, BillBoardTransFlag);
       }
