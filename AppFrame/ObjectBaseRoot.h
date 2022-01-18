@@ -185,8 +185,9 @@ namespace AppFrame {
           * \param size 描画サイズ(横方向のサイズ、縦方向は縦横比により決定)
           * \param angle 描画角度
           * \param handle 画像ハンドル
+          * \param animespeed アニメーションスピード(何フレームごとに画像を切り替えるか)
           */
-         void DrawBillBoard(Vector4 pos,double size,double angle,std::vector<int> handle,double deltatime);
+         void DrawBillBoard(Vector4 pos,double size,double angle,std::vector<int> handle,int animeSpeed);
 
          ObjectState _objState{ ObjectState::Active }; //!< オブジェクトの種別変数
          std::unique_ptr<StateServer> _stateServer;    //!< 状態の一括管理クラスのポインタ
@@ -195,7 +196,7 @@ namespace AppFrame {
          Vector4 _position{ 0,0,0 };             //!< 位置
          Vector4 _rotation{ 0,0,0 };             //!< 回転
          Vector4 _scale{ 1,1,1 };                //!< 拡大率
-         int _cnt{0};
+         int _cnt{ 0 };                          //!< ビルボードした画像のアニメーション用カウント
       };
    }
 }
