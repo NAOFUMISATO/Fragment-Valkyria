@@ -86,6 +86,13 @@ namespace AppFrame {
          static bool CollisionPlaneLine(const Plane& p, const Vector4& lineStart, const Vector4& lineEnd, Collision& result);
          //球と点の当たり判定
          static bool CollisionSpherePoint(const Vector4& point, const Sphere& s);
+         /**
+          * \brief カプセルと球の当たり判定
+          * \param c
+          * \param s
+          * \return 当たっているか
+          */
+         static bool CollisionCapsuleSphere(const Capsule& c, const Sphere& s);
         /**
          * \brief 指定したRGBのカラーコードの取得
          * \param r 赤値

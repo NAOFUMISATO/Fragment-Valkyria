@@ -145,6 +145,41 @@ namespace AppFrame {
          return (checkSize) <= (radian * radian);
       }
 
+      bool Utility::CollisionCapsuleSphere(const Capsule& c, const Sphere& s) {
+
+          auto [cpos1, cpos2, cradian] = c;
+
+          auto [spos, sradian] = s;
+
+          auto startToSphere = spos - cpos1;
+          auto startToEnd = cpos2 - cpos1;
+
+          startToEnd.Normalized();
+
+          auto nearLength = startToEnd.Dot(startToSphere);
+          auto nearLengthRate = nearLength / startToEnd.Lenght();
+          auto near = cpos1 + startToEnd * std::clamp(nearLengthRate, 0.0, 1.0);
+
+          auto distance = 0.0;
+          auto endToSphere = spos - cpos2;
+          auto nearToSphere = spos - near;
+
+          if (nearLengthRate < 0) {
+              auto [x, y, z] = startToSphere.GetXYZ();
+              distance = x * x + y * y + z * z;
+          }
+          else if (nearLengthRate > 1) {
+              auto [x, y, z] = endToSphere.GetXYZ();
+              distance = x * x + y * y + z * z;
+          }
+          else {
+              auto [x, y, z] = nearToSphere.GetXYZ();
+              distance = x * x + y * y + z * z;
+          }
+
+          return distance <= (cradian + sradian) * (cradian + sradian);
+      }
+
       unsigned int Utility::GetColorCode(unsigned char red, unsigned char green, unsigned char blue) {
          std::array<unsigned char, 3> color = { red,green,blue };
          std::string redCode;

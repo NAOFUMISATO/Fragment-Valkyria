@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   Player.h
- * \brief  プレイヤークラス
+ * \brief  プレイヤーの処理を回すクラス
  *
  * \author NAOFUMISATO
  * \date   December 2021
@@ -71,7 +71,7 @@ namespace FragmentValkyria {
          /**
           * \brief 移動処理
           */
-         void Move();
+         void Move(Vector4 forward);
 
          void ShootRotate();
 
@@ -79,9 +79,13 @@ namespace FragmentValkyria {
 
          void HitCheckFromIdleFallObject();
 
-         double _rotateSpeed{ 0 };       //!< 回転速度
+         void HitCheckFromGatling();
+
+         double _rotateSpeed{ 0.0 };       //!< 回転速度
+         int _freezeTime{ 0 };
 
          Vector4 _moved{ Vector4() };
+         Vector4 _knockBack{ Vector4() };
          Vector4 _direction{ Vector4() };
 
          Matrix44 _rightRotation{ Matrix44() };
@@ -194,6 +198,66 @@ namespace FragmentValkyria {
               * \param owner プレイヤーの参照
               */
              StateShootReady(Player& owner) : StateBase{ owner } {};
+             /**
+              * \brief 入口処理
+              */
+             void Enter() override;
+             /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+             void Input(InputManager& input) override;
+             /**
+              * \brief 更新処理
+              */
+             void Update() override;
+             /**
+              * \brief 描画処理
+              */
+             void Draw() override;
+         };
+         /**
+          * \class ノックバック状態クラス
+          * \brief ノックバック状態の処理を回す
+          */
+         class StateKnockBack : public StateBase
+         {
+         public:
+             /**
+              * \brief コンストラクタ
+              * \param owner プレイヤーの参照
+              */
+             StateKnockBack(Player& owner) : StateBase{ owner } {};
+             /**
+              * \brief 入口処理
+              */
+             void Enter() override;
+             /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+             void Input(InputManager& input) override;
+             /**
+              * \brief 更新処理
+              */
+             void Update() override;
+             /**
+              * \brief 描画処理
+              */
+             void Draw() override;
+         };
+         /**
+         * \class 死亡状態クラス
+         * \brief 死亡状態の処理を回す
+         */
+         class StateDie : public StateBase
+         {
+         public:
+             /**
+              * \brief コンストラクタ
+              * \param owner プレイヤーの参照
+              */
+             StateDie(Player& owner) : StateBase{ owner } {};
              /**
               * \brief 入口処理
               */

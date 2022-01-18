@@ -52,6 +52,13 @@ void Gatling::HitCheckFromObjectModel() {
 	}
 }
 
+void Gatling::HitCheckFromPlayer() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
+		_stateServer->PushBack("Die");
+	}
+}
+
 void Gatling::StateBase::Draw() {
 	/*_owner._modelAnimeComponent->Draw();*/
 	auto position = AppFrame::Math::ToDX(_owner._position);
@@ -71,6 +78,7 @@ void Gatling::StateChase::Input(InputManager& input) {
 
 void Gatling::StateChase::Update() {
 	_owner.HitCheckFromObjectModel();
+	_owner.HitCheckFromPlayer();
 	_owner.Move();
 }
 

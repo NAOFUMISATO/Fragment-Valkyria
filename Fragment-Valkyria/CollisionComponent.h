@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   CollisionServer.h
- * \brief  
+ * \brief  ìñÇΩÇËîªíËÇçsÇ§ÉNÉâÉX
  * 
  * \author AHMD2000
  * \date   January 2022
@@ -23,7 +23,8 @@ namespace FragmentValkyria {
 				None,
 				HitFromPlayer,
 				HitFromObjectRange,
-				HitFromIdleFallObject
+				HitFromIdleFallObject,
+				HitFromGatling
 			};
 
 			class Report {
@@ -46,6 +47,8 @@ namespace FragmentValkyria {
 			void PlayerFromObjectModel();
 
 			void GatlingFromObjectModel();
+
+			void GatlingFromPlayer();
 
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }

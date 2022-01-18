@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   CollisionServer.cpp
- * \brief  
+ * \brief  ìñÇΩÇËîªíËèàóùÇçsÇ§ÉNÉâÉX
  * 
  * \author AHMD2000
  * \date   January 2022
@@ -77,6 +77,9 @@ void CollisionComponent::PlayerFromObjectRange() {
 				if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 					break;
 				}
+				else if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
+					break;
+				}
 				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
 			}
 			break;
@@ -148,6 +151,38 @@ void CollisionComponent::GatlingFromObjectModel() {
 			objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
 		}
 	}
+
+}
+
+void CollisionComponent::GatlingFromPlayer() {
+	auto playerPos = _owner.position();
+	auto capsulePos1 = playerPos + Vector4(0.0, 30.0, 0.0);
+	auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
+	auto casuleRadian = 30.0;
+
+	AppFrame::Math::Capsule plyCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+		
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
+			continue;
+		}
+
+		auto gatling = objectBase.position();
+		auto gatlinRadian = 100.0;
+
+		AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlinRadian);
+		if (AppFrame::Math::Utility::CollisionCapsuleSphere(plyCapsule, gatlingSphere)) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
+			_owner.collisionComponent().report().id(ReportId::HitFromGatling);
+			_owner.collisionComponent().hitPos(objectBase.position());
+		}
+		else {
+			objectBase.collisionComponent().report().id(ReportId::None);
+		}
+}
 
 }
 

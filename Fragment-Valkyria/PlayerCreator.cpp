@@ -41,6 +41,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
    state->Register("Attack", std::make_shared<Player::Player::StateAttack>(*player));
    state->Register("ShootReady", std::make_shared<Player::Player::StateShootReady>(*player));
+   state->Register("KnockBack", std::make_shared<Player::Player::StateKnockBack>(*player));
+   state->Register("Die", std::make_shared<Player::Player::StateDie>(*player));
    player->stateServer(std::move(state));
 
    return std::move(player);

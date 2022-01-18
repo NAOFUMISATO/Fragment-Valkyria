@@ -76,8 +76,8 @@ void Player::ComputeWorldTransform() {
    _worldTransform = world;
 }
 
-void Player::Move() {
-    _position = _position + (_moved * MoveSpeed);
+void Player::Move(Vector4 forward) {
+    _position = _position + forward;
 }
 
 void Player::ShootRotate() {
@@ -105,6 +105,22 @@ void Player::HitCheckFromIdleFallObject() {
         _position = _position + (_moved * -MoveSpeed);
 
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+    }
+}
+
+void Player::HitCheckFromGatling() {
+    auto report = _collisionComponent->report();
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromGatling) {
+        auto hitPos = _collisionComponent->hitPos();
+        auto knockBackVec = _position - hitPos;
+        auto [x, y, z] = knockBackVec.GetXYZ();
+        auto knockBackDelta = Vector4(x, 0.0, z);
+        knockBackDelta.Normalized();
+        _knockBack = knockBackDelta * 10.0;
+
+        _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+
+        _stateServer->PushBack("KnockBack");
     }
 }
 
@@ -151,6 +167,8 @@ void Player::StateIdle::Input(InputManager& input) {
 }
 void Player::StateIdle::Update() {
     _owner._collisionComponent->ObjectRangeFromPlayer();
+    _owner._collisionComponent->GatlingFromPlayer();
+    _owner.HitCheckFromGatling();
 }
 
 /// ‘–‚è
@@ -198,14 +216,17 @@ void Player::StateRun::Input(InputManager& input) {
    }
    else {
        _owner._moved.Normalized();
+       _owner._moved = _owner._moved * MoveSpeed;
        auto [x, y, z] = _owner._moved.GetXYZ();
        auto radian = std::atan2(x, z);
        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
    }
 }
 void Player::StateRun::Update() {
-   _owner.Move();
+   _owner.Move(_owner._moved);
    _owner._collisionComponent->ObjectRangeFromPlayer();
+   _owner._collisionComponent->GatlingFromPlayer();
+   _owner.HitCheckFromGatling();
 }
 
 /// UŒ‚
@@ -245,3 +266,44 @@ void Player::StateShootReady::Update() {
 void Player::StateShootReady::Draw() {
     _owner._modelAnimeComponent->Draw();
 }
+
+void Player::StateKnockBack::Enter() {
+    _owner._freezeTime = 20;
+}
+
+void Player::StateKnockBack::Input(InputManager& input) {
+
+}
+
+void Player::StateKnockBack::Update() {
+    if (_owner._freezeTime > 0) {
+        _owner.Move(_owner._knockBack);
+
+        --_owner._freezeTime;
+        return;
+    }
+    else {
+        _owner._stateServer->PopBack();
+    }
+}
+
+void Player::StateKnockBack::Draw() {
+    _owner._modelAnimeComponent->Draw();
+}
+
+void Player::StateDie::Enter() {
+
+}
+
+void Player::StateDie::Input(InputManager& input) {
+
+}
+
+void Player::StateDie::Update() {
+    
+}
+
+void Player::StateDie::Draw() {
+
+}
+

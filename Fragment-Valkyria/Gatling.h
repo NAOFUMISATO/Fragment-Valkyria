@@ -47,6 +47,7 @@ namespace FragmentValkyria {
 		private:
             void Move();
             void HitCheckFromObjectModel();
+            void HitCheckFromPlayer();
 
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
