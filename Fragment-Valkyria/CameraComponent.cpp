@@ -18,6 +18,7 @@ CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} 
 void CameraComponent::Init() {
     _firstPlyToTarget = _target - _plyPos;
     _firstPlyToPos = _position - _plyPos;
+    _anyAxisMatrix.RotateY(90.0, true);
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
@@ -62,13 +63,15 @@ AppFrame::Math::Matrix44 CameraComponent::GetCameraProjectionMatrix(double camer
 
 void CameraComponent::Rotate() {
     _plyToTarget = _firstPlyToTarget * _rotateMatrix;
-    _plyToPos = _firstPlyToPos * _rotateMatrix;
+    auto sinValue = std::sin(_zoomRateRadian);
+    _zoomRate = _posToTarget * sinValue;
+    _plyToPos = (_firstPlyToPos + _zoomRate) * _rotateMatrix;
 }
 
 void CameraComponent::Placement() {
     //プレイヤーの背部にカメラ位置を設定する
     _target = _plyPos + _plyToTarget;
-    _position = _plyPos + _plyToPos + _zoomRate;
+    _position = _plyPos + _plyToPos;
 }
 
 void CameraComponent::StateBase::Draw() {
@@ -76,7 +79,7 @@ void CameraComponent::StateBase::Draw() {
 }
 
 void CameraComponent::StateNormal::Enter() {
-
+ 
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
@@ -86,14 +89,22 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
         upMatrix.RotateX(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
-        _owner._rotateMatrix.RotateX(-2.0, false);
+        auto posToTarget = _owner._target - _owner._position;
+
+        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+
+        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, 2.0, false);
     }
     if (input.GetXJoypad().RightStickY() <= -10000) {
         /*auto downMatrix = Matrix44();
         downMatrix.RotateX(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
-        _owner._rotateMatrix.RotateX(2.0, false);
+        auto posToTarget = _owner._target - _owner._position;
+
+        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+
+        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, -2.0, false);
     }
     if (input.GetXJoypad().RightStickX() >= 10000) {
         /*auto rightMatrix = Matrix44();
@@ -101,7 +112,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
 
         _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
 
-        _owner._rotateMatrix.RotateY(2.0, false);
+        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), -2.0, false);
     }
     if (input.GetXJoypad().RightStickX() <= -10000) {
         /*auto leftMatrix = Matrix44();
@@ -109,20 +120,24 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
 
         _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
 
-        _owner._rotateMatrix.RotateY(-2.0, false);
+        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), 2.0, false);
     }
 }
 
 void CameraComponent::StateNormal::Update() {
     _owner.Rotate();
     _owner.Placement();
+    if (_owner._zoom) {
+        _owner._stateServer->PushBack("ZoomIn");
+    }
     
 }
 
 void CameraComponent::StateZoomIn::Enter() {
+    _owner._zoomRateRadian = 0.0;
     auto posToTarget = _owner._target - _owner._position;
     posToTarget.Normalized();
-    _owner._posToTarget = posToTarget * 100.0;
+    _owner._posToTarget = posToTarget * 300.0;
 }
 
 void CameraComponent::StateZoomIn::Input(InputManager& input) {
@@ -130,7 +145,12 @@ void CameraComponent::StateZoomIn::Input(InputManager& input) {
 }
 
 void CameraComponent::StateZoomIn::Update() {
-
+    _owner._zoomRateRadian += AppFrame::Math::PI / 180.0 * 5.0;
+    if (_owner._zoomRateRadian >= AppFrame::Math::PI / 2.0) {
+        _owner._stateServer->PopBack();
+        _owner._stateServer->PushBack("ShootReady");
+    }
+    _owner.Rotate();
     _owner.Placement();
 }
 
@@ -139,11 +159,53 @@ void CameraComponent::StateShootReady::Enter() {
 }
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
+    if (input.GetXJoypad().RightStickY() >= 10000) {
+        /*auto upMatrix = Matrix44();
+        upMatrix.RotateX(-2.0, true);
 
+        _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
+        auto posToTarget = _owner._target - _owner._position;
+
+        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+
+        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, 2.0, false);
+    }
+    if (input.GetXJoypad().RightStickY() <= -10000) {
+        /*auto downMatrix = Matrix44();
+        downMatrix.RotateX(2.0, true);
+
+        _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
+        auto posToTarget = _owner._target - _owner._position;
+
+        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+
+        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, -2.0, false);
+    }
+    if (input.GetXJoypad().RightStickX() >= 10000) {
+        /*auto rightMatrix = Matrix44();
+        rightMatrix.RotateY(2.0, true);
+
+        _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
+
+        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), -2.0, false);
+    }
+    if (input.GetXJoypad().RightStickX() <= -10000) {
+        /*auto leftMatrix = Matrix44();
+        leftMatrix.RotateY(-2.0, true);
+
+        _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
+
+        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), 2.0, false);
+    }
 }
 
 void CameraComponent::StateShootReady::Update() {
-
+    _owner.Rotate();
+    _owner.Placement();
+    if (!_owner._zoom) {
+        _owner._stateServer->PopBack();
+        _owner._stateServer->PushBack("ZoomOut");
+    }
 }
 
 void CameraComponent::StateZoomOut::Enter() {
@@ -155,5 +217,11 @@ void CameraComponent::StateZoomOut::Input(InputManager& input) {
 }
 
 void CameraComponent::StateZoomOut::Update() {
-
+    _owner._zoomRateRadian -= AppFrame::Math::PI / 180.0 * 5;
+    if (_owner._zoomRateRadian <= AppFrame::Math::PI / 180.0) {
+        _owner._stateServer->PopBack();
+        _owner._stateServer->PushBack("Normal");
+    }
+    _owner.Rotate();
+    _owner.Placement();
 }

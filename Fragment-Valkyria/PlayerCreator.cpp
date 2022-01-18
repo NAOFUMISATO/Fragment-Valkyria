@@ -26,6 +26,9 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    camera->Init();
 
    auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
+   camerastate->Register("ZoomIn", std::make_shared<Camera::CameraComponent::StateZoomIn>(*camera));
+   camerastate->Register("ShootReady", std::make_shared<Camera::CameraComponent::StateShootReady>(*camera));
+   camerastate->Register("ZoomOut", std::make_shared<Camera::CameraComponent::StateZoomOut>(*camera));
    camera->stateServer(std::move(camerastate));
 
    // ƒvƒŒƒCƒ„[‚Ì¶¬

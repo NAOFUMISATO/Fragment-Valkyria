@@ -95,6 +95,7 @@ void Player::HitCheckFromFallObjectRange() {
     auto report = _collisionComponent->report();
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromObjectRange) {
         _stateServer->PushBack("ShootReady");
+        _cameraComponent->SetZoom(true);
     }
 }
 
@@ -256,6 +257,7 @@ void Player::StateShootReady::Enter() {
 void Player::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick()) {
         _owner._stateServer->PopBack();
+        _owner._cameraComponent->SetZoom(false);
     }
 }
 
