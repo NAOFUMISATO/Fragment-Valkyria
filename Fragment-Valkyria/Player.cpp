@@ -16,7 +16,7 @@
 using namespace FragmentValkyria::Player;
 
 namespace {
-    auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("player",
+    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",
         { "movespeed" });
 
     const double MoveSpeed = paramMap["movespeed"];

@@ -115,11 +115,14 @@ namespace FragmentValkyria {
          Vector4 _plyToTarget{ 0, 0, 0 };
          Vector4 _firstPlyToPos{ 0, 0, 0 };
          Vector4 _firstPlyToTarget{ 0, 0, 0 };
+         Vector4 _posToTarget{ Vector4(0.0, 0.0, 0.0) };
+         Vector4 _zoomRate{ Vector4(0.0, 0.0, 0.0) };
          Vector4 _plyPos{ 0, 0, 0 };
          Matrix44 _rotateMatrix{ Matrix44() };
          Game::GameMain& _gameMain;
          double _targetDistance{ 500 };       //!< 注視点オブジェクトとのZ座標の距離
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離
+         double _zoomRateRadian{ 0.0 };
          std::tuple<double, double, double> _nearFarFov{   //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
             std::make_tuple(2.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
 
@@ -157,6 +160,84 @@ namespace FragmentValkyria {
                * \param owner カメラの参照
                */
               StateNormal(CameraComponent& owner) : StateBase{ owner } {};
+              /**
+               * \brief 入口処理
+               */
+              void Enter() override;
+              /**
+               * \brief 入力処理
+               * \param input 入力一括管理クラスの参照
+               */
+              void Input(InputManager& input) override;
+              /**
+               * \brief 更新処理
+               */
+              void Update() override;
+          };
+          /**
+          * \class ズームイン状態クラス
+          * \brief ズームイン状態の処理を回す
+          */
+          class StateZoomIn : public StateBase
+          {
+          public:
+              /**
+               * \brief コンストラクタ
+               * \param owner カメラの参照
+               */
+              StateZoomIn(CameraComponent& owner) : StateBase{ owner } {};
+              /**
+               * \brief 入口処理
+               */
+              void Enter() override;
+              /**
+               * \brief 入力処理
+               * \param input 入力一括管理クラスの参照
+               */
+              void Input(InputManager& input) override;
+              /**
+               * \brief 更新処理
+               */
+              void Update() override;
+          };
+          /**
+         * \class 射撃準備状態クラス
+         * \brief 射撃準備状態の処理を回す
+         */
+          class StateShootReady : public StateBase
+          {
+          public:
+              /**
+               * \brief コンストラクタ
+               * \param owner カメラの参照
+               */
+              StateShootReady(CameraComponent& owner) : StateBase{ owner } {};
+              /**
+               * \brief 入口処理
+               */
+              void Enter() override;
+              /**
+               * \brief 入力処理
+               * \param input 入力一括管理クラスの参照
+               */
+              void Input(InputManager& input) override;
+              /**
+               * \brief 更新処理
+               */
+              void Update() override;
+          };
+          /**
+          * \class ズームアウト状態クラス
+          * \brief ズームアウト状態の処理を回す
+          */
+          class StateZoomOut : public StateBase
+          {
+          public:
+              /**
+               * \brief コンストラクタ
+               * \param owner カメラの参照
+               */
+              StateZoomOut(CameraComponent& owner) : StateBase{ owner } {};
               /**
                * \brief 入口処理
                */

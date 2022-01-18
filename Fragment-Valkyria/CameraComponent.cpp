@@ -68,7 +68,7 @@ void CameraComponent::Rotate() {
 void CameraComponent::Placement() {
     //プレイヤーの背部にカメラ位置を設定する
     _target = _plyPos + _plyToTarget;
-    _position = _plyPos + _plyToPos;
+    _position = _plyPos + _plyToPos + _zoomRate;
 }
 
 void CameraComponent::StateBase::Draw() {
@@ -117,4 +117,43 @@ void CameraComponent::StateNormal::Update() {
     _owner.Rotate();
     _owner.Placement();
     
+}
+
+void CameraComponent::StateZoomIn::Enter() {
+    auto posToTarget = _owner._target - _owner._position;
+    posToTarget.Normalized();
+    _owner._posToTarget = posToTarget * 100.0;
+}
+
+void CameraComponent::StateZoomIn::Input(InputManager& input) {
+
+}
+
+void CameraComponent::StateZoomIn::Update() {
+
+    _owner.Placement();
+}
+
+void CameraComponent::StateShootReady::Enter() {
+
+}
+
+void CameraComponent::StateShootReady::Input(InputManager& input) {
+
+}
+
+void CameraComponent::StateShootReady::Update() {
+
+}
+
+void CameraComponent::StateZoomOut::Enter() {
+
+}
+
+void CameraComponent::StateZoomOut::Input(InputManager& input) {
+
+}
+
+void CameraComponent::StateZoomOut::Update() {
+
 }
