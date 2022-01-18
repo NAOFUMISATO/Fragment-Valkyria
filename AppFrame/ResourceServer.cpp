@@ -87,6 +87,26 @@ namespace AppFrame {
          return handle;                   // 上記のハンドルを返す
       }
 
+      std::vector<int> ResourceServer::GetTextures(std::string_view key) {
+#ifndef _DEBUG
+         if (!_textures.contains(key.data())) {
+            return std::vector<int>(0);
+         }
+#else
+         try {
+            if (!_textures.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]が画像情報コンテナに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+         auto&& [divGraph, handles] = _textures[key.data()];
+         return handles;
+      }
+
       Texture ResourceServer::GetTextureInfo(std::string_view key) {
 #ifndef _DEBUG
          if (!_textures.contains(key.data())) {
