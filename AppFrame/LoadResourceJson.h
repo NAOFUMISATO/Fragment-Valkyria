@@ -1,6 +1,6 @@
 
 /*****************************************************************//**
- * \file   LoadJson.h
+ * \file   LoadResourceJson.h
  * \brief  ゲーム情報をJsonファイルから読み込むクラス
  *
  * \author NAOFUMISATO
@@ -35,18 +35,18 @@ namespace AppFrame {
        * \class ゲーム情報をJsonファイルから読み込むクラス
        * \brief リソースサーバーに登録する素材情報及び各データをjsonファイルから読み込む
        */
-      class LoadJson {
+      class LoadResourceJson {
          using Vector4 = Math::Vector4;
       public:
          /**
           * \brief コンストラクタ
           * \param gameBase ゲームベースの参照
           */
-         LoadJson(Game::GameBase& gameBase);
+         LoadResourceJson(Game::GameBase& gameBase);
          /**
           * \brief デフォルトデストラクタ
           */
-         ~LoadJson() = default;
+         ~LoadResourceJson() = default;
          /**
           * \brief jsonファイルから画像情報を読み込み、リソースサーバーに登録する
           * \param jsonName jsonファイル名
@@ -67,38 +67,9 @@ namespace AppFrame {
           * \param jsonName jsonファイル名
           */
          void LoadEffects(const std::filesystem::path jsonName);
-         /**
-          * \brief jsonファイルからデータを取得する
-          * \param jsonName jsonファイル名
-          * \param paramName データ名
-          * \return データ
-          */
-         nlohmann::json GetParam(const std::filesystem::path jsonName, const std::string_view paramName);
-         /**
-          * \brief jsonファイルからVecotor4データを取得する
-          * \param jsonName jsonファイル名
-          * \param vecName データ名
-          * \return データ
-          */
-         Vector4 GetVecParam(const std::filesystem::path jsonName,const std::string_view vecName);
-         /**
-          * \brief jsonファイルから各データを連想配列にして返す
-          * \param jsonName jsonファイル名
-          * \param paramNames データ名群
-          * \return データをnlohmann::json型で登録した連想配列
-          */
-         static std::unordered_map<std::string, nlohmann::json> GetParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> paramNames);
-         /**
-          * \brief jsonファイルからVector4データを連想配列にして返す
-          * \param jsonName jsonファイル名
-          * \param vecParamNames Vector4データ名群
-          * \return Vector4データを登録した連想配列
-          */
-         static std::unordered_map<std::string, Vector4> GetVecParamMap(const std::filesystem::path jsonName, const std::vector<std::string_view> vecParamNames);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
-         static const std::filesystem::path _paramJsonCurrentPath;   //!< 各データを格納しているjsonファイルのパス
       };
    }
 }

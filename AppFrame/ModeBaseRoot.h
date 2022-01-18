@@ -17,7 +17,7 @@ namespace AppFrame {
    }
    namespace Resource {
       class ResourceServer;
-      class LoadJson;
+      class LoadResourceJson;
    }
    namespace Input {
       class InputManager;
@@ -103,7 +103,7 @@ namespace AppFrame {
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照
           */
-         Resource::LoadJson& GetLoadJson() const;
+         Resource::LoadResourceJson& GetLoadJson() const;
          /**
           * \brief オブジェクト一括管理クラスの参照をゲームベース経由で取得
           * \return オブジェクト一括管理クラスの参照

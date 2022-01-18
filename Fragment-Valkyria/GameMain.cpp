@@ -18,8 +18,6 @@ using namespace FragmentValkyria::Game;
 
 GameMain gameMain;
 
-const std::filesystem::path AppFrame::Resource::LoadJson::_paramJsonCurrentPath= "resource/json/param";
-
 bool GameMain::Initialize(HINSTANCE hInstance) {
    if (!GameBase::Initialize(hInstance)) { return false; }
 

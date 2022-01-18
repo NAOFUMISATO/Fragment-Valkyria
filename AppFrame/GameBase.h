@@ -24,7 +24,7 @@ namespace AppFrame {
    }
    namespace Resource {
       class ResourceServer;
-      class LoadJson;
+      class LoadResourceJson;
    }
    namespace Input {
       class InputManager;
@@ -128,7 +128,7 @@ namespace AppFrame {
           * \brief jsonファイル管理のポインタを取得
           * \return jsonファイル管理のポインタ
           */
-         inline Resource::LoadJson& loadJson() const { return *_loadJson; }
+         inline Resource::LoadResourceJson& loadJson() const { return *_loadresJson; }
          /**
           * \brief エフェクトサーバーのポインタを取得
           * \return エフェクトサーバーのポインタ
@@ -157,14 +157,14 @@ namespace AppFrame {
 
       protected:
          static GameBase* _gameInstance;        //!< ゲームのインスタンス
-         GameState _gState{ GameState::Play };                  //!< ゲーム状態
-         std::unique_ptr<Mode::ModeServer> _modeServer;         //!< モードの一括管理クラス
-         std::unique_ptr<Resource::ResourceServer> _resServer;  //!< リソースの一括管理クラス
-         std::unique_ptr<Input::InputManager> _inputManager;    //!< 入力の一括管理クラス
-         std::unique_ptr<Path::CurrentPathServer> _pathServer;         //!< パスの一括管理クラス
-         std::unique_ptr<Sound::SoundServer> _soundServer;      //!< サウンドの一括管理クラス
-         std::unique_ptr<Resource::LoadJson> _loadJson;         //!< jsonファイル管理クラス
-         std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス
+         GameState _gState{ GameState::Play };                    //!< ゲーム状態
+         std::unique_ptr<Mode::ModeServer> _modeServer;           //!< モードの一括管理クラス
+         std::unique_ptr<Resource::ResourceServer> _resServer;    //!< リソースの一括管理クラス
+         std::unique_ptr<Input::InputManager> _inputManager;      //!< 入力の一括管理クラス
+         std::unique_ptr<Path::CurrentPathServer> _pathServer;    //!< パスの一括管理クラス
+         std::unique_ptr<Sound::SoundServer> _soundServer;        //!< サウンドの一括管理クラス
+         std::unique_ptr<Resource::LoadResourceJson> _loadresJson;//!< jsonファイル管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;        //!< エフェクトの一括管理クラス
          std::unique_ptr<Object::ObjectServer> _objServer;
       };
    }

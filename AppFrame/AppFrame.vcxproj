@@ -167,6 +167,7 @@
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
+    <ClInclude Include="LoadParamJson.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="ModeBaseRoot.h" />
     <ClInclude Include="ModeFadeBase.h" />
@@ -177,8 +178,9 @@
     <ClInclude Include="ObjectBaseRoot.h" />
     <ClInclude Include="ObjectServer.h" />
     <ClInclude Include="CurrentPathServer.h" />
-    <ClInclude Include="LoadJson.h" />
+    <ClInclude Include="LoadResourceJson.h" />
     <ClInclude Include="ResourceServer.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundServer.h" />
     <ClInclude Include="StateBaseRoot.h" />
     <ClInclude Include="StateServer.h" />
@@ -194,13 +196,14 @@
     <ClCompile Include="EffectServer.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LoadParamJson.cpp" />
     <ClCompile Include="Matrix44.cpp" />
     <ClCompile Include="ModeBaseRoot.cpp" />
     <ClCompile Include="ModeFade.cpp" />
     <ClCompile Include="ObjectBaseRoot.cpp" />
     <ClCompile Include="ObjectServer.cpp" />
     <ClCompile Include="CurrentPathServer.cpp" />
-    <ClCompile Include="LoadJson.cpp" />
+    <ClCompile Include="LoadResourceJson.cpp" />
     <ClCompile Include="ResourceServer.cpp" />
     <ClCompile Include="SoundServer.cpp" />
     <ClCompile Include="StateServer.cpp" />

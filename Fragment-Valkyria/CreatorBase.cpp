@@ -7,6 +7,6 @@ using namespace FragmentValkyria;
 CreatorBase::CreatorBase(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 
-AppFrame::Resource::LoadJson& CreatorBase::GetLoadJson() const {
+AppFrame::Resource::LoadResourceJson& CreatorBase::GetLoadJson() const {
 	return _gameMain.loadJson();
 }

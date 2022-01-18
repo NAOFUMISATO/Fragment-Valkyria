@@ -40,7 +40,7 @@ namespace AppFrame {
          return _gameBase.efcServer();
       }
 
-      AppFrame::Resource::LoadJson& ObjectBaseRoot::GetLoadJson() const{
+      AppFrame::Resource::LoadResourceJson& ObjectBaseRoot::GetLoadJson() const{
          return _gameBase.loadJson();
       }
 
