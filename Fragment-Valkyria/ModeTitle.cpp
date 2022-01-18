@@ -8,11 +8,10 @@
  *********************************************************************/
 #include "ModeTitle.h"
 #include "GameMain.h"
-#include "LoadJson.h"
 using namespace FragmentValkyria::Mode;
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("title",
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("title",
       { "bg_width","bg_height" ,"title_width" ,"title_height" ,
       "guide_width" ,"guide_height", "guide_x" ,"guide_y" });
 
@@ -25,7 +24,7 @@ namespace {
    const int StartGuidePositionX = paramMap["guide_x"];   //!< スタートガイドX位置
    const int StartGuidePositionY = paramMap["guide_y"];   //!< スタートガイドY位置
    //仮----------
-   auto vecParamMap = AppFrame::Resource::LoadJson::GetVecParamMap("player", { "init_pos" });
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("player", { "init_pos" });
    const auto PlayerInitPos = vecParamMap["init_pos"];   //!< プレイヤー初期位置
    //------------
 }

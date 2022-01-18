@@ -23,7 +23,7 @@ namespace AppFrame {
       ModeBaseRoot::~ModeBaseRoot() {
       }
 
-      Resource::LoadJson& ModeBaseRoot::GetLoadJson() const{ 
+      Resource::LoadResourceJson& ModeBaseRoot::GetLoadJson() const{ 
          return _gameBase.loadJson();
       }
 

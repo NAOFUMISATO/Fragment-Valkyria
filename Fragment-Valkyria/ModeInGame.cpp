@@ -15,7 +15,6 @@
 #include "PlayerCreator.h"
 #include "StageCreator.h"
 #include "GatlingCreator.h"
-#include "LoadJson.h"
 #include "ObjectBase.h"
 #include "EffectPlayerShot.h" //‰¼
 using namespace FragmentValkyria::Mode;

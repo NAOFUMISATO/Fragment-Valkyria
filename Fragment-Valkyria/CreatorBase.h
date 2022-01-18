@@ -42,7 +42,7 @@ namespace FragmentValkyria {
           */
          virtual std::unique_ptr<Object::ObjectBase> Create() = 0;
 
-         inline AppFrame::Resource::LoadJson& GetLoadJson() const;
+         inline AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
       
       protected:
           Game::GameMain& _gameMain;
