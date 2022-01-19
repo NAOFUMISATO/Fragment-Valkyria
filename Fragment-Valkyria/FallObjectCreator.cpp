@@ -49,7 +49,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		fallObject->position(startPosition[i]);
 
 		auto model = std::make_unique<Model::ModelAnimeComponent>(*fallObject);
-		model->SetModel("Drum1", 1000);
+		model->SetModel("DrumGreen", 1000);
 		fallObject->modelAnimeComponent(std::move(model));
 
 		fallObject->Init();

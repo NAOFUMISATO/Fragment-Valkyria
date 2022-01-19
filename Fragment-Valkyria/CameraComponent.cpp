@@ -19,6 +19,9 @@ void CameraComponent::Init() {
     _firstPlyToTarget = _target - _plyPos;
     _firstPlyToPos = _position - _plyPos;
     _anyAxisMatrix.RotateY(90.0, true);
+    auto posToTarget = _target - _position;
+    posToTarget.Normalized();
+    _posToTarget = posToTarget * 300.0;
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
@@ -84,44 +87,57 @@ void CameraComponent::StateNormal::Enter() {
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
    /* _owner._rotateMatrix = Matrix44();*/
-    if (input.GetXJoypad().RightStickY() >= 10000) {
+    if (input.GetXJoypad().RightStickY() >= 1000) {
         /*auto upMatrix = Matrix44();
         upMatrix.RotateX(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
-        auto posToTarget = _owner._target - _owner._position;
-
-        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-
-        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, 2.0, false);
+        _owner._upDownAngle += 2.0;
+        if (_owner._upDownAngle >= 40.0) {
+            _owner._upDownAngle = 40.0;
+        }
     }
-    if (input.GetXJoypad().RightStickY() <= -10000) {
+    if (input.GetXJoypad().RightStickY() <= -1000) {
         /*auto downMatrix = Matrix44();
         downMatrix.RotateX(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
-        auto posToTarget = _owner._target - _owner._position;
-
-        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-
-        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, -2.0, false);
+        _owner._upDownAngle -= 2.0;
+        if (_owner._upDownAngle <= -10.0) {
+            _owner._upDownAngle = -10.0;
+        }
     }
-    if (input.GetXJoypad().RightStickX() >= 10000) {
+    if (input.GetXJoypad().RightStickX() >= 1000) {
         /*auto rightMatrix = Matrix44();
         rightMatrix.RotateY(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
-
-        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), -2.0, false);
+        _owner._sideAngle -= 2.0;
+        if (_owner._sideAngle <= -360.0) {
+            _owner._sideAngle = 0.0;
+        }
     }
-    if (input.GetXJoypad().RightStickX() <= -10000) {
+    if (input.GetXJoypad().RightStickX() <= -1000) {
         /*auto leftMatrix = Matrix44();
         leftMatrix.RotateY(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
 
-        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), 2.0, false);
+        _owner._sideAngle += 2.0;
+        if (_owner._sideAngle >= 360.0) {
+            _owner._sideAngle = 0.0;
+        }
     }
+
+    auto posToTarget = _owner._target - _owner._position;
+
+    auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+    Matrix44 rotateUpDown = Matrix44();
+    rotateUpDown.RotateAnyVec(anyAxisVec, _owner._upDownAngle, true);
+    Matrix44 rotateSide = Matrix44();
+    rotateSide.RotateAnyVec(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
+
+    _owner._rotateMatrix = rotateSide * rotateUpDown;
 }
 
 void CameraComponent::StateNormal::Update() {
@@ -135,9 +151,6 @@ void CameraComponent::StateNormal::Update() {
 
 void CameraComponent::StateZoomIn::Enter() {
     _owner._zoomRateRadian = 0.0;
-    auto posToTarget = _owner._target - _owner._position;
-    posToTarget.Normalized();
-    _owner._posToTarget = posToTarget * 300.0;
 }
 
 void CameraComponent::StateZoomIn::Input(InputManager& input) {
@@ -145,7 +158,7 @@ void CameraComponent::StateZoomIn::Input(InputManager& input) {
 }
 
 void CameraComponent::StateZoomIn::Update() {
-    _owner._zoomRateRadian += AppFrame::Math::PI / 180.0 * 5.0;
+    _owner._zoomRateRadian += AppFrame::Math::RADIAN_1 * 5.0;
     if (_owner._zoomRateRadian >= AppFrame::Math::PI / 2.0) {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("ShootReady");
@@ -217,8 +230,8 @@ void CameraComponent::StateZoomOut::Input(InputManager& input) {
 }
 
 void CameraComponent::StateZoomOut::Update() {
-    _owner._zoomRateRadian -= AppFrame::Math::PI / 180.0 * 5;
-    if (_owner._zoomRateRadian <= AppFrame::Math::PI / 180.0) {
+    _owner._zoomRateRadian -= AppFrame::Math::RADIAN_1 * 5.0;
+    if (_owner._zoomRateRadian <= 0.0) {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("Normal");
     }

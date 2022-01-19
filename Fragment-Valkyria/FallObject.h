@@ -53,11 +53,14 @@ namespace FragmentValkyria {
             double _upDownAngle{ 0.0 };
             double _rotateAngle{ 0.0 };
             bool _saveFlag{ false };
+            bool _isFall{ true };
 
             int _collision{ 0 };
 
             Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };
+
+            std::string_view _collisionName{ "" };
 
         public:
             /**

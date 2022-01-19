@@ -32,9 +32,13 @@ FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
 void FallObject::Init() {
 	auto modelHandle = _modelAnimeComponent->modelHandle();
-	_collision = MV1SearchFrame(modelHandle, "drum_c");
+	_collision = MV1SearchFrame(modelHandle, "drum_green_c");
 	//// ナビメッシュを非表示
 	//MV1SetFrameVisible(modelHandle, _collision, FALSE);
+#ifdef _DEBUG
+	MV1SetFrameOpacityRate(modelHandle, _collision, 0.5f);
+#endif
+
 	// フレーム1をナビメッシュとして使用
 	MV1SetupCollInfo(modelHandle, _collision);
 }
@@ -103,7 +107,7 @@ void FallObject::StateBase::Draw() {
 }
 
 void FallObject::StateIdle::Enter() {
-
+	_owner._isFall = false;
 }
 
 void FallObject::StateIdle::Input(InputManager& input) {
@@ -113,7 +117,7 @@ void FallObject::StateIdle::Input(InputManager& input) {
 }
 
 void FallObject::StateIdle::Update() {
-	_owner._collisionComponent->PlayerFromObjectModel();
+	_owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
 	_owner._collisionComponent->PlayerFromObjectRange();
 	_owner._collisionComponent->GatlingFromObjectModel();
 }
@@ -137,7 +141,7 @@ void FallObject::StateFall::Update() {
 		_owner._stateServer->PushBack("Idle");
 	}
 
-	/*_owner._collisionComponent->PlayerFromObjectRange();*/
+	_owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
 
 	++_owner._fallTimer;
 }

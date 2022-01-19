@@ -24,6 +24,7 @@ namespace FragmentValkyria {
 				HitFromPlayer,
 				HitFromObjectRange,
 				HitFromIdleFallObject,
+				HitFromFallObject,
 				HitFromGatling
 			};
 
@@ -44,7 +45,7 @@ namespace FragmentValkyria {
 
 			void PlayerFromObjectRange();
 
-			void PlayerFromObjectModel();
+			void PlayerFromFallObjectModel(bool fall);
 
 			void GatlingFromObjectModel();
 

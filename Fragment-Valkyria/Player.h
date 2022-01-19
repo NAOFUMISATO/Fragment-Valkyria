@@ -72,7 +72,9 @@ namespace FragmentValkyria {
           * \brief ˆÚ“®ˆ—
           */
          void Move(Vector4 forward);
-
+         /**
+          * \brief ËŒ‚€”õó‘Ô‚Ì‰ñ“]ˆ—
+          */
          void ShootRotate();
 
          void HitCheckFromFallObjectRange();
@@ -80,6 +82,8 @@ namespace FragmentValkyria {
          void HitCheckFromIdleFallObject();
 
          void HitCheckFromGatling();
+
+         void HitCheckFromFallObject();
 
          double _rotateSpeed{ 0.0 };       //!< ‰ñ“]‘¬“x
          int _freezeTime{ 0 };

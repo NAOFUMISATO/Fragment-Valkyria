@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   LargeEnemy.h
- * \brief  
+ * \brief  ラージエネミーの処理を回すクラス
  * 
  * \author AHMD2000
  * \date   January 2022
