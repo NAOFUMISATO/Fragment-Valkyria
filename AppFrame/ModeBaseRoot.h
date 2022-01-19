@@ -23,7 +23,7 @@ namespace AppFrame {
       class InputManager;
    }
    namespace Sound {
-      class SoundServer;
+      class SoundComponent;
    }
    namespace Object {
       class ObjectServer;
@@ -98,7 +98,7 @@ namespace AppFrame {
           * \brief 音源一括管理クラスの参照をゲームベース経由で取得
           * \return
           */
-         Sound::SoundServer& GetSoundServer() const;
+         Sound::SoundComponent& GetSoundServer() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照
@@ -121,8 +121,8 @@ namespace AppFrame {
          inline void fadeType(char fadeType) { _fadeType = fadeType; };
 
       protected:
-         Game::GameBase& _gameBase;   //!< ゲームベースの参照
-         char _fadeType{ 'M' };       //!< フェード時間を指定する文字
+         Game::GameBase& _gameBase;     //!< ゲームベースの参照
+         char _fadeType{ 'M' };         //!< フェード時間を指定する文字
       };
    }
 }

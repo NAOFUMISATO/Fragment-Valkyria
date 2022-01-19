@@ -40,7 +40,6 @@ namespace AppFrame {
           * \param mode モードのインスタンス
           */
          void Register(std::string_view key, std::shared_ptr<ModeBaseRoot> mode);
-
          /**
           * \brief モードリストの一番後ろにモード挿入
           * \param key 登録済みのモードに関連付けた文字列
@@ -80,21 +79,25 @@ namespace AppFrame {
           * \brief 描画処理
           */
          void Render() const;
+         /**
+          * \brief ゲームのフレームを取得
+          * \return ゲームのフレーム
+          */
+         unsigned int frameCount() { return _frameCount; }
 
       private:
          /**
           * \brief モードリストの一番後ろの真下にフェード(アウトorイン)モード挿入し、フェード時間を設定する
-          * \param key 登録済みのモードに関連付けた文字列
           * \param fadeType フェード時間の種別
           */
-         void FadeInsertBelowBack(std::string_view key, char fadeType);
+         void FadeInsertBelowBack(char fadeType);
          /**
           * \brief モードリストの一番後ろにモード挿入
-          * \param key 登録済みのモードに関連付けた文字列
           * \param fadeType フェード時間の種別
           */
-         void FadePushBack(std::string_view key, char fadeType);
+         void FadePushBack(char fadeType);
 
+         unsigned int _frameCount{ 0 };   // ゲームのフレームをカウント
          std::unordered_map<std::string, std::shared_ptr<ModeBaseRoot>> _modeRegistry;  //!< モードを登録する連想配列
          std::list<std::shared_ptr<ModeBaseRoot>> _modeList;                            //!< モードの処理を回す双方向配列
       };

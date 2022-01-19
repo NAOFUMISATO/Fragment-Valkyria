@@ -34,7 +34,7 @@ ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 
 void ModeTitle::Init() {
    //仮(値チェック用)-----------
-   auto vec = PlayerInitPos;
+   auto vec = TitleBgWidth;
    //---------------------------
    auto& loadJson = GetLoadJson();
    loadJson.LoadTextures("title");

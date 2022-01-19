@@ -24,7 +24,7 @@ namespace AppFrame {
       }
 
       Resource::LoadResourceJson& ModeBaseRoot::GetLoadJson() const{ 
-         return _gameBase.loadJson();
+         return _gameBase.loadresJson();
       }
 
       Mode::ModeServer& ModeBaseRoot::GetModeServer() const {
@@ -39,8 +39,8 @@ namespace AppFrame {
          return _gameBase.resServer(); 
       }
 
-      Sound::SoundServer& ModeBaseRoot::GetSoundServer() const {
-         return _gameBase.soundServer(); 
+      Sound::SoundComponent& ModeBaseRoot::GetSoundServer() const {
+         return _gameBase.soundComponent(); 
       }
 
       Effect::EffectServer& ModeBaseRoot::GetEfcServer() const {

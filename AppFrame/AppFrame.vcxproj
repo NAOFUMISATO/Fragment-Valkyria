@@ -180,8 +180,9 @@
     <ClInclude Include="CurrentPathServer.h" />
     <ClInclude Include="LoadResourceJson.h" />
     <ClInclude Include="ResourceServer.h" />
+    <ClInclude Include="SimpleTextureComponent.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SoundServer.h" />
+    <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="StateBaseRoot.h" />
     <ClInclude Include="StateServer.h" />
     <ClInclude Include="Texture.h" />
@@ -205,7 +206,8 @@
     <ClCompile Include="CurrentPathServer.cpp" />
     <ClCompile Include="LoadResourceJson.cpp" />
     <ClCompile Include="ResourceServer.cpp" />
-    <ClCompile Include="SoundServer.cpp" />
+    <ClCompile Include="SimpleTextureComponent.cpp" />
+    <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="StateServer.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector4.cpp" />

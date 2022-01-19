@@ -14,7 +14,7 @@
 #include "Utility.h"
 #include "StateServer.h"
 #include "StateBaseRoot.h"
-#include "SoundServer.h"
+#include "SoundComponent.h"
 #include "InputManager.h"
 #include "LoadResourceJson.h"
 #include "EffectBaseRoot.h"

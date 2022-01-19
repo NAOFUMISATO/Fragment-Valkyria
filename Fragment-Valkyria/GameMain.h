@@ -11,11 +11,9 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
-   namespace {
-      constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
-      constexpr auto ScreenHeight = 1080;  //!< 縦画面サイズ
-      constexpr auto ScreenDepth = 32;     //!< ビット数
-   }
+   constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
+   constexpr auto ScreenHeight = 1080;  //!< 縦画面サイズ
+   constexpr auto ScreenDepth = 32;     //!< ビット数
    // 二重インクルード防止
    namespace Create {
       class ObjectFactory;
@@ -60,6 +58,11 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render()override;
+         /**
+          * \brief 画面設定の値を返す
+          * \return 画面横サイズ、画面縦サイズ、画面ビット数
+          */
+         inline virtual std::tuple<int, int, int>GraphSize() { return { ScreenWidth,ScreenHeight,ScreenDepth }; }
 
          /**
           * \brief オブジェクトの生成一括管理クラスの取得

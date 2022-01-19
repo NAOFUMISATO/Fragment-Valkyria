@@ -82,6 +82,12 @@
     <Filter Include="ヘッダー ファイル\Temp">
       <UniqueIdentifier>{5e51596f-f165-4c18-a9af-7de48c85d15b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Texture">
+      <UniqueIdentifier>{3b253a2d-9bec-445a-845c-f523d3fe8a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Texture">
+      <UniqueIdentifier>{6aa79114-f174-463c-a54f-bb992c775c11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -111,7 +117,7 @@
     <ClCompile Include="StateServer.cpp">
       <Filter>ソース ファイル\State</Filter>
     </ClCompile>
-    <ClCompile Include="SoundServer.cpp">
+    <ClCompile Include="SoundComponent.cpp">
       <Filter>ソース ファイル\Sound</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="LoadParamJson.cpp">
       <Filter>ソース ファイル\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleTextureComponent.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +194,7 @@
     <ClInclude Include="StateServer.h">
       <Filter>ヘッダー ファイル\State</Filter>
     </ClInclude>
-    <ClInclude Include="SoundServer.h">
+    <ClInclude Include="SoundComponent.h">
       <Filter>ヘッダー ファイル\Sound</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
@@ -235,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>ヘッダー ファイル\Temp</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTextureComponent.h">
+      <Filter>ヘッダー ファイル\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

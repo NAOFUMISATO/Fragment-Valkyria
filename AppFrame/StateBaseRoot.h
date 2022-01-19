@@ -46,6 +46,10 @@ namespace AppFrame {
           * \brief •`‰æˆ—
           */
          virtual void Draw() {};
+         /**
+          * \brief oŒûˆ—
+          */
+         virtual void Exit() {};
       };
    }
 }

@@ -54,6 +54,7 @@ namespace AppFrame {
           * \param key 登録済みの状態に関連付けた文字列
           */
          void GoToState(std::string_view key);
+         void InsertBelowBack(std::string_view key);
          /**
           * \brief 入力処理
           * \param input 入力一括管理クラスの参照

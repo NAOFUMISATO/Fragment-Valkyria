@@ -14,9 +14,7 @@
   */
 namespace AppFrame {
    namespace {
-      constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
-      constexpr auto ScreenHeight = 1080;  //!< 縦画面サイズ
-      constexpr auto ScreenDepth = 32;     //!< ビット数
+     
    }
    //二重インクルード防止
    namespace Mode {
@@ -33,7 +31,7 @@ namespace AppFrame {
       class CurrentPathServer;
    }
    namespace Sound {
-      class SoundServer;
+      class SoundComponent;
    }
    namespace Effect {
       class EffectServer;
@@ -123,12 +121,12 @@ namespace AppFrame {
           * \brief サウンド管理サーバーのポインタを取得
           * \return サウンド管理サーバーのポインタ
           */
-         inline Sound::SoundServer& soundServer() const { return *_soundServer; }
+         inline Sound::SoundComponent& soundComponent() const { return *_soundComponent; }
          /**
           * \brief jsonファイル管理のポインタを取得
           * \return jsonファイル管理のポインタ
           */
-         inline Resource::LoadResourceJson& loadJson() const { return *_loadresJson; }
+         inline Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
          /**
           * \brief エフェクトサーバーのポインタを取得
           * \return エフェクトサーバーのポインタ
@@ -153,7 +151,7 @@ namespace AppFrame {
           * \brief 画面設定の値を返す
           * \return 画面横サイズ、画面縦サイズ、画面ビット数
           */
-         inline virtual std::tuple<int, int, int> GraphSize() { return { ScreenWidth,ScreenHeight,ScreenDepth }; }
+         inline virtual std::tuple<int, int, int> GraphSize() { return { 1280,1024,32 }; }
 
       protected:
          static GameBase* _gameInstance;        //!< ゲームのインスタンス
@@ -162,7 +160,7 @@ namespace AppFrame {
          std::unique_ptr<Resource::ResourceServer> _resServer;    //!< リソースの一括管理クラス
          std::unique_ptr<Input::InputManager> _inputManager;      //!< 入力の一括管理クラス
          std::unique_ptr<Path::CurrentPathServer> _pathServer;    //!< パスの一括管理クラス
-         std::unique_ptr<Sound::SoundServer> _soundServer;        //!< サウンドの一括管理クラス
+         std::unique_ptr<Sound::SoundComponent> _soundComponent;        //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadResourceJson> _loadresJson;//!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;        //!< エフェクトの一括管理クラス
          std::unique_ptr<Object::ObjectServer> _objServer;

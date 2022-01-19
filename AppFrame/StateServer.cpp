@@ -68,7 +68,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-
+         _stateList.back()->Exit();
          _stateList.pop_back();
 
 #ifndef _DEBUG
@@ -89,8 +89,29 @@ namespace AppFrame {
       }
 
       void StateServer::GoToState(std::string_view key) {
+         InsertBelowBack(key.data());
          PopBack();
-         PushBack(key.data());
+      }
+
+      void StateServer::InsertBelowBack(std::string_view key) {
+#ifndef _DEBUG
+         if (!_stateRegistry.contains(key.data())) {
+            return;   // キーが未登録
+         }
+#else
+         try {
+            if (!_stateRegistry.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]が状態レジストリに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+         auto insertState = _stateRegistry[key.data()];
+         insertState->Enter();
+         _stateList.insert(std::prev(_stateList.end()), insertState);
       }
 
       void StateServer::Input(Input::InputManager& input) {
