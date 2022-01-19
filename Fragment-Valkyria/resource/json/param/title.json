@@ -1,12 +1,10 @@
 {
 	"title": [
 		{
-			"bg_width":1920,
-			"bg_height":1080,
-			"title_width":1553,
-			"title_height":224,
-			"guide_width":1135,
-			"guide_height":107,
+			"bg_x":0,
+			"bg_y":0,
+			"title_x":0,
+			"title_y":0,
 			"guide_x":405,
 			"guide_y":650
 		}	

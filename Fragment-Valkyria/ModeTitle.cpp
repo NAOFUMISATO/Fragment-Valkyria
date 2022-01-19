@@ -12,21 +12,19 @@ using namespace FragmentValkyria::Mode;
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("title",
-      { "bg_width","bg_height" ,"title_width" ,"title_height" ,
-      "guide_width" ,"guide_height", "guide_x" ,"guide_y" });
-
-   const int TitleBgWidth = paramMap["bg_width"];         //!< タイトル背景横サイズ
-   const int TitleBgHeight = paramMap["bg_height"];       //!< タイトル背景縦サイズ
-   const int GameTitleWidth = paramMap["title_width"];    //!< ゲームタイトル横サイズ
-   const int GameTitleHeight = paramMap["title_height"];  //!< ゲームタイトル縦サイズ
-   const int StartGuideWidth = paramMap["guide_width"];   //!< スタートガイド横サイズ
-   const int StartGuideHeight = paramMap["guide_height"]; //!< スタートガイド縦サイズ
-   const int StartGuidePositionX = paramMap["guide_x"];   //!< スタートガイドX位置
-   const int StartGuidePositionY = paramMap["guide_y"];   //!< スタートガイドY位置
+      { "bg_x","bg_y","title_x","title_y","guide_x" ,"guide_y" });
+   const int TitleBgPosX = paramMap["bg_x"];        //!< タイトル背景X位置
+   const int TitleBgPosY = paramMap["bg_y"];        //!< タイトル背景Y位置
+   const int GameTitlePosX = paramMap["title_x"];   //!< ゲームタイトルX位置
+   const int GameTitlePosY = paramMap["title_y"];   //!< ゲームタイトルY位置
+   const int StartGuidePosX = paramMap["guide_x"];  //!< スタートガイドX位置
+   const int StartGuidePosY = paramMap["guide_y"];  //!< スタートガイドY位置
    //仮----------
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("player", { "init_pos" });
    const auto PlayerInitPos = vecParamMap["init_pos"];   //!< プレイヤー初期位置
    //------------
+   constexpr auto DefaultGraphScale = 1.0;
+   constexpr auto DefaultGraphAngle = 0.0;
 }
 
 ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
@@ -34,11 +32,11 @@ ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 
 void ModeTitle::Init() {
    //仮(値チェック用)-----------
-   auto vec = TitleBgWidth;
+   auto vec = PlayerInitPos;
    //---------------------------
    auto& loadJson = GetLoadJson();
    loadJson.LoadTextures("title");
-   loadJson.LoadSounds("bgm");
+   loadJson.LoadSounds("title");
 
    auto& resServer = GetResServer();
    _bgGrHandle = resServer.GetTexture("TitleBg");
@@ -66,11 +64,11 @@ void ModeTitle::Update() {
 }
 
 void ModeTitle::Render() {
-   DrawGraph(0, 0, _bgGrHandle, FALSE);
+   GetSimpTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, _bgGrHandle);
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-   DrawGraph(StartGuidePositionX, StartGuidePositionY, _guideGrHandle, TRUE);
+   GetSimpTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle,_guideGrHandle);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   DrawGraph(0, 0, _titleGrHandle, TRUE);
+   GetSimpTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, _titleGrHandle);
 
 }
 

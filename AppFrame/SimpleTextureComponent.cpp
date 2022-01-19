@@ -13,8 +13,8 @@
 #include "Vector4.h"
 #include "DxUtility.h"
 namespace {
-   constexpr auto DefaultTransFlag = TRUE;
-   constexpr auto DefaultTurnFlag = FALSE;
+   constexpr auto DefaultTransFlag = true;
+   constexpr auto DefaultTurnFlag = false;
    constexpr auto DefaultCenterX = 0.5f;
    constexpr auto DefaultCenterY = 10.0f;
 }

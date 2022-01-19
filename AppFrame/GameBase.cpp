@@ -90,7 +90,7 @@ namespace AppFrame {
 
          _objServer = std::make_unique<Object::ObjectServer>();
 
-         _simpleTexComponent = std::make_unique<Texture::SimpleTextureComponent>(this);
+         _simpleTexComponent = std::make_unique<Texture::SimpleTextureComponent>(*this);
 
          return true;
       }

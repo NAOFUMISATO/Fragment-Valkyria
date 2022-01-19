@@ -23,3 +23,4 @@
 #include "ObjectServer.h"
 #include "Singleton.h"
 #include "LoadParamJson.h"
+#include "SimpleTextureComponent.h"
