@@ -5,7 +5,7 @@
 #include "StateServer.h"
 #include "DxUtility.h"
 #include "ModeServer.h"
-
+#include "SimpleTextureComponent.h"
 namespace {
    constexpr auto BillBoardPosX = 0.5f;
    constexpr auto BillBoardPosY = 1.0f;
@@ -39,6 +39,10 @@ namespace AppFrame {
 
       Effect::EffectServer& ObjectBaseRoot::GetEfcServer() const {
          return _gameBase.efcServer();
+      }
+
+      Texture::SimpleTextureComponent& ObjectBaseRoot::GetSimpTexComponent() const {
+         return _gameBase.simpleTexComponent();
       }
 
       AppFrame::Resource::LoadResourceJson& ObjectBaseRoot::GetLoadJson() const{

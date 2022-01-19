@@ -39,6 +39,9 @@ namespace AppFrame {
    namespace Object {
       class ObjectServer;
    }
+   namespace Texture {
+      class SimpleTextureComponent;
+   }
    /**
     * \brief ゲームベース
     */
@@ -98,45 +101,50 @@ namespace AppFrame {
           */
          inline static GameBase* gameInstance() { return _gameInstance; }
          /**
-          * \brief モードサーバーのポインタを取得
+          * \brief モードサーバーの参照を取得
           * \return モードサーバーのポインタ
           */
          inline Mode::ModeServer& modeServer() const { return *_modeServer; }
          /**
-          * \brief リソースサーバーのポインタを取得
+          * \brief リソースサーバーの参照を取得
           * \return リソースサーバーのポインタ
           */
          inline Resource::ResourceServer& resServer() const { return *_resServer; }
          /**
-          * \brief 入力の一括管理クラスのポインタを取得
+          * \brief 入力の一括管理クラスの参照を取得
           * \return 入力の一括管理クラスのポインタ
           */
          inline Input::InputManager& inputManager() const { return *_inputManager; }
          /**
-          * \brief パスサーバーのポインタを取得
+          * \brief パスサーバーの参照を取得
           * \return パスサーバーのポインタ
           */
          inline Path::CurrentPathServer& pathServer() const { return *_pathServer; }
          /**
-          * \brief サウンド管理サーバーのポインタを取得
+          * \brief サウンド管理サーバーの参照を取得
           * \return サウンド管理サーバーのポインタ
           */
          inline Sound::SoundComponent& soundComponent() const { return *_soundComponent; }
          /**
-          * \brief jsonファイル管理のポインタを取得
+          * \brief jsonファイル管理の参照を取得
           * \return jsonファイル管理のポインタ
           */
          inline Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
          /**
-          * \brief エフェクトサーバーのポインタを取得
+          * \brief エフェクトサーバーの参照を取得
           * \return エフェクトサーバーのポインタ
           */
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
          /**
-          * \brief オブジェクトサーバーのポインタを取得
+          * \brief オブジェクトサーバーの参照を取得
           * \return オブジェクトサーバーのポインタ
           */
          inline Object::ObjectServer& objServer() const { return *_objServer; }
+         /**
+          * \brief 画像の簡易描画クラスの参照を取得
+          * \return 画像の簡易描画クラスのポインタ
+          */
+         inline Texture::SimpleTextureComponent& simpleTexComponent() const { return *_simpleTexComponent; }
          /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
@@ -155,15 +163,16 @@ namespace AppFrame {
 
       protected:
          static GameBase* _gameInstance;        //!< ゲームのインスタンス
-         GameState _gState{ GameState::Play };                    //!< ゲーム状態
-         std::unique_ptr<Mode::ModeServer> _modeServer;           //!< モードの一括管理クラス
-         std::unique_ptr<Resource::ResourceServer> _resServer;    //!< リソースの一括管理クラス
-         std::unique_ptr<Input::InputManager> _inputManager;      //!< 入力の一括管理クラス
-         std::unique_ptr<Path::CurrentPathServer> _pathServer;    //!< パスの一括管理クラス
-         std::unique_ptr<Sound::SoundComponent> _soundComponent;        //!< サウンドの一括管理クラス
-         std::unique_ptr<Resource::LoadResourceJson> _loadresJson;//!< jsonファイル管理クラス
-         std::unique_ptr<Effect::EffectServer> _efcServer;        //!< エフェクトの一括管理クラス
-         std::unique_ptr<Object::ObjectServer> _objServer;
+         GameState _gState{ GameState::Play };                       //!< ゲーム状態
+         std::unique_ptr<Mode::ModeServer> _modeServer;              //!< モードの一括管理クラス
+         std::unique_ptr<Resource::ResourceServer> _resServer;       //!< リソースの一括管理クラス
+         std::unique_ptr<Input::InputManager> _inputManager;         //!< 入力の一括管理クラス
+         std::unique_ptr<Path::CurrentPathServer> _pathServer;       //!< パスの一括管理クラス
+         std::unique_ptr<Sound::SoundComponent> _soundComponent;     //!< サウンドの一括管理クラス
+         std::unique_ptr<Resource::LoadResourceJson> _loadresJson;   //!< jsonファイル管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;           //!< エフェクトの一括管理クラス
+         std::unique_ptr<Object::ObjectServer> _objServer;           //!< オブジェクトの一括管理クラス
+         std::unique_ptr<Texture::SimpleTextureComponent> _simpleTexComponent;   //!< 画像の簡易描画クラス
       };
    }
 }

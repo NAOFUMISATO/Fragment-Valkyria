@@ -17,6 +17,7 @@
 #include "LoadResourceJson.h"
 #include "EffectServer.h"
 #include "ObjectServer.h"
+#include "SimpleTextureComponent.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -88,6 +89,8 @@ namespace AppFrame {
          _efcServer = std::make_unique<Effect::EffectServer>();
 
          _objServer = std::make_unique<Object::ObjectServer>();
+
+         _simpleTexComponent = std::make_unique<Texture::SimpleTextureComponent>(this);
 
          return true;
       }

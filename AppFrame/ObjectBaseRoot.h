@@ -23,6 +23,9 @@ namespace AppFrame {
    namespace Effect {
       class EffectServer;
    }
+   namespace Texture {
+      class SimpleTextureComponent;
+   }
    /**
     * \brief オブジェクト関係
     */
@@ -168,6 +171,11 @@ namespace AppFrame {
           * \return jsonファイル管理クラスの参照
           */
          AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
+         /**
+          * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
+          * \return 画像簡易描画クラスの参照
+          */
+         Texture::SimpleTextureComponent& GetSimpTexComponent() const;
 
       protected:
          /**

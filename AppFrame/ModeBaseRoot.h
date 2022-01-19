@@ -31,6 +31,9 @@ namespace AppFrame {
    namespace Effect {
       class EffectServer;
    }
+   namespace Texture {
+      class SimpleTextureComponent;
+   }
    /**
     * \brief モード関係
     */
@@ -114,6 +117,11 @@ namespace AppFrame {
           * \return エフェクト一括管理クラスの参照
           */
          Effect::EffectServer& GetEfcServer() const;
+         /**
+          * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
+          * \return 画像簡易描画クラスの参照
+          */
+         Texture::SimpleTextureComponent& GetSimpTexComponent() const;
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字
