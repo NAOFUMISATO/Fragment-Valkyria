@@ -16,6 +16,7 @@
 #include "StageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
+#include "LoadStageFromJson.h"
 #include "EffectPlayerShot.h" //‰¼
 using namespace FragmentValkyria::Mode;
 
@@ -27,6 +28,9 @@ void ModeInGame::Init() {
    auto& loadJson = GetLoadJson();
    loadJson.LoadModels("ingame");
    loadJson.LoadEffects("player");
+
+   auto& loadStage = _gameMain.loadStage();
+   loadStage.LoadStageModels("Boss");
 }
 
 void ModeInGame::Enter() {

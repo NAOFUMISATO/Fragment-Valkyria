@@ -20,6 +20,8 @@ namespace FragmentValkyria {
     * \brief ステージ関係
     */
    namespace Stage {
+      // 二重インクルード防止
+      class StageModelComponent;
       /**
        * \class ステージクラス
        * \brief スカイスフィア及び地面の管理を行う
@@ -47,7 +49,7 @@ namespace FragmentValkyria {
 
       private:
          std::unique_ptr<Model::ModelComponent> _skySphere; //!< スカイスフィアのポインタ
-         std::unique_ptr<Model::ModelComponent> _ground;    //!< 地面のポインタ
+         std::unique_ptr<StageModelComponent> _stage;
       };
    }
 }

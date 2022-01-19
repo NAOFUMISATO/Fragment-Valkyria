@@ -1,0 +1,8 @@
+{
+"Boss":[
+{"filename":"container_red","tx":-153.275,"ty":0,"tz":-2318.27,"rx":-0,"ry":111.809,"rz":0,"sx":1,"sy":1,"sz":1},
+{"filename":"container_green","tx":159.66,"ty":0,"tz":-2416.502,"rx":-0,"ry":6.32,"rz":0,"sx":1,"sy":1,"sz":1},
+{"filename":"stage","tx":0,"ty":0,"tz":-0,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
+{"filename":"container_red","tx":-153.275,"ty":27.126,"tz":-2717.418,"rx":-0,"ry":111.809,"rz":0,"sx":1,"sy":1,"sz":1}
+   ]
+}

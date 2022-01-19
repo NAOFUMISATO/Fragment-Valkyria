@@ -80,7 +80,7 @@ void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
       const auto sx = stageParam["sx"];
       const auto sy = stageParam["sy"];
       const auto sz = stageParam["sz"];
-      const auto stagePath = (stageDirectory / fileName).generic_string();
+      const auto stagePath = (stageDirectory / fileName).generic_string()+".mv1";
       AppMath::Vector4 position = AppMath::Vector4(tx, ty, tz);
       AppMath::Vector4 rotation = AppMath::Vector4(rx, ry, rz);
       AppMath::Vector4 scale = AppMath::Vector4(sx, sy, sz);

@@ -9,6 +9,7 @@
 #include "Stage.h"
 #include "ModelComponent.h"
 #include "ObjectServer.h"
+#include "StageModelComponent.h"
 using namespace FragmentValkyria::Stage;
 
 Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
@@ -16,10 +17,9 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
    _skySphere = std::make_unique<Model::ModelComponent>(*this);
    _skySphere->SetModel("SkySphere");
    _skySphere->SetScale({ 80.f,  80.f, 80.f });
-   // 地面のモデル
-   _ground = std::make_unique<Model::ModelComponent>(*this);
-   _ground->SetModel("Ground");
-   _ground->SetScale({ 10.f, 10.f, 10.f });
+
+   _stage = std::make_unique<StageModelComponent>(*this);
+   _stage->SetModels("Boss");
 
    // フォグの設定
    SetFogEnable(TRUE);
@@ -34,5 +34,5 @@ void Stage::Update() {
 
 void Stage::Draw() {
    _skySphere->Draw(); // スカイスフィア
-   _ground->Draw();    // 地面
+   _stage->Draw();
 }
