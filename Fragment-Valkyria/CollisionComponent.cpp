@@ -77,7 +77,10 @@ void CollisionComponent::PlayerFromObjectRange() {
 				if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 					break;
 				}
-				else if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
+				if (objectBase.collisionComponent().report().id() == ReportId::HitFromFallObject) {
+					break;
+				}
+				if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
 					break;
 				}
 				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
@@ -90,20 +93,26 @@ void CollisionComponent::PlayerFromObjectRange() {
 		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 			break;
 		}
+		if (objectBase.collisionComponent().report().id() == ReportId::HitFromFallObject) {
+			break;
+		}
+		if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
+			break;
+		}
 
 		auto plyPoint = objectBase.position();
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromObjectRange);
-		}
+		} 
 		else {
 			objectBase.collisionComponent().report().id(ReportId::None);
 		}
 	}
 }
 
-void FragmentValkyria::Collision::CollisionComponent::PlayerFromObjectModel() {
+void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 	auto objectModel = _owner.modelAnimeComponent().modelHandle();
-	auto collision = MV1SearchFrame(objectModel, "drum_c");
+	auto collision = MV1SearchFrame(objectModel, "drum_green_c");
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 
@@ -123,8 +132,15 @@ void FragmentValkyria::Collision::CollisionComponent::PlayerFromObjectModel() {
 		auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
 
 		if (result.HitNum > 0) {
-			objectBase.collisionComponent().hitPos(_owner.position());
-			objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+			if (fall) {
+				objectBase.collisionComponent().hitPos(_owner.position());
+				objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+			}
+			else {
+				objectBase.collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
+				objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+			}
+			
 		}
 	}
 
@@ -132,7 +148,7 @@ void FragmentValkyria::Collision::CollisionComponent::PlayerFromObjectModel() {
 
 void CollisionComponent::GatlingFromObjectModel() {
 	auto objectModel = _owner.modelAnimeComponent().modelHandle();
-	auto collision = MV1SearchFrame(objectModel, "drum_c");
+	auto collision = MV1SearchFrame(objectModel, "drum_green_c");
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 

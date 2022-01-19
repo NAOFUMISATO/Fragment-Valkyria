@@ -17,16 +17,16 @@
 			"filename": "ground.mv1"
 		},
 		{
-			"keyname": "Drum",
-			"filename": "drum.mv1"
+			"keyname": "DrumRed",
+			"filename": "drum_red.mv1"
 		},
 		{
-			"keyname": "Drum1",
-			"filename": "drum1.mv1"
+			"keyname": "DrumBlue",
+			"filename": "drum_blue.mv1"
 		},
 		{
-			"keyname": "Drum2",
-			"filename": "drum2.mv1"
+			"keyname": "DrumGreen",
+			"filename": "drum_green.mv1"
 		},
 		{
 			"keyname": "Drum3",

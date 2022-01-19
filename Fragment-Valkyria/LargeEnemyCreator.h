@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   LargeEnemyCreator.h
- * \brief  
+ * \brief  ラージエネミーの生成クラス
  * 
  * \author AHMD2000
  * \date   January 2022

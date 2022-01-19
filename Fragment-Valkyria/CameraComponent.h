@@ -86,6 +86,8 @@ namespace FragmentValkyria {
 
          inline StateServer& stateServer() { return *_stateServer; }
 
+         void SetZoom(bool zoom) { _zoom = zoom; }
+
       private:
          /**
           * \brief カメラのビュー行列の設定
@@ -107,6 +109,7 @@ namespace FragmentValkyria {
          void Rotate();
 
          void Placement();
+         bool _zoom{ false };
          Vector4 _position{ 0, 0, 0 };        //!< 位置
          Vector4 _target{ 0, 0, 0 };          //!< 注視点
          Vector4 _up{ 0, 1 ,0 };              //!< 上方向
@@ -119,10 +122,13 @@ namespace FragmentValkyria {
          Vector4 _zoomRate{ Vector4(0.0, 0.0, 0.0) };
          Vector4 _plyPos{ 0, 0, 0 };
          Matrix44 _rotateMatrix{ Matrix44() };
+         Matrix44 _anyAxisMatrix{ Matrix44() };
          Game::GameMain& _gameMain;
          double _targetDistance{ 500 };       //!< 注視点オブジェクトとのZ座標の距離
          double _vertDistance{ 120 };         //!< 注視点オブジェクトとのY座標の距離
          double _zoomRateRadian{ 0.0 };
+         double _upDownAngle{ 0.0 };
+         double _sideAngle{ 0.0 };
          std::tuple<double, double, double> _nearFarFov{   //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
             std::make_tuple(2.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
 

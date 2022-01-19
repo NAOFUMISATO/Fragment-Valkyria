@@ -56,6 +56,7 @@ namespace AppFrame {
          void RotateX(const double degree, bool make);
          void RotateY(const double degree, bool make);
          void RotateZ(const double degree, bool make);
+         void RotateAnyVec(const Vector4 vec, const double degree, bool make);
 
          const Matrix44 GetRotate() const;
 

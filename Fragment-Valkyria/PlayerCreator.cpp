@@ -22,10 +22,13 @@ PlayerCreator::PlayerCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain }
 std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    auto camera = std::make_shared<Camera::CameraComponent>(_gameMain);
    camera->SetPosition({ 0, 120, -500 });
-   camera->SetTarget({ 150, 100, 2000 });
+   camera->SetTarget({ 150, 300, 2000 });
    camera->Init();
 
    auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
+   camerastate->Register("ZoomIn", std::make_shared<Camera::CameraComponent::StateZoomIn>(*camera));
+   camerastate->Register("ShootReady", std::make_shared<Camera::CameraComponent::StateShootReady>(*camera));
+   camerastate->Register("ZoomOut", std::make_shared<Camera::CameraComponent::StateZoomOut>(*camera));
    camera->stateServer(std::move(camerastate));
 
    // ƒvƒŒƒCƒ„[‚Ì¶¬
