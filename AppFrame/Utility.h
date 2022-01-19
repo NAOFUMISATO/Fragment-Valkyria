@@ -19,6 +19,7 @@ namespace AppFrame {
    namespace Math {
       static constexpr double DEGREES_180 = 180.0;    //!< “x”–@180‹
       static constexpr double PI = std::numbers::pi;  //!< ‰~Žü—¦
+      static constexpr double RADIAN_1 = std::numbers::pi / DEGREES_180;
 
       class Vector4;
 

@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   Player.cpp
- * \brief  プレイヤー
+ * \brief  プレイヤーの処理を回すクラス
  *
  * \author NAOFUMISATO
  * \date   December 2021
@@ -95,14 +95,19 @@ void Player::HitCheckFromFallObjectRange() {
     auto report = _collisionComponent->report();
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromObjectRange) {
         _stateServer->PushBack("ShootReady");
+        _cameraComponent->SetZoom(true);
     }
 }
 
 void Player::HitCheckFromIdleFallObject() {
     auto report = _collisionComponent->report();
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
-        auto hitPos = _collisionComponent->hitPos();
-        _position = _position + (_moved * -MoveSpeed);
+        auto normal = _collisionComponent->hitPos();
+        auto moveVec = _moved * MoveSpeed;
+        auto slideVec = moveVec.Cross(normal);
+        slideVec = normal.Cross(slideVec);
+
+        _position = _position + normal * MoveSpeed /*+ slideVec*/;
 
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
@@ -117,6 +122,37 @@ void Player::HitCheckFromGatling() {
         auto knockBackDelta = Vector4(x, 0.0, z);
         knockBackDelta.Normalized();
         _knockBack = knockBackDelta * 10.0;
+
+        _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+
+        _stateServer->PushBack("KnockBack");
+    }
+}
+
+void Player::HitCheckFromFallObject() {
+    auto report = _collisionComponent->report();
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromFallObject) {
+        auto hitPos = _collisionComponent->hitPos();
+        
+        auto [hitX, hitY, hitZ] = hitPos.GetXYZ();
+        auto [posX, posY, posZ] = _position.GetXYZ();
+        if (hitX == posX && posZ == hitZ) {
+            auto rotateY = _rotation.GetY();
+            Matrix44 mat = Matrix44();
+            mat.RotateY(rotateY, true);
+            Vector4 vec = Vector4(0.0, 0.0, 1.0);
+            vec.Normalized();
+            auto knockBackDelta = vec * mat * -1.0;
+            knockBackDelta.Normalized();
+            _knockBack = knockBackDelta * 10.0;
+        }
+        else {
+            auto knockBackVec = _position - hitPos;
+            auto [x, y, z] = knockBackVec.GetXYZ();
+            auto knockBackDelta = Vector4(x, 0.0, z);
+            knockBackDelta.Normalized();
+            _knockBack = knockBackDelta * 10.0;
+        }
 
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
 
@@ -168,6 +204,7 @@ void Player::StateIdle::Input(InputManager& input) {
 void Player::StateIdle::Update() {
     _owner._collisionComponent->ObjectRangeFromPlayer();
     _owner._collisionComponent->GatlingFromPlayer();
+    _owner.HitCheckFromFallObject();
     _owner.HitCheckFromGatling();
 }
 
@@ -177,6 +214,7 @@ void Player::StateRun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
+    _owner.HitCheckFromFallObject();
     _owner.HitCheckFromIdleFallObject();
 
     auto moved = false;
@@ -213,7 +251,7 @@ void Player::StateRun::Input(InputManager& input) {
    }
    if (!moved) {
        _owner._stateServer->PopBack();
-   }
+   } 
    else {
        _owner._moved.Normalized();
        _owner._moved = _owner._moved * MoveSpeed;
@@ -256,6 +294,7 @@ void Player::StateShootReady::Enter() {
 void Player::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick()) {
         _owner._stateServer->PopBack();
+        _owner._cameraComponent->SetZoom(false);
     }
 }
 
