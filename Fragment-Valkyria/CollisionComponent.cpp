@@ -123,8 +123,9 @@ void FragmentValkyria::Collision::CollisionComponent::PlayerFromObjectModel() {
 		auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
 
 		if (result.HitNum > 0) {
-			objectBase.collisionComponent().hitPos(_owner.position());
+			objectBase.collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
 			objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+			
 		}
 	}
 

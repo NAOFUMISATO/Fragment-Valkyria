@@ -48,6 +48,7 @@ namespace FragmentValkyria {
             int _gatlingCnt{ 0 };
             const int GatlingFrame{ 60 };
             bool _fallObjectflag{ false };
+            double _hp{ 100.0 };
 
         public:
             /**

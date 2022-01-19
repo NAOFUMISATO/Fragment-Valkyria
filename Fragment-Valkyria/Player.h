@@ -83,6 +83,7 @@ namespace FragmentValkyria {
 
          double _rotateSpeed{ 0.0 };       //!< ‰ñ“]‘¬“x
          int _freezeTime{ 0 };
+         double _hp{ 100.0 };
 
          Vector4 _moved{ Vector4() };
          Vector4 _knockBack{ Vector4() };

@@ -102,8 +102,12 @@ void Player::HitCheckFromFallObjectRange() {
 void Player::HitCheckFromIdleFallObject() {
     auto report = _collisionComponent->report();
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
-        auto hitPos = _collisionComponent->hitPos();
-        _position = _position + (_moved * -MoveSpeed);
+        auto normal = _collisionComponent->hitPos();
+        auto moveVec = _moved * MoveSpeed;
+        auto slideVec = moveVec.Cross(normal);
+        slideVec = normal.Cross(slideVec);
+
+        _position = _position + normal * MoveSpeed /*+ slideVec*/;
 
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
