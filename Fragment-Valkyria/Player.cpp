@@ -126,6 +126,8 @@ void Player::HitCheckFromGatling() {
         knockBackDelta.Normalized();
         _knockBack = knockBackDelta * 10.0;
 
+        _hp -= _collisionComponent->damage();
+
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
 
         _stateServer->PushBack("KnockBack");
@@ -156,6 +158,8 @@ void Player::HitCheckFromFallObject() {
             knockBackDelta.Normalized();
             _knockBack = knockBackDelta * 10.0;
         }
+
+        _hp -= _collisionComponent->damage();
 
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
 
@@ -320,9 +324,15 @@ void Player::StateKnockBack::Input(InputManager& input) {
 void Player::StateKnockBack::Update() {
     if (_owner._freezeTime > 0) {
         _owner.Move(_owner._knockBack);
+        auto [x, y, z] = _owner._knockBack.GetXYZ();
+        auto radian = std::atan2(-x, -z);
+        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
 
         --_owner._freezeTime;
         return;
+    }
+    if (_owner._hp <= 0) {
+        _owner._stateServer->GoToState("Die");
     }
     else {
         _owner._stateServer->PopBack();
@@ -334,7 +344,8 @@ void Player::StateKnockBack::Draw() {
 }
 
 void Player::StateDie::Enter() {
-
+    _owner.modelAnimeComponent().ChangeAnime("MO_SDChar_jumpStart", true);
+    _timeOver = 60 * 5;
 }
 
 void Player::StateDie::Input(InputManager& input) {
@@ -342,10 +353,15 @@ void Player::StateDie::Input(InputManager& input) {
 }
 
 void Player::StateDie::Update() {
-    
+    if (_timeOver > 0) {
+        --_timeOver;
+    }
+    else {
+        _owner.gameMain().modeServer().GoToMode("Title");
+    }
 }
 
 void Player::StateDie::Draw() {
-
+    _owner._modelAnimeComponent->Draw();
 }
 

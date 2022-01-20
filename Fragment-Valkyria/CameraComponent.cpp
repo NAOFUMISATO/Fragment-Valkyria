@@ -87,27 +87,27 @@ void CameraComponent::StateNormal::Enter() {
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
    /* _owner._rotateMatrix = Matrix44();*/
-    if (input.GetXJoypad().RightStickY() >= 1000) {
+    if (input.GetXJoypad().RightStickY() >= 500) {
         /*auto upMatrix = Matrix44();
         upMatrix.RotateX(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
         _owner._upDownAngle += 2.0;
-        if (_owner._upDownAngle >= 40.0) {
-            _owner._upDownAngle = 40.0;
+        if (_owner._upDownAngle >= 10.0) {
+            _owner._upDownAngle = 10.0;
         }
     }
-    if (input.GetXJoypad().RightStickY() <= -1000) {
+    if (input.GetXJoypad().RightStickY() <= -500) {
         /*auto downMatrix = Matrix44();
         downMatrix.RotateX(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
         _owner._upDownAngle -= 2.0;
-        if (_owner._upDownAngle <= -10.0) {
-            _owner._upDownAngle = -10.0;
+        if (_owner._upDownAngle <= -20.0) {
+            _owner._upDownAngle = -20.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() >= 1000) {
+    if (input.GetXJoypad().RightStickX() >= 500) {
         /*auto rightMatrix = Matrix44();
         rightMatrix.RotateY(2.0, true);
 
@@ -117,7 +117,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
             _owner._sideAngle = 0.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() <= -1000) {
+    if (input.GetXJoypad().RightStickX() <= -500) {
         /*auto leftMatrix = Matrix44();
         leftMatrix.RotateY(-2.0, true);
 
@@ -172,27 +172,27 @@ void CameraComponent::StateShootReady::Enter() {
 }
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
-    if (input.GetXJoypad().RightStickY() >= 10000) {
+    if (input.GetXJoypad().RightStickY() >= 500) {
         _owner._upDownAngle += 2.0;
-        if (_owner._upDownAngle >= 40.0) {
-            _owner._upDownAngle = 40.0;
+        if (_owner._upDownAngle >= 10.0) {
+            _owner._upDownAngle = 10.0;
         }
     }
-    if (input.GetXJoypad().RightStickY() <= -10000) {
+    if (input.GetXJoypad().RightStickY() <= -500) {
         
         _owner._upDownAngle -= 2.0;
-        if (_owner._upDownAngle <= -10.0) {
-            _owner._upDownAngle = -10.0;
+        if (_owner._upDownAngle <= -20.0) {
+            _owner._upDownAngle = -20.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() >= 10000) {
+    if (input.GetXJoypad().RightStickX() >= 500) {
 
         _owner._sideAngle -= 2.0;
         if (_owner._sideAngle <= -360.0) {
             _owner._sideAngle = 0.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() <= -10000) {
+    if (input.GetXJoypad().RightStickX() <= -500) {
 
         _owner._sideAngle += 2.0;
         if (_owner._sideAngle >= 360.0) {

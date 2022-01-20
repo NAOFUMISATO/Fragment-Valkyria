@@ -20,13 +20,17 @@ using namespace FragmentValkyria::Collision;
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
 		{ "fallObjectRange", "plyRadian", "plyCapsulePos1",
-		"plyCapsulePos2", "gatlingRadian"});
+		"plyCapsulePos2", "gatlingRadian", "fallObjectCaosulePos1",
+		"fallObjectCapsulePos2", "fallObjectRadian" });
 
 	const double FallObjectRange = paramMap["fallObjectRange"];     //!< フォールオブジェクトの球の半径
 	const double PlayerRadian = paramMap["plyRadian"];              //!< プレイヤーのカプセルの半径
 	const double PlayerCapsulePos1 = paramMap["plyCapsulePos1"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
 	const double PlayerCapsulePos2 = paramMap["plyCapsulePos2"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
 	const double GatlingRadian = paramMap["gatlingRadian"];         //!< ガトリングの半径
+	const double FallObjectCapsulePos1 = paramMap["fallObjectCaosulePos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+	const double FallObjectCapsulePos2 = paramMap["fallObjectCapsulePos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+	const double FallObjectRadian = paramMap["fallObjectRadian"];         //!< フォールオブジェクトのカプセルの半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -137,6 +141,8 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 			if (fall) {
 				objectBase.collisionComponent().hitPos(_owner.position());
 				objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+
+				objectBase.collisionComponent().damage(20.0);
 			}
 			else {
 				objectBase.collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
@@ -176,7 +182,7 @@ void CollisionComponent::GatlingFromPlayer() {
 	auto playerPos = _owner.position();
 	auto capsulePos1 = playerPos + Vector4(0.0, 30.0, 0.0);
 	auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
-	auto casuleRadian = 30.0;
+	auto casuleRadian = PlayerRadian/*30.0*/;
 
 	AppFrame::Math::Capsule plyCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
 
@@ -195,10 +201,40 @@ void CollisionComponent::GatlingFromPlayer() {
 		if (AppFrame::Math::Utility::CollisionCapsuleSphere(plyCapsule, gatlingSphere)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
 			_owner.collisionComponent().report().id(ReportId::HitFromGatling);
+			_owner.collisionComponent().damage(20.0);
 			_owner.collisionComponent().hitPos(objectBase.position());
 		}
 		else {
 			objectBase.collisionComponent().report().id(ReportId::None);
+		}
+}
+
+}
+
+void CollisionComponent::ObjectModelFromLargeEnemy() {
+	auto fallObjectPos = _owner.position();
+	auto capsulePos1 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos1, 0.0);
+	auto capsulePos2 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos2, 0.0);
+	auto capsuleRadian = static_cast<float>(FallObjectRadian);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+			continue;
+		}
+
+		auto largeEnemyModel = objectBase.modelAnimeComponent().modelHandle();
+		auto collision = objectBase.modelAnimeComponent().FindFrame("Spider");
+
+		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+			objectBase.collisionComponent().damage(20.0);
+			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+			_owner.collisionComponent().hitPos(objectBase.position());
 		}
 }
 

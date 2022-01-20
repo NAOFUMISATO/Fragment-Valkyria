@@ -25,7 +25,8 @@ namespace FragmentValkyria {
 				HitFromObjectRange,
 				HitFromIdleFallObject,
 				HitFromFallObject,
-				HitFromGatling
+				HitFromGatling,
+				HitFromLargeEnemy
 			};
 
 			class Report {
@@ -51,18 +52,25 @@ namespace FragmentValkyria {
 
 			void GatlingFromPlayer();
 
+			void ObjectModelFromLargeEnemy();
+
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }
 
 			void hitPos(Vector4 pos) { _hitPos = pos; }
 
 			Vector4 hitPos() { return _hitPos; }
+
+			void damage(double damage) { _damage = damage; }
+
+			double damage() { return _damage; }
 		private:
 
 			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
 
 			Object::ObjectBase& _owner;
 			std::unique_ptr<Report> _report;
+			double _damage{ 0.0 };
 
 			Vector4 _hitPos;
 

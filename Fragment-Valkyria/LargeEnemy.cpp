@@ -9,6 +9,7 @@
 #include "LargeEnemy.h"
 #include "GameMain.h"
 #include "ObjectFactory.h"
+#include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 
 using namespace FragmentValkyria::Enemy;
@@ -18,7 +19,10 @@ LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
 void LargeEnemy::Init() {
-
+	auto modelHandle = _modelAnimeComponent->modelHandle();
+	_collision = _modelAnimeComponent->FindFrame("Spider");
+	// フレーム1をナビメッシュとして使用
+	MV1SetupCollInfo(modelHandle, _collision);
 }
 
 void LargeEnemy::Input(InputManager& input) {
@@ -26,6 +30,8 @@ void LargeEnemy::Input(InputManager& input) {
 }
 
 void LargeEnemy::Update() {
+	//コリジョン情報の更新
+	MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collision);
 	// 状態の更新
 	_stateServer->Update();
 	// ワールド行列の更新
@@ -48,6 +54,20 @@ void LargeEnemy::CreateFallObject() {
 void LargeEnemy::CreateGatling() {
 	auto gatling = gameMain().objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
+}
+
+void LargeEnemy::HitCheckFromFallObject() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromFallObject) {
+		_hp -= _collisionComponent->damage();
+
+		if (_hp <= 0) {
+			_stateServer->GoToState("Die");
+		}
+
+		_collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+	}
+
 }
 
 void LargeEnemy::StateBase::Draw() {
@@ -74,6 +94,8 @@ void LargeEnemy::StateIdle::Update() {
 		}
 	}
 
+	_owner.HitCheckFromFallObject();
+
 	++_owner._stateCnt;
 }
 
@@ -98,6 +120,7 @@ void LargeEnemy::StateFallObject::Update() {
 	}
 
 	/*_owner._stateServer->PopBack();*/
+	_owner.HitCheckFromFallObject();
 
 	++_owner._stateCnt;
 }
@@ -119,5 +142,26 @@ void LargeEnemy::StateGatling::Update() {
 		_owner._fallObjectflag = false;
 	}
 
+	_owner.HitCheckFromFallObject();
+
 	++_owner._stateCnt;
+}
+
+void LargeEnemy::StateDie::Enter() {
+	_owner.modelAnimeComponent().ChangeAnime("Spider_Armature|die", false);
+	_owner._freezeTime = 60 * 2;
+}
+
+void LargeEnemy::StateDie::Update() {
+	auto playTime = _owner.modelAnimeComponent().playTime();
+	if (playTime >= 70.0f) {
+		//モーションを止める
+		_owner.modelAnimeComponent().timeRate(0.0);
+		if (_owner._freezeTime > 0) {
+			--_owner._freezeTime;
+		}
+		else {
+			_owner.gameMain().modeServer().GoToMode("Title");
+		}
+	}
 }
