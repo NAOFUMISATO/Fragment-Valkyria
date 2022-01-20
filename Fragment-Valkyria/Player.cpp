@@ -273,7 +273,7 @@ void Player::StateRun::Update() {
 /// UŒ‚
 void Player::StateAttack::Enter() {
    /*_owner._forwardSpeed = 0.f;*/
-   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_attack");
+   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_attack",false);
 }
 void Player::StateAttack::Update() {
    auto cnt = _owner._modelAnimeComponent->repeatedCount();
