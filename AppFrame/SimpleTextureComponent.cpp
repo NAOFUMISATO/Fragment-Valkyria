@@ -13,8 +13,8 @@
 #include "Vector4.h"
 #include "DxUtility.h"
 namespace {
-   constexpr auto DefaultTransFlag = true;
-   constexpr auto DefaultTurnFlag = false;
+   constexpr auto DefaultTransFlag = TRUE;
+   constexpr auto DefaultTurnFlag = FALSE;
    constexpr auto DefaultCenterX = 0.5f;
    constexpr auto DefaultCenterY = 10.0f;
 }
@@ -40,7 +40,7 @@ namespace AppFrame {
          GetGraphSize(animeNo, &width, &height);
          auto drawX = x + width / 2;
          auto drawY = y + height / 2;
-         DrawRotaGraph(drawX, drawY, scale, angle, animeNo, DefaultTransFlag, DefaultTurnFlag);
+         DrawRotaGraph(drawX, drawY, scale, angle, handles[animeNo], DefaultTransFlag, DefaultTurnFlag);
       }
 
       void SimpleTextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle, bool turnFrag) {
@@ -59,7 +59,7 @@ namespace AppFrame {
          GetGraphSize(animeNo, &width, &height);
          auto drawX = x + width / 2;
          auto drawY = y + height / 2;
-         DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, animeNo, DefaultTransFlag, turnFrag);
+         DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);
       }
 
       void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos, double size, double angle, int handle) {
@@ -71,8 +71,8 @@ namespace AppFrame {
          auto count = _gameBase.modeServer().frameCount();
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
-         DrawBillboard3D(Math::ToDX(pos), DefaultCenterX, DefaultCenterY,
-            static_cast<float>(size), static_cast<float>(angle), animeNo, DefaultTransFlag);
+         auto g = DrawBillboard3D(Math::ToDX(pos), DefaultCenterX, DefaultCenterY,
+            static_cast<float>(size), static_cast<float>(angle), handles[animeNo], TRUE);
       }
 
       void SimpleTextureComponent::TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double size, double angle, int handle) {
@@ -85,7 +85,7 @@ namespace AppFrame {
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
          DrawBillboard3D(Math::ToDX(pos), static_cast<float>(cx), static_cast<float>(cy),
-            static_cast<float>(size), static_cast<float>(angle), animeNo, DefaultTransFlag);
+            static_cast<float>(size), static_cast<float>(angle), handles[animeNo], DefaultTransFlag);
       }
 
 

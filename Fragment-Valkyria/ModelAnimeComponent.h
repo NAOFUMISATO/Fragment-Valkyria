@@ -48,7 +48,7 @@ namespace FragmentValkyria {
           * \param animeName アニメーション名
           * \param repeate アニメーションをループ再生するかのフラグ
           */
-         void ChangeAnime(std::string_view animeName, bool repeate = false);
+         void ChangeAnime(std::string_view animeName, bool repeate,double animeSpeed=1.0);
          /**
           * \brief アニメーションの総時間の取得
           * \return アニメーションの総時間
@@ -68,12 +68,12 @@ namespace FragmentValkyria {
           * \brief 再生時間の掛率の取得
           * \return 再生時間の掛率
           */
-         inline float timeRate() const { return _timeRate; }
+         inline double timeRate() const { return _timeRate; }
          /**
           * \brief 再生時間の掛率の設定
           * \param 再生時間の掛率
           */
-         inline void timeRate(float timeRate) { _timeRate = timeRate; };
+         inline void timeRate(double timeRate) { _timeRate = timeRate; };
 
       private:
          int _animIndex{ -1 };      //!< 現在のアニメ番号
@@ -84,7 +84,7 @@ namespace FragmentValkyria {
          float _blendRate{ 0.f };   //!< アニメーションブレンド率
          float _playTime{ 0 };      //!< アニメーションの再生時間
          float _totalTime{ 0 };     //!< アニメーションの総再生時間
-         float _timeRate{ 1.f };    //!< 再生時間の掛率
+         double _timeRate{ 1.0 };   //!< 再生時間の掛率
          int _repeatedCount{ 0 };   //!< アニメーションを繰り返した回数
          bool _repeate{ false };    //!< アニメーションをループさせるかのフラグ
       };

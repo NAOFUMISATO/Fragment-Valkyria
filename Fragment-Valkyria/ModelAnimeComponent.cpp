@@ -30,7 +30,7 @@ void ModelAnimeComponent::Update() {
    ModelComponent::Update();
 
    // 再生時間を進める
-   _playTime += (1.f * _timeRate);
+   _playTime += (1.f * static_cast<float>(_timeRate));
 
    // 再生時間が総再生時間以上か
    if (_playTime >= _totalTime) {
@@ -73,7 +73,7 @@ void ModelAnimeComponent::Draw() {
    MV1DrawModel(_modelHandle);
 }
 
-void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate) {
+void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate,double animeSpeed) {
    // アニメーションブレンド中に、ChangeAnime関数を呼んだならブレンドの終了処理を行う
    if (_blending) {
       _animIndex = _newAnimIndex;  // アニメ番号の更新
@@ -97,5 +97,6 @@ void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate) 
    _blendRate = 0.f;    // ブレンド率の初期化
    _blending = true;    // ブレンド中かの判定をtrue
    _repeate = repeate;  // 引数からアニメーションを繰り返すかの判定を取得
+   _timeRate = animeSpeed;
    _repeatedCount = 0;  // アニメーション回数の初期化
 }
