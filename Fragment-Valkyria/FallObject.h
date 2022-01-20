@@ -62,6 +62,8 @@ namespace FragmentValkyria {
 
             std::string_view _collisionName{ "" };
 
+            std::vector<int> _fallPointHandles{ -1 };
+
         public:
             /**
             * \class プレイヤー状態の基底クラス
@@ -134,6 +136,10 @@ namespace FragmentValkyria {
                  * \brief 更新処理
                  */
                 void Update() override;
+                /**
+                 * \brief 描画処理
+                 */
+                void Draw() override;
             };
             /**
              * \class 浮く状態のクラス
