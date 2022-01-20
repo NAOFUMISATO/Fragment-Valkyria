@@ -5,7 +5,10 @@
 			"plyRadian": 30.0,
             "plyCapsulePos1": 30.0,
             "plyCapsulePos2": 60.0,
-			"gatlingRadian": 100.0
+			"gatlingRadian": 100.0,
+			"fallObjectCaosulePos1": 30.0,
+			"fallObjectCapsulePos2": 60.0,
+			"fallObjectRadian": 50.0
 		}
 	],
 	"collision_vec": [

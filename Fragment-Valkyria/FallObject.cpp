@@ -16,7 +16,7 @@ using namespace FragmentValkyria::Enemy;
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallObject",
 		{ "range", "gravity", "shootSpeed", "upSpeed", "rotateAngle",
-		"upDownRange" });
+		"upDownRange", "capsulePos1", "capsulePos2", "capsuleRadian"});
 
 	const double Range = paramMap["range"];
 	const double Gravity = paramMap["gravity"];
@@ -24,6 +24,9 @@ namespace {
 	const double UpSpeed = paramMap["upSpeed"];
 	const double RotateAngle = paramMap["rotateAngle"];
 	const double UpDownRange = paramMap["upDownRange"];
+	const double CapsulePos1 = paramMap["capsulePos1"];
+	const double CapsulePos2 = paramMap["capsulePos2"];
+	const double CapsuleRadian = paramMap["capsuleRadian"];
 
 	constexpr auto DefaultPointScale = 1.0;
 	constexpr auto DefaultPointAngle = 0.0;
@@ -74,6 +77,14 @@ void FallObject::HitCheckFromPlayerPoint() {
 	}
 }
 
+void FallObject::HitCheckFromLargeEnemy() {
+	auto report = _collisionComponent->report();
+
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+		_stateServer->PushBack("Die");
+	}
+}
+
 void FallObject::Save() {
 	_rotateAngle += 0.01;
 	auto radian = AppFrame::Math::Utility::DegreeToRadian(_rotateAngle);
@@ -108,6 +119,12 @@ void FallObject::StateBase::Draw() {
 	auto pos = AppFrame::Math::ToDX(_owner._position);
 	auto radian = static_cast<float>(/*Range*/300.0);
 	DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
+
+	auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
+	auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
+	radian = static_cast<float>(CapsuleRadian);
+
+	DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
 }
 
@@ -176,7 +193,6 @@ void FallObject::StateSave::Update() {
 	else {
 		_owner.Save();
 	}
-	
 }
 
 void FallObject::StateShoot::Enter() {
@@ -190,4 +206,19 @@ void FallObject::StateShoot::Input(InputManager& input) {
 
 void FallObject::StateShoot::Update() {
 	_owner.Shoot();
+
+	_owner._collisionComponent->ObjectModelFromLargeEnemy();
+	_owner.HitCheckFromLargeEnemy();
+}
+
+void FallObject::StateDie::Enter() {
+
+}
+
+void FallObject::StateDie::Input(InputManager& input) {
+
+}
+
+void FallObject::StateDie::Update() {
+	_owner.SetDead();
 }

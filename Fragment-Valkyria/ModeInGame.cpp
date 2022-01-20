@@ -12,7 +12,9 @@
 #include "ObjectFactory.h"
 #include "GameMain.h"
 #include "LargeEnemyCreator.h"
+#include "LargeEnemy.h"
 #include "PlayerCreator.h"
+#include "Player.h"
 #include "BossStageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
@@ -82,6 +84,23 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
 void ModeInGame::Update() {
    GetObjServer().Update();
    GetEfcServer().Update();
+#ifdef _DEBUG
+
+   for (auto&& object : GetObjServer().runObjects()) {
+       auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
+       if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::Player) {
+           auto& player = dynamic_cast<Player::Player&>(objectBase);
+           _playerHp = player.hp();
+           continue;
+       }
+       if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
+           auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(objectBase);
+
+           _largeEnemyHp = largeEnemy.hp();
+           continue;
+       }
+   }
+#endif
 }
 
 void ModeInGame::Render() {
@@ -111,6 +130,8 @@ void ModeInGame::Render() {
    auto targetStartZ = camTarget + Vector4(0.0, 0.0, -10.0);
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
    DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), GetColor(0, 0, 255));
+
+   DrawFormatString(0, 30, GetColor(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
 #endif
   
 }

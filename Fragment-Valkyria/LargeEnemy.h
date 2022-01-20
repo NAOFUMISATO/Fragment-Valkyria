@@ -39,16 +39,22 @@ namespace FragmentValkyria {
              */
             void Draw() override;
 
+            double hp() { return _hp; }
+
         private:
 
             void CreateFallObject();
             void CreateGatling();
 
+            void HitCheckFromFallObject();
+
             int _stateCnt{ 0 };
             int _gatlingCnt{ 0 };
+            int _collision{ 0 };
             const int GatlingFrame{ 60 };
             bool _fallObjectflag{ false };
             double _hp{ 100.0 };
+            int _freezeTime{ 0 };
 
         public:
             /**
@@ -135,6 +141,27 @@ namespace FragmentValkyria {
                  * \param owner ラージエネミーの参照
                  */
                 StateGatling(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+            * \class ガトリング攻撃状態クラス
+            * \brief ガトリング攻撃状態の処理を回す
+            */
+            class StateDie : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateDie(LargeEnemy& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */

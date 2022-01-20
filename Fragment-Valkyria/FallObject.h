@@ -45,6 +45,7 @@ namespace FragmentValkyria {
 
         private:
             void HitCheckFromPlayerPoint();
+            void HitCheckFromLargeEnemy();
             void Save();
             void Up();
             void Shoot();
@@ -179,6 +180,32 @@ namespace FragmentValkyria {
                  * \param owner プレイヤーの参照
                  */
                 StateShoot(FallObject& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 入力処理
+                 * \param input 入力一括管理クラスの参照
+                 */
+                void Input(InputManager& input) override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+             * \class 死亡状態クラス
+             * \brief 死亡状態の処理を回す
+             */
+            class StateDie : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner 落ちてくるオブジェクトの参照
+                 */
+                StateDie(FallObject& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */

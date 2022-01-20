@@ -67,6 +67,8 @@ namespace FragmentValkyria {
           */
          void ComputeWorldTransform() override;
 
+         double hp() { return _hp; }
+
       private:
          /**
           * \brief ˆÚ“®ˆ—
@@ -280,6 +282,8 @@ namespace FragmentValkyria {
               * \brief •`‰æˆ—
               */
              void Draw() override;
+         private:
+             int _timeOver{ 0 };
          };
       };
    }
