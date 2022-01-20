@@ -37,7 +37,7 @@ namespace AppFrame {
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
          int width, height;
-         GetGraphSize(animeNo, &width, &height);
+         GetGraphSize(handles[animeNo], &width, &height);
          auto drawX = x + width / 2;
          auto drawY = y + height / 2;
          DrawRotaGraph(drawX, drawY, scale, angle, handles[animeNo], DefaultTransFlag, DefaultTurnFlag);
@@ -56,7 +56,7 @@ namespace AppFrame {
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
          int width, height;
-         GetGraphSize(animeNo, &width, &height);
+         GetGraphSize(handles[animeNo], &width, &height);
          auto drawX = x + width / 2;
          auto drawY = y + height / 2;
          DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);

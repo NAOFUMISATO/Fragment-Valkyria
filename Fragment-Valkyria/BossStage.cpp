@@ -6,13 +6,13 @@
  * \author NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
-#include "Stage.h"
+#include "BossStage.h"
 #include "ModelComponent.h"
 #include "ObjectServer.h"
 #include "StageModelComponent.h"
 using namespace FragmentValkyria::Stage;
 
-Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
+BossStage::BossStage(Game::GameMain& game) : Object::ObjectBase{ game } {
    // スカイスフィアのモデル
    _skySphere = std::make_unique<Model::ModelComponent>(*this);
    _skySphere->SetModel("SkySphere");
@@ -27,12 +27,12 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
    SetFogStartEnd(50.0f, 15000.0f);
 }
 
-void Stage::Update() {
+void BossStage::Update() {
    // スカイスフィアをプレイヤと同じ位置にする
    _skySphere->SetPosition(GetObjServer().GetPosition("PlayerPos"));
 }
 
-void Stage::Draw() {
+void BossStage::Draw() {
    _skySphere->Draw(); // スカイスフィア
    _stage->Draw();
 }

@@ -19,10 +19,10 @@ namespace FragmentValkyria {
        * \class ステージの生成管理クラス
        * \brief スカイスフィア及び地面の生成を行う
        */
-      class StageCreator : public CreatorBase {
+      class BossStageCreator : public CreatorBase {
       public:
           
-          StageCreator(Game::GameMain& gameMain);
+          BossStageCreator(Game::GameMain& gameMain);
 
       private:
          /**

@@ -26,13 +26,13 @@ namespace FragmentValkyria {
        * \class ステージクラス
        * \brief スカイスフィア及び地面の管理を行う
        */
-      class Stage : public Object::ObjectBase {
+      class BossStage : public Object::ObjectBase {
       public:
          /**
           * \brief コンストラクタ
           * \param game ゲーム本体クラスの参照
           */
-         Stage(Game::GameMain& game);
+         BossStage(Game::GameMain& game);
          /**
           * \brief 更新処理
           */
@@ -45,7 +45,7 @@ namespace FragmentValkyria {
           * \brief オブジェクトの種別を返す
           * \return ステージ
           */
-         ObjectType GetObjType() const override { return ObjectType::Stage; }
+         ObjectType GetObjType() const override { return ObjectType::BossStage; }
 
       private:
          std::unique_ptr<Model::ModelComponent> _skySphere; //!< スカイスフィアのポインタ

@@ -33,7 +33,7 @@ namespace FragmentValkyria {
           */
          ModelComponent(Object::ObjectBase& owner);
          /**
-          * \brief デフォルトデストラクタ
+          * \brief デストラクタ
           */
          virtual ~ModelComponent();
          /**
@@ -87,7 +87,7 @@ namespace FragmentValkyria {
          inline int modelHandle() { return _modelHandle; }
          /**
           * \brief モデルの自己発光色の設定
-          * \param index 設定する同一モデルの通し番号
+          * \param index 設定するモデルのマテリアル番号
           * \param r 赤
           * \param g 緑
           * \param b 青

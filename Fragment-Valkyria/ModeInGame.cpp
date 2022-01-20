@@ -13,7 +13,7 @@
 #include "GameMain.h"
 #include "LargeEnemyCreator.h"
 #include "PlayerCreator.h"
-#include "StageCreator.h"
+#include "BossStageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
@@ -39,7 +39,7 @@ void ModeInGame::Enter() {
    auto& objFac = objFactory();
    objFac.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
    objFac.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
-   objFac.Register("Stage", std::make_unique<Create::StageCreator>(_gameMain));
+   objFac.Register("Stage", std::make_unique<Create::BossStageCreator>(_gameMain));
    objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFac.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
 

@@ -96,7 +96,7 @@
     <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
+    <ClInclude Include="BossStage.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="CreatorBase.h">
@@ -111,7 +111,7 @@
     <ClInclude Include="PlayerCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
-    <ClInclude Include="StageCreator.h">
+    <ClInclude Include="BossStageCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
     <ClInclude Include="ModelComponent.h">
@@ -176,7 +176,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
+    <ClCompile Include="BossStage.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
@@ -188,7 +188,7 @@
     <ClCompile Include="PlayerCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
-    <ClCompile Include="StageCreator.cpp">
+    <ClCompile Include="BossStageCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
     <ClCompile Include="ModelComponent.cpp">
