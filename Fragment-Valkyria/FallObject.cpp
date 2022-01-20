@@ -13,18 +13,21 @@
 
 using namespace FragmentValkyria::Enemy;
 
-//namespace {
-//	auto paramMap = AppFrame::Resource::LoadJson::GetParamMap("fallObject",
-//		{ "range", "gravity", "shootSpeed", "upSpeed", "rotateAngle",
-//		"upDownRange" });
-//
-//	const double Range = paramMap["range"];
-//	const double Gravity = paramMap["gravity"];
-//	const double ShootSpeed = paramMap["shootSpeed"];
-//	const double UpSpeed = paramMap["upSpeed"];
-//	const double RotateAngle = paramMap["rotateAngle"];
-//	const double UpDownRange = paramMap["upDownRange"];
-//}
+namespace {
+	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallObject",
+		{ "range", "gravity", "shootSpeed", "upSpeed", "rotateAngle",
+		"upDownRange" });
+
+	const double Range = paramMap["range"];
+	const double Gravity = paramMap["gravity"];
+	const double ShootSpeed = paramMap["shootSpeed"];
+	const double UpSpeed = paramMap["upSpeed"];
+	const double RotateAngle = paramMap["rotateAngle"];
+	const double UpDownRange = paramMap["upDownRange"];
+
+	constexpr auto DefaultPointScale = 1.0;
+	constexpr auto DefaultPointAngle = 0.0;
+}
 
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
@@ -41,6 +44,8 @@ void FallObject::Init() {
 
 	// フレーム1をナビメッシュとして使用
 	MV1SetupCollInfo(modelHandle, _collision);
+
+	_fallPointHandles = _gameMain.resServer().GetTextures("FallPoint");
 }
 
 void FallObject::Input(InputManager& input) {
@@ -144,6 +149,13 @@ void FallObject::StateFall::Update() {
 	_owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
 
 	++_owner._fallTimer;
+}
+
+void FallObject::StateFall::Draw() {
+	FallObject::StateBase::Draw();
+	auto pointPosition = _owner._position;
+	pointPosition.SetY(0);
+	_owner.GetSimpTexComponent().DrawBillBoard(pointPosition, DefaultPointScale, DefaultPointAngle, _owner._fallPointHandles, 10);
 }
 
 void FallObject::StateSave::Enter() {

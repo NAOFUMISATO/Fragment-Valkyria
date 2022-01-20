@@ -28,6 +28,7 @@ void ModeInGame::Init() {
    auto& loadJson = GetLoadJson();
    loadJson.LoadModels("ingame");
    loadJson.LoadEffects("player");
+   loadJson.LoadTextures("ingame");
 
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");
