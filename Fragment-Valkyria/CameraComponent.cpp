@@ -173,43 +173,42 @@ void CameraComponent::StateShootReady::Enter() {
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RightStickY() >= 10000) {
-        /*auto upMatrix = Matrix44();
-        upMatrix.RotateX(-2.0, true);
-
-        _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
-        auto posToTarget = _owner._target - _owner._position;
-
-        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-
-        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, 2.0, false);
+        _owner._upDownAngle += 2.0;
+        if (_owner._upDownAngle >= 40.0) {
+            _owner._upDownAngle = 40.0;
+        }
     }
     if (input.GetXJoypad().RightStickY() <= -10000) {
-        /*auto downMatrix = Matrix44();
-        downMatrix.RotateX(2.0, true);
-
-        _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
-        auto posToTarget = _owner._target - _owner._position;
-
-        auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-
-        _owner._rotateMatrix.RotateAnyVec(anyAxisVec, -2.0, false);
+        
+        _owner._upDownAngle -= 2.0;
+        if (_owner._upDownAngle <= -10.0) {
+            _owner._upDownAngle = -10.0;
+        }
     }
     if (input.GetXJoypad().RightStickX() >= 10000) {
-        /*auto rightMatrix = Matrix44();
-        rightMatrix.RotateY(2.0, true);
 
-        _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
-
-        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), -2.0, false);
+        _owner._sideAngle -= 2.0;
+        if (_owner._sideAngle <= -360.0) {
+            _owner._sideAngle = 0.0;
+        }
     }
     if (input.GetXJoypad().RightStickX() <= -10000) {
-        /*auto leftMatrix = Matrix44();
-        leftMatrix.RotateY(-2.0, true);
 
-        _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
-
-        _owner._rotateMatrix.RotateAnyVec(Vector4(0.0, 1.0, 0.0), 2.0, false);
+        _owner._sideAngle += 2.0;
+        if (_owner._sideAngle >= 360.0) {
+            _owner._sideAngle = 0.0;
+        }
     }
+
+    auto posToTarget = _owner._target - _owner._position;
+
+    auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+    Matrix44 rotateUpDown = Matrix44();
+    rotateUpDown.RotateAnyVec(anyAxisVec, _owner._upDownAngle, true);
+    Matrix44 rotateSide = Matrix44();
+    rotateSide.RotateAnyVec(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
+
+    _owner._rotateMatrix = rotateSide * rotateUpDown;
 }
 
 void CameraComponent::StateShootReady::Update() {

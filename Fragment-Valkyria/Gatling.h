@@ -52,9 +52,6 @@ namespace FragmentValkyria {
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
 
-            const double Speed{ 2.0 };
-            double _radian{ 100.0 };
-
 		public:
             /**
             * \class ガトリングの状態の基底クラス

@@ -17,9 +17,12 @@ using namespace FragmentValkyria::Player;
 
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",
-        { "movespeed" });
+        { "movespeed", "capsulePos1", "capsulePos2", "capsuleRadian"});
 
     const double MoveSpeed = paramMap["movespeed"];
+    const double CapsulePos1 = paramMap["capsulePos1"];
+    const double CapsulePos2 = paramMap["capsulePos2"];
+    const double CapsuleRadian = paramMap["capsuleRadian"];
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -163,9 +166,9 @@ void Player::HitCheckFromFallObject() {
 void Player::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
-   auto pos1 = _owner._position + Vector4(0.0, 30.0, 0.0);
-   auto pos2 = _owner._position + Vector4(0.0, 60.0, 0.0);
-   auto radian = static_cast<float>(30.0);
+   auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
+   auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
+   auto radian = static_cast<float>(CapsuleRadian);
   
    DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
