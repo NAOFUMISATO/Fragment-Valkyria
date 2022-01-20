@@ -1,7 +1,7 @@
 {
 	"player": [
 		{
-			"movespeed": 2.0,
+			"movespeed": 5.0,
 			"rotspeed": 10.0,
 			"capsulePos1": 30.0,
 			"capsulePos2": 60.0,
