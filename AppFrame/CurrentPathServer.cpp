@@ -43,7 +43,7 @@ namespace AppFrame {
 
       std::filesystem::path CurrentPathServer::GetCurrentPath(std::string_view key) {
 #ifndef _DEBUG
-         if (!_paths.contains(key.data())) {
+         if (!_currentPaths.contains(key.data())) {
             return "";
          }
 #else
