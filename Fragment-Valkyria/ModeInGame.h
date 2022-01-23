@@ -77,7 +77,6 @@ namespace FragmentValkyria {
          short _padLeftY{ 0 };
          short _padRightX{ 0 };
          short _padRightY{ 0 };
-
          double _largeEnemyHp{ 0 };
          double _playerHp{ 0 };
 #endif

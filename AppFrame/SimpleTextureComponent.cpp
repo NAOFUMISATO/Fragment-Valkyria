@@ -13,10 +13,10 @@
 #include "Vector4.h"
 #include "DxUtility.h"
 namespace {
-   constexpr auto DefaultTransFlag = TRUE;
-   constexpr auto DefaultTurnFlag = FALSE;
+   constexpr auto DefaultTransFlag = true;
+   constexpr auto DefaultTurnFlag = false;
    constexpr auto DefaultCenterX = 0.5f;
-   constexpr auto DefaultCenterY = 10.0f;
+   constexpr auto DefaultCenterY = 0.0f;
 }
 namespace AppFrame {
 
@@ -62,28 +62,40 @@ namespace AppFrame {
          DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);
       }
 
-      void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos, double size, double angle, int handle) {
+      void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos, double scale, double angle, int handle) {
+         int width, height;
+         GetGraphSize(handle, &width, &height);
+         auto size = static_cast<float>(width) * scale;
          DrawBillboard3D(Math::ToDX(pos), DefaultCenterX, DefaultCenterY, 
             static_cast<float>(size), static_cast<float>(angle), handle, DefaultTransFlag);
       }
 
-      void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos, double size, double angle, std::vector<int> handles, int animeSpeed) {
+      void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos,double scale, double angle, std::vector<int> handles, int animeSpeed) {
          auto count = _gameBase.modeServer().frameCount();
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
-         auto g = DrawBillboard3D(Math::ToDX(pos), DefaultCenterX, DefaultCenterY,
-            static_cast<float>(size), static_cast<float>(angle), handles[animeNo], TRUE);
+         int width, height;
+         GetGraphSize(handles[animeNo], &width, &height);
+         auto size = static_cast<double>(width) * scale;
+         DrawBillboard3D(Math::ToDX(pos), DefaultCenterX, DefaultCenterY,
+            static_cast<float>(size), static_cast<float>(angle), handles[animeNo], DefaultTransFlag);
       }
 
-      void SimpleTextureComponent::TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double size, double angle, int handle) {
+      void SimpleTextureComponent::TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double scale, double angle, int handle) {
+         int width, height;
+         GetGraphSize(handle, &width, &height);
+         auto size = static_cast<double>(width) * scale;
          DrawBillboard3D(Math::ToDX(pos), static_cast<float>(cx), static_cast<float>(cy),
             static_cast<float>(size), static_cast<float>(angle), handle, DefaultTransFlag);
       }
 
-      void SimpleTextureComponent::TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double size, double angle, std::vector<int> handles, int animeSpeed) {
+      void SimpleTextureComponent::TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double scale, double angle, std::vector<int> handles, int animeSpeed) {
          auto count = _gameBase.modeServer().frameCount();
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
+         int width, height;
+         GetGraphSize(handles[animeNo], &width, &height);
+         auto size = static_cast<double>(width) * scale;
          DrawBillboard3D(Math::ToDX(pos), static_cast<float>(cx), static_cast<float>(cy),
             static_cast<float>(size), static_cast<float>(angle), handles[animeNo], DefaultTransFlag);
       }

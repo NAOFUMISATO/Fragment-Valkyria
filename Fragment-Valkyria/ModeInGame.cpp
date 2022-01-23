@@ -31,7 +31,6 @@ void ModeInGame::Init() {
    loadJson.LoadModels("ingame");
    loadJson.LoadEffects("player");
    loadJson.LoadTextures("ingame");
-
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");
 }
@@ -104,6 +103,7 @@ void ModeInGame::Update() {
 }
 
 void ModeInGame::Render() {
+  
    GetObjServer().Render();
    GetEfcServer().Render();
 #ifdef _DEBUG
@@ -133,7 +133,6 @@ void ModeInGame::Render() {
 
    DrawFormatString(0, 30, GetColor(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
 #endif
-  
 }
 
 void ModeInGame::Exit() {

@@ -154,7 +154,7 @@
       <Filter>ソース ファイル\Resource</Filter>
     </ClCompile>
     <ClCompile Include="SimpleTextureComponent.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

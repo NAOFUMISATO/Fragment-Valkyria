@@ -111,9 +111,9 @@ namespace AppFrame {
          Vector4 GetForward() const {
             auto vec = Vector4{ 0,0,1 };
             vec.Normalized();
-            Matrix44 matrix;
-            matrix.RotateY(_rotation.GetY(), true);
-            return vec * matrix;
+            auto matrix = Matrix44();
+            matrix.RotateY(_rotation.GetY(), false);
+            return vec* matrix ;
          }
 
          /**

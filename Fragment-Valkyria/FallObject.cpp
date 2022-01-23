@@ -14,20 +14,23 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallObject",
-		{ "range", "gravity", "shootSpeed", "upSpeed", "rotateAngle",
-		"upDownRange", "capsulePos1", "capsulePos2", "capsuleRadian"});
+	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
+		{ "range", "gravity", "shoot_speed", "up_speed", "rotate_angle",
+		"updown_range", "capsule_pos1", "capsule_pos2", "capsule_radian",
+		"fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
 
 	const double Range = paramMap["range"];
 	const double Gravity = paramMap["gravity"];
-	const double ShootSpeed = paramMap["shootSpeed"];
-	const double UpSpeed = paramMap["upSpeed"];
-	const double RotateAngle = paramMap["rotateAngle"];
-	const double UpDownRange = paramMap["upDownRange"];
-	const double CapsulePos1 = paramMap["capsulePos1"];
-	const double CapsulePos2 = paramMap["capsulePos2"];
-	const double CapsuleRadian = paramMap["capsuleRadian"];
-
+	const double ShootSpeed = paramMap["shoot_speed"];
+	const double UpSpeed = paramMap["up_speed"];
+	const double RotateAngle = paramMap["rotate_angle"];
+	const double UpDownRange = paramMap["updown_range"];
+	const double CapsulePos1 = paramMap["capsule_pos1"];
+	const double CapsulePos2 = paramMap["capsule_pos2"];
+	const double CapsuleRadian = paramMap["capsule_radian"];
+	const double FallPointPosY = paramMap["fallpoint_pos_y"];
+	const double FallPointScale = paramMap["fallpoint_scale"];
+	const int FallPointAnimeSpeed = paramMap["fallpoint_animespeed"];
 	constexpr auto DefaultPointScale = 1.0;
 	constexpr auto DefaultPointAngle = 0.0;
 }
@@ -171,8 +174,8 @@ void FallObject::StateFall::Update() {
 void FallObject::StateFall::Draw() {
 	FallObject::StateBase::Draw();
 	auto pointPosition = _owner._position;
-	pointPosition.SetY(0);
-	_owner.GetSimpTexComponent().DrawBillBoard(pointPosition, DefaultPointScale, DefaultPointAngle, _owner._fallPointHandles, 10);
+	pointPosition.SetY(FallPointPosY);
+	_owner.GetSimpTexComponent().DrawBillBoard(pointPosition, FallPointScale,DefaultPointAngle, _owner._fallPointHandles, FallPointAnimeSpeed);
 }
 
 void FallObject::StateSave::Enter() {

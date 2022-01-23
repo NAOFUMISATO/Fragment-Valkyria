@@ -1,18 +1,22 @@
 {
-	"fallObject": [
+	"fallobject": [
 		{
 			"range": 300.0,
 			"gravity": 0.01,
-            "shootSpeed": 2.0,
-            "upSpeed": 3.0,
-            "rotateAngle": 180.0,
-            "upDownRange": 30.0,
-			"capsulePos1": 30.0,
-			"capsulePos2": 60.0,
-			"capsuleRadian": 50.0
+            "shoot_speed": 2.0,
+            "up_speed": 3.0,
+            "rotate_angle": 180.0,
+            "updown_range": 30.0,
+			"capsule_pos1": 30.0,
+			"capsule_pos2": 60.0,
+			"capsule_radian": 50.0,
+			"fallpoint_pos_y":-10.0,
+			"fallpoint_scale":0.7,
+			"fallpoint_animespeed":1
+			
 		}
 	],
-	"fallObject_vec": [
+	"fallobject_vec": [
 		{
 			"init_pos": [
 				{

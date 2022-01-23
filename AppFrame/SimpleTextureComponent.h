@@ -80,41 +80,41 @@ namespace AppFrame {
          /**
           * \brief 画像のビルボード描画を簡易的に行う
           * \param pos 描画座標(足下基準)
-          * \param size 拡大率
+          * \param scale 拡大率(0.0～1.0)
           * \param angle 角度(弧度法)
           * \param handle 画像ハンドル
           */
-         void DrawBillBoard(Math::Vector4 pos, double size, double angle, int handle);
+         void DrawBillBoard(Math::Vector4 pos, double scale, double angle, int handle);
          /**
           * \brief 画像のビルボードアニメーション描画を簡易的に行う
           * \param pos 描画座標(足下基準)
-          * \param size 拡大率
+          * \param scale 拡大率(0.0～1.0)
           * \param angle 角度(弧度法)
           * \param handles 画像ハンドルの動的配列
           * \param animeSpeed アニメーションスピード
           */
-         void DrawBillBoard(Math::Vector4 pos, double size, double angle, std::vector<int> handles, int animeSpeed);
+         void DrawBillBoard(Math::Vector4 pos,double scale, double angle, std::vector<int> handles, int animeSpeed);
          /**
           * \brief 画像のビルボード描画を詳細設定を行い、描画する
           * \param pos 描画座標(足下基準)
           * \param cx 基準位置X座標
           * \param cy 基準位置Y座標
-          * \param size 拡大率
+          * \param scale 拡大率(0.0～1.0)
           * \param angle 角度(弧度法)
           * \param handle 画像ハンドル
           */
-         void TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double size, double angle, int handle);
+         void TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double scale, double angle, int handle);
          /**
           * \brief 画像のビルボードアニメーションを詳細設定を行い、描画する
           * \param pos 描画座標(足下基準)
           * \param cx 基準位置X座標
           * \param cy 基準位置Y座標
-          * \param size 拡大率
+          * \param scale 拡大率(0.0～1.0)
           * \param angle 角度(弧度法)
           * \param handles 画像ハンドルの動的配列
           * \param animeSpeed アニメーションスピード
           */
-         void TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double size, double angle, std::vector<int> handles, int animeSpeed);
+         void TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double scale, double angle, std::vector<int> handles, int animeSpeed);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
