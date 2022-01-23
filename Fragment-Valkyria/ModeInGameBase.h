@@ -34,6 +34,7 @@ namespace FragmentValkyria {
          enum class InGameType {
             Boss   //!< モードボス
          };
+
          /**
           * \brief コンストラクタ
           * \param game ゲーム本体の参照

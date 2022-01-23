@@ -84,7 +84,7 @@
     <ClInclude Include="GameMain.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ModeInGame.h">
+    <ClInclude Include="ModeBoss.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
     <ClInclude Include="ModeTitle.h">

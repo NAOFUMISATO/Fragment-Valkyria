@@ -58,9 +58,9 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto pushmode = _modeRegistry[key.data()];
-         pushmode->Enter();          // 指定のモードの入口処理を行う
-         _modeList.push_back(pushmode); // リストの末尾に指定のモードを追加する
+         auto pushMode = _modeRegistry[key.data()];
+         pushMode->Enter();          // 指定のモードの入口処理を行う
+         _modeList.push_back(pushMode); // リストの末尾に指定のモードを追加する
       }
 
       void ModeServer::PopBack() {
@@ -104,9 +104,9 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto insertmode = _modeRegistry[key.data()];
-         insertmode->Enter();   // 指定のモードの入口処理を行う
-         _modeList.insert(std::prev(_modeList.end()), insertmode);   // 指定のモードをリストの末尾分、後方に進んだ位置に挿入する
+         auto insertMode = _modeRegistry[key.data()];
+         insertMode->Enter();   // 指定のモードの入口処理を行う
+         _modeList.insert(std::prev(_modeList.end()), insertMode);   // 指定のモードをリストの末尾分、後方に進んだ位置に挿入する
       }
 
       std::shared_ptr<ModeBaseRoot> ModeServer::GetMode(std::string_view key) {
@@ -192,10 +192,10 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto insertmode = _modeRegistry["FadeIn"];
-         insertmode->fadeType(fadeType);     // フェード時間の設定
-         insertmode->Enter();                // 指定のモード(フェード)の入口処理
-         _modeList.insert(std::prev(_modeList.end()), insertmode);  // 指定のモード(フェード)をリストの末尾分、後方に進んだ位置に挿入する
+         auto insertMode = _modeRegistry["FadeIn"];
+         insertMode->fadeType(fadeType);     // フェード時間の設定
+         insertMode->Enter();                // 指定のモード(フェード)の入口処理
+         _modeList.insert(std::prev(_modeList.end()), insertMode);  // 指定のモード(フェード)をリストの末尾分、後方に進んだ位置に挿入する
       }
 
       void ModeServer::FadePushBack(char fadeType) {
@@ -214,10 +214,10 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto pushmode = _modeRegistry["FadeOut"];
-         pushmode->fadeType(fadeType);     // フェード時間の設定
-         pushmode->Enter();                // 指定のモード(フェード)入口処理
-         _modeList.push_back(pushmode);    // リストの末尾に指定のモード(フェード)を追加する
+         auto pushMode = _modeRegistry["FadeOut"];
+         pushMode->fadeType(fadeType);     // フェード時間の設定
+         pushMode->Enter();                // 指定のモード(フェード)入口処理
+         _modeList.push_back(pushMode);    // リストの末尾に指定のモード(フェード)を追加する
       }
    }
 }

@@ -1,12 +1,12 @@
 
 /*****************************************************************//**
- * \file   ModeInGame.cpp
+ * \file   ModeBoss.cpp
  * \brief  モードインゲーム
  *
  * \author NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
-#include "ModeInGame.h"
+#include "ModeBoss.h"
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
@@ -22,11 +22,11 @@
 #include "EffectPlayerShot.h" //仮
 using namespace FragmentValkyria::Mode;
 
-ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
+ModeBoss::ModeBoss(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
 
 }
 
-void ModeInGame::Init() {
+void ModeBoss::Init() {
    auto& loadJson = GetLoadJson();
    loadJson.LoadModels("ingame");
    loadJson.LoadEffects("player");
@@ -35,7 +35,7 @@ void ModeInGame::Init() {
    loadStage.LoadStageModels("Boss");
 }
 
-void ModeInGame::Enter() {
+void ModeBoss::Enter() {
 
    auto& objFactory = GetObjFactory();
    objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
@@ -59,7 +59,7 @@ void ModeInGame::Enter() {
    ModeInGameBase::Enter();
 }
 
-void ModeInGame::Input(AppFrame::Input::InputManager& input) {
+void ModeBoss::Input(AppFrame::Input::InputManager& input) {
    if (input.GetMouse().RightClick()) {
       // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("Title", 'L');
@@ -78,7 +78,7 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
    ModeInGameBase::Input(input);
 }
 
-void ModeInGame::Update() {
+void ModeBoss::Update() {
 #ifdef _DEBUG
    for (auto&& object : GetObjServer().runObjects()) {
        auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
@@ -98,6 +98,6 @@ void ModeInGame::Update() {
    ModeInGameBase::Update();
 }
 
-void ModeInGame::Render() {
+void ModeBoss::Render() {
    ModeInGameBase::Render();
 }

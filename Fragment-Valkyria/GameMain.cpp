@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "GameMain.h"
 #include "ModeTitle.h"
-#include "ModeInGame.h"
+#include "ModeBoss.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
 #include "LoadStageFromJson.h"
@@ -55,7 +55,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    pathSer.RegistCurrentPath(pathToUsed);
 
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
-   _modeServer->Register("InGame", std::make_shared<Mode::ModeInGame>(*this));
+   _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
 
    return true;
 }

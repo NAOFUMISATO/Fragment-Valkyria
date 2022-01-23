@@ -1,6 +1,6 @@
 #pragma once
 /*****************************************************************//**
- * \file   ModeInGame.h
+ * \file   ModeBoss.h
  * \brief  モードボスクラス
  *
  * \author NAOFUMISATO
@@ -16,20 +16,20 @@ namespace FragmentValkyria {
     */
    namespace Mode {
       /**
-       * \class モードインゲームクラス
+       * \class モードボスクラス
        * \brief インゲームの処理を回す
        */
-      class ModeInGame : public ModeInGameBase {
+      class ModeBoss : public ModeInGameBase {
       public:
          /**
           * \brief コンストラクタ
           * \param game ゲーム本体の参照
           */
-         ModeInGame(Game::GameMain& gameMain);
+         ModeBoss(Game::GameMain& gameMain);
          /**
           * \brief デフォルトデストラクタ
           */
-         ~ModeInGame() = default;
+         ~ModeBoss() = default;
          /**
           * \brief 初期化処理
           */
@@ -51,6 +51,7 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render() override;
+
          /**
           * \brief インゲーム種別の取得
           * \return モードボス

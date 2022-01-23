@@ -177,7 +177,7 @@
     <ClInclude Include="LargeEnemyCreator.h" />
     <ClInclude Include="LoadStageFromJson.h" />
     <ClInclude Include="ModeBase.h" />
-    <ClInclude Include="ModeInGame.h" />
+    <ClInclude Include="ModeBoss.h" />
     <ClInclude Include="ModeInGameBase.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
     <ClInclude Include="ModelComponent.h" />
