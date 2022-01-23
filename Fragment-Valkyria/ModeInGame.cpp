@@ -22,7 +22,7 @@
 #include "EffectPlayerShot.h" //仮
 using namespace FragmentValkyria::Mode;
 
-ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeBase{ gameMain } {
+ModeInGame::ModeInGame(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
 
 }
 
@@ -37,26 +37,26 @@ void ModeInGame::Init() {
 
 void ModeInGame::Enter() {
 
-   auto& objFac = objFactory();
-   objFac.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
-   objFac.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
-   objFac.Register("Stage", std::make_unique<Create::BossStageCreator>(_gameMain));
-   objFac.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
-   objFac.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
+   auto& objFactory = GetObjFactory();
+   objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
+   objFactory.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
+   objFactory.Register("Stage", std::make_unique<Create::BossStageCreator>(_gameMain));
+   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
+   objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
 
-   auto player = objFac.Create("Player");
+   auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用
-   auto& objSer = GetObjServer();
-   objSer.Register("Player", player->position());
-   objSer.Add(std::move(player));
+   auto& objServer = GetObjServer();
+   objServer.Register("Player", player->position());
+   objServer.Add(std::move(player));
 
-   auto stage = objFac.Create("Stage");
-   objSer.Add(std::move(stage));
+   auto stage = objFactory.Create("Stage");
+   objServer.Add(std::move(stage));
 
-   auto largeEnemy = objFac.Create("LargeEnemy");
-   objSer.Add(std::move(largeEnemy));
+   auto largeEnemy = objFactory.Create("LargeEnemy");
+   objServer.Add(std::move(largeEnemy));
 
-   Update();
+   ModeInGameBase::Enter();
 }
 
 void ModeInGame::Input(AppFrame::Input::InputManager& input) {
@@ -64,27 +64,22 @@ void ModeInGame::Input(AppFrame::Input::InputManager& input) {
       // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("Title", 'L');
    }
-   GetObjServer().Input(input);
-
    //エフェクト仮描画
    if (input.GetKeyboard().ZClick()) {
       auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain);
       GetEfcServer().Add(std::move(efcShot));
    }
-   GetEfcServer().Input(input);
 #ifdef _DEBUG
    _padLeftX = input.GetXJoypad().LeftStickX();
    _padLeftY = input.GetXJoypad().LeftStickY();
    _padRightX = input.GetXJoypad().RightStickX();
    _padRightY = input.GetXJoypad().RightStickY();
 #endif
+   ModeInGameBase::Input(input);
 }
 
 void ModeInGame::Update() {
-   GetObjServer().Update();
-   GetEfcServer().Update();
 #ifdef _DEBUG
-
    for (auto&& object : GetObjServer().runObjects()) {
        auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
        if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::Player) {
@@ -100,12 +95,10 @@ void ModeInGame::Update() {
        }
    }
 #endif
+   ModeInGameBase::Update();
 }
 
 void ModeInGame::Render() {
-  
-   GetObjServer().Render();
-   GetEfcServer().Render();
 #ifdef _DEBUG
    DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
    DrawFormatString(0, 15, GetColor(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
@@ -133,14 +126,5 @@ void ModeInGame::Render() {
 
    DrawFormatString(0, 30, GetColor(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
 #endif
-}
-
-void ModeInGame::Exit() {
-   // アクターを削除
-   GetObjServer().Clear();
-   GetEfcServer().Clear();
-   // デュプリケートしたモデルだけ削除
-   GetResServer().DeleteDuplicateModels();
-   // クリエイターを削除
-   objFactory().Clear();
+   ModeInGameBase::Render();
 }
