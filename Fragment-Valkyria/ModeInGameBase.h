@@ -79,6 +79,17 @@ namespace FragmentValkyria {
           * \return オブジェクト生成一括管理クラスの参照
           */
          Create::ObjectFactory& GetObjFactory() const;
+
+      protected:
+#ifdef _DEBUG
+         void DebugDraw();
+         short _padLeftX{ 0 };
+         short _padLeftY{ 0 };
+         short _padRightX{ 0 };
+         short _padRightY{ 0 };
+         double _largeEnemyHp{ 0 };
+         double _playerHp{ 0 };
+#endif
       };
    }
 }

@@ -29,8 +29,7 @@ Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
     Init();
 }
 
-void Player::Player::Init()
-{
+void Player::Player::Init(){
     _rightRotation.RotateY(90.0, true);
     _leftRotation.RotateY(-90.0, true);
     _backRotation.RotateY(180.0, true);
