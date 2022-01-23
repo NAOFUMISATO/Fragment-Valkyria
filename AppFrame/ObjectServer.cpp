@@ -81,26 +81,7 @@ namespace AppFrame {
          _objRegistry.emplace(key, vec);
       }
 
-      AppFrame::Math::Vector4 ObjectServer::GetPosition(std::string_view key) {
-#ifndef _DEBUG
-         if (!_objRegistry.contains(key.data())) {
-            return{ 0,0,0 };
-         }
-#else
-         try {
-            if (!_objRegistry.contains(key.data())) {
-               std::string message = key.data();
-               throw std::logic_error("----------キー[" + message + "]がオブジェクトレジストリに存在しませんでした。----------\n");
-            }
-         }
-         catch (std::logic_error& error) {
-            OutputDebugString(error.what());
-         }
-#endif
-         return _objRegistry[key.data()];
-      }
-
-      AppFrame::Math::Vector4 ObjectServer::GetForward(std::string_view key) {
+      AppFrame::Math::Vector4 ObjectServer::GetVecData(std::string_view key) {
 #ifndef _DEBUG
          if (!_objRegistry.contains(key.data())) {
             return{ 0,0,0 };

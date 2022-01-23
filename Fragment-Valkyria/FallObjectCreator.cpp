@@ -29,7 +29,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	rightTransMatrix.RotateY(45.0, true);
 	leftTransMatrix.RotateY(-45.0, true);
 
-	auto MoveVec = _gameMain.objServer().GetPosition("CamTarget") - _gameMain.objServer().GetPosition("CamPos");
+	auto MoveVec = _gameMain.objServer().GetVecData("CamTarget") - _gameMain.objServer().GetVecData("CamPos");
 	MoveVec.Normalized();
 
 	auto rightMoveVec = MoveVec * rightTransMatrix;
@@ -38,9 +38,9 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	constexpr double distance = 1000.0;
 
 	std::array<Vector4, 3> startPosition = {
-		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0),
-		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
-		_gameMain.objServer().GetPosition("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0),
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
 	};
 
 	for (auto i = 0; i < 3; ++i) {

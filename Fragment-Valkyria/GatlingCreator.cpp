@@ -19,7 +19,7 @@ GatlingCreator::GatlingCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain
 
 std::unique_ptr<Object::ObjectBase> GatlingCreator::Create() {
 	auto gatling = std::make_unique<Enemy::Gatling>(_gameMain);
-	auto startPos = _gameMain.objServer().GetPosition("EnemyPos") + AppFrame::Math::Vector4(0.0, 100.0, 0.0);
+	auto startPos = _gameMain.objServer().GetVecData("EnemyPos") + AppFrame::Math::Vector4(0.0, 100.0, 0.0);
 	gatling->position(startPos);
 	gatling->Init();
 

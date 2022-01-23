@@ -120,7 +120,7 @@ void ModeInGame::Render() {
    auto startZ = Vector4(0.0, 0.0, -10000.0);
    auto endZ = Vector4(0.0, 0.0, 10000.0);
    DrawLine3D(AppMath::ToDX(startZ), AppMath::ToDX(endZ), GetColor(0, 0, 255));
-   auto camTarget = GetObjServer().GetPosition("CamTarget");
+   auto camTarget = GetObjServer().GetVecData("CamTarget");
    auto targetStartX = camTarget + Vector4(-10.0, 0.0, 0.0);
    auto targetEndX = camTarget + Vector4(10.0, 0.0, 0.0);
    DrawLine3D(AppMath::ToDX(targetStartX), AppMath::ToDX(targetEndX), GetColor(255, 0, 0));

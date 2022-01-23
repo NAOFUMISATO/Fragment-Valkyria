@@ -55,13 +55,8 @@ namespace AppFrame {
           * \param key オブジェクトに関連付けた任意の文字列
           * \return 登録したオブジェクトの位置
           */
-         Vector4 GetPosition(std::string_view key);
-         /**
-          * \brief レジストリに登録したオブジェクトの回転角を取得する
-          * \param key オブジェクトに関連付けた任意の文字列
-          * \return 登録したオブジェクトの回転角
-          */
-         Vector4 GetForward(std::string_view key);
+         Vector4 GetVecData(std::string_view key);
+
       private:
          bool _updating{ false };   //!< 更新しているかのフラグ
          std::vector<std::unique_ptr<ObjectBaseRoot>> _runObjects;      //!< オブジェクトの処理を回す用の動的配列

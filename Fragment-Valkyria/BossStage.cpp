@@ -29,7 +29,7 @@ BossStage::BossStage(Game::GameMain& game) : Object::ObjectBase{ game } {
 
 void BossStage::Update() {
    // スカイスフィアをプレイヤと同じ位置にする
-   _skySphere->SetPosition(GetObjServer().GetPosition("PlayerPos"));
+   _skySphere->SetPosition(GetObjServer().GetVecData("PlayerPos"));
 }
 
 void BossStage::Draw() {

@@ -199,7 +199,7 @@ void FallObject::StateSave::Update() {
 }
 
 void FallObject::StateShoot::Enter() {
-	_owner._shootVec = _owner.GetObjServer().GetPosition("CamTarget") - _owner._position;
+	_owner._shootVec = _owner.GetObjServer().GetVecData("CamTarget") - _owner._position;
 	_owner._shootVec.Normalized();
 }
 
