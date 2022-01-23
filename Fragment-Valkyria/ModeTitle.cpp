@@ -54,7 +54,7 @@ void ModeTitle::Enter() {
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
    if (input.GetMouse().LeftClick()) {
-      GetModeServer().GoToMode("InGame", 'L');
+      GetModeServer().GoToMode("Boss", 'L');
       _alpha = 255;
    }
 }
