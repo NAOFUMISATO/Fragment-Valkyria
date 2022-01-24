@@ -206,7 +206,7 @@
     <ClCompile Include="LargeEnemyCreator.cpp" />
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeBase.cpp" />
-    <ClCompile Include="ModeInGame.cpp" />
+    <ClCompile Include="ModeBoss.cpp" />
     <ClCompile Include="ModeIngameBase.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />

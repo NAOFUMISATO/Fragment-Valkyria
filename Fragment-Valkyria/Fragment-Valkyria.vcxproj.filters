@@ -167,7 +167,7 @@
     <ClCompile Include="GameMain.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
-    <ClCompile Include="ModeInGame.cpp">
+    <ClCompile Include="ModeBoss.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="ModeTitle.cpp">

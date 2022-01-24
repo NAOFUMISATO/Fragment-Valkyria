@@ -33,6 +33,7 @@ void ModeBoss::Init() {
    loadJson.LoadTextures("ingame");
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");
+   ModeInGameBase::Init();
 }
 
 void ModeBoss::Enter() {

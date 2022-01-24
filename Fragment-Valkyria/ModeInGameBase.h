@@ -27,6 +27,7 @@ namespace FragmentValkyria {
        * \brief インゲームの処理を回す
        */
       class ModeInGameBase : public ModeBase {
+         using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
           * \brief インゲーム種別の取得
@@ -82,6 +83,12 @@ namespace FragmentValkyria {
          Create::ObjectFactory& GetObjFactory() const;
 
       protected:
+         int _lightHandleFirst{ -1 };
+         int _lightHandleSecond{ -1 };
+         int _lightHandleThird{ -1 };
+         int _shadowMapHandleFirst{ -1 };
+         int _shadowMapHandleSecond{ -1 };
+         int _shadowMapHandleThird{ -1 };
 #ifdef _DEBUG
          void DebugDraw();
          short _padLeftX{ 0 };
@@ -90,6 +97,9 @@ namespace FragmentValkyria {
          short _padRightY{ 0 };
          double _largeEnemyHp{ 0 };
          double _playerHp{ 0 };
+         Vector4 _lightFirstPos{ 0,0,0 };
+         Vector4 _lightSecondPos{ 0,0,0 };
+         Vector4 _lightThirdPos{ 0,0,0 };
 #endif
       };
    }
