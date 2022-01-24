@@ -20,7 +20,7 @@ using namespace FragmentValkyria::Collision;
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
 		{ "fallObjectRange", "plyRadian", "plyCapsulePos1",
-		"plyCapsulePos2", "gatlingRadian", "fallObjectCaosulePos1",
+		"plyCapsulePos2", "gatlingRadian", "fallObjectCapsulePos1",
 		"fallObjectCapsulePos2", "fallObjectRadian" });
 
 	const double FallObjectRange = paramMap["fallObjectRange"];     //!< フォールオブジェクトの球の半径
@@ -28,7 +28,7 @@ namespace {
 	const double PlayerCapsulePos1 = paramMap["plyCapsulePos1"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
 	const double PlayerCapsulePos2 = paramMap["plyCapsulePos2"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
 	const double GatlingRadian = paramMap["gatlingRadian"];         //!< ガトリングの半径
-	const double FallObjectCapsulePos1 = paramMap["fallObjectCaosulePos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+	const double FallObjectCapsulePos1 = paramMap["fallObjectCapsulePos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
 	const double FallObjectCapsulePos2 = paramMap["fallObjectCapsulePos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
 	const double FallObjectRadian = paramMap["fallObjectRadian"];         //!< フォールオブジェクトのカプセルの半径
 }
@@ -195,9 +195,9 @@ void CollisionComponent::GatlingFromPlayer() {
 		}
 
 		auto gatling = objectBase.position();
-		auto gatlinRadian = 100.0;
+		auto gatlingRadian = GatlingRadian/*100.0*/;
 
-		AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlinRadian);
+		AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlingRadian);
 		if (AppFrame::Math::Utility::CollisionCapsuleSphere(plyCapsule, gatlingSphere)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
 			_owner.collisionComponent().report().id(ReportId::HitFromGatling);

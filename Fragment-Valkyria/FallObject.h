@@ -43,6 +43,10 @@ namespace FragmentValkyria {
             */
             void Draw() override;
 
+
+            bool residual() { return _residual; }
+            void residual(bool residual) { _residual = residual; }
+
         private:
             void HitCheckFromPlayerPoint();
             void HitCheckFromLargeEnemy();
@@ -55,6 +59,8 @@ namespace FragmentValkyria {
             double _rotateAngle{ 0.0 };
             bool _saveFlag{ false };
             bool _isFall{ true };
+
+            bool _residual{ true };
 
             int _collision{ 0 };
 

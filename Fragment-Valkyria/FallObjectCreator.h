@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "CreatorBase.h"
+#include "FallObject.h"
 
 namespace FragmentValkyria {
 
@@ -28,7 +29,9 @@ namespace FragmentValkyria {
 			*/
 			virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
-			std::unique_ptr<Object::ObjectBase> _fallObject;
+			std::unique_ptr<Object::ObjectBase> _fallObject{ std::make_unique<Enemy::FallObject>(_gameMain) };
+
+			int _createNum{ 0 };
 		};
 	}
 }

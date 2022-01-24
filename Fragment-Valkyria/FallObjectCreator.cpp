@@ -15,6 +15,10 @@
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
+namespace {
+	constexpr int MaxNum = 6;
+}
+
 FallObjectCreator::FallObjectCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
 
 }
@@ -22,6 +26,37 @@ FallObjectCreator::FallObjectCreator(Game::GameMain& gameMain) : CreatorBase{ ga
 std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	using Vector4 = AppFrame::Math::Vector4;
 	using Matrix44 = AppFrame::Math::Matrix44;
+
+	_createNum = 3;
+
+	for (auto&& object : _gameMain.objServer().runObjects()) {
+
+		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+			continue;
+		}
+		++_createNum;
+	}
+
+	if (_createNum > MaxNum) {
+		for (auto&& object : _gameMain.objServer().runObjects()) {
+
+			auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
+
+			if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+				continue;
+			}
+			auto& fallObject = dynamic_cast<Enemy::FallObject&>(objectBase);
+			if (fallObject.residual()) {
+				objectBase.SetDead();
+				--_createNum;
+				if (_createNum <= MaxNum) {
+					break;
+				}
+			}
+		}
+	}
 
 	auto rightTransMatrix = Matrix44();
 	auto leftTransMatrix = Matrix44();
@@ -67,6 +102,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 		else {
 			_fallObject = std::move(fallObject);
 		}
+
 	}
 	
 	return std::move(_fallObject);

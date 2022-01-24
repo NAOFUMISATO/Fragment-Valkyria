@@ -70,6 +70,52 @@ void LargeEnemy::HitCheckFromFallObject() {
 
 }
 
+void LargeEnemy::Move() {
+	_position = _position + _moved * 30.0;
+}
+
+void LargeEnemy::Rotate(bool& rotating) {
+	_rotation.Add(0.0, _addRotate, 0.0);
+
+	Matrix44 rotateY = Matrix44();
+	rotateY.RotateY(_rotation.GetY(), true);
+	Vector4 forward = Vector4(1.0, 0.0, 0.0);
+	forward = forward * rotateY;
+	forward.Normalized();
+	auto dot = _moved.Dot(forward);
+	
+	if (_addRotate > 0.0) {
+		if (dot < 0) {
+			rotating = false;
+		}
+	}
+	else {
+		if (dot >= 0) {
+			rotating = false;
+		}
+	}
+	
+}
+
+void LargeEnemy::SetAddRotate() {
+	_moved = GetObjServer().GetVecData("PlayerPos") - _position;
+	_moved.Normalized();
+
+	Matrix44 rotateY = Matrix44();
+	rotateY.RotateY(_rotation.GetY(), true);
+	Vector4 forward = Vector4(1.0, 0.0, 0.0);
+	forward = forward * rotateY;
+	forward.Normalized();
+	_rotateDot = _moved.Dot(forward);
+
+	if (_rotateDot >= 0) {
+		_addRotate = 1.0;
+	}
+	else {
+		_addRotate = -1.0;
+	}
+}
+
 void LargeEnemy::StateBase::Draw() {
 	_owner._modelAnimeComponent->Draw();
 }
@@ -85,12 +131,16 @@ void LargeEnemy::StateIdle::Input(InputManager& input) {
 
 void LargeEnemy::StateIdle::Update() {
 
-	if (_owner._stateCnt >= 1 && _owner._stateCnt % 600 == 0) {
+	if (_owner._stateCnt >= 1 && _owner._stateCnt % 300 == 0) {
 		if (!_owner._fallObjectflag) {
-			_owner._stateServer->PushBack("FallObject");
+			/*_owner._stateServer->GoToState("Move");*/
+			_owner._stateServer->GoToState("FallObject");
+		}
+		else if (!_owner._moving){
+			_owner._stateServer->GoToState("Move");
 		}
 		else {
-			_owner._stateServer->PushBack("Gatling");
+			_owner._stateServer->GoToState("Gatling");
 		}
 	}
 
@@ -112,7 +162,7 @@ void LargeEnemy::StateFallObject::Input(InputManager& input) {
 void LargeEnemy::StateFallObject::Update() {
 	auto cnt = _owner._modelAnimeComponent->repeatedCount();
 	if (cnt > 0) {
-		_owner._stateServer->PopBack();
+		_owner._stateServer->GoToState("Idle");
 	}
 
 	if (_owner._stateCnt == 0) {
@@ -138,8 +188,9 @@ void LargeEnemy::StateGatling::Update() {
 	}
 
 	if (_owner._gatlingCnt <= 0) {
-		_owner._stateServer->PopBack();
+		_owner._stateServer->GoToState("Idle");
 		_owner._fallObjectflag = false;
+		_owner._moving = false;
 	}
 
 	_owner.HitCheckFromFallObject();
@@ -163,5 +214,44 @@ void LargeEnemy::StateDie::Update() {
 		else {
 			_owner.gameMain().modeServer().GoToMode("Title");
 		}
+	}
+}
+
+void LargeEnemy::StateMove::Enter() {
+	_endGetplyPos = true;
+	_owner._stateCnt = 0;
+	_owner._moving = true;
+	_owner._firstRotating = true;
+	_owner._endRotating = true;
+	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|run_ani_vor", true);
+
+	_owner.SetAddRotate();
+}
+
+void LargeEnemy::StateMove::Update() {
+	if (_owner._firstRotating) {
+		_owner.Rotate(_owner._firstRotating);
+	}
+	else {
+
+		if (_owner._stateCnt >= 60 * 3) {
+			if (_endGetplyPos) {
+				_owner.SetAddRotate();
+				_endGetplyPos = false;
+			}
+
+			if (_owner._endRotating) {
+				_owner.Rotate(_owner._endRotating);
+			}
+			else {
+				_owner._stateServer->GoToState("Idle");
+			}
+		}
+		else if (_owner._stateCnt >= 60 * 1 ) {
+
+			_owner.Move();
+		}
+		
+		++_owner._stateCnt;
 	}
 }

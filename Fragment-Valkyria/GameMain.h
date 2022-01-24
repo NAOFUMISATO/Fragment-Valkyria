@@ -63,7 +63,6 @@ namespace FragmentValkyria {
           * \return 画面横サイズ、画面縦サイズ、画面ビット数
           */
          inline virtual std::tuple<int, int, int>GraphSize() { return { ScreenWidth,ScreenHeight,ScreenDepth }; }
-
          /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
