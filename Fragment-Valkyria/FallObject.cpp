@@ -180,6 +180,8 @@ void FallObject::StateFall::Draw() {
 
 void FallObject::StateSave::Enter() {
 	_owner._vecBeforeSave = _owner._position;
+
+	_owner.residual(false);
 }
 
 void FallObject::StateSave::Input(InputManager& input) {

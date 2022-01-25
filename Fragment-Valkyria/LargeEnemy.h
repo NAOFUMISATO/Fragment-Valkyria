@@ -48,13 +48,25 @@ namespace FragmentValkyria {
 
             void HitCheckFromFallObject();
 
+            void Move();
+            void Rotate(bool& rotating);
+            void SetAddRotate();
+
             int _stateCnt{ 0 };
             int _gatlingCnt{ 0 };
             int _collision{ 0 };
             const int GatlingFrame{ 60 };
             bool _fallObjectflag{ false };
+            bool _moving{ false };
+            bool _firstRotating{ true };
+            bool _endRotating{ true };
+            double _rotateDot{ 0.0 };
+            double _addRotate{ 1.0 };
             double _hp{ 100.0 };
             int _freezeTime{ 0 };
+
+            Vector4 _moved{ 0.0, 0.0, 0.0 };
+
 
         public:
             /**
@@ -170,6 +182,30 @@ namespace FragmentValkyria {
                  * \brief 更新処理
                  */
                 void Update() override;
+            };
+            /**
+            * \class 移動状態クラス
+            * \brief 移動状態の処理を回す
+            */
+            class StateMove : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateMove(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+
+            private:
+                bool _endGetplyPos{ true };
             };
         };
     }

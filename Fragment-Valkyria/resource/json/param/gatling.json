@@ -1,8 +1,8 @@
 {
 	"gatling": [
 		{
-			"speed": 25.0,
-			"radian": 50.0
+			"speed": 50.0,
+			"radian": 30.0
 			
 		}	
 	]	

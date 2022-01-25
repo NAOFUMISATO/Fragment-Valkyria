@@ -35,6 +35,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
 	state->Register("FallObject", std::make_shared<Enemy::LargeEnemy::StateFallObject>(*largeEnemy));
 	state->Register("Gatling", std::make_shared<Enemy::LargeEnemy::StateGatling>(*largeEnemy));
+	state->Register("Move", std::make_shared<Enemy::LargeEnemy::StateMove>(*largeEnemy));
 	state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
 	largeEnemy->stateServer(std::move(state));
 

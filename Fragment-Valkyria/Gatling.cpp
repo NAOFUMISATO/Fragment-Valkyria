@@ -85,8 +85,8 @@ void Gatling::StateChase::Input(InputManager& input) {
 }
 
 void Gatling::StateChase::Update() {
-	_owner.HitCheckFromObjectModel();
 	_owner.HitCheckFromPlayer();
+	_owner.HitCheckFromObjectModel();
 	_owner.Move();
 }
 
