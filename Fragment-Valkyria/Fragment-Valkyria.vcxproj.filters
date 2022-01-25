@@ -79,6 +79,12 @@
     <Filter Include="ソース ファイル\Collision">
       <UniqueIdentifier>{0c7ca877-ca62-49a3-98f6-2921ba728779}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Lighting">
+      <UniqueIdentifier>{42198891-9e13-4452-ad54-0727052fc42e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Lighting">
+      <UniqueIdentifier>{1a29c202-4604-4c18-88d7-081146a02e42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -162,6 +168,9 @@
     <ClInclude Include="ModeInGameBase.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="LightAndShadow.h">
+      <Filter>ヘッダー ファイル\Lighting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -241,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="ModeIngameBase.cpp">
       <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="LightAndShadow.cpp">
+      <Filter>ソース ファイル\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

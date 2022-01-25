@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "ModeBase.h"
+#include "LightAndShadow.h"
 /**
  * \brief プロジェクト名
  */
@@ -17,6 +18,9 @@ namespace FragmentValkyria {
    }
    namespace Create {
       class ObjectFactory;
+   }
+   namespace Lighting {
+      class LightAndShadow;
    }
    /**
     * \brief モード関係
@@ -83,13 +87,7 @@ namespace FragmentValkyria {
          Create::ObjectFactory& GetObjFactory() const;
 
       protected:
-         int _lightHandleFirst{ -1 };
-         int _lightHandleSecond{ -1 };
-         int _lightHandleThird{ -1 };
-         int _shadowMapHandleFirst{ -1 };
-         int _shadowMapHandleSecond{ -1 };
-         int _shadowMapHandleThird{ -1 };
-         Vector4 _lightPoint{ 0,40.0,0 };
+         std::unique_ptr<Lighting::LightAndShadow> _lighting;
 #ifdef _DEBUG
          void DebugDraw();
          short _padLeftX{ 0 };
@@ -98,10 +96,6 @@ namespace FragmentValkyria {
          short _padRightY{ 0 };
          double _largeEnemyHp{ 0 };
          double _playerHp{ 0 };
-         Vector4 _lightFirstPos{ 0,0,0 };
-         Vector4 _lightSecondPos{ 0,0,0 };
-         Vector4 _lightThirdPos{ 0,0,0 };
-        
 #endif
       };
    }
