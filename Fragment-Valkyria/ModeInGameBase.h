@@ -89,6 +89,7 @@ namespace FragmentValkyria {
          int _shadowMapHandleFirst{ -1 };
          int _shadowMapHandleSecond{ -1 };
          int _shadowMapHandleThird{ -1 };
+         Vector4 _lightPoint{ 0,40.0,0 };
 #ifdef _DEBUG
          void DebugDraw();
          short _padLeftX{ 0 };
@@ -100,6 +101,7 @@ namespace FragmentValkyria {
          Vector4 _lightFirstPos{ 0,0,0 };
          Vector4 _lightSecondPos{ 0,0,0 };
          Vector4 _lightThirdPos{ 0,0,0 };
+        
 #endif
       };
    }

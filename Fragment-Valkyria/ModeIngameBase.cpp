@@ -34,6 +34,8 @@ void ModeInGameBase::Init() {
 
    SetLightEnable(false);
 
+   //SetGlobalAmbientLight(GetColorF(0.5f, 1.0f, 0.5f, 1.0f));
+
    auto pointLightFirstPos = Vector4(-2200.0,3000.0,-2300);
    auto pointLightSecondPos = Vector4(0, 3000.0, 3000.0);
    auto pointLightThirdPos = Vector4(3000.0, 3000.0, 0);
@@ -45,11 +47,11 @@ void ModeInGameBase::Init() {
    _lightSecondPos.SetY(_lightSecondPos.GetY() + LightDiffY);
    _lightThirdPos.SetY(_lightThirdPos.GetY() + LightDiffY);
 #endif
-   _lightHandleFirst = CreatePointLightHandle(AppMath::ToDX(pointLightFirstPos),10000.f, 0.0000001f, 0.0006f, 0.0000001f);
-   _lightHandleSecond = CreatePointLightHandle(AppMath::ToDX(pointLightSecondPos), 10000.f, 0.0000001f, 0.0006f, 0.0000001f);
-   _lightHandleThird = CreatePointLightHandle(AppMath::ToDX(pointLightThirdPos), 10000.f, 0.0000001f, 0.0006f, 0.0000001f);
+   _lightHandleFirst = CreatePointLightHandle(AppMath::ToDX(pointLightFirstPos),10000.f, 0.0000001f, 0.0002f, 0.0000001f);
+   _lightHandleSecond = CreatePointLightHandle(AppMath::ToDX(pointLightSecondPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f);
+   _lightHandleThird = CreatePointLightHandle(AppMath::ToDX(pointLightThirdPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f);
    SetLightDifColorHandle(_lightHandleFirst, GetColorF(1.0f, 0.5f, 0.5f, 1.0f));
-   SetLightDifColorHandle(_lightHandleSecond, GetColorF(0.5f,1.0f,0.5f,1.0f));
+   SetLightDifColorHandle(_lightHandleSecond, GetColorF(0.5f, 1.0f, 0.5f, 1.0f));
    SetLightDifColorHandle(_lightHandleThird, GetColorF(0.5f, 0.5f, 1.0f, 1.0f));
    //SetLightSpcColorHandle(_lightHandleSecond, GetColorF(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -57,13 +59,13 @@ void ModeInGameBase::Init() {
    _shadowMapHandleSecond = MakeShadowMap(8192, 8192);
    _shadowMapHandleThird = MakeShadowMap(8192, 8192);
 
-   auto shadowFirstDirection = Vector4(0.5, -0.5, 0.5);
-   auto shadowSecondDirection = Vector4(0.0, -1.0, -1.0);
-   auto shadowThirdDirection = Vector4(-1.0, -1.0, 0.0);
+   //auto shadowFirstDirection = Vector4(0.5, -0.5, 0.5);
+   //auto shadowSecondDirection = Vector4(0.0, -1.0, -1.0);
+   //auto shadowThirdDirection = Vector4(-1.0, -1.0, 0.0);
 
-   SetShadowMapLightDirection(_shadowMapHandleFirst, AppMath::ToDX(shadowFirstDirection));
-   SetShadowMapLightDirection(_shadowMapHandleSecond, AppMath::ToDX(shadowSecondDirection));
-   SetShadowMapLightDirection(_shadowMapHandleThird, AppMath::ToDX(shadowThirdDirection));
+   auto shadowFirstDirection = Vector4(0.0, -1.0, 0.0);
+   //SetShadowMapLightDirection(_shadowMapHandleSecond, AppMath::ToDX(shadowSecondDirection));
+   //SetShadowMapLightDirection(_shadowMapHandleThird, AppMath::ToDX(shadowThirdDirection));
 
 
    auto shadowMinArea = Vector4(-2500.0, -1.0, -2500.0);
@@ -84,6 +86,13 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeInGameBase::Update() {
+   auto direction = GetObjServer().GetVecData("PlayerPos")- _lightPoint;
+   direction.Normalized();
+   direction.SetY(-1.0);
+   //auto [x,y,z] = direction.GetXYZ();
+   //direction.SetXYZ(std::make_tuple(x, -1.0, z));
+
+   SetShadowMapLightDirection(_shadowMapHandleFirst, AppFrame::Math::ToDX(direction));
    GetObjServer().Update();
    GetEfcServer().Update();
 }
@@ -93,23 +102,26 @@ void ModeInGameBase::Render() {
    GetObjServer().Render();
    ShadowMap_DrawEnd();
 
-   ShadowMap_DrawSetup(_shadowMapHandleSecond);
-   GetObjServer().Render();
-   ShadowMap_DrawEnd();
+   //ShadowMap_DrawSetup(_shadowMapHandleSecond);
+   //GetObjServer().Render();
+   //ShadowMap_DrawEnd();
 
-   ShadowMap_DrawSetup(_shadowMapHandleThird);
-   GetObjServer().Render();
-   ShadowMap_DrawEnd();
+   //ShadowMap_DrawSetup(_shadowMapHandleThird);
+   //GetObjServer().Render();
+   //ShadowMap_DrawEnd();
+
    SetUseShadowMap(0, _shadowMapHandleFirst);
-   SetUseShadowMap(1, _shadowMapHandleSecond);
-   SetUseShadowMap(2, _shadowMapHandleThird);
+   //SetUseShadowMap(1, _shadowMapHandleSecond);
+   //SetUseShadowMap(2, _shadowMapHandleThird);
+
    GetObjServer().Render();
+   
    SetUseShadowMap(0, -1);
-   SetUseShadowMap(1, -1);
-   SetUseShadowMap(2, -1);
+   //SetUseShadowMap(1, -1);
+   //SetUseShadowMap(2, -1);
    //TestDrawShadowMap(_shadowMapHandleFirst, 0, 0, 480, 270);
-   //TestDrawShadowMap(_shadowMapHandleSecond, 500, 0, 480, 270);
-   //TestDrawShadowMap(_shadowMapHandleThird, 1000, 0, 480, 270);
+   //TestDrawShadowMap(_shadowMapHandleSecond, 700, 0, 480, 270);
+   //TestDrawShadowMap(_shadowMapHandleThird, 1400, 0, 480, 270);
    GetEfcServer().Render();
 #ifdef _DEBUG
    DebugDraw();
@@ -129,39 +141,40 @@ Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
 
 #ifdef _DEBUG
 void ModeInGameBase::DebugDraw() {
-   DrawFormatString(0, 0, GetColor(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
-   DrawFormatString(0, 15, GetColor(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
    namespace AppMath = AppFrame::Math;
+   using Utility = AppMath::Utility;
+   DrawFormatString(0, 0, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
+   DrawFormatString(0, 15, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
    auto startX = Vector4(-10000.0, 0.0, 0.0);
    auto endX = Vector4(10000.0, 0.0, 0.0);
-   DrawLine3D(AppMath::ToDX(startX), AppMath::ToDX(endX), GetColor(255, 0, 0));
+   DrawLine3D(AppMath::ToDX(startX), AppMath::ToDX(endX), Utility::GetColorCode(255, 0, 0));
    auto startY = Vector4(0.0, -10000.0, 0.0);
    auto endY = Vector4(0.0, 10000.0, 0.0);
-   DrawLine3D(AppMath::ToDX(startY), AppMath::ToDX(endY), GetColor(0, 255, 0));
+   DrawLine3D(AppMath::ToDX(startY), AppMath::ToDX(endY), Utility::GetColorCode(0, 255, 0));
    auto startZ = Vector4(0.0, 0.0, -10000.0);
    auto endZ = Vector4(0.0, 0.0, 10000.0);
-   DrawLine3D(AppMath::ToDX(startZ), AppMath::ToDX(endZ), GetColor(0, 0, 255));
+   DrawLine3D(AppMath::ToDX(startZ), AppMath::ToDX(endZ), Utility::GetColorCode(0, 0, 255));
    auto camTarget = GetObjServer().GetVecData("CamTarget");
    auto targetStartX = camTarget + Vector4(-10.0, 0.0, 0.0);
    auto targetEndX = camTarget + Vector4(10.0, 0.0, 0.0);
-   DrawLine3D(AppMath::ToDX(targetStartX), AppMath::ToDX(targetEndX), GetColor(255, 0, 0));
+   DrawLine3D(AppMath::ToDX(targetStartX), AppMath::ToDX(targetEndX), Utility::GetColorCode(255, 0, 0));
    auto targetStartY = camTarget + Vector4(0.0, -10.0, 0.0);
    auto targetEndY = camTarget + Vector4(0.0, 10.0, 0.0);
-   DrawLine3D(AppMath::ToDX(targetStartY), AppMath::ToDX(targetEndY), GetColor(0, 255, 0));
+   DrawLine3D(AppMath::ToDX(targetStartY), AppMath::ToDX(targetEndY), Utility::GetColorCode(0, 255, 0));
    auto targetStartZ = camTarget + Vector4(0.0, 0.0, -10.0);
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
-   DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), GetColor(0, 0, 255));
-   DrawFormatString(0, 30, GetColor(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
+   DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), Utility::GetColorCode(0, 0, 255));
+   DrawFormatString(0, 30, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
    //プレイヤー座標描画
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
    auto [px, py, pz] = playerPos.GetXYZ();
    DrawFormatString(0, 1060, GetColor(255, 255, 255), "Player_X:%3.f Y:%3.f Z:%3.f", px, py, pz);
    //ライト描画
    DrawSphere3D(AppMath::ToDX(_lightFirstPos), 80.f, 32,
-      AppMath::Utility::GetColorCode(255, 0, 0), AppMath::Utility::GetColorCode(255, 0, 0),TRUE);
+      Utility::GetColorCode(255, 0, 0), Utility::GetColorCode(255, 0, 0),TRUE);
    DrawSphere3D(AppMath::ToDX(_lightSecondPos), 80.f, 32,
-      AppMath::Utility::GetColorCode(0, 255, 0), AppMath::Utility::GetColorCode(0, 255, 0), TRUE);
+      Utility::GetColorCode(0, 255, 0), Utility::GetColorCode(0, 255, 0), TRUE);
    DrawSphere3D(AppMath::ToDX(_lightThirdPos), 80.f, 32,
-      AppMath::Utility::GetColorCode(0, 0, 255), AppMath::Utility::GetColorCode(0, 0, 255), TRUE);
+      Utility::GetColorCode(0, 0, 255), Utility::GetColorCode(0, 0, 255), TRUE);
 }
 #endif
