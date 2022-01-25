@@ -248,7 +248,7 @@
     <ClCompile Include="StageModelComponent.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="ModeIngameBase.cpp">
+    <ClCompile Include="ModeInGameBase.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="LightAndShadow.cpp">

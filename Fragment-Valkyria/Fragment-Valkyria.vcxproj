@@ -209,7 +209,7 @@
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeBoss.cpp" />
-    <ClCompile Include="ModeIngameBase.cpp" />
+    <ClCompile Include="ModeInGameBase.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="ModeTitle.cpp" />

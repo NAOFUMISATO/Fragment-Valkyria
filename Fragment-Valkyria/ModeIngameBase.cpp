@@ -45,9 +45,9 @@ void ModeInGameBase::Render() {
 
    GetObjServer().Render();
 
-   //SetUseShadowMap(0, -1);
-   //SetUseShadowMap(1, -1);
-   //SetUseShadowMap(2, -1);
+   SetUseShadowMap(0, -1);
+   SetUseShadowMap(1, -1);
+   SetUseShadowMap(2, -1);
    
    GetEfcServer().Render();
 
@@ -93,9 +93,16 @@ void ModeInGameBase::DebugDraw() {
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
    DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), Utility::GetColorCode(0, 0, 255));
    DrawFormatString(0, 30, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
-   //プレイヤー座標描画
+   //プレイヤー情報描画
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
    auto [px, py, pz] = playerPos.GetXYZ();
-   DrawFormatString(0, 1060, GetColor(255, 255, 255), "Player_X:%3.f Y:%3.f Z:%3.f", px, py, pz);
+   DrawFormatString(0, 1030, GetColor(255, 255, 255), "PlyPosition_X:%f  Y:%f  Z:%f ", px, py, pz);
+   auto playerRot = GetObjServer().GetVecData("PlayerRot");
+   auto [rx, ry, rz] = playerRot.GetXYZ();
+   DrawFormatString(0, 1045, GetColor(255, 255, 255), "PlyRotation_X:%f  Y:%f  Z:%f ", rx, ry, rz);
+   auto playerFor = GetObjServer().GetVecData("PlayerFor");
+   auto [fx, fy, fz] = playerFor.GetXYZ();
+   DrawFormatString(0, 1060, GetColor(255, 255, 255), "PlyForward__X:%f  Y:%f  Z:%f ", fx, fy, fz);
+
 }
 #endif
