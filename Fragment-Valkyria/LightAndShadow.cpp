@@ -32,7 +32,7 @@ void LightAndShadow::Init() {
 
    auto [firstLightPos, secondLightPos, thirdLightPos] = _lightPositions;
    auto& first = std::get<0>(_lightHandles);
-   first = CreateSpotLightHandle(AppMath::ToDX(firstLightPos), { 0.0f,-1.0f,0.0f }, DX_PI_F / 3.0f, DX_PI_F / 6.0f,1000.f, 0.0001f, 0.00006f, 0.000001f);
+   first = CreatePointLightHandle(AppMath::ToDX(firstLightPos), 1000.f, 0.0001f, 0.00006f, 0.000001f);
    //_lightHandles = {
    //   CreatePointLightHandle(AppMath::ToDX(firstLightPos),1000.f, 0.0001f, 0.00002f, 0.00001f),
    //   CreatePointLightHandle(AppMath::ToDX(secondLightPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f),

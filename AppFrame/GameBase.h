@@ -42,6 +42,9 @@ namespace AppFrame {
    namespace Texture {
       class SimpleTextureComponent;
    }
+   namespace Sprite {
+      class SpriteServer;
+   }
    /**
     * \brief ゲームベース
     */
@@ -150,6 +153,7 @@ namespace AppFrame {
           * \return 画像の簡易描画クラスのポインタ
           */
          inline Texture::SimpleTextureComponent& simpleTexComponent() const { return *_simpleTexComponent; }
+         inline Sprite::SpriteServer& sprServer() const { return *_sprServer; }
          /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
@@ -179,6 +183,7 @@ namespace AppFrame {
          std::unique_ptr<Effect::EffectServer> _efcServer;           //!< エフェクトの一括管理クラス
          std::unique_ptr<Object::ObjectServer> _objServer;           //!< オブジェクトの一括管理クラス
          std::unique_ptr<Texture::SimpleTextureComponent> _simpleTexComponent;   //!< 画像の簡易描画クラス
+         std::unique_ptr<Sprite::SpriteServer> _sprServer;
       };
    }
 }

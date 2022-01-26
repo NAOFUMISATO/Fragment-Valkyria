@@ -189,9 +189,9 @@
     <ClInclude Include="PlayerCreator.h" />
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="BossStageCreator.h" />
+    <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
-    <ClInclude Include="UIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
@@ -220,6 +220,7 @@
     <ClCompile Include="PlayerCreator.cpp" />
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="BossStageCreator.cpp" />
+    <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="StageModelComponent.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -55,7 +55,7 @@ namespace AppFrame {
          // 保留中のオブジェクトを削除する
          _pendingObjects.clear();
 
-         // 死んだアクターを削除する
+         // 死んだオブジェクトを削除する
          erase_if(_runObjects, [](auto&& act) { return act->IsDead(); });
       }
 

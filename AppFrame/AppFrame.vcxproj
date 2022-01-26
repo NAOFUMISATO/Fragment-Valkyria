@@ -184,6 +184,8 @@
     <ClInclude Include="SimpleTextureComponent.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="SpriteBaseRoot.h" />
+    <ClInclude Include="SpriteServer.h" />
     <ClInclude Include="StateBaseRoot.h" />
     <ClInclude Include="StateServer.h" />
     <ClInclude Include="Texture.h" />
@@ -210,6 +212,8 @@
     <ClCompile Include="ResourceServer.cpp" />
     <ClCompile Include="SimpleTextureComponent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
+    <ClCompile Include="SpriteBaseRoot.cpp" />
+    <ClCompile Include="SpriteServer.cpp" />
     <ClCompile Include="StateServer.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector4.cpp" />

@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 /**
- * \brief プロジェクト名
+ * \brief アプリケーションフレーム
  */
 namespace AppFrame {
    /**
@@ -51,8 +51,8 @@ namespace AppFrame {
           */
          std::vector<std::unique_ptr<ObjectBaseRoot>>& runObjects() { return _runObjects; };
          /**
-          * \brief レジストリに登録したオブジェクトの位置を取得する
-          * \param key オブジェクトに関連付けた任意の文字列
+          * \brief レジストリに登録したオブジェクトのVecto4データを取得する
+          * \param key オブジェクトのVecto4データに関連付けた任意の文字列
           * \return 登録したオブジェクトの位置
           */
          Vector4 GetVecData(std::string_view key);
