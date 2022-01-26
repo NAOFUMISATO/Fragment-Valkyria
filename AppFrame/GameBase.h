@@ -96,11 +96,6 @@ namespace AppFrame {
          virtual void Render();
 
          /**
-          * \brief シャドウマップハンドルの取得
-          * \return シャドウマップハンドル
-          */
-         int shadowMapHandle() const { return _shadowMapHandle; }
-         /**
           * \brief ゲームの基底クラスのインスタンスを取得
           * \return ゲームの基底クラスのインスタンス
           */
@@ -167,7 +162,6 @@ namespace AppFrame {
          inline virtual std::tuple<int, int, int> GraphSize() { return { 1280,1024,32 }; }
 
       protected:
-         int _shadowMapHandle{ -1 };            //!< シャドウマップハンドル
          static GameBase* _gameInstance;        //!< ゲームのインスタンス
          GameState _gState{ GameState::Play };                       //!< ゲーム状態
          std::unique_ptr<Mode::ModeServer> _modeServer;              //!< モードの一括管理クラス

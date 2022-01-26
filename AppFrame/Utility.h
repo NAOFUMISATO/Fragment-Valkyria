@@ -101,7 +101,7 @@ namespace AppFrame {
          * \param b 青値
          * \return カラーコード
          */
-         static unsigned int GetColorCode(unsigned char red, unsigned char green, unsigned char blue);
+         unsigned int GetColorCode(unsigned char red, unsigned char green, unsigned char blue);
 
       private:
          Utility() = default;

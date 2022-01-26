@@ -25,8 +25,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 
 	auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
 	largeEnemy->position(Vector4(0.0, 0.0, 1000.0));
-	largeEnemy->scale(Vector4(1.0, 1.0, 1.0));
-	largeEnemy->rotation(Vector4(0.0, 0.0, 0.0));
+	largeEnemy->scale(Vector4(3.0, 3.0, 3.0));
+	largeEnemy->rotation(Vector4(0.0, 180.0, 0.0));
 
 	auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
 	model->SetModel("LargeEnemy", 1000);

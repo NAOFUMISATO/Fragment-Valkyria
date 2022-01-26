@@ -25,6 +25,7 @@
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
+
    /**
     * \brief リソース関係
     */

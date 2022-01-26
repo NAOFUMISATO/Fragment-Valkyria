@@ -21,7 +21,7 @@ EffectPlayerShot::~EffectPlayerShot() {
 void EffectPlayerShot::Init(std::string_view key) {
    EffectBase::Init(key);
   _position=_gameMain.objServer().GetVecData("PlayerPos");
-  _rotation = _gameMain.objServer().GetVecData("PlayerFor");
+  _rotation=_gameMain.objServer().GetVecData("PlayerFor");
   PlayEffect();
 }
 

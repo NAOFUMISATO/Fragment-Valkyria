@@ -21,6 +21,21 @@ GameMain gameMain;
 bool GameMain::Initialize(HINSTANCE hInstance) {
    if (!GameBase::Initialize(hInstance)) { return false; }
 
+   // マテリアルの自己発光色を暗い青色にする
+#ifdef _DEBUG
+   MATERIALPARAM material;
+   material.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);
+   material.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+   material.Ambient = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+   material.Emissive = GetColorF(0.0f, 0.0f, 0.5f, 0.0f);
+   material.Power = 20.0f;
+   SetMaterialParam(material);
+#endif
+
+   _objFactory = std::make_unique<Create::ObjectFactory>(*this);
+
+   _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
+
    auto& pathSer = pathServer();
 
    const AppFrame::Path::CurrentPathServer::CurrentPathMap pathToUsed{
@@ -39,12 +54,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    pathSer.RegistCurrentPath(pathToUsed);
 
-   _objFactory = std::make_unique<Create::ObjectFactory>(*this);
-
-   _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
-
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
-
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
 
    return true;
