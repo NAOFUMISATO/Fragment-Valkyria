@@ -168,8 +168,8 @@
     <ClInclude Include="ModeInGameBase.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-     <ClInclude Include="LightAndShadow.h">
-      <Filter>ヘッダー ファイル\Lighting</Filter>
+    <ClInclude Include="LightAndShadow.h">
+     <Filter>ヘッダー ファイル\Lighting</Filter>
     </ClInclude>
      <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル\Player</Filter>

@@ -79,7 +79,7 @@ void LargeEnemy::Rotate(bool& rotating) {
 
 	Matrix44 rotateY = Matrix44();
 	rotateY.RotateY(_rotation.GetY(), true);
-	Vector4 forward = Vector4(1.0, 0.0, 0.0);
+	Vector4 forward = Vector4(-1.0, 0.0, 0.0);
 	forward = forward * rotateY;
 	forward.Normalized();
 	auto dot = _moved.Dot(forward);
@@ -101,7 +101,7 @@ void LargeEnemy::SetAddRotate() {
 
 	Matrix44 rotateY = Matrix44();
 	rotateY.RotateY(_rotation.GetY(), true);
-	Vector4 forward = Vector4(1.0, 0.0, 0.0) * rotateY;
+	Vector4 forward = Vector4(-1.0, 0.0, 0.0) * rotateY;
 	forward.Normalized();
 	_rotateDot = _moved.Dot(forward);
 
@@ -222,19 +222,19 @@ void LargeEnemy::StateMove::Enter() {
 	_owner._endRotating = true;
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|run_ani_vor", true);
 
-	auto result = AppFrame::Math::Utility::GetRandom(0, 1);
+	auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/1;
 	if (result) {
-		_owner._moved = _owner.GetObjServer().GetVecData("PlyerPos") - _owner._position;
+		_owner._moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 		_owner._moved.Normalized();
 	}
-	else {
+	/*else {
 		auto degree = AppFrame::Math::Utility::GetRandom(0.0, 360.0);
 		Matrix44 rotate = Matrix44();
 		rotate.RotateY(degree, true);
 
 		_owner._moved = Vector4(0.0, 0.0, 1.0) * rotate;
 		_owner._moved.Normalized();
-	}
+	}*/
 
 	_owner.SetAddRotate();
 }
