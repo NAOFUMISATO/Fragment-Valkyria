@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "ModeBase.h"
+#include "LightAndShadow.h"
 /**
  * \brief プロジェクト名
  */
@@ -18,6 +19,9 @@ namespace FragmentValkyria {
    namespace Create {
       class ObjectFactory;
    }
+   namespace Lighting {
+      class LightAndShadow;
+   }
    /**
     * \brief モード関係
     */
@@ -27,6 +31,7 @@ namespace FragmentValkyria {
        * \brief インゲームの処理を回す
        */
       class ModeInGameBase : public ModeBase {
+         using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
           * \brief インゲーム種別の取得
@@ -82,6 +87,7 @@ namespace FragmentValkyria {
          Create::ObjectFactory& GetObjFactory() const;
 
       protected:
+         std::unique_ptr<Lighting::LightAndShadow> _lighting;
 #ifdef _DEBUG
          void DebugDraw();
          short _padLeftX{ 0 };

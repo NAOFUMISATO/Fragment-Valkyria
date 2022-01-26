@@ -58,6 +58,11 @@ void Player::Update() {
    GetObjServer().Register("PlayerPos", _position);
    GetObjServer().Register("PlayerRot", _rotation);
    GetObjServer().Register("PlayerFor",GetForward());
+
+   auto handle = _modelAnimeComponent.get()->modelHandle();
+   auto headFrame = _modelAnimeComponent.get()->FindFrameChild("SDChar_Root", "SDChar_Head");
+   auto headPos = MV1GetFramePosition(handle, headFrame);
+   GetObjServer().Register("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
    GetObjServer().Register("CamTarget", _cameraComponent->GetTarget());
    GetObjServer().Register("CamPos", _cameraComponent->GetPos());
 }
