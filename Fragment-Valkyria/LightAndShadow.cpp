@@ -31,16 +31,17 @@ void LightAndShadow::Init() {
    };
 
    auto [firstLightPos, secondLightPos, thirdLightPos] = _lightPositions;
-
-   _lightHandles = {
-      CreatePointLightHandle(AppMath::ToDX(firstLightPos),10000.f, 0.0000001f, 0.0002f, 0.0000001f),
-      CreatePointLightHandle(AppMath::ToDX(secondLightPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f),
-      CreatePointLightHandle(AppMath::ToDX(thirdLightPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f)
-   };
+   auto& first = std::get<0>(_lightHandles);
+   first = CreateSpotLightHandle(AppMath::ToDX(firstLightPos), { 0.0f,-1.0f,0.0f }, DX_PI_F / 3.0f, DX_PI_F / 6.0f,1000.f, 0.0001f, 0.00006f, 0.000001f);
+   //_lightHandles = {
+   //   CreatePointLightHandle(AppMath::ToDX(firstLightPos),1000.f, 0.0001f, 0.00002f, 0.00001f),
+   //   CreatePointLightHandle(AppMath::ToDX(secondLightPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f),
+   //   CreatePointLightHandle(AppMath::ToDX(thirdLightPos), 10000.f, 0.0000001f, 0.0002f, 0.0000001f)
+   //};
 
    auto [firstLightHandle, secondLightHandle, thirdLightHandle] = _lightHandles;
 
-   SetLightDifColorHandle(firstLightHandle, GetColorF(1.0f, 0.5f, 0.5f, 1.0f));
+   //SetLightDifColorHandle(firstLightHandle, GetColorF(1.0f, 0.5f, 0.5f, 1.0f));
    SetLightDifColorHandle(secondLightHandle, GetColorF(0.5f, 1.0f, 0.5f, 1.0f));
    SetLightDifColorHandle(thirdLightHandle, GetColorF(0.5f, 0.5f, 1.0f, 1.0f));
 
@@ -63,9 +64,14 @@ void LightAndShadow::Init() {
 void LightAndShadow::Update() {
    namespace AppMath = AppFrame::Math;
    auto plyHeadPos = _gameMain.objServer().GetVecData("PlayerHeadPos");
-
+   //
+   auto [firstLightHandle, secondLightHandle, thirdLightHandle] = _lightHandles;
+   auto [hx,hy,hz] = plyHeadPos.GetXYZ();
+   auto lightPos = Vector4(hx, hy + 300.0,hz);
+   SetLightPositionHandle(firstLightHandle, AppFrame::Math::ToDX(lightPos));
+   //
    auto [firstLightPos, secondLightPos, thirdLightPos] = _lightPositions;
-
+   
    auto firstShadowDirection = (plyHeadPos - firstLightPos).Normalize();
    auto secondShadowDirection = (plyHeadPos - secondLightPos).Normalize();
    auto thirdShadowDirection = (plyHeadPos - thirdLightPos).Normalize();
@@ -79,21 +85,21 @@ void LightAndShadow::Update() {
 
 void LightAndShadow::Render() {
    auto [firstShadowHandle, secondShadowHandle, thirdShadowHandle] = _shadowHandles;
-   ShadowMap_DrawSetup(firstShadowHandle);
-   _gameMain.objServer().Render();
-   ShadowMap_DrawEnd();
+   //ShadowMap_DrawSetup(firstShadowHandle);
+   //_gameMain.objServer().Render();
+   //ShadowMap_DrawEnd();
 
-   ShadowMap_DrawSetup(secondShadowHandle);
-   _gameMain.objServer().Render();
-   ShadowMap_DrawEnd();
+   //ShadowMap_DrawSetup(secondShadowHandle);
+   //_gameMain.objServer().Render();
+   //ShadowMap_DrawEnd();
+   //
+   //ShadowMap_DrawSetup(thirdShadowHandle);
+   //_gameMain.objServer().Render();
+   //ShadowMap_DrawEnd();
 
-   ShadowMap_DrawSetup(thirdShadowHandle);
-   _gameMain.objServer().Render();
-   ShadowMap_DrawEnd();
-
-   SetUseShadowMap(0, firstShadowHandle);
-   SetUseShadowMap(1, secondShadowHandle);
-   SetUseShadowMap(2, thirdShadowHandle);
+   //SetUseShadowMap(0, firstShadowHandle);
+   //SetUseShadowMap(1, secondShadowHandle);
+   //SetUseShadowMap(2, thirdShadowHandle);
 
 #ifdef _DEBUG
    //ƒ‰ƒCƒg•`‰æ

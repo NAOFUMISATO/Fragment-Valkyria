@@ -10,7 +10,7 @@
 #include <string>
 #include <array>
 namespace AppFrame {
-   namespace Color {
+   namespace Data {
       Color::Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a) :
          _red(r), _green(g), _blue(b), _alpha(a) {
       };

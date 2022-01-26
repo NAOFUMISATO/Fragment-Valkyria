@@ -143,12 +143,12 @@ namespace AppFrame{
           * \brief エフェクトの色の取得
           * \return エフェクトの色
           */
-         inline Color::Color color() const { return _color; }
+         inline Data::Color color() const { return _color; }
          /**
           * \brief エフェクトの色(RGBA)を設定
           * \param color エフェクトを設定する色(RGBA)
           */
-         void SetEfcColor(Color::Color _color );
+         void SetEfcColor(Data::Color _color );
 
       protected:
          Game::GameBase& _gameBase;                    //!< ゲームベースの参照
@@ -159,7 +159,7 @@ namespace AppFrame{
          Math::Vector4 _position{ 0,0,0 };             //!< 位置
          Math::Vector4 _rotation{ 0,0,0 };             //!< 回転角
          Math::Vector4 _scale{ 1.0,1.0,1.0 };          //!< 拡大率
-         Color::Color _color{ Color::Color() };        //!< 色(RGBA)
+         Data::Color _color{ Data::Color() };        //!< 色(RGBA)
       };
    }
 } 

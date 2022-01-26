@@ -78,7 +78,7 @@ namespace AppFrame {
          SetSpeedPlayingEffekseer3DEffect(_playHandle, cSpeed);
       }
 
-      void EffectBaseRoot::SetEfcColor(Color::Color color){
+      void EffectBaseRoot::SetEfcColor(Data::Color color){
          _color = color;
          auto [red, green, blue, alpha] = _color.GetColorA();
          SetColorPlayingEffekseer3DEffect(_playHandle, red, green, blue, alpha);

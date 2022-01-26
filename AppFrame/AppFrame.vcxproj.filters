@@ -73,12 +73,6 @@
     <Filter Include="ヘッダー ファイル\Object">
       <UniqueIdentifier>{31c94a4e-8c38-4c01-b9c8-ee86094ae978}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Color">
-      <UniqueIdentifier>{d393c3d5-fea6-4a3e-9033-2b4582f30018}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Color">
-      <UniqueIdentifier>{a135d2f8-6901-4063-ab44-1a48ecfb2d12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Temp">
       <UniqueIdentifier>{5e51596f-f165-4c18-a9af-7de48c85d15b}</UniqueIdentifier>
     </Filter>
@@ -87,6 +81,12 @@
     </Filter>
     <Filter Include="ソース ファイル\Texture">
       <UniqueIdentifier>{6aa79114-f174-463c-a54f-bb992c775c11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Data">
+      <UniqueIdentifier>{d393c3d5-fea6-4a3e-9033-2b4582f30018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Data">
+      <UniqueIdentifier>{a135d2f8-6901-4063-ab44-1a48ecfb2d12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +145,7 @@
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>ソース ファイル\Color</Filter>
+      <Filter>ソース ファイル\Data</Filter>
     </ClCompile>
     <ClCompile Include="ObjectServer.cpp">
       <Filter>ソース ファイル\Object</Filter>
@@ -155,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="SimpleTextureComponent.cpp">
       <Filter>ソース ファイル\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>ソース ファイル\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,7 +240,7 @@
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>ヘッダー ファイル\Color</Filter>
+      <Filter>ヘッダー ファイル\Data</Filter>
     </ClInclude>
     <ClInclude Include="LoadParamJson.h">
       <Filter>ヘッダー ファイル\Resource</Filter>
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="SimpleTextureComponent.h">
       <Filter>ヘッダー ファイル\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>ヘッダー ファイル\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,9 +12,9 @@
  */
 namespace AppFrame {
    /**
-    * \brief カラー関係
+    * \brief 各データ関係
     */
-   namespace Color {
+   namespace Data {
       /**
        * \class カラークラス
        * \brief カラー値の管理、カラーコードの取得を行う
