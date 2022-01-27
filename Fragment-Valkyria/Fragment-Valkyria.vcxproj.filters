@@ -85,9 +85,6 @@
     <Filter Include="ソース ファイル\Lighting">
       <UniqueIdentifier>{1a29c202-4604-4c18-88d7-081146a02e42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
-      <UniqueIdentifier>{6b4b55cd-5348-45e3-822d-dc37ef9e25e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Sprite">
       <UniqueIdentifier>{f7b789ac-6246-4269-a43d-a7e083c1e351}</UniqueIdentifier>
     </Filter>

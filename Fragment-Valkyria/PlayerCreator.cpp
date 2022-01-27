@@ -38,6 +38,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
 
    auto model = std::make_unique<Model::ModelAnimeComponent>(*player);
    model->SetModel("Player");
+   model->PixelLightingON();
    player->modelAnimeComponent(std::move(model));
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared <Player::Player::StateIdle>(*player));

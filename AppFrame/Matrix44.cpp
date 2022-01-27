@@ -51,9 +51,9 @@ namespace AppFrame {
          axis_y.Normalized();
          axis_z.Normalized();
 
-         auto [xx, xy, xz] = axis_x.GetXYZ();
-         auto [yx, yy, yz] = axis_y.GetXYZ();
-         auto [zx, zy, zz] = axis_z.GetXYZ();
+         auto [xx, xy, xz] = axis_x.GetVec3();
+         auto [yx, yy, yz] = axis_y.GetVec3();
+         auto [zx, zy, zz] = axis_z.GetVec3();
 
          _rowColumn[0][0] = xx;
          _rowColumn[0][1] = yx;
@@ -123,7 +123,7 @@ namespace AppFrame {
       const Matrix44 Matrix44::operator +(const Vector4 rhs) const {
          MatrixArray result = _rowColumn;
 
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          result[3][0] += x;
          result[3][1] += y;
          result[3][2] += z;
@@ -211,7 +211,7 @@ namespace AppFrame {
       void Matrix44::RotateAnyVec(const Vector4 vec, const double degree, bool make) {
           auto anyVec = vec.Normalize();
           auto [sin, cos] = GetSinCos(degree);
-          auto [x, y, z] = anyVec.GetXYZ();
+          auto [x, y, z] = anyVec.GetVec3();
 
           if (make) {
               Unit();

@@ -16,11 +16,7 @@ namespace AppFrame {
       }
 
       SpriteServer& SpriteBaseRoot::GetSprServer() const {
-         return _gameBase.objServer();
-      }
-
-      Effect::EffectServer& SpriteBaseRoot::GetEfcServer() const {
-         return _gameBase.efcServer();
+         return _gameBase.sprServer();
       }
 
       Texture::SimpleTextureComponent& SpriteBaseRoot::GetSimpTexComponent() const {

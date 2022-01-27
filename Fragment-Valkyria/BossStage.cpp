@@ -20,6 +20,7 @@ BossStage::BossStage(Game::GameMain& game) : Object::ObjectBase{ game } {
 
    _stage = std::make_unique<StageModelComponent>(*this);
    _stage->SetModels("Boss");
+   _stage->PixelLightingON();
 
    // ƒtƒHƒO‚Ìİ’è
    SetFogEnable(TRUE);

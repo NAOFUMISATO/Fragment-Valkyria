@@ -94,6 +94,14 @@ namespace FragmentValkyria {
           */
          void SetEmiColor(int index, float r, float g, float b);
          /**
+          * \brief ライティングフラグをfalseにする
+          */
+         inline void LightingOFF() { _isLighting = false; }
+         /**
+          * \brief ピクセルライティングをtrueにする
+          */
+         inline void PixelLightingON() { _isPixelLighting = true; }
+         /**
           * \brief モデルから指定名のフレームを取得する
           * \param frameName フレーム名
           * \return フレーム番号
@@ -112,6 +120,7 @@ namespace FragmentValkyria {
          std::string _key;             //!< モデル及びアニメーションで使用するキー
          int _modelHandle{ -1 };       //!< モデルハンドル
          bool _isLighting{ true };     //!< ライティングを行うかのフラグ
+         bool _isPixelLighting{false};
       };
    }
 }

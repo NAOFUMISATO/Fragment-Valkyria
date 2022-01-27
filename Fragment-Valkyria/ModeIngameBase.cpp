@@ -46,9 +46,7 @@ void ModeInGameBase::Render() {
    GetObjServer().Render();
 
    SetUseShadowMap(0, -1);
-   SetUseShadowMap(1, -1);
-   SetUseShadowMap(2, -1);
-   
+
    GetEfcServer().Render();
 
 #ifdef _DEBUG
@@ -95,13 +93,13 @@ void ModeInGameBase::DebugDraw() {
    DrawFormatString(0, 30, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
    //ÉvÉåÉCÉÑÅ[èÓïÒï`âÊ
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
-   auto [px, py, pz] = playerPos.GetXYZ();
+   auto [px, py, pz] = playerPos.GetVec3();
    DrawFormatString(0, 1030, GetColor(255, 255, 255), "PlyPosition_X:%f  Y:%f  Z:%f ", px, py, pz);
    auto playerRot = GetObjServer().GetVecData("PlayerRot");
-   auto [rx, ry, rz] = playerRot.GetXYZ();
+   auto [rx, ry, rz] = playerRot.GetVec3();
    DrawFormatString(0, 1045, GetColor(255, 255, 255), "PlyRotation_X:%f  Y:%f  Z:%f ", rx, ry, rz);
    auto playerFor = GetObjServer().GetVecData("PlayerFor");
-   auto [fx, fy, fz] = playerFor.GetXYZ();
+   auto [fx, fy, fz] = playerFor.GetVec3();
    DrawFormatString(0, 1060, GetColor(255, 255, 255), "PlyForward__X:%f  Y:%f  Z:%f ", fx, fy, fz);
 
 }

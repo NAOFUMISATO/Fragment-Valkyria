@@ -40,7 +40,7 @@ namespace AppFrame {
 
       void EffectBaseRoot::SetPosition(Math::Vector4 pos){
          _position = pos;
-         auto [x, y, z] = _position.GetXYZ();
+         auto [x, y, z] = _position.GetVec3();
          auto cx = static_cast<float>(x);
          auto cy = static_cast<float>(y);
          auto cz = static_cast<float>(z);
@@ -49,7 +49,7 @@ namespace AppFrame {
 
       void EffectBaseRoot::SetRotation(Math::Vector4 rot) {
          _rotation = rot;
-         auto [x, y, z] = _rotation.GetXYZ();
+         auto [x, y, z] = _rotation.GetVec3();
          auto cx = static_cast<float>(x);
          auto cy = static_cast<float>(y);
          auto cz = static_cast<float>(z);
@@ -58,7 +58,7 @@ namespace AppFrame {
 
       void EffectBaseRoot::SetScale(Math::Vector4 sca) {
          _scale = sca;
-         auto [x, y, z] = _scale.GetXYZ();
+         auto [x, y, z] = _scale.GetVec3();
          auto cx = static_cast<float>(x);
          auto cy = static_cast<float>(y);
          auto cz = static_cast<float>(z);

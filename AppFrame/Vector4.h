@@ -48,10 +48,16 @@ namespace AppFrame {
          void Add(const Vector4& vector);
          void Add(const double x, const double y, const double z);
 
-         inline const std::tuple<double, double, double> GetXYZ() const { return { _x, _y, _z }; }
-         inline void SetXYZ(std::tuple<double, double, double> xyz) {
+         inline const std::tuple<double, double, double> GetVec3() const { return { _x, _y, _z }; }
+         inline void SetVec3(std::tuple<double, double, double> xyz) {
             auto [x, y, z] = xyz;
-            _x=x,_y=y,_z=z; }
+            _x=x,_y=y,_z=z; 
+         }
+         inline const std::pair<double, double> GetVec2() const { return { _x,_y }; }
+         inline void SetVec2(std::pair<double, double> xy) {
+            auto [x, y] = xy;
+            _x = x, _y = y;
+         }
          inline const double GetY() const { return _y; }
          inline const double GetW() const { return _w; }
          inline void SetY(double y) { _y = y; }

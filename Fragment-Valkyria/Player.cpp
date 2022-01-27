@@ -72,9 +72,9 @@ void Player::Draw() {
 }
 
 void Player::ComputeWorldTransform() {
-   auto [sx, sy, sz] = _scale.GetXYZ();
-   auto [rx, ry, rz] = _rotation.GetXYZ();
-   auto [px, py, pz] = _position.GetXYZ();
+   auto [sx, sy, sz] = _scale.GetVec3();
+   auto [rx, ry, rz] = _rotation.GetVec3();
+   auto [px, py, pz] = _position.GetVec3();
    auto world = Matrix44();
    world.Scale(sx, sy, sz, true);
    world.RotateZ(rz, false);
@@ -92,7 +92,7 @@ void Player::ShootRotate() {
     // カメラから向く方向の単位ベクトルをもとめる
     auto camForward = _cameraComponent->GetForward();
 
-    auto [x, y, z] = camForward.GetXYZ();
+    auto [x, y, z] = camForward.GetVec3();
     auto direction = Vector4(x, 0.0, z);
     auto radian = std::atan2(x, z);
     _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
@@ -126,7 +126,7 @@ void Player::HitCheckFromGatling() {
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromGatling) {
         auto hitPos = _collisionComponent->hitPos();
         auto knockBackVec = _position - hitPos;
-        auto [x, y, z] = knockBackVec.GetXYZ();
+        auto [x, y, z] = knockBackVec.GetVec3();
         auto knockBackDelta = Vector4(x, 0.0, z);
         knockBackDelta.Normalized();
         _knockBack = knockBackDelta * 10.0;
@@ -144,8 +144,8 @@ void Player::HitCheckFromFallObject() {
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromFallObject) {
         auto hitPos = _collisionComponent->hitPos();
         
-        auto [hitX, hitY, hitZ] = hitPos.GetXYZ();
-        auto [posX, posY, posZ] = _position.GetXYZ();
+        auto [hitX, hitY, hitZ] = hitPos.GetVec3();
+        auto [posX, posY, posZ] = _position.GetVec3();
         if (hitX == posX && posZ == hitZ) {
             auto rotateY = _rotation.GetY();
             Matrix44 mat = Matrix44();
@@ -158,7 +158,7 @@ void Player::HitCheckFromFallObject() {
         }
         else {
             auto knockBackVec = _position - hitPos;
-            auto [x, y, z] = knockBackVec.GetXYZ();
+            auto [x, y, z] = knockBackVec.GetVec3();
             auto knockBackDelta = Vector4(x, 0.0, z);
             knockBackDelta.Normalized();
             _knockBack = knockBackDelta * 10.0;
@@ -232,7 +232,7 @@ void Player::StateRun::Input(InputManager& input) {
     auto moved = false;
     // カメラから前進方向単位ベクトルをもとめる
     auto camForward = _owner._cameraComponent->GetForward();
-    auto [x, y, z] = camForward.GetXYZ();
+    auto [x, y, z] = camForward.GetVec3();
     _owner._direction = Vector4(x, 0.0, z);
     _owner._moved = Vector4();
    if (input.GetKeyboard().SpaceClick()) {
@@ -267,7 +267,7 @@ void Player::StateRun::Input(InputManager& input) {
    else {
        _owner._moved.Normalized();
        _owner._moved = _owner._moved * MoveSpeed;
-       auto [x, y, z] = _owner._moved.GetXYZ();
+       auto [x, y, z] = _owner._moved.GetVec3();
        auto radian = std::atan2(x, z);
        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
    }
@@ -329,7 +329,7 @@ void Player::StateKnockBack::Input(InputManager& input) {
 void Player::StateKnockBack::Update() {
     if (_owner._freezeTime > 0) {
         _owner.Move(_owner._knockBack);
-        auto [x, y, z] = _owner._knockBack.GetXYZ();
+        auto [x, y, z] = _owner._knockBack.GetVec3();
         auto radian = std::atan2(-x, -z);
         _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
 

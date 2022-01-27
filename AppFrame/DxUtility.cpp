@@ -19,7 +19,7 @@ namespace AppFrame {
     */
    namespace Math {
       VECTOR ToDX(Math::Vector4& vector) {
-         auto [x, y, z] = vector.GetXYZ();
+         auto [x, y, z] = vector.GetVec3();
          auto cx = static_cast<float>(x);
          auto cy = static_cast<float>(y);
          auto cz = static_cast<float>(z);

@@ -28,7 +28,6 @@ namespace FragmentValkyria {
     * \brief オブジェクト関係
     */
    namespace Object {
-      class ObjectServer;
       /**
        * \class オブジェクトの基底クラス
        * \brief 各オブジェクトはこのクラスを継承して定義する

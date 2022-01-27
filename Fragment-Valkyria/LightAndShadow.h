@@ -17,10 +17,9 @@ namespace FragmentValkyria {
 
       private:
          Game::GameMain& _gameMain;
-         std::tuple<int, int, int> _lightHandles{ -1,-1,-1 };
-         std::tuple<int, int, int> _shadowHandles{ -1,-1,-1 };
-         std::tuple<Vector4, Vector4, Vector4> _lightPositions{
-            {0,0,0}, {0,0,0}, {0,0,0} };
+         std::pair<int, int> _lightHandles{ -1,-1 };
+         std::pair<Vector4, Vector4> _lightPositions{ {0,0,0},{0,0,0} };
+         int _shadowHandle{ -1 };
       };
    }
 

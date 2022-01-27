@@ -28,6 +28,7 @@ void ModelComponent::Update() {
 
 void ModelComponent::Draw() {
    SetUseLighting(_isLighting);
+   SetUsePixelLighting(_isPixelLighting);
    MV1DrawModel(_modelHandle);
 }
 

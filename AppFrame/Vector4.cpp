@@ -23,7 +23,7 @@ namespace AppFrame {
       }
 
       void Vector4::Set(const Vector4& vector) {
-         auto [x, y, z] = vector.GetXYZ();
+         auto [x, y, z] = vector.GetVec3();
          auto w = vector.GetW();
          _x = x;
          _y = y;
@@ -38,7 +38,7 @@ namespace AppFrame {
       }
 
       void Vector4::Add(const Vector4& vector) {
-         auto [x, y, z] = vector.GetXYZ();
+         auto [x, y, z] = vector.GetVec3();
          _x += x;
          _y += y;
          _z += z;
@@ -71,12 +71,12 @@ namespace AppFrame {
       }
 
       const double Vector4::Dot(const Vector4& rhs) const {
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          return _x * x + _y * y + _z * z;
       }
 
       const Vector4 Vector4::Cross(const Vector4& rhs) const {
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          auto cx = _y * z - _z * y;
          auto cy = _z * x - _x * z;
          auto cz = _x * y - _y * x;
@@ -84,17 +84,17 @@ namespace AppFrame {
       }
 
       const Vector4 Vector4::operator +(const Vector4& rhs) const {
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          return Vector4(_x + x, _y + y, _z + z);
       }
 
       const Vector4 Vector4::operator -(const Vector4& rhs) const {
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          return Vector4(_x - x, _y - y, _z - z);
       }
 
       const Vector4 Vector4::operator *(const Vector4& rhs) const {
-         auto [x, y, z] = rhs.GetXYZ();
+         auto [x, y, z] = rhs.GetVec3();
          return Vector4(_x * x, _y * y, _z * z);
       }
 

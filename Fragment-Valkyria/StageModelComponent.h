@@ -71,6 +71,14 @@ namespace FragmentValkyria {
           */
          void SetEmiColor(int index, float r, float g, float b);
          /**
+          * \brief ライティングフラグをfalseにする
+          */
+         inline void LightingOFF() { _isLighting = false; }
+         /**
+          * \brief ピクセルライティングフラグをtrueにする
+          */
+         inline void PixelLightingON() { _isPixelLighting = true; }
+         /**
           * \brief ステージパーツのモデルハンドルの動的配列から指定のコリジョンフレームがあるモデルハンドルとコリジョン番号を返す
           * \param collName コリジョンフレーム名
           * \return モデルハンドルとコリジョン番号
@@ -106,6 +114,7 @@ namespace FragmentValkyria {
          Object::ObjectBase& _owner;                 //!< オブジェクトベースの参照
          std::vector<int> _modelHandles{ -1 };       //!< モデルハンドル
          bool _isLighting{ true };     //!< ライティングを行うかのフラグ
+         bool _isPixelLighting{ false };
       };
    }
 }

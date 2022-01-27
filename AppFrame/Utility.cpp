@@ -140,7 +140,7 @@ namespace AppFrame {
       bool Utility::CollisionSpherePoint(const Vector4& point, const Sphere& s) {
          auto [pos, radian] = s;
          auto sphereFromPoint = pos - point;
-         auto [x, y, z] = sphereFromPoint.GetXYZ();
+         auto [x, y, z] = sphereFromPoint.GetVec3();
          auto checkSize = x * x + y * y + z * z;
          return (checkSize) <= (radian * radian);
       }
@@ -165,15 +165,15 @@ namespace AppFrame {
           auto nearToSphere = spos - near;
 
           if (nearLengthRate < 0) {
-              auto [x, y, z] = startToSphere.GetXYZ();
+              auto [x, y, z] = startToSphere.GetVec3();
               distance = x * x + y * y + z * z;
           }
           else if (nearLengthRate > 1) {
-              auto [x, y, z] = endToSphere.GetXYZ();
+              auto [x, y, z] = endToSphere.GetVec3();
               distance = x * x + y * y + z * z;
           }
           else {
-              auto [x, y, z] = nearToSphere.GetXYZ();
+              auto [x, y, z] = nearToSphere.GetVec3();
               distance = x * x + y * y + z * z;
           }
 

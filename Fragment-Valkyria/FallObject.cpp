@@ -161,7 +161,7 @@ void FallObject::StateFall::Update() {
 	_owner._position.Add(0.0, -posY, 0.0);
 
 	if (_owner._position.GetY() <= 0.0) {
-		auto [oldPosX, oldPosY, oldPosZ] = _owner._position.GetXYZ();
+		auto [oldPosX, oldPosY, oldPosZ] = _owner._position.GetVec3();
 		_owner._position = AppFrame::Math::Vector4(oldPosX, 0.0, oldPosZ);
 		_owner._stateServer->PushBack("Idle");
 	}

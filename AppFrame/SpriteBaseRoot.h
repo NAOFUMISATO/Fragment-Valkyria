@@ -116,10 +116,10 @@ namespace AppFrame {
 
          SpriteState _sprState{ SpriteState::Active }; 
          std::unique_ptr<StateServer> _stateServer;    //!< 状態の一括管理クラスのポインタ
-         Game::GameBase& _gameBase;              //!< ゲーム本体クラスの参照
-         Vector4 _position{ 0,0,0 };             //!< 位置
-         Vector4 _rotation{ 0,0,0 };             //!< 回転
-         Vector4 _scale{ 1,1,1 };                //!< 拡大率
+         Game::GameBase& _gameBase;   //!< ゲーム本体クラスの参照
+         Vector4 _position{ 0,0,0 };  //!< 位置
+         Vector4 _rotation{ 0,0,0 };  //!< 回転
+         Vector4 _scale{ 1,1,1 };     //!< 拡大率
       };
    }
 }

@@ -13,9 +13,6 @@
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
-   namespace {
-     
-   }
    //二重インクルード防止
    namespace Mode {
       class ModeServer;

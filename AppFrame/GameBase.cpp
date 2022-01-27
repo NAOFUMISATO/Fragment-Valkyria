@@ -18,6 +18,7 @@
 #include "EffectServer.h"
 #include "ObjectServer.h"
 #include "SimpleTextureComponent.h"
+#include "SpriteServer.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -49,7 +50,7 @@ namespace AppFrame {
 
          // DirectX11を使用可(Effekseerを使用する為)
          SetUseDirect3DVersion(DX_DIRECT3D_11);
-
+        
          //エラーが起きたら直ちに終了
          if (DxLib_Init() == -1) {
             return false;
@@ -91,6 +92,8 @@ namespace AppFrame {
          _objServer = std::make_unique<Object::ObjectServer>();
 
          _simpleTexComponent = std::make_unique<Texture::SimpleTextureComponent>(*this);
+
+         _sprServer = std::make_unique <Sprite::SpriteServer>();
 
          return true;
       }

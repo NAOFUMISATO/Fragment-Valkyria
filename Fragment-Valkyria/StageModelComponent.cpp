@@ -21,6 +21,7 @@ void StageModelComponent::Update() {
 
 void StageModelComponent::Draw() {
    SetUseLighting(_isLighting);
+   SetUsePixelLighting(_isPixelLighting);
    for (auto& modelHandle : _modelHandles) {
       MV1DrawModel(modelHandle);
    }

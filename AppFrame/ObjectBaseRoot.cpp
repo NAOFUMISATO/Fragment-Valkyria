@@ -17,9 +17,9 @@ namespace AppFrame {
       }
 
       void ObjectBaseRoot::ComputeWorldTransform() {
-         auto [sx, sy, sz] = _scale.GetXYZ();
-         auto [rx, ry, rz] = _rotation.GetXYZ();
-         auto [px, py, pz] = _position.GetXYZ();
+         auto [sx, sy, sz] = _scale.GetVec3();
+         auto [rx, ry, rz] = _rotation.GetVec3();
+         auto [px, py, pz] = _position.GetVec3();
          auto world = Matrix44();
          world.Scale(sx, sy, sz, true);
          world.RotateZ(rz, false);
