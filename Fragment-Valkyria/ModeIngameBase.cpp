@@ -69,8 +69,8 @@ Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
 void ModeInGameBase::DebugDraw() {
    namespace AppMath = AppFrame::Math;
    using Utility = AppMath::Utility;
-   DrawFormatString(0, 0, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
-   DrawFormatString(0, 15, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
+   DrawFormatString(0, 985, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
+   DrawFormatString(0, 1000, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
    auto startX = Vector4(-10000.0, 0.0, 0.0);
    auto endX = Vector4(10000.0, 0.0, 0.0);
    DrawLine3D(AppMath::ToDX(startX), AppMath::ToDX(endX), Utility::GetColorCode(255, 0, 0));
@@ -90,7 +90,7 @@ void ModeInGameBase::DebugDraw() {
    auto targetStartZ = camTarget + Vector4(0.0, 0.0, -10.0);
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
    DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), Utility::GetColorCode(0, 0, 255));
-   DrawFormatString(0, 30, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
+   DrawFormatString(0, 1015, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
    //ÉvÉåÉCÉÑÅ[èÓïÒï`âÊ
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
    auto [px, py, pz] = playerPos.GetVec3();
