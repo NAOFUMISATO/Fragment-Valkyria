@@ -169,12 +169,14 @@
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
     <ClInclude Include="LightAndShadow.h">
-     <Filter>ヘッダー ファイル\Lighting</Filter>
+      <Filter>ヘッダー ファイル\Lighting</Filter>
     </ClInclude>
-     <ClInclude Include="Bullet.h">
+    <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
-   
+    <ClInclude Include="BulletCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -255,13 +257,15 @@
     <ClCompile Include="ModeInGameBase.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-     <ClCompile Include="LightAndShadow.cpp">
+    <ClCompile Include="LightAndShadow.cpp">
       <Filter>ソース ファイル\Lighting</Filter>
     </ClCompile>
-     <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
-  
+    <ClCompile Include="BulletCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

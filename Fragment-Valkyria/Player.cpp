@@ -9,6 +9,8 @@
 #include "Player.h"
 #include <cmath>
 #include "ObjectServer.h"
+#include "ObjectFactory.h"
+#include "Bullet.h"
 #include "CameraComponent.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
@@ -172,6 +174,11 @@ void Player::HitCheckFromFallObject() {
     }
 }
 
+void Player::WeakAttack() {
+    auto bullet = gameMain().objFactory().Create("Bullet");
+    gameMain().objServer().Add(std::move(bullet));
+}
+
 void Player::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
@@ -211,6 +218,10 @@ void Player::StateIdle::Input(InputManager& input) {
 
    if (input.GetXJoypad().LeftTrigger() >= 20) {
        _owner.HitCheckFromFallObjectRange();
+   }
+   else if (input.GetXJoypad().LBClick()) {
+       _owner._stateServer->PushBack("WeakShootReady");
+       _owner._cameraComponent->SetZoom(true);
    }
 }
 void Player::StateIdle::Update() {
@@ -260,6 +271,10 @@ void Player::StateRun::Input(InputManager& input) {
    }
    if (input.GetXJoypad().LeftTrigger() >= 20) {
        _owner.HitCheckFromFallObjectRange();
+   }
+   else if (input.GetXJoypad().LBClick()) {
+       _owner._stateServer->PushBack("WeakShootReady");
+       _owner._cameraComponent->SetZoom(true);
    }
    if (!moved) {
        _owner._stateServer->PopBack();
@@ -350,7 +365,7 @@ void Player::StateKnockBack::Draw() {
 
 void Player::StateDie::Enter() {
     _owner.modelAnimeComponent().ChangeAnime("MO_SDChar_jumpStart", true);
-    _timeOver = 60 * 5;
+    _timeOver = 60 * 2;
 }
 
 void Player::StateDie::Input(InputManager& input) {
@@ -370,3 +385,21 @@ void Player::StateDie::Draw() {
     _owner._modelAnimeComponent->Draw();
 }
 
+void Player::StateWeakShootReady::Enter() {
+    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+}
+
+void Player::StateWeakShootReady::Input(InputManager& input) {
+    if (input.GetXJoypad().RBClick() && _coolTime <= 0) {
+        _owner.WeakAttack();
+        _coolTime = 60 * 3;
+    }
+    if (input.GetXJoypad().LBClick()) {
+        _owner._stateServer->PopBack();
+        _owner._cameraComponent->SetZoom(false);
+    }
+}
+
+void Player::StateWeakShootReady::Update() {
+    --_coolTime;
+}

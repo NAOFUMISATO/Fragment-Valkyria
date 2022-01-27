@@ -247,6 +247,8 @@ void LargeEnemy::StateMove::Update() {
 
 		if (_owner._stateCnt >= 60 * 3) {
 			if (_endGetplyPos) {
+				_owner._moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+				_owner._moved.Normalized();
 				_owner.SetAddRotate();
 				_endGetplyPos = false;
 			}
