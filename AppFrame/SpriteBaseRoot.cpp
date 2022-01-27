@@ -15,6 +15,13 @@ namespace AppFrame {
       SpriteBaseRoot::~SpriteBaseRoot() {
       }
 
+      void SpriteBaseRoot::Draw() {
+         auto [x, y] = _position.GetVec2();
+         SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+         GetSimpTexComponent().TransDrawTexture(x, y, _cx, _cy, _scale, _angle, _grHandle, _turnFlag);
+         SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+      }
+
       SpriteServer& SpriteBaseRoot::GetSprServer() const {
          return _gameBase.sprServer();
       }

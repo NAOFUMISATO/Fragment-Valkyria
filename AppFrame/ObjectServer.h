@@ -45,7 +45,8 @@ namespace AppFrame {
           * \param key オブジェクトに関連付ける任意の文字列
           * \param vec 登録するVector4データ
           */
-         void Register(std::string_view key, Vector4 vec);
+         void RegistVector(std::string_view key, Vector4 vecData);
+         void RegistDouble(std::string_view key, double doubleData);
          /**
           * \brief オブジェクトの処理を回す動的配列を取得する
           */
@@ -56,12 +57,14 @@ namespace AppFrame {
           * \return 登録したオブジェクトの位置
           */
          Vector4 GetVecData(std::string_view key);
+         double GetDoubleData(std::string_view key);
 
       private:
          bool _updating{ false };   //!< 更新しているかのフラグ
          std::vector<std::unique_ptr<ObjectBaseRoot>> _runObjects;      //!< オブジェクトの処理を回す用の動的配列
          std::vector<std::unique_ptr<ObjectBaseRoot>> _pendingObjects;  //!< 保留中のオブジェクトを登録しておく動的配列
-         std::unordered_map<std::string, Vector4> _objRegistry;         //!< オブジェクトのVector4データを登録しておく連想配列
+         std::unordered_map<std::string, Vector4> _objVecData;          //!< オブジェクトのVector4データを登録しておく連想配列
+         std::unordered_map<std::string, double> _objDoubleData;        //!< オブジェクトのdoubleデータを登録しておく連想配列
       };
    }
 }

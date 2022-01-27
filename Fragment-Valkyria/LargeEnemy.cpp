@@ -39,7 +39,7 @@ void LargeEnemy::Update() {
 	// ƒ‚ƒfƒ‹‚ÌXV
 	_modelAnimeComponent->Update();
 
-	GetObjServer().Register("EnemyPos", _position);
+	GetObjServer().RegistVector("EnemyPos", _position);
 }
 
 void LargeEnemy::Draw() {

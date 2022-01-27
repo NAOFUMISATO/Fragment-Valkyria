@@ -14,8 +14,13 @@ namespace AppFrame {
       EffectBaseRoot::EffectBaseRoot(Game::GameBase& gameBase) :_gameBase{gameBase} {
       }
 
-      EffectBaseRoot::~EffectBaseRoot() {
-      };
+      void EffectBaseRoot::Draw() {
+         SetPosition(_position);
+         SetRotation(_rotation);
+         SetScale(_scale);
+         SetSpeed(_speed);
+         SetEfcColor(_color);
+      }
 
       void EffectBaseRoot::SetEffectLoadHandle(std::string_view key) {
          auto handle = _gameBase.resServer().GetEffectHandle(key);

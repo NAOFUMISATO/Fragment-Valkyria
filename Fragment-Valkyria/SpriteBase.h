@@ -18,16 +18,13 @@ namespace FragmentValkyria {
          
          enum class SpriteType {
             Sprite = 0,   //!< オブジェクト
+            UI            //!< ユーザーインターフェイス
          };
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体の参照
           */
          SpriteBase(Game::GameMain& gameMain);
-         /**
-          * \brief デストラクタ
-          */
-         ~SpriteBase()override;
          /**
           * \brief 初期化処理
           */

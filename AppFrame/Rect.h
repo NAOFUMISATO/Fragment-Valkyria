@@ -12,10 +12,10 @@ namespace AppFrame{
          std::tuple<double, double, double, double> GetRectParams() { return {_left,_right,_top,_bottom}; }
 
       private:
-         double _left;
-         double _right;
-         double _top;
-         double _bottom;
+         double _left{ 0 };
+         double _right{ 0 };
+         double _top{ 0 };
+         double _bottom{ 0 };
       };
 
 }

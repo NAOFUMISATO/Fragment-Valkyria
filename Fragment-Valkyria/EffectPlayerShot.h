@@ -25,35 +25,24 @@ namespace FragmentValkyria {
           * \brief コンストラクタ
           * \param gameMain ゲーム本体クラスの参照
           */
-         EffectPlayerShot(Game::GameMain& gameMain);
-         /**
-          * \brief デストラクタ
-          */
-         ~EffectPlayerShot()override;
+         EffectPlayerShot(Game::GameMain& gameMain,std::string_view key);
 
          /**
-          * \brief 初期化及び_loadHandleにエフェクトハンドルを登録する
-          * \param key ResourceServerに登録済みの任意の文字列
+          * \brief 初期化処理
           */
-         void Init(std::string_view key)override;
-         /**
-          * \brief 入力処理
-          * \param input 入力一括管理クラスの参照
-          */
-         void Input(AppFrame::Input::InputManager& input)override {};
+         void Init()override;
          /**
           * \brief 更新処理
           */
          void Update()override;
          /**
-          * \brief 描画処理
-          */
-         void Draw()override;
-         /**
           * \brief オブジェクトの種別の取得
           * \return プレイヤー射撃エフェクト
           */
          EffectType GetEfcType() const override { return EffectType::PlayerShot; }
+
+      private:
+         bool _play{ true };
       };
    }
 

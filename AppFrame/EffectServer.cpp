@@ -3,6 +3,7 @@
 namespace AppFrame {
    namespace Effect {
       void EffectServer::Add(std::unique_ptr<EffectBaseRoot> efc) {
+         efc->Init();
          if (_updating) {
             // 更新中は保留中の動的配列に追加する
             _pendingEffects.emplace_back(std::move(efc));

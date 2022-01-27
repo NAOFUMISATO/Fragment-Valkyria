@@ -48,7 +48,7 @@ void ModeBoss::Enter() {
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用
    auto& objServer = GetObjServer();
-   objServer.Register("PlayerPos", player->position());
+   objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
 
    auto stage = objFactory.Create("Stage");
@@ -67,7 +67,7 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
    }
    //エフェクト仮描画
    if (input.GetKeyboard().ZClick()) {
-      auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain);
+      auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain,"Shot");
       GetEfcServer().Add(std::move(efcShot));
    }
 #ifdef _DEBUG

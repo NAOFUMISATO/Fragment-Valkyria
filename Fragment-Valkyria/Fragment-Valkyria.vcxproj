@@ -189,6 +189,7 @@
     <ClInclude Include="PlayerCreator.h" />
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="BossStageCreator.h" />
+    <ClInclude Include="PlayerHP.h" />
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="BossStageCreator.cpp" />
     <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="StageModelComponent.cpp" />
+    <ClCompile Include="PlayerHP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -162,9 +162,6 @@
     <ClCompile Include="SimpleTextureComponent.cpp">
       <Filter>ソース ファイル\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Rect.cpp">
-      <Filter>ソース ファイル\Data</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteBaseRoot.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
     </ClCompile>
@@ -271,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="SpriteServer.h">
       <Filter>ヘッダー ファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>ヘッダー ファイル\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -180,6 +180,9 @@
     <ClInclude Include="SpriteBase.h">
       <Filter>ヘッダー ファイル\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerHP.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="SpriteBase.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHP.cpp">
+      <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -44,9 +44,9 @@ namespace AppFrame {
           */
          SpriteBaseRoot(Game::GameBase& gameBase);
          /**
-          * \brief デストラクタ
+          * \brief デフォルトデストラクタ
           */
-         virtual ~SpriteBaseRoot();
+         virtual ~SpriteBaseRoot()=default;
          /**
           * \brief 初期化処理
           */
@@ -63,7 +63,7 @@ namespace AppFrame {
          /**
           * \brief 描画処理
           */
-         virtual void Draw() {};
+         virtual void Draw();
 
          inline bool IsDead() { return (_sprState == SpriteState::Dead); }
          
@@ -77,14 +77,7 @@ namespace AppFrame {
          inline void position(const Vector4& objPosition) { _position = objPosition; }
          
          inline Vector4 position() const { return _position; }
-        
-         inline void rotation(const Vector4& objRotation) { _rotation = objRotation; }
          
-         inline Vector4 rotation() const { return _rotation; }
-         
-         inline void scale(const Vector4& objScale) { _scale = objScale; }
-         
-         inline Vector4 scale() const { return _scale; }
          /**
           * \brief 状態一括管理クラスの設定
           * \param state 各状態クラスのインスタンス
@@ -118,8 +111,13 @@ namespace AppFrame {
          std::unique_ptr<StateServer> _stateServer;    //!< 状態の一括管理クラスのポインタ
          Game::GameBase& _gameBase;   //!< ゲーム本体クラスの参照
          Vector4 _position{ 0,0,0 };  //!< 位置
-         Vector4 _rotation{ 0,0,0 };  //!< 回転
-         Vector4 _scale{ 1,1,1 };     //!< 拡大率
+         std::vector<int> _grHandles;
+         int _grHandle{ -1 };
+         int _cx{ 0 }, _cy{ 0 };
+         int _alpha{ 255 };
+         double _scale{ 1.0 };
+         double _angle{ 0.0 };
+         bool _turnFlag{ false };
       };
    }
 }

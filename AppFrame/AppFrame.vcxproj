@@ -189,6 +189,7 @@
     <ClInclude Include="StateBaseRoot.h" />
     <ClInclude Include="StateServer.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="XJoypadInput.h" />
@@ -208,7 +209,6 @@
     <ClCompile Include="ObjectServer.cpp" />
     <ClCompile Include="CurrentPathServer.cpp" />
     <ClCompile Include="LoadResourceJson.cpp" />
-    <ClCompile Include="Rect.cpp" />
     <ClCompile Include="ResourceServer.cpp" />
     <ClCompile Include="SimpleTextureComponent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />

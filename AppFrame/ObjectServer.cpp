@@ -16,6 +16,7 @@
 namespace AppFrame {
    namespace Object {
       void ObjectServer::Add(std::unique_ptr<ObjectBaseRoot> obj) {
+         obj->Init();
          if (_updating) {
             // 更新中は保留中の動的配列に追加する
             _pendingObjects.emplace_back(std::move(obj));
@@ -74,21 +75,28 @@ namespace AppFrame {
          _pendingObjects.clear();
       }
 
-      void ObjectServer::Register(std::string_view key, Vector4 vec) {
-         if (_objRegistry.contains(key.data())) {
-            _objRegistry[key.data()] = vec;
+      void ObjectServer::RegistVector(std::string_view key, Vector4 vecData) {
+         if (_objVecData.contains(key.data())) {
+            _objVecData[key.data()] = vecData;
          }
-         _objRegistry.emplace(key, vec);
+         _objVecData.emplace(key, vecData);
+      }
+
+      void ObjectServer::RegistDouble(std::string_view key, double doubleData) {
+         if (_objDoubleData.contains(key.data())) {
+            _objDoubleData[key.data()] = doubleData;
+         }
+         _objDoubleData.emplace(key, doubleData);
       }
 
       AppFrame::Math::Vector4 ObjectServer::GetVecData(std::string_view key) {
 #ifndef _DEBUG
-         if (!_objRegistry.contains(key.data())) {
+         if (!_objVecData.contains(key.data())) {
             return{ 0,0,0 };
          }
 #else
          try {
-            if (!_objRegistry.contains(key.data())) {
+            if (!_objVecData.contains(key.data())) {
                std::string message = key.data();
                throw std::logic_error("----------キー[" + message + "]がオブジェクトレジストリに存在しませんでした。----------\n");
             }
@@ -97,7 +105,26 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         return _objRegistry[key.data()];
+         return _objVecData[key.data()];
+      }
+
+      double ObjectServer::GetDoubleData(std::string_view key) {
+#ifndef _DEBUG
+         if (!_objDoubleData.contains(key.data())) {
+            return 0.0;
+         }
+#else
+         try {
+            if (!_objDoubleData.contains(key.data())) {
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]がオブジェクトレジストリに存在しませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
+         return _objDoubleData[key.data()];
       }
    }
 }

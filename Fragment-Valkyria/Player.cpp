@@ -55,16 +55,16 @@ void Player::Update() {
    _cameraComponent->SetPlyPos(_position);
    _cameraComponent->Update();
    // オブジェクトサーバーに位置を通知
-   GetObjServer().Register("PlayerPos", _position);
-   GetObjServer().Register("PlayerRot", _rotation);
-   GetObjServer().Register("PlayerFor",GetForward());
+   GetObjServer().RegistVector("PlayerPos", _position);
+   GetObjServer().RegistVector("PlayerRot", _rotation);
+   GetObjServer().RegistVector("PlayerFor",GetForward());
 
    auto handle = _modelAnimeComponent.get()->modelHandle();
    auto headFrame = _modelAnimeComponent.get()->FindFrameChild("SDChar_Root", "SDChar_Head");
    auto headPos = MV1GetFramePosition(handle, headFrame);
-   GetObjServer().Register("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
-   GetObjServer().Register("CamTarget", _cameraComponent->GetTarget());
-   GetObjServer().Register("CamPos", _cameraComponent->GetPos());
+   GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
+   GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
+   GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
 }
 
 void Player::Draw() {
