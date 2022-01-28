@@ -10,6 +10,7 @@
 #include "ModeServer.h"
 #include "GameBase.h"
 #include "SimpleTextureComponent.h"
+#include "SpriteServer.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -50,6 +51,10 @@ namespace AppFrame {
 
       Texture::SimpleTextureComponent& ModeBaseRoot::GetSimpTexComponent() const {
          return _gameBase.simpleTexComponent();
+      }
+
+      Sprite::SpriteServer& ModeBaseRoot::GetSprServer() const {
+         return _gameBase.sprServer();
       }
    }
 }

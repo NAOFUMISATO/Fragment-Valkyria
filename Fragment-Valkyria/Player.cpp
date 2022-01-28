@@ -65,6 +65,7 @@ void Player::Update() {
    GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
+   GetObjServer().RegistDouble("PlayerHP",_hp);
 }
 
 void Player::Draw() {

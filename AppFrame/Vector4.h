@@ -54,10 +54,7 @@ namespace AppFrame {
             _x=x,_y=y,_z=z; 
          }
          inline const std::pair<double, double> GetVec2() const { return { _x,_y }; }
-         inline void SetVec2(std::pair<double, double> xy) {
-            auto [x, y] = xy;
-            _x = x, _y = y;
-         }
+         inline void SetVec2(double x, double y) { _x = x, _y = y; }
          inline const double GetY() const { return _y; }
          inline const double GetW() const { return _w; }
          inline void SetY(double y) { _y = y; }

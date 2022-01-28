@@ -12,6 +12,7 @@
 #include "GameMain.h"
 #include "CameraComponent.h"
 #include "ModelAnimeComponent.h"
+#include "PlayerHP.h"
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
@@ -48,6 +49,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("KnockBack", std::make_shared<Player::Player::StateKnockBack>(*player));
    state->Register("Die", std::make_shared<Player::Player::StateDie>(*player));
    player->stateServer(std::move(state));
+
+   _gameMain.sprServer().Add(std::make_unique<Player::PlayerHP>(_gameMain));
 
    return std::move(player);
 }

@@ -14,6 +14,7 @@
 #include "ObjectBase.h"
 #include "ModelAnimeComponent.h"
 #include "LightAndShadow.h"
+#include "SpriteBase.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -32,12 +33,14 @@ void ModeInGameBase::Enter() {
 void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
    GetObjServer().Input(input);
    GetEfcServer().Input(input);
+   GetSprServer().Input(input);
 }
 
 void ModeInGameBase::Update() {
    GetObjServer().Update();
    _lighting->Update();
    GetEfcServer().Update();
+   GetSprServer().Update();
 }
 
 void ModeInGameBase::Render() {
@@ -48,6 +51,7 @@ void ModeInGameBase::Render() {
    SetUseShadowMap(0, -1);
 
    GetEfcServer().Render();
+   GetSprServer().Render();
 
 #ifdef _DEBUG
    DebugDraw();
@@ -57,6 +61,7 @@ void ModeInGameBase::Render() {
 void ModeInGameBase::Exit() {
    GetObjServer().Clear();
    GetEfcServer().Clear();
+   GetSprServer().Clear();
    GetResServer().DeleteDuplicateModels();
    GetObjFactory().Clear();
 }

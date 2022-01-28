@@ -8,7 +8,8 @@ namespace FragmentValkyria {
    namespace Player {
       using Color = AppFrame::Data::Color;
       using Rect = AppFrame::Data::Rect;
-      class PlayerHP :public Sprite::SpriteBase{
+      using Triangle = AppFrame::Data::Triangle;
+      class PlayerHP :public Sprite::SpriteBase {
       public:
          PlayerHP(Game::GameMain& gameMain);
 
@@ -16,13 +17,23 @@ namespace FragmentValkyria {
          void Update()override;
          void Draw()override;
 
+         virtual SpriteType GetSprType() const { return SpriteType::UI; }
       private:
          double _hp{ 100.0 };
          double _hpRange{ 100.0 };
-         Color _frontColor{255,255,255};
-         Rect _frontBar{0,0,0,0};
-         Rect _offSet{0,0,0,0};
+         double _rate{ 0.0 };
+         double _frontHP{ 0.0 };
+         double _backHP{ 0.0 };
+         bool _subFlag{ true };
+         bool _shake{ false };
+         unsigned int _cnt{0};
+         Color _frontColor{ 255,255,255 };
+         Rect _frontBar{ 0,0,0,0 };
+         Triangle _frontTriangle{ {0,0},{0,0},{0,0} };
+         Color _backColor{ 255,255,255 };
+         Rect _backBar{ 0,0,0,0 };
+         Triangle _backTriangle{ {0,0},{0,0},{0,0} };
+         Rect _offSet{ 0,0,0,0 };
       };
    }
-
 }

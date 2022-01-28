@@ -11,7 +11,9 @@ namespace AppFrame {
             _firstPos{ firstPos }, _secondPos{ secondPos }, _thirdPos{ thirdPos }{
          };
          Triangle() {};
-
+         void SetTriangleParams(Apex firstPos, Apex secondPos, Apex thirdPos) { 
+            _firstPos = firstPos, _secondPos = secondPos, _thirdPos = thirdPos; 
+         }
          std::tuple<Apex, Apex, Apex> GetTriangleParams() { return { _firstPos ,_secondPos,_thirdPos }; }
 
       private:
