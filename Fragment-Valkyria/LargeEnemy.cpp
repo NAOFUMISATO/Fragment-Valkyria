@@ -132,7 +132,7 @@ void LargeEnemy::StateBase::Draw() {
 
 void LargeEnemy::StateIdle::Enter() {
 	_owner._stateCnt = 0;
-	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|warte_pose", true);
+	_owner._modelAnimeComponent->ChangeAnime("idle", true);
 }
 
 void LargeEnemy::StateIdle::Input(InputManager& input) {
@@ -163,7 +163,7 @@ void LargeEnemy::StateIdle::Update() {
 void LargeEnemy::StateFallObject::Enter() {
 	_owner._stateCnt = 0;
 	_owner._fallObjectflag = true;
-	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Attack", true);
+	_owner._modelAnimeComponent->ChangeAnime("object_attack", false);
 }
 
 void LargeEnemy::StateFallObject::Input(InputManager& input) {
@@ -190,7 +190,7 @@ void LargeEnemy::StateFallObject::Update() {
 void LargeEnemy::StateGatling::Enter() {
 	_owner._stateCnt = 0;
 	_owner._gatlingCnt = 10;
-	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+	_owner._modelAnimeComponent->ChangeAnime("beem", true);
 }
 
 void LargeEnemy::StateGatling::Update() {
@@ -212,7 +212,7 @@ void LargeEnemy::StateGatling::Update() {
 }
 
 void LargeEnemy::StateDie::Enter() {
-	_owner.modelAnimeComponent().ChangeAnime("Spider_Armature|die", false);
+	_owner.modelAnimeComponent().ChangeAnime("beem", false);
 	_owner._freezeTime = 60 * 2;
 }
 
@@ -236,7 +236,7 @@ void LargeEnemy::StateMove::Enter() {
 	_owner._moving = true;
 	_owner._firstRotating = true;
 	_owner._endRotating = true;
-	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|run_ani_vor", true);
+	_owner._modelAnimeComponent->ChangeAnime("walk", true);
 
 	auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/1;
 	if (result) {

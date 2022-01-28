@@ -110,7 +110,6 @@ namespace AppFrame {
          }
 #endif
          auto insertState = _stateRegistry[key.data()];
-         insertState->Enter();
          _stateList.insert(std::prev(_stateList.end()), insertState);
       }
 

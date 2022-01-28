@@ -41,7 +41,7 @@ namespace FragmentValkyria {
          /**
           * \brief 描画処理
           */
-         void Draw() override;
+         //void Draw() override;
 
          /**
           * \brief アニメーションの変更
