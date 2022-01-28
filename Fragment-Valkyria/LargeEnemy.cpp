@@ -11,6 +11,7 @@
 #include "ObjectFactory.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
+#include "PoorEnemyGatling.h"
 
 using namespace FragmentValkyria::Enemy;
 
@@ -46,14 +47,14 @@ void LargeEnemy::Draw() {
 	_stateServer->Draw();
 }
 
-void LargeEnemy::CreateFallObject() {
-	auto fallObject = gameMain().objFactory().Create("FallObject");
-	gameMain().objServer().Add(std::move(fallObject));
-}
-
 void LargeEnemy::CreateGatling() {
 	auto gatling = gameMain().objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
+}
+
+void LargeEnemy::CreateFallObject() {
+	auto fallObject = gameMain().objFactory().Create("FallObject");
+	gameMain().objServer().Add(std::move(fallObject));
 }
 
 void LargeEnemy::HitCheckFromFallObject() {
@@ -238,19 +239,19 @@ void LargeEnemy::StateMove::Enter() {
 	_owner._endRotating = true;
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|run_ani_vor", true);
 
-	auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/1;
+	auto result = AppFrame::Math::Utility::GetRandom(0, 1)/*1*/;
 	if (result) {
 		_owner._moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 		_owner._moved.Normalized();
 	}
-	/*else {
+	else {
 		auto degree = AppFrame::Math::Utility::GetRandom(0.0, 360.0);
 		Matrix44 rotate = Matrix44();
 		rotate.RotateY(degree, true);
 
 		_owner._moved = Vector4(0.0, 0.0, 1.0) * rotate;
 		_owner._moved.Normalized();
-	}*/
+	}
 
 	_owner.SetAddRotate();
 }

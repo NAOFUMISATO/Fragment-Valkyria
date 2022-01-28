@@ -19,7 +19,7 @@ namespace FragmentValkyria {
             LargeEnemy(Game::GameMain& gameMain);
             virtual ~LargeEnemy() override = default;
 
-            ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
+            virtual ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
 
             /**
             * \brief ‰Šú‰»ˆ—
@@ -39,12 +39,14 @@ namespace FragmentValkyria {
              */
             void Draw() override;
 
+
+            void CreateGatling();
+
             double hp() { return _hp; }
 
         private:
 
             void CreateFallObject();
-            void CreateGatling();
 
             void HitCheckFromFallObject();
 
