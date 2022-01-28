@@ -47,7 +47,8 @@ namespace FragmentValkyria {
             BossStage,    //!< ボスステージ
             LargeEnemy,
             FallObject,
-            Gatling
+            Gatling,
+            Bullet
          };
          /**
           * \brief コンストラクタ

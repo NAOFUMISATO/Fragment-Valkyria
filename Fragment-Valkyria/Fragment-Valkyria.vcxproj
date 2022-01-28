@@ -163,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletCreator.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CreatorBase.h" />
@@ -195,6 +197,8 @@
     <ClInclude Include="StageModelComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletCreator.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CreatorBase.cpp" />

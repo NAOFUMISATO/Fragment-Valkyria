@@ -48,6 +48,8 @@ namespace FragmentValkyria {
 
             void HitCheckFromFallObject();
 
+            void HitCheckFromBullet();
+
             void Move();
             void Rotate(bool& rotating);
             void SetAddRotate();

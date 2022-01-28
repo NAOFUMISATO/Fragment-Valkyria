@@ -226,7 +226,7 @@ void CollisionComponent::ObjectModelFromLargeEnemy() {
 		}
 
 		auto largeEnemyModel = objectBase.modelAnimeComponent().modelHandle();
-		auto collision = objectBase.modelAnimeComponent().FindFrame("Spider");
+		auto collision = objectBase.modelAnimeComponent().FindFrame("S301_typeCO");
 
 		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
 
@@ -236,7 +236,34 @@ void CollisionComponent::ObjectModelFromLargeEnemy() {
 			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 			_owner.collisionComponent().hitPos(objectBase.position());
 		}
+    }
+
 }
+
+void CollisionComponent::LargeEnemyFromBullet() {
+	auto bulletPos = _owner.position();
+	auto bulletRadius = static_cast<float>(20.0);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+			continue;
+		}
+
+		auto largeEnemyModel = objectBase.modelAnimeComponent().modelHandle();
+		auto collision = objectBase.modelAnimeComponent().FindFrame("S301_typeCO");
+
+		auto result = MV1CollCheck_Sphere(largeEnemyModel, collision, AppFrame::Math::ToDX(bulletPos), bulletRadius);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromBullet);
+			objectBase.collisionComponent().damage(10.0);
+			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+			_owner.collisionComponent().hitPos(objectBase.position());
+		}
+	}
 
 }
 
