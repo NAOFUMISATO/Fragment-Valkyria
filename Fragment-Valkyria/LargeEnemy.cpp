@@ -20,7 +20,7 @@ LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
 void LargeEnemy::Init() {
 	auto modelHandle = _modelAnimeComponent->modelHandle();
-	_collision = _modelAnimeComponent->FindFrame("Spider");
+	_collision = _modelAnimeComponent->FindFrame("S301_typeCO");
 	// フレーム1をナビメッシュとして使用
 	MV1SetupCollInfo(modelHandle, _collision);
 }
@@ -68,6 +68,19 @@ void LargeEnemy::HitCheckFromFallObject() {
 		_collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
 	}
 
+}
+
+void LargeEnemy::HitCheckFromBullet() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromBullet) {
+		_hp -= _collisionComponent->damage();
+
+		if (_hp <= 0) {
+			_stateServer->GoToState("Die");
+		}
+
+		_collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+	}
 }
 
 void LargeEnemy::Move() {
@@ -142,6 +155,7 @@ void LargeEnemy::StateIdle::Update() {
 	}
 
 	_owner.HitCheckFromFallObject();
+	_owner.HitCheckFromBullet();
 
 	++_owner._stateCnt;
 }
@@ -168,6 +182,7 @@ void LargeEnemy::StateFallObject::Update() {
 
 	/*_owner._stateServer->PopBack();*/
 	_owner.HitCheckFromFallObject();
+	_owner.HitCheckFromBullet();
 
 	++_owner._stateCnt;
 }
@@ -191,6 +206,7 @@ void LargeEnemy::StateGatling::Update() {
 	}
 
 	_owner.HitCheckFromFallObject();
+	_owner.HitCheckFromBullet();
 
 	++_owner._stateCnt;
 }
@@ -267,4 +283,7 @@ void LargeEnemy::StateMove::Update() {
 		
 		++_owner._stateCnt;
 	}
+
+	_owner.HitCheckFromFallObject();
+	_owner.HitCheckFromBullet();
 }

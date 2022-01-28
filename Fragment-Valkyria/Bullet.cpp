@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "Bullet.h"
+#include "CollisionComponent.h"
 
 using namespace FragmentValkyria::Player;
 
@@ -47,6 +48,13 @@ void Bullet::Move() {
 
 }
 
+void Bullet::HitCheckFromLargeEnemy() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+		_stateServer->GoToState("Die");
+	}
+}
+
 void Bullet::StateBase::Draw() {
 	auto pos = AppFrame::Math::ToDX(_owner._position);
 	auto radius = static_cast<float>(Radius);
@@ -63,6 +71,9 @@ void Bullet::StateShoot::Input(InputManager& input) {
 
 void Bullet::StateShoot::Update() {
 	_owner.Move();
+	_owner._collisionComponent->LargeEnemyFromBullet();
+
+	_owner.HitCheckFromLargeEnemy();
 }
 
 void Bullet::StateDie::Enter() {
@@ -74,7 +85,7 @@ void Bullet::StateDie::Input(InputManager& input) {
 }
 
 void Bullet::StateDie::Update() {
-
+	_owner.SetDead();
 }
 
 

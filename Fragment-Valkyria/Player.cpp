@@ -96,8 +96,8 @@ void Player::ShootRotate() {
 
     auto [x, y, z] = camForward.GetXYZ();
     auto direction = Vector4(x, 0.0, z);
-    auto radian = std::atan2(x, z);
-    _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
+    auto radius = std::atan2(x, z);
+    _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
 
 }
 
@@ -223,6 +223,9 @@ void Player::StateIdle::Input(InputManager& input) {
        _owner._stateServer->PushBack("WeakShootReady");
        _owner._cameraComponent->SetZoom(true);
    }
+   if (input.GetXJoypad().XClick()) {
+       _owner._stateServer->GoToState("Reload");
+   }
 }
 void Player::StateIdle::Update() {
     _owner._collisionComponent->ObjectRangeFromPlayer();
@@ -275,6 +278,9 @@ void Player::StateRun::Input(InputManager& input) {
    else if (input.GetXJoypad().LBClick()) {
        _owner._stateServer->PushBack("WeakShootReady");
        _owner._cameraComponent->SetZoom(true);
+   }
+   if (input.GetXJoypad().XClick()) {
+       _owner._stateServer->GoToState("Reload");
    }
    if (!moved) {
        _owner._stateServer->PopBack();
@@ -387,11 +393,13 @@ void Player::StateDie::Draw() {
 
 void Player::StateWeakShootReady::Enter() {
     _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+    _coolTime = 0;
 }
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
-    if (input.GetXJoypad().RBClick() && _coolTime <= 0) {
+    if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
         _owner.WeakAttack();
+        --_owner._bulletStock;
         _coolTime = 60 * 3;
     }
     if (input.GetXJoypad().LBClick()) {
@@ -401,5 +409,28 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
 }
 
 void Player::StateWeakShootReady::Update() {
+    _owner.ShootRotate();
+
     --_coolTime;
+}
+
+void Player::StateReload::Enter() {
+    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+    _reloadCnt = 0;
+}
+
+void Player::StateReload::Input(InputManager& input) {
+
+}
+
+void Player::StateReload::Update() {
+    if (_reloadCnt > 60) {
+        _reloadCnt = 0;
+        ++_owner._bulletStock;
+        if (_owner._bulletStock > 5) {
+            _owner._stateServer->GoToState("Idle");
+        }
+    }
+
+    ++_reloadCnt;
 }
