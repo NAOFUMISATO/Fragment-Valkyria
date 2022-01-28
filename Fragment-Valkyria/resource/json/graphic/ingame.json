@@ -8,6 +8,15 @@
 			"ynum": 2,
 			"xsize": 60,
 			"ysize": 180
+		},
+		{
+			"keyname": "PlayerHP",
+			"filename": "HPFrame.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 400,
+			"ysize": 100
 		}
 	]
 }

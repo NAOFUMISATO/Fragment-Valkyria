@@ -15,6 +15,7 @@ namespace AppFrame {
       class InputManager;
    }
    namespace Resource {
+      class ResourceServer;
       class LoadResourceJson;
    }
    namespace State {
@@ -100,6 +101,7 @@ namespace AppFrame {
           * \return ‰æ‘œŠÈˆÕ•`‰æƒNƒ‰ƒX‚ÌQÆ
           */
          Texture::SimpleTextureComponent& GetSimpTexComponent() const;
+         Resource::ResourceServer& GetResServer() const;
 
       protected:
         

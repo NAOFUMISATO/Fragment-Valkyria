@@ -25,25 +25,7 @@ namespace FragmentValkyria {
           * \param gameMain ゲーム本体の参照
           */
          SpriteBase(Game::GameMain& gameMain);
-         /**
-          * \brief 初期化処理
-          */
-         void Init() override {};
-         /**
-          * \brief 入力処理
-          * \param input 入力一括管理クラスの参照
-          */
-         void Input(AppFrame::Input::InputManager& input)override {};
-         /**
-          * \brief 更新処理
-          */
-         void Update()override {};
-         /**
-          * \brief 描画処理
-          */
-         void Draw() override {};
 
-         
          virtual SpriteType GetSprType() const = 0;
          /**
           * \brief ゲームクラスの参照を取得

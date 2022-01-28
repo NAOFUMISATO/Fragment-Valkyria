@@ -8,23 +8,24 @@
 
 namespace AppFrame {
    namespace Sprite {
-      void SpriteServer::Add(std::unique_ptr<SpriteBaseRoot> obj) {
+      void SpriteServer::Add(std::unique_ptr<SpriteBaseRoot> spr) {
+         spr->Init();
          if (_updating) {
             // 更新中は保留中の動的配列に追加する
-            _pendingSprites.emplace_back(std::move(obj));
+            _pendingSprites.emplace_back(std::move(spr));
          }
          else {
             //更新中でなければ処理を回す用の動的配列に追加する
-            _runSprites.emplace_back(std::move(obj));
+            _runSprites.emplace_back(std::move(spr));
          }
       }
 
       void SpriteServer::Input(AppFrame::Input::InputManager& input) {
          _updating = true;
          // _runSpritesに登録されているActive状態のスプライトの入力処理を回す
-         for (auto&& obj : _runSprites) {
-            if (obj->IsActive()) {
-               obj->Input(input);
+         for (auto&& spr : _runSprites) {
+            if (spr->IsActive()) {
+               spr->Input(input);
             }
          }
          _updating = false;
@@ -33,9 +34,9 @@ namespace AppFrame {
       void SpriteServer::Update() {
          _updating = true;
          // _runObjectsに登録されているActive状態のスプライトの更新処理を回す
-         for (auto&& obj : _runSprites) {
-            if (obj->IsActive()) {
-               obj->Update();
+         for (auto&& spr : _runSprites) {
+            if (spr->IsActive()) {
+               spr->Update();
             }
          }
          _updating = false;
@@ -53,10 +54,10 @@ namespace AppFrame {
       }
 
       void SpriteServer::Render() {
-         for (auto&& obj : _runSprites) {
+         for (auto&& spr : _runSprites) {
             // _runSpritesに登録されているActive状態のスプライトの描画処理を回す
-            if (obj->IsActive()) {
-               obj->Draw();
+            if (spr->IsActive()) {
+               spr->Draw();
             }
          }
       }

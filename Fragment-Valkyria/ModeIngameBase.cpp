@@ -14,6 +14,7 @@
 #include "ObjectBase.h"
 #include "ModelAnimeComponent.h"
 #include "LightAndShadow.h"
+#include "SpriteBase.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -32,12 +33,14 @@ void ModeInGameBase::Enter() {
 void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
    GetObjServer().Input(input);
    GetEfcServer().Input(input);
+   GetSprServer().Input(input);
 }
 
 void ModeInGameBase::Update() {
    GetObjServer().Update();
    _lighting->Update();
    GetEfcServer().Update();
+   GetSprServer().Update();
 }
 
 void ModeInGameBase::Render() {
@@ -48,6 +51,7 @@ void ModeInGameBase::Render() {
    SetUseShadowMap(0, -1);
 
    GetEfcServer().Render();
+   GetSprServer().Render();
 
 #ifdef _DEBUG
    DebugDraw();
@@ -57,6 +61,7 @@ void ModeInGameBase::Render() {
 void ModeInGameBase::Exit() {
    GetObjServer().Clear();
    GetEfcServer().Clear();
+   GetSprServer().Clear();
    GetResServer().DeleteDuplicateModels();
    GetObjFactory().Clear();
 }
@@ -69,8 +74,8 @@ Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
 void ModeInGameBase::DebugDraw() {
    namespace AppMath = AppFrame::Math;
    using Utility = AppMath::Utility;
-   DrawFormatString(0, 0, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
-   DrawFormatString(0, 15, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
+   DrawFormatString(0, 985, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
+   DrawFormatString(0, 1000, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
    auto startX = Vector4(-10000.0, 0.0, 0.0);
    auto endX = Vector4(10000.0, 0.0, 0.0);
    DrawLine3D(AppMath::ToDX(startX), AppMath::ToDX(endX), Utility::GetColorCode(255, 0, 0));
@@ -90,7 +95,7 @@ void ModeInGameBase::DebugDraw() {
    auto targetStartZ = camTarget + Vector4(0.0, 0.0, -10.0);
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
    DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), Utility::GetColorCode(0, 0, 255));
-   DrawFormatString(0, 30, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
+   DrawFormatString(0, 1015, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
    //ÉvÉåÉCÉÑÅ[èÓïÒï`âÊ
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
    auto [px, py, pz] = playerPos.GetVec3();

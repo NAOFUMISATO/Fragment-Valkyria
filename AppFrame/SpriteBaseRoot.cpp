@@ -5,6 +5,7 @@
 #include "DxUtility.h"
 #include "ModeServer.h"
 #include "SimpleTextureComponent.h"
+#include "ResourceServer.h"
 
 namespace AppFrame {
    namespace Sprite {
@@ -29,6 +30,10 @@ namespace AppFrame {
 
       AppFrame::Resource::LoadResourceJson& SpriteBaseRoot::GetLoadJson() const {
          return _gameBase.loadresJson();
+      }
+
+      AppFrame::Resource::ResourceServer& SpriteBaseRoot::GetResServer() const {
+         return _gameBase.resServer();
       }
 
       void SpriteBaseRoot::stateServer(std::unique_ptr<StateServer> state) {

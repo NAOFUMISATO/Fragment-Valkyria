@@ -44,22 +44,14 @@ namespace AppFrame {
       }
 
       void SimpleTextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle, bool turnFrag) {
-         int width, height;
-         GetGraphSize(handle, &width, &height);
-         auto drawX = x + width / 2;
-         auto drawY = y + height / 2;
-         DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, handle, DefaultTransFlag, turnFrag);
+         DrawRotaGraph2(x, y, cx, cy, scale, angle, handle, DefaultTransFlag, turnFrag);
       }
 
       void SimpleTextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, std::vector<int> handles, int animeSpeed, bool turnFrag) {
          auto count = _gameBase.modeServer().frameCount();
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
-         int width, height;
-         GetGraphSize(handles[animeNo], &width, &height);
-         auto drawX = x + width / 2;
-         auto drawY = y + height / 2;
-         DrawRotaGraph2(drawX, drawY, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);
+         DrawRotaGraph2(x, y, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);
       }
 
       void SimpleTextureComponent::DrawBillBoard(Math::Vector4 pos, double scale, double angle, int handle) {

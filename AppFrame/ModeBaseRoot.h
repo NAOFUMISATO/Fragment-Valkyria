@@ -34,6 +34,9 @@ namespace AppFrame {
    namespace Texture {
       class SimpleTextureComponent;
    }
+   namespace Sprite {
+      class SpriteServer;
+   }
    /**
     * \brief モード関係
     */
@@ -122,6 +125,7 @@ namespace AppFrame {
           * \return 画像簡易描画クラスの参照
           */
          Texture::SimpleTextureComponent& GetSimpTexComponent() const;
+         Sprite::SpriteServer& GetSprServer() const;
          /**
           * \brief フェード時間の設定
           * \param fadeType フェード時間を指定する文字
