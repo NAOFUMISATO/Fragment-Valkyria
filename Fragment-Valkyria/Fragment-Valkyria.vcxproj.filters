@@ -272,6 +272,18 @@
     <ClCompile Include="LightAndShadow.cpp">
       <Filter>ソース ファイル\Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHP.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBase.cpp">
+      <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
