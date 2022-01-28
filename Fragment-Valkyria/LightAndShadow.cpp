@@ -2,7 +2,58 @@
 #include "GameMain.h"
 
 namespace {
-   constexpr auto LightDiffY = 100.0;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("lightshadow", { "followlight_diff_y" ,"fixedlight_area" ,"fixedlight_atten_first" ,
+   "fixedlight_atten_second","fixedlight_atten_third","followlight_area","followlight_atten_first" ,"followlight_atten_second" ,
+     "followlight_atten_third","fixedlight_red","fixedlight_green","fixedlight_blue","fixedlight_alpha","followlight_red" ,"followlight_green" ,
+     "followlight_blue","followlight_alpha","shadow_resolution" });
+   const double FollowLightDiffY = paramMap["followlight_diff_y"];
+   const float FixedLightArea = paramMap["fixedlight_area"];
+   const float FixedLightAttenFirst = paramMap["fixedlight_atten_first"];
+   const float FixedLightAttenSecond = paramMap["fixedlight_atten_second"];
+   const float FixedLightAttenThird= paramMap["fixedlight_atten_third"];
+   const float FollowLightArea = paramMap["followlight_area"];
+   const float FollowLightAttenFirst = paramMap["followlight_atten_first"];
+   const float FollowLightAttenSecond = paramMap["followlight_atten_second"];
+   const float FollowLightAttenThird = paramMap["followlight_atten_third"];
+   const float FixedLightRed = paramMap["fixedlight_red"];
+   const float FixedLightGreen = paramMap["fixedlight_green"];
+   const float FixedLightBlue = paramMap["fixedlight_blue"];
+   const float FixedLightAlpha = paramMap["fixedlight_alpha"];
+   const float FollowLightRed = paramMap["followlight_red"];
+   const float FollowLightGreen = paramMap["followlight_green"];
+   const float FollowLightBlue = paramMap["followlight_blue"];
+   const float FollowLightAlpha = paramMap["followlight_alpha"];
+   const int ShadowResolution = paramMap["shadow_resolution"];
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("lightshadow", { "fixedlight_pos" ,"shaodw_minarea" ,"shaodw_maxarea" });
+   const auto FixedLightPos = vecParamMap["fixedlight_pos"];
+   const auto ShadowMinArea = vecParamMap["shaodw_minarea"];
+   const auto ShadowMaxArea = vecParamMap["shaodw_maxarea"];
+
+#ifdef _DEBUG
+   constexpr auto MatDifRed = 0.0f;
+   constexpr auto MatDifGreen = 0.0f;
+   constexpr auto MatDifBlue = 0.0f;
+   constexpr auto MatDifAlpha = 1.0f;
+   constexpr auto MatSpeRed = 0.0f;
+   constexpr auto MatSpeGreen = 0.0f;
+   constexpr auto MatSpeBlue = 0.0f;
+   constexpr auto MatSpeAlpha = 0.0f;
+   constexpr auto MatAmbRed = 0.0f;
+   constexpr auto MatAmbGreen = 0.0f;
+   constexpr auto MatAmbBlue = 0.0f;
+   constexpr auto MatAmbAlpha = 0.0f;
+   constexpr auto MatEmiRed = 0.0f;
+   constexpr auto MatEmiGreen = 0.0f;
+   constexpr auto MatEmiBlue = 0.5f;
+   constexpr auto MatEmiAlpha = 0.0f;
+   constexpr auto MatPower = 20.0f;
+   constexpr auto LightSphereDiffY = 100.0;
+   constexpr auto LightSphereRadius = 80.0f;
+   constexpr auto LightSphereDiv = 32;
+   constexpr auto LightSphereRed = 0;
+   constexpr auto LightSphereGreen = 128;
+   constexpr auto LightSphereBlue = 200;
+#endif
 }
 
 using namespace FragmentValkyria::Lighting;
@@ -13,40 +64,41 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
 
 void LightAndShadow::Init() {
    namespace AppMath = AppFrame::Math;
+#ifdef _DEBUG
    // マテリアルの自己発光色設定
    MATERIALPARAM material;
-   material.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);
-   material.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
-   material.Ambient = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
-   material.Emissive = GetColorF(0.0f, 0.0f, 0.5f, 0.0f);
-   material.Power = 20.0f;
+   material.Diffuse = GetColorF(MatDifRed, MatDifGreen, MatDifBlue, MatDifAlpha);
+   material.Specular = GetColorF(MatSpeRed, MatSpeGreen, MatSpeBlue, MatSpeAlpha);
+   material.Ambient = GetColorF(MatAmbRed, MatAmbGreen, MatAmbBlue, MatAmbAlpha);
+   material.Emissive = GetColorF(MatEmiRed, MatEmiGreen, MatEmiBlue, MatEmiAlpha);
+   material.Power = MatPower;
    SetMaterialParam(material);
+#endif
 
    SetLightEnable(false);
-
    auto followLightPos = _gameMain.objServer().GetVecData("PlayerHeadPos");
-   followLightPos.SetY(followLightPos.GetY() + 300.0);
+   followLightPos.SetY(followLightPos.GetY() + FollowLightDiffY);
    _lightPositions = { 
-      {-3000.0,3000.0,0},
+      FixedLightPos,
       followLightPos
    };
 
    auto [firstLightPos, secondLightPos] = _lightPositions;
    
    _lightHandles = {
-      CreatePointLightHandle(AppMath::ToDX(firstLightPos), 10000.f, 0.00000001f, 0.0000005f, 0.0000001f),
-      CreatePointLightHandle(AppMath::ToDX(secondLightPos),5000.f, 0.00001f, 0.00005f, 0.00001f)
+      CreatePointLightHandle(AppMath::ToDX(firstLightPos), FixedLightArea,FixedLightAttenFirst, FixedLightAttenSecond, FixedLightAttenThird),
+      CreatePointLightHandle(AppMath::ToDX(secondLightPos),FollowLightArea, FollowLightAttenFirst, FollowLightAttenSecond, FollowLightAttenThird)
    };
 
    auto [firstLightHandle, secondLightHandle] = _lightHandles;
 
-   SetLightDifColorHandle(firstLightHandle, GetColorF(0.5f, 1.0f, 0.5f, 1.0f));
-   SetLightDifColorHandle(secondLightHandle, GetColorF(0.5f, 0.5f, 1.0f, 1.0f));
+   SetLightDifColorHandle(firstLightHandle, GetColorF(FixedLightRed, FixedLightGreen, FixedLightBlue, FixedLightAlpha));
+   SetLightDifColorHandle(secondLightHandle, GetColorF(FollowLightRed, FollowLightGreen, FollowLightBlue, FollowLightAlpha));
 
-   _shadowHandle = MakeShadowMap(8192, 8192);
+   _shadowHandle = MakeShadowMap(ShadowResolution, ShadowResolution);
 
-   auto shadowMinArea = Vector4(-2500.0, -1.0, -2500.0);
-   auto shadowMaxArea = Vector4(2000.0, 1000.0, 2000.0);
+   auto shadowMinArea = ShadowMinArea;
+   auto shadowMaxArea = ShadowMaxArea;
 
    SetShadowMapDrawArea(_shadowHandle, AppMath::ToDX(shadowMinArea), AppMath::ToDX(shadowMaxArea));
 }
@@ -55,10 +107,10 @@ void LightAndShadow::Update() {
    namespace AppMath = AppFrame::Math;
 
    auto plyHeadPos= _gameMain.objServer().GetVecData("PlayerHeadPos");
-   plyHeadPos.SetY(plyHeadPos.GetY() + 300.0);
+   plyHeadPos.SetY(plyHeadPos.GetY() + FollowLightDiffY);
    
    _lightPositions = {
-      {-3000,3000.0,0},
+      FixedLightPos,
       {plyHeadPos}
    };
 
@@ -85,12 +137,14 @@ void LightAndShadow::Render() {
    namespace AppMath = AppFrame::Math;
    using Utility = AppFrame::Math::Utility;
    auto [firstLightPos, secondLightPos] = _lightPositions;
-   firstLightPos.SetY(firstLightPos.GetY() + LightDiffY);
-   secondLightPos.SetY(secondLightPos.GetY() + LightDiffY);
-   DrawSphere3D(AppMath::ToDX(firstLightPos), 80.f, 32,
-      Utility::GetColorCode(255, 0, 0), Utility::GetColorCode(255, 0, 0), TRUE);
-   DrawSphere3D(AppMath::ToDX(secondLightPos), 80.f, 32,
-      Utility::GetColorCode(0, 255, 0), Utility::GetColorCode(0, 255, 0), TRUE);
+   firstLightPos.SetY(firstLightPos.GetY() + LightSphereDiffY);
+   secondLightPos.SetY(secondLightPos.GetY() + LightSphereDiffY);
+   DrawSphere3D(AppMath::ToDX(firstLightPos), LightSphereRadius, LightSphereDiv,
+      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue),
+      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), TRUE);
+   DrawSphere3D(AppMath::ToDX(secondLightPos), LightSphereRadius, LightSphereDiv,
+      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), 
+      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), TRUE);
 #endif
 }
 

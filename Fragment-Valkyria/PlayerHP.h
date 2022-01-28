@@ -18,15 +18,16 @@ namespace FragmentValkyria {
          void Draw()override;
 
          virtual SpriteType GetSprType() const { return SpriteType::UI; }
+
       private:
          double _hp{ 100.0 };
          double _hpRange{ 100.0 };
          double _rate{ 0.0 };
-         double _frontHP{ 0.0 };
-         double _backHP{ 0.0 };
-         bool _subFlag{ true };
+         double _oldFrontHP{ 0.0 };
+         double _oldBackHP{ 0.0 };
+         bool _rateReset{ true };
          bool _shake{ false };
-         unsigned int _cnt{0};
+         unsigned int _shakeCnt{0};
          Color _frontColor{ 255,255,255 };
          Rect _frontBar{ 0,0,0,0 };
          Triangle _frontTriangle{ {0,0},{0,0},{0,0} };

@@ -1,0 +1,49 @@
+{
+	"lightshadow": [
+		{
+			"followlight_diff_y":300.0,
+			"fixedlight_area":10000.0,
+			"fixedlight_atten_first":0.00000001,
+			"fixedlight_atten_second":0.0000005,
+			"fixedlight_atten_third":0.0000001,
+			"followlight_area":5000.0,
+			"followlight_atten_first":0.00001,
+			"followlight_atten_second":0.00005,
+			"followlight_atten_third":0.00001,
+			"fixedlight_red":0.5,
+			"fixedlight_green":1.0,
+			"fixedlight_blue":0.5,
+			"fixedlight_alpha":1.0,
+			"followlight_red":0.5,
+			"followlight_green":0.5,
+			"followlight_blue":1.0,
+			"followlight_alpha":1.0,
+			"shadow_resolution":8192
+		}	
+	],
+	"lightshadow_vec": [
+		{
+			"fixedlight_pos": [
+				{
+					"x": -3000.0,
+					"y": 3000.0,
+					"z": 0
+				}
+			],
+			"shaodw_minarea": [
+				{
+					"x": -2500.0,
+					"y": -1.0,
+					"z": -2500.0
+				}
+			],
+			"shaodw_maxarea": [
+				{
+					"x": 2000.0,
+					"y": 1000.0,
+					"z": 2000.0
+				}
+			]
+		}
+	]	
+}

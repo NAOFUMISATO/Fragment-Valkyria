@@ -77,7 +77,7 @@ namespace AppFrame {
 
       AppFrame::Math::Vector4 SpriteServer::GetVecData(std::string_view key) {
 #ifndef _DEBUG
-         if (!_objRegistry.contains(key.data())) {
+         if (!_sprRegistry.contains(key.data())) {
             return{ 0,0,0 };
          }
 #else

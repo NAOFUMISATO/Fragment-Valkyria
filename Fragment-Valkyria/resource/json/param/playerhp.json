@@ -1,0 +1,27 @@
+{
+	"playerhp": [
+		{
+			"frontcolor_red":0,
+			"frontcolor_green":255,
+			"frontcolor_blue":0,
+			"backcolor_red":255,
+			"backcolor_green":0,
+			"backcolor_blue":0,
+			"shake_frame":30,
+			"shake_width":3.0,
+			"redbar_speed":0.02,
+			"max_hp":100.0
+		}	
+	],	
+	"playerhp_vec": [
+		{
+			"defalut_pos": [
+				{
+					"x": 30.0,
+					"y": 30.0,
+					"z": 0
+				}
+			]
+		}
+	]
+}
