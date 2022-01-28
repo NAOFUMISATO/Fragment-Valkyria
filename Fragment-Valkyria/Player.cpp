@@ -62,7 +62,7 @@ void Player::Update() {
    GetObjServer().RegistVector("PlayerFor",GetForward());
 
    auto handle = _modelAnimeComponent.get()->modelHandle();
-   auto headFrame = _modelAnimeComponent.get()->FindFrameChild("SDChar_Root", "SDChar_Head");
+   auto headFrame = _modelAnimeComponent.get()->FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_Head");
    auto headPos = MV1GetFramePosition(handle, headFrame);
    GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
