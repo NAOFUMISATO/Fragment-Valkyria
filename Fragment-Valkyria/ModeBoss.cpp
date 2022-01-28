@@ -7,6 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include "ModeBoss.h"
+#include "BulletCreator.h"
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
@@ -44,6 +45,7 @@ void ModeBoss::Enter() {
    objFactory.Register("Stage", std::make_unique<Create::BossStageCreator>(_gameMain));
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
+   objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
 
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用

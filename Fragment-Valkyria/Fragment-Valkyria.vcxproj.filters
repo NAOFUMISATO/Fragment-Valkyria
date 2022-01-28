@@ -183,6 +183,12 @@
     <ClInclude Include="PlayerHP.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -265,12 +271,6 @@
     </ClCompile>
     <ClCompile Include="LightAndShadow.cpp">
       <Filter>ソース ファイル\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteBase.cpp">
-      <Filter>ソース ファイル\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerHP.cpp">
-      <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,8 @@
  * \author NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
-#include "Player.h"
 #include "PlayerCreator.h"
+#include "Player.h"
 #include "ObjectBase.h"
 #include "GameMain.h"
 #include "CameraComponent.h"
@@ -48,6 +48,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("ShootReady", std::make_shared<Player::Player::StateShootReady>(*player));
    state->Register("KnockBack", std::make_shared<Player::Player::StateKnockBack>(*player));
    state->Register("Die", std::make_shared<Player::Player::StateDie>(*player));
+   state->Register("WeakShootReady", std::make_shared<Player::Player::StateWeakShootReady>(*player));
+   state->Register("Reload", std::make_shared<Player::Player::StateReload>(*player));
    player->stateServer(std::move(state));
 
    _gameMain.sprServer().Add(std::make_unique<Player::PlayerHP>(_gameMain));
