@@ -20,7 +20,6 @@ namespace FragmentValkyria {
 			Gatling(Game::GameMain& gameMain);
 
 			virtual ~Gatling() override = default;
-
             /**
             * \brief オブジェクトの種類を返す
             * \return プレイヤー
