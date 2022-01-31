@@ -19,12 +19,12 @@ using namespace FragmentValkyria::Player;
 
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",
-        { "movespeed", "capsulePos1", "capsulePos2", "capsuleRadian"});
+        { "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius"});
 
-    const double MoveSpeed = paramMap["movespeed"];
-    const double CapsulePos1 = paramMap["capsulePos1"];
-    const double CapsulePos2 = paramMap["capsulePos2"];
-    const double CapsuleRadian = paramMap["capsuleRadian"];
+    const double MoveSpeed = paramMap["move_speed"];
+    const double CapsulePos1 = paramMap["capsule_pos1"];
+    const double CapsulePos2 = paramMap["capsule_pos2"];
+    const double CapsuleRadius = paramMap["capsule_radius"];
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -185,7 +185,7 @@ void Player::StateBase::Draw() {
 #ifdef _DEBUG
    auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
    auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
-   auto radian = static_cast<float>(CapsuleRadian);
+   auto radian = static_cast<float>(CapsuleRadius);
   
    DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif

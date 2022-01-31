@@ -30,7 +30,7 @@ ModeBoss::ModeBoss(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
 void ModeBoss::Init() {
    auto& loadJson = GetLoadJson();
    loadJson.LoadModels("ingame");
-   loadJson.LoadEffects("player");
+   loadJson.LoadEffects("ingame");
    loadJson.LoadTextures("ingame");
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");

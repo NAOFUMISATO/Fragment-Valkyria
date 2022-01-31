@@ -16,7 +16,7 @@ using namespace FragmentValkyria::Enemy;
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
 		{ "range", "gravity", "shoot_speed", "up_speed", "rotate_angle",
-		"updown_range", "capsule_pos1", "capsule_pos2", "capsule_radian",
+		"updown_range", "capsule_pos1", "capsule_pos2", "capsule_radius",
 		"fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
 
 	const double Range = paramMap["range"];
@@ -27,7 +27,7 @@ namespace {
 	const double UpDownRange = paramMap["updown_range"];
 	const double CapsulePos1 = paramMap["capsule_pos1"];
 	const double CapsulePos2 = paramMap["capsule_pos2"];
-	const double CapsuleRadian = paramMap["capsule_radian"];
+	const double CapsuleRadius = paramMap["capsule_radius"];
 	const double FallPointPosY = paramMap["fallpoint_pos_y"];
 	const double FallPointScale = paramMap["fallpoint_scale"];
 	const int FallPointAnimeSpeed = paramMap["fallpoint_animespeed"];
@@ -92,19 +92,19 @@ void FallObject::Save() {
 	_rotateAngle += 0.01;
 	auto radian = AppFrame::Math::Utility::DegreeToRadian(_rotateAngle);
 	auto sinValue = std::sin(radian);
-	auto xyz = /*RotateAngle*/180.0 * AppFrame::Math::DEGREES_180 * sinValue;
+	auto xyz = RotateAngle * AppFrame::Math::DEGREES_180 * sinValue;
 	_rotation = Vector4(xyz, xyz, xyz);
 
 	_upDownAngle += 2.0;
 	auto upDownRadian = AppFrame::Math::Utility::DegreeToRadian(_upDownAngle);
 	auto upDownSinValue = std::sin(upDownRadian);
-	auto y = /*UpDownRange*/30.0 * upDownSinValue;
+	auto y = UpDownRange * upDownSinValue;
 	_position = _vecBeforeSave + Vector4(0.0, 300.0 + y, 0.0);
 
 }
 
 void FallObject::Up() {
-	_position.Add(0.0, /*UpSpeed*/3.0, 0.0);
+	_position.Add(0.0, UpSpeed, 0.0);
 
 	if (_position.GetY() > 300.0) {
 		_saveFlag = true;
@@ -112,7 +112,7 @@ void FallObject::Up() {
 }
 
 void FallObject::Shoot() {
-	auto move = _shootVec * /*ShootSpeed*/3.0;
+	auto move = _shootVec * ShootSpeed;
 	_position = _position + move;
 }
 
@@ -120,12 +120,12 @@ void FallObject::StateBase::Draw() {
 	_owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
 	auto pos = AppFrame::Math::ToDX(_owner._position);
-	auto radian = static_cast<float>(/*Range*/300.0);
+	auto radian = static_cast<float>(Range);
 	DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
 
 	auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
 	auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
-	radian = static_cast<float>(CapsuleRadian);
+	radian = static_cast<float>(CapsuleRadius);
 
 	DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
@@ -156,7 +156,7 @@ void FallObject::StateFall::Input(InputManager& input) {
 }
 
 void FallObject::StateFall::Update() {
-	auto posY = (0.5 * 0.01/*Gravity*/ *_owner._fallTimer * _owner._fallTimer);
+	auto posY = (0.5 * Gravity*_owner._fallTimer * _owner._fallTimer);
 
 	_owner._position.Add(0.0, -posY, 0.0);
 

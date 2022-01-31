@@ -9,7 +9,7 @@
             "updown_range": 30.0,
 			"capsule_pos1": 30.0,
 			"capsule_pos2": 60.0,
-			"capsule_radian": 50.0,
+			"capsule_radius": 50.0,
 			"fallpoint_pos_y":-10.0,
 			"fallpoint_scale":0.7,
 			"fallpoint_animespeed":1

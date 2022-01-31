@@ -17,6 +17,15 @@
 			"ynum": 1,
 			"xsize": 400,
 			"ysize": 100
+		},
+		{
+			"keyname": "RemainingBullet",
+			"filename": "RemainingBullet.png",
+			"allnum": 2,
+			"xnum": 2,
+			"ynum": 1,
+			"xsize": 60,
+			"ysize": 120
 		}
 	]
 }
