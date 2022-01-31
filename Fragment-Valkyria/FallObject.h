@@ -50,6 +50,7 @@ namespace FragmentValkyria {
         private:
             void HitCheckFromPlayerPoint();
             void HitCheckFromLargeEnemy();
+            void CheckPlayerKnockBack();
             void Save();
             void Up();
             void Shoot();

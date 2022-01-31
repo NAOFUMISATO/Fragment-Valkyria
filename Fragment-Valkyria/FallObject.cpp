@@ -88,6 +88,13 @@ void FallObject::HitCheckFromLargeEnemy() {
 	}
 }
 
+void FallObject::CheckPlayerKnockBack() {
+	auto result = _collisionComponent->knockBack();
+	if (result) {
+		_stateServer->PushBack("Die");
+	}
+}
+
 void FallObject::Save() {
 	_rotateAngle += 0.01;
 	auto radian = AppFrame::Math::Utility::DegreeToRadian(_rotateAngle);
@@ -198,6 +205,8 @@ void FallObject::StateSave::Update() {
 	else {
 		_owner.Save();
 	}
+	_owner._collisionComponent->PlayerKnockBack();
+	_owner.CheckPlayerKnockBack();
 }
 
 void FallObject::StateShoot::Enter() {

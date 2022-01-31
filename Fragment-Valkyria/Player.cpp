@@ -136,7 +136,11 @@ void Player::HitCheckFromGatling() {
 
         _hp -= _collisionComponent->damage();
 
+        _collisionComponent->knockBack(true);
+
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+
+        _cameraComponent->SetZoom(false);
 
         _stateServer->PushBack("KnockBack");
     }
@@ -169,7 +173,11 @@ void Player::HitCheckFromFallObject() {
 
         _hp -= _collisionComponent->damage();
 
+        _collisionComponent->knockBack(true);
+
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+
+        _cameraComponent->SetZoom(false);
 
         _stateServer->PushBack("KnockBack");
     }
@@ -334,6 +342,11 @@ void Player::StateShootReady::Input(InputManager& input) {
 
 void Player::StateShootReady::Update() {
     _owner.ShootRotate();
+
+    _owner._collisionComponent->GatlingFromPlayer();
+
+    _owner.HitCheckFromFallObject();
+    _owner.HitCheckFromGatling();
 }
 
 void Player::StateShootReady::Draw() {
@@ -352,8 +365,8 @@ void Player::StateKnockBack::Update() {
     if (_owner._freezeTime > 0) {
         _owner.Move(_owner._knockBack);
         auto [x, y, z] = _owner._knockBack.GetVec3();
-        auto radian = std::atan2(-x, -z);
-        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
+        auto radius = std::atan2(-x, -z);
+        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
 
         --_owner._freezeTime;
         return;
@@ -362,7 +375,8 @@ void Player::StateKnockBack::Update() {
         _owner._stateServer->GoToState("Die");
     }
     else {
-        _owner._stateServer->PopBack();
+        _owner.collisionComponent().knockBack(false);
+        _owner._stateServer->GoToState("Idle");
     }
 }
 
