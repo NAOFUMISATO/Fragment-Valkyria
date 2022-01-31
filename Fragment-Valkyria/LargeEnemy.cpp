@@ -288,3 +288,11 @@ void LargeEnemy::StateMove::Update() {
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
 }
+
+void LargeEnemy::StateLaser::Enter() {
+
+}
+
+void LargeEnemy::StateLaser::Update() {
+
+}
