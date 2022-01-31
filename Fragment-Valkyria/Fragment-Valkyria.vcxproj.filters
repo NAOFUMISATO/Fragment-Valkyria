@@ -189,6 +189,9 @@
     <ClInclude Include="BulletCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
+    <ClInclude Include="RemainingBullet.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -283,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="SpriteBase.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="RemainingBullet.cpp">
+      <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

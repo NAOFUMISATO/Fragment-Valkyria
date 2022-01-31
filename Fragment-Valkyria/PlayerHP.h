@@ -11,10 +11,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-   // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief プレイヤー関係
     */
