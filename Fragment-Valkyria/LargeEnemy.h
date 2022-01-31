@@ -211,6 +211,27 @@ namespace FragmentValkyria {
             private:
                 bool _endGetplyPos{ true };
             };
+            /**
+            * \class ガトリング攻撃状態クラス
+            * \brief ガトリング攻撃状態の処理を回す
+            */
+            class StateLaser : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateLaser(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
         };
     }
 }
