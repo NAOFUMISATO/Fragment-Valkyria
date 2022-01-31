@@ -32,6 +32,30 @@ void PoorEnemyGatling::Draw() {
 
 }
 
+void PoorEnemyGatling::StateBase::Draw() {
+
+}
+
+void PoorEnemyGatling::StateIdle::Enter() {
+}
+
+void PoorEnemyGatling::StateIdle::Input(InputManager& input) {
+
+}
+
+void PoorEnemyGatling::StateIdle::Update() {
+
+}
+
+void PoorEnemyGatling::StateMove::Enter() {
+
+}
+
 void PoorEnemyGatling::StateMove::Input(InputManager& input) {
 
 }
+
+void PoorEnemyGatling::StateMove::Update() {
+
+}
+
