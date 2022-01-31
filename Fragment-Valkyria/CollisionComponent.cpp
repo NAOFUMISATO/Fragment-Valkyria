@@ -267,6 +267,20 @@ void CollisionComponent::LargeEnemyFromBullet() {
 
 }
 
+void CollisionComponent::PlayerKnockBack() {
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+			continue;
+		}
+		if (objectBase.collisionComponent().knockBack()) {
+			_owner.collisionComponent().knockBack(true);
+		}
+	}
+}
+
 FragmentValkyria::Object::ObjectBase& CollisionComponent::ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj) {
 #ifndef _DEBUG
 	auto& objectBase = dynamic_cast<Object::ObjectBase&>(obj);

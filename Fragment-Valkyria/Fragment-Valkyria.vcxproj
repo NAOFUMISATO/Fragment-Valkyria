@@ -177,6 +177,7 @@
     <ClInclude Include="GatlingCreator.h" />
     <ClInclude Include="LargeEnemy.h" />
     <ClInclude Include="LargeEnemyCreator.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="LightAndShadow.h" />
     <ClInclude Include="LoadStageFromJson.h" />
     <ClInclude Include="ModeBase.h" />
@@ -192,6 +193,8 @@
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="BossStageCreator.h" />
     <ClInclude Include="PlayerHP.h" />
+    <ClInclude Include="PoorEnemyGatringCreator.h" />
+    <ClInclude Include="PoorEnemyGatling.h" />
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
@@ -211,6 +214,7 @@
     <ClCompile Include="LargeEnemy.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LargeEnemyCreator.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="LightAndShadow.cpp" />
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeBase.cpp" />
@@ -225,6 +229,8 @@
     <ClCompile Include="PlayerCreator.cpp" />
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="BossStageCreator.cpp" />
+    <ClCompile Include="PoorEnemyGatling.cpp" />
+    <ClCompile Include="PoorEnemyGatringCreator.cpp" />
     <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="StageModelComponent.cpp" />
     <ClCompile Include="PlayerHP.cpp" />

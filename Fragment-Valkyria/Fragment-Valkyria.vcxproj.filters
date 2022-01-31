@@ -189,6 +189,15 @@
     <ClInclude Include="BulletCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
+    <ClInclude Include="PoorEnemyGatling.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="PoorEnemyGatringCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -271,6 +280,27 @@
     </ClCompile>
     <ClCompile Include="LightAndShadow.cpp">
       <Filter>ソース ファイル\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerHP.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBase.cpp">
+      <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="PoorEnemyGatling.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PoorEnemyGatringCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

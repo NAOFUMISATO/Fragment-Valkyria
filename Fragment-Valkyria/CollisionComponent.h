@@ -57,6 +57,8 @@ namespace FragmentValkyria {
 
 			void LargeEnemyFromBullet();
 
+			void PlayerKnockBack();
+
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }
 
@@ -67,6 +69,10 @@ namespace FragmentValkyria {
 			void damage(double damage) { _damage = damage; }
 
 			double damage() { return _damage; }
+
+			void knockBack(bool knockBack) { _knockBack = knockBack; }
+
+			bool knockBack() { return _knockBack; }
 		private:
 
 			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
@@ -75,6 +81,7 @@ namespace FragmentValkyria {
 			std::unique_ptr<Report> _report;
 			double _damage{ 0.0 };
 
+			bool _knockBack{ false };
 			Vector4 _hitPos;
 
 		};
