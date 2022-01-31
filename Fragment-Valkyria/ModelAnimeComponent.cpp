@@ -23,6 +23,7 @@ void ModelAnimeComponent::Init() {
 }
 
 void ModelAnimeComponent::Update() {
+
    // 再生時間をセットする
    MV1SetAttachAnimTime(_modelHandle, _attachNum, _playTime);
 
@@ -67,10 +68,6 @@ void ModelAnimeComponent::Update() {
          _blending = false; // ブレンド中かの判定をfalse
       }
    }
-}
-
-void ModelAnimeComponent::Draw() {
-   MV1DrawModel(_modelHandle);
 }
 
 void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate,double animeSpeed) {

@@ -29,7 +29,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	largeEnemy->rotation(Vector4(0.0, 0.0, 0.0));
 
 	auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
-	model->SetModel("LargeEnemy", 1000);
+	model->SetModel("LargeEnemy");
 	largeEnemy->modelAnimeComponent(std::move(model));
 
 	auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));

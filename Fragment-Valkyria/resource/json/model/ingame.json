@@ -2,11 +2,11 @@
 	"ingame": [
 		{
 			"keyname": "Player",
-			"filename": "SDChar.mv1"
+			"filename": "Kamilla_SOTAI_test0128.mv1"
 		},
 		{
 			"keyname": "LargeEnemy",
-			"filename": "boss.mv1"
+			"filename": "boss_shuugou2.mv1"
 		},
 		{
 			"keyname": "SkySphere",
