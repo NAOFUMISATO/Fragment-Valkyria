@@ -19,18 +19,18 @@ using namespace FragmentValkyria::Collision;
 
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
-		{ "fallObjectRange", "plyRadius", "plyCapsulePos1",
-		"plyCapsulePos2", "gatlingRadius", "fallObjectCapsulePos1",
-		"fallObjectCapsulePos2", "fallObjectRadius" });
+		{ "fallobject_range", "ply_radius", "ply_capsule_pos1",
+		 "ply_capsule_pos2", "gatling_radius", "fallobject_capsule_pos1",
+		"fallobject_capsule_pos2", "fallobject_radius" });
 
-	const double FallObjectRange = paramMap["fallObjectRange"];     //!< フォールオブジェクトの球の半径
-	const double PlayerRadius = paramMap["plyRadius"];              //!< プレイヤーのカプセルの半径
-	const double PlayerCapsulePos1 = paramMap["plyCapsulePos1"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-	const double PlayerCapsulePos2 = paramMap["plyCapsulePos2"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-	const double GatlingRadius = paramMap["gatlingRadius"];         //!< ガトリングの半径
-	const double FallObjectCapsulePos1 = paramMap["fallObjectCapsulePos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-	const double FallObjectCapsulePos2 = paramMap["fallObjectCapsulePos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-	const double FallObjectRadius = paramMap["fallObjectRadius"];         //!< フォールオブジェクトのカプセルの半径
+	const double FallObjectRange = paramMap["fallobject_range"];     //!< フォールオブジェクトの球の半径
+	const double PlayerRadius = paramMap["ply_radius"];              //!< プレイヤーのカプセルの半径
+	const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+	const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+	const double GatlingRadius = paramMap["gatling_radius"];         //!< ガトリングの半径
+	const double FallObjectCapsulePos1 = paramMap["fallobject_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+	const double FallObjectCapsulePos2 = paramMap["fallobject_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+	const double FallObjectRadius = paramMap["fallobject_radius"];         //!< フォールオブジェクトのカプセルの半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {

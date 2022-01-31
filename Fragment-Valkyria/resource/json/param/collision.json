@@ -1,14 +1,14 @@
 {
 	"collision": [
 		{
-			"fallObjectRange": 300.0,
-			"plyRadius": 30.0,
-            "plyCapsulePos1": 30.0,
-            "plyCapsulePos2": 60.0,
-			"gatlingRadius": 30.0,
-			"fallObjectCapsulePos1": 30.0,
-			"fallObjectCapsulePos2": 60.0,
-			"fallObjectRadius": 50.0
+			"fallobject_range": 300.0,
+			"ply_radius": 30.0,
+            "ply_capsule_pos1": 30.0,
+            "ply_capsule_pos2": 60.0,
+			"gatling_radius": 30.0,
+			"fallobject_capsule_pos1": 30.0,
+			"fallobject_capsule_pos2": 60.0,
+			"fallobject_radius": 50.0
 		}
 	],
 	"collision_vec": [
