@@ -19,18 +19,18 @@ using namespace FragmentValkyria::Collision;
 
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
-		{ "fallObjectRange", "plyRadian", "plyCapsulePos1",
-		"plyCapsulePos2", "gatlingRadian", "fallObjectCapsulePos1",
-		"fallObjectCapsulePos2", "fallObjectRadian" });
+		{ "fallObjectRange", "plyRadius", "plyCapsulePos1",
+		"plyCapsulePos2", "gatlingRadius", "fallObjectCapsulePos1",
+		"fallObjectCapsulePos2", "fallObjectRadius" });
 
 	const double FallObjectRange = paramMap["fallObjectRange"];     //!< フォールオブジェクトの球の半径
-	const double PlayerRadian = paramMap["plyRadian"];              //!< プレイヤーのカプセルの半径
+	const double PlayerRadius = paramMap["plyRadius"];              //!< プレイヤーのカプセルの半径
 	const double PlayerCapsulePos1 = paramMap["plyCapsulePos1"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
 	const double PlayerCapsulePos2 = paramMap["plyCapsulePos2"];    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-	const double GatlingRadian = paramMap["gatlingRadian"];         //!< ガトリングの半径
+	const double GatlingRadius = paramMap["gatlingRadius"];         //!< ガトリングの半径
 	const double FallObjectCapsulePos1 = paramMap["fallObjectCapsulePos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
 	const double FallObjectCapsulePos2 = paramMap["fallObjectCapsulePos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-	const double FallObjectRadian = paramMap["fallObjectRadian"];         //!< フォールオブジェクトのカプセルの半径
+	const double FallObjectRadius = paramMap["fallObjectRadius"];         //!< フォールオブジェクトのカプセルの半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -133,7 +133,7 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 		auto plyPos = objectBase.position();
 		auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, PlayerCapsulePos1, 0.0);
 		plyPos.Add(0.0, PlayerCapsulePos2/*60.0*/, 0.0);
-		auto radian = static_cast<float>(PlayerRadian/*30.0*/);
+		auto radian = static_cast<float>(PlayerRadius/*30.0*/);
 		
 		auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
 
@@ -166,7 +166,7 @@ void CollisionComponent::GatlingFromObjectModel() {
 		}
 		// ガトリング側の球を設定
 		auto gatlingPos = objectBase.position();
-		auto radian = static_cast<float>(GatlingRadian);
+		auto radian = static_cast<float>(GatlingRadius);
 
 		auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
 
@@ -182,7 +182,7 @@ void CollisionComponent::GatlingFromPlayer() {
 	auto playerPos = _owner.position();
 	auto capsulePos1 = playerPos + Vector4(0.0, 30.0, 0.0);
 	auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
-	auto casuleRadian = PlayerRadian/*30.0*/;
+	auto casuleRadian = PlayerRadius/*30.0*/;
 
 	AppFrame::Math::Capsule plyCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
 
@@ -195,7 +195,7 @@ void CollisionComponent::GatlingFromPlayer() {
 		}
 
 		auto gatling = objectBase.position();
-		auto gatlingRadian = GatlingRadian/*100.0*/;
+		auto gatlingRadian = GatlingRadius/*100.0*/;
 
 		AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlingRadian);
 		if (AppFrame::Math::Utility::CollisionCapsuleSphere(plyCapsule, gatlingSphere)) {
@@ -215,7 +215,7 @@ void CollisionComponent::ObjectModelFromLargeEnemy() {
 	auto fallObjectPos = _owner.position();
 	auto capsulePos1 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos1, 0.0);
 	auto capsulePos2 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos2, 0.0);
-	auto capsuleRadian = static_cast<float>(FallObjectRadian);
+	auto capsuleRadian = static_cast<float>(FallObjectRadius);
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 

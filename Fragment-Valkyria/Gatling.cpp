@@ -14,10 +14,10 @@ using namespace FragmentValkyria::Enemy;
 
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",
-		{ "speed", "radian"});
+		{ "speed", "radius"});
 
 	const double Speed = paramMap["speed"];
-	const double Radian = paramMap["radian"];
+	const double Radius = paramMap["radius"];
 }
 
 Gatling::Gatling(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -70,7 +70,7 @@ void Gatling::HitCheckFromPlayer() {
 void Gatling::StateBase::Draw() {
 	/*_owner._modelAnimeComponent->Draw();*/
 	auto position = AppFrame::Math::ToDX(_owner._position);
-	auto radian = static_cast<float>(Radian);
+	auto radian = static_cast<float>(Radius);
 	
 	DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
 	
@@ -104,7 +104,7 @@ void Gatling::StateDie::Update() {
 
 void Gatling::StateDie::Draw() {
 	auto position = AppFrame::Math::ToDX(_owner._position);
-	auto radian = static_cast<float>(Radian);
+	auto radian = static_cast<float>(Radius);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
