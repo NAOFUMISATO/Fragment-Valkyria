@@ -195,6 +195,7 @@
     <ClInclude Include="PlayerHP.h" />
     <ClInclude Include="PoorEnemyGatringCreator.h" />
     <ClInclude Include="PoorEnemyGatling.h" />
+    <ClInclude Include="RemainingBullet.h" /> 
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="BossStageCreator.cpp" />
     <ClCompile Include="PoorEnemyGatling.cpp" />
     <ClCompile Include="PoorEnemyGatringCreator.cpp" />
+    <ClCompile Include="RemainingBullet.cpp" />
     <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="StageModelComponent.cpp" />
     <ClCompile Include="PlayerHP.cpp" />

@@ -198,7 +198,10 @@
     <ClInclude Include="Laser.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-  </ItemGroup>
+    <ClInclude Include="RemainingBullet.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
       <Filter>ソース ファイル\Game</Filter>
@@ -293,7 +296,7 @@
     <ClCompile Include="SpriteBase.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="PoorEnemyGatling.cpp">
+     <ClCompile Include="PoorEnemyGatling.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="PoorEnemyGatringCreator.cpp">
@@ -302,7 +305,10 @@
     <ClCompile Include="Laser.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-  </ItemGroup>
+    <ClCompile Include="RemainingBullet.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
