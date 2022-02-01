@@ -182,6 +182,7 @@
     <ClInclude Include="LoadStageFromJson.h" />
     <ClInclude Include="ModeBase.h" />
     <ClInclude Include="ModeBoss.h" />
+    <ClInclude Include="ModeClearResult.h" />
     <ClInclude Include="ModeInGameBase.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
     <ClInclude Include="ModelComponent.h" />
@@ -195,7 +196,7 @@
     <ClInclude Include="PlayerHP.h" />
     <ClInclude Include="PoorEnemyGatringCreator.h" />
     <ClInclude Include="PoorEnemyGatling.h" />
-    <ClInclude Include="RemainingBullet.h" /> 
+    <ClInclude Include="RemainingBullet.h" />
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeBoss.cpp" />
+    <ClCompile Include="ModeClearResult.cpp" />
     <ClCompile Include="ModeInGameBase.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
