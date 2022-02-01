@@ -11,13 +11,19 @@
 
 namespace {
    // jsonファイルから値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("lightshadow", { "followlight_diff_y" ,"fixedlight_area" ,"fixedlight_atten_first" ,
-      "fixedlight_atten_second","fixedlight_atten_third","followlight_area","followlight_atten_first" ,"followlight_atten_second" ,
-      "followlight_atten_third","fixedlight_difred","fixedlight_difgreen","fixedlight_difblue","fixedlight_difalpha","followlight_difred" ,
-      "followlight_difgreen" ,"followlight_difblue","followlight_difalpha","fixedlight_spcred","fixedlight_spcgreen","fixedlight_spcblue",
-      "fixedlight_spcalpha","followlight_spcred" ,"followlight_spcgreen" ,"followlight_spcblue","followlight_spcalpha","fixedlight_ambred",
-      "fixedlight_ambgreen","fixedlight_ambblue","fixedlight_ambalpha","followlight_ambred" ,"followlight_ambgreen" ,"followlight_ambblue",
-      "followlight_ambalpha","shadow_resolution" });
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("lightshadow", { "fog_enuble","fog_red","fog_green","fog_blue","fog_start",
+      "fog_end","followlight_diff_y" ,"fixedlight_area" ,"fixedlight_atten_first" ,"fixedlight_atten_second","fixedlight_atten_third",
+      "followlight_area","followlight_atten_first" ,"followlight_atten_second" ,"followlight_atten_third","fixedlight_difred","fixedlight_difgreen",
+      "fixedlight_difblue","fixedlight_difalpha","followlight_difred" ,"followlight_difgreen" ,"followlight_difblue","followlight_difalpha",
+      "fixedlight_spcred","fixedlight_spcgreen","fixedlight_spcblue","fixedlight_spcalpha","followlight_spcred" ,"followlight_spcgreen" ,
+      "followlight_spcblue","followlight_spcalpha","fixedlight_ambred","fixedlight_ambgreen","fixedlight_ambblue","fixedlight_ambalpha",
+      "followlight_ambred" ,"followlight_ambgreen" ,"followlight_ambblue","followlight_ambalpha","shadow_resolution" });
+   const bool FogEnuble = paramMap["fog_enuble"];                             //!< フォグの有無
+   const int FogRed= paramMap["fog_red"];                                     //!< フォグ色(赤)
+   const int FogGreen = paramMap["fog_green"];                                //!< フォグ色(緑)
+   const int FogBlue = paramMap["fog_blue"];                                  //!< フォグ色(青)
+   const float FogStart = paramMap["fog_start"];                              //!< フォグが始まる距離
+   const float FogEnd = paramMap["fog_end"];                                  //!< フォグの色のみになる距離
    const double FollowLightDiffY = paramMap["followlight_diff_y"];            //!< 追従光源のプレイヤー頭位置からのY差分
    const float FixedLightArea = paramMap["fixedlight_area"];                  //!< 固定光源の照射範囲
    const float FixedLightAttenFirst = paramMap["fixedlight_atten_first"];     //!< 固定光源の距離減衰パラメーター1(除算値)
@@ -103,6 +109,12 @@ void LightAndShadow::Init() {
    material.Power = MatPower;
    SetMaterialParam(material);
 #endif
+   // フォグを有効にする
+   SetFogEnable(FogEnuble);
+   // フォグの色の設定
+   SetFogColor(FogRed, FogGreen, FogBlue);
+   // フォグの始点と終点の設定
+   SetFogStartEnd(FogStart, FogEnd);
    // 標準ライトを無効にする
    SetLightEnable(false);
    // プレイヤーの頭位置をObjectServerから取得

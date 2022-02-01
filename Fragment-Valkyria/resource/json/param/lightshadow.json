@@ -1,6 +1,12 @@
 {
 	"lightshadow": [
 		{
+			"fog_enuble":true,
+			"fog_red":247,
+			"fog_green":188,
+			"fog_blue":101,
+			"fog_start":50.0,
+			"fog_end":15000.0,
 			"followlight_diff_y":300.0,
 			"fixedlight_area":10000.0,
 			"fixedlight_atten_first":0.00000001,
