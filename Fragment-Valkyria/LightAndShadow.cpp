@@ -117,14 +117,10 @@ void LightAndShadow::Init() {
    SetFogStartEnd(FogStart, FogEnd);
    // 標準ライトを無効にする
    SetLightEnable(false);
-   // プレイヤーの頭位置をObjectServerから取得
-   auto followLightPos = _gameMain.objServer().GetVecData("PlayerHeadPos");
-   // プレイヤーに追従する光源をプレイヤーの頭位置から指定座標分ずらす
-   followLightPos.SetY(followLightPos.GetY() + FollowLightDiffY);
    // 各光源位置の初期化
-   _lightPositions = { 
+   _lightPositions = {
       FixedLightPos,
-      followLightPos
+      { 0, 0, 0 }
    };
    
    auto [firstLightPos, secondLightPos] = _lightPositions;

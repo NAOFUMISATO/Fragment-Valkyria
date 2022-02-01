@@ -11,7 +11,7 @@
 
 namespace {
    // jsonファイルから値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerhp", { "frontcolor_red" ,
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "frontcolor_red" ,
       "frontcolor_green" ,"frontcolor_blue", "backcolor_red" ,"backcolor_green",
       "backcolor_blue" ,"shake_frame","shake_width","redbar_speed","max_hp" });
    const unsigned char FrontColorRed = paramMap["frontcolor_red"];     //!< 前面バーの初期カラー赤値
@@ -25,8 +25,8 @@ namespace {
    const double RedBarSpeed = paramMap["redbar_speed"];                //!< 背面バーの減少速度
    const double MaxHp= paramMap["max_hp"];                             //!< プレイヤー最大HP
    // jsonファイルからVector4の値を取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerhp", { "defalut_pos" });
-   const auto DefalutPos = vecParamMap["defalut_pos"];                 //!< バーフレーム位置(左上座標)
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "hp_pos" });
+   const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
 
    constexpr auto OffSetLeft = 18;   //!< オフセット位置左
    constexpr auto OffSetTop = 27;    //!< オフセット位置上

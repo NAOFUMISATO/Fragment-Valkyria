@@ -68,6 +68,7 @@ void Player::Update() {
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
    GetObjServer().RegistDouble("PlayerHP",_hp);
+   GetObjServer().RegistDouble("PlayerBulletStock",static_cast<double>(_bulletStock));
 }
 
 void Player::Draw() {

@@ -1,5 +1,5 @@
 {
-	"playerhp": [
+	"playerui": [
 		{
 			"frontcolor_red":0,
 			"frontcolor_green":255,
@@ -10,15 +10,23 @@
 			"shake_frame":30,
 			"shake_width":3.0,
 			"redbar_speed":0.02,
-			"max_hp":100.0
+			"max_hp":100.0,
+			"bullet_diff_x":30
 		}	
 	],	
-	"playerhp_vec": [
+	"playerui_vec": [
 		{
-			"defalut_pos": [
+			"hp_pos": [
 				{
 					"x": 30.0,
 					"y": 30.0,
+					"z": 0
+				}
+			],
+			"bullet_pos": [
+				{
+					"x": 200.0,
+					"y": 120.0,
 					"z": 0
 				}
 			]
