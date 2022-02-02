@@ -42,6 +42,8 @@ namespace FragmentValkyria {
 
             void CreateGatling();
 
+            void CreateLaser();
+
             double hp() { return _hp; }
 
         private:

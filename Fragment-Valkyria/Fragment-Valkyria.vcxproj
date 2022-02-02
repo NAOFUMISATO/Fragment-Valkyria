@@ -178,6 +178,7 @@
     <ClInclude Include="LargeEnemy.h" />
     <ClInclude Include="LargeEnemyCreator.h" />
     <ClInclude Include="Laser.h" />
+    <ClInclude Include="LaserCreator.h" />
     <ClInclude Include="LightAndShadow.h" />
     <ClInclude Include="LoadStageFromJson.h" />
     <ClInclude Include="ModeBase.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LargeEnemyCreator.cpp" />
     <ClCompile Include="Laser.cpp" />
+    <ClCompile Include="LaserCreator.cpp" />
     <ClCompile Include="LightAndShadow.cpp" />
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeBase.cpp" />

@@ -52,6 +52,11 @@ void LargeEnemy::CreateGatling() {
 	gameMain().objServer().Add(std::move(gatling));
 }
 
+void LargeEnemy::CreateLaser() {
+	auto laser = gameMain().objFactory().Create("Laser");
+	gameMain().objServer().Add(std::move(laser));
+}
+
 void LargeEnemy::CreateFallObject() {
 	auto fallObject = gameMain().objFactory().Create("FallObject");
 	gameMain().objServer().Add(std::move(fallObject));
@@ -146,9 +151,11 @@ void LargeEnemy::StateIdle::Update() {
 		if (!_owner._fallObjectflag) {
 			/*_owner._stateServer->GoToState("Move");*/
 			_owner._stateServer->GoToState("FallObject");
+			/*_owner._stateServer->GoToState("Laser");*/
 		}
 		else if (!_owner._moving){
-			_owner._stateServer->GoToState("Move");
+			/*_owner._stateServer->GoToState("Move");*/
+			_owner._stateServer->GoToState("Laser");
 		}
 		else {
 			_owner._stateServer->GoToState("Gatling");
@@ -290,9 +297,16 @@ void LargeEnemy::StateMove::Update() {
 }
 
 void LargeEnemy::StateLaser::Enter() {
-
+	_owner._stateCnt = 0;
+	_owner._moving = true;
+	_owner._modelAnimeComponent->ChangeAnime("beem", true);
 }
 
 void LargeEnemy::StateLaser::Update() {
+	if (_owner._stateCnt >= 60 * 3) {
+		_owner.CreateLaser();
+		_owner._stateServer->GoToState("Idle");
+	}
 
+	++_owner._stateCnt;
 }

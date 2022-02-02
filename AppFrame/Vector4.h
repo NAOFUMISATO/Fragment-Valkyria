@@ -33,6 +33,8 @@ namespace AppFrame {
          Vector4& operator =(const Vector4&) = default; // コピー
          Vector4& operator =(Vector4&&) = default; // ムーブ
 
+         bool operator <(const Vector4 rhs) const;
+
          const Vector4 operator +(const Vector4& rhs) const;
          const Vector4 operator -(const Vector4& rhs) const;
          const Vector4 operator *(const Vector4& rhs) const;
