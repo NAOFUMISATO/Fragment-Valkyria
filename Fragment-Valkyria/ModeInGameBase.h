@@ -46,10 +46,6 @@ namespace FragmentValkyria {
           */
          ModeInGameBase(Game::GameMain& gameMain);
          /**
-          * \brief デフォルトデストラクタ
-          */
-         ~ModeInGameBase() = default;
-         /**
           * \brief 初期化処理
           */
          void Init() override;
@@ -94,8 +90,6 @@ namespace FragmentValkyria {
          short _padLeftY{ 0 };
          short _padRightX{ 0 };
          short _padRightY{ 0 };
-         double _largeEnemyHp{ 0 };
-         double _playerHp{ 0 };
 #endif
       };
    }

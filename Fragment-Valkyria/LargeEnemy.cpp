@@ -41,6 +41,7 @@ void LargeEnemy::Update() {
 	_modelAnimeComponent->Update();
 
 	GetObjServer().RegistVector("EnemyPos", _position);
+	GetObjServer().RegistDouble("BossHP", _hp);
 }
 
 void LargeEnemy::Draw() {

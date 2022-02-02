@@ -21,10 +21,10 @@
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
 #include "EffectPlayerShot.h" //仮
+
 using namespace FragmentValkyria::Mode;
 
 ModeBoss::ModeBoss(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
-
 }
 
 void ModeBoss::Init() {
@@ -34,6 +34,7 @@ void ModeBoss::Init() {
    loadJson.LoadTextures("ingame");
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");
+   _gameMain.ingameTimer(0);
    ModeInGameBase::Init();
 }
 
@@ -67,40 +68,25 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
       // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("Title", 'L');
    }
+   if (input.GetMouse().LeftClick()) {
+      // 右クリックでタイトルへ遷移
+      GetModeServer().GoToMode("ClearResult", 'S');
+   }
    //エフェクト仮描画
    if (input.GetKeyboard().ZClick()) {
       auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain,"Shot");
       GetEfcServer().Add(std::move(efcShot));
    }
-#ifdef _DEBUG
-   _padLeftX = input.GetXJoypad().LeftStickX();
-   _padLeftY = input.GetXJoypad().LeftStickY();
-   _padRightX = input.GetXJoypad().RightStickX();
-   _padRightY = input.GetXJoypad().RightStickY();
-#endif
    ModeInGameBase::Input(input);
 }
 
 void ModeBoss::Update() {
-#ifdef _DEBUG
-   for (auto&& object : GetObjServer().runObjects()) {
-       auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
-       if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::Player) {
-           auto& player = dynamic_cast<Player::Player&>(objectBase);
-           _playerHp = player.hp();
-           continue;
-       }
-       if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
-           auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(objectBase);
-
-           _largeEnemyHp = largeEnemy.hp();
-           continue;
-       }
-   }
-#endif
    ModeInGameBase::Update();
+   _gameCnt++;
 }
 
 void ModeBoss::Render() {
    ModeInGameBase::Render();
+   auto bossHp= GetObjServer().GetDoubleData("BossHP");
+   DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),"ボスHP : %f", bossHp);
 }

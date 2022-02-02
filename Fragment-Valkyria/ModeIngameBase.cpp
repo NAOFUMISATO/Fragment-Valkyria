@@ -34,6 +34,12 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
    GetObjServer().Input(input);
    GetEfcServer().Input(input);
    GetSprServer().Input(input);
+#ifdef _DEBUG
+   _padLeftX = input.GetXJoypad().LeftStickX();
+   _padLeftY = input.GetXJoypad().LeftStickY();
+   _padRightX = input.GetXJoypad().RightStickX();
+   _padRightY = input.GetXJoypad().RightStickY();
+#endif
 }
 
 void ModeInGameBase::Update() {
@@ -41,11 +47,11 @@ void ModeInGameBase::Update() {
    _lighting->Update();
    GetEfcServer().Update();
    GetSprServer().Update();
+   _gameMain.IngameTimerCount();
 }
 
 void ModeInGameBase::Render() {
    _lighting->Render();
-
    GetObjServer().Render();
 
    SetUseShadowMap(0, -1);
@@ -74,8 +80,22 @@ Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
 void ModeInGameBase::DebugDraw() {
    namespace AppMath = AppFrame::Math;
    using Utility = AppMath::Utility;
-   DrawFormatString(0, 985, Utility::GetColorCode(255, 255, 255), "LeftX:%d LeftY:%d", _padLeftX, _padLeftY);
-   DrawFormatString(0, 1000, Utility::GetColorCode(255, 255, 255), "RightX:%d RightY:%d", _padRightX, _padRightY);
+   // プレイヤー情報
+   auto playerHp = GetObjServer().GetDoubleData("PlayerHP");
+   DrawFormatString(0, 960, GetColor(255, 255, 255), "プレイヤーHP : %f", playerHp);
+   auto playerPos = GetObjServer().GetVecData("PlayerPos");
+   auto [px, py, pz] = playerPos.GetVec3();
+   DrawFormatString(0, 980, GetColor(255, 255, 255), "プレイヤー位置_X:%f  Y:%f  Z:%f ", px, py, pz);
+   auto playerRot = GetObjServer().GetVecData("PlayerRot");
+   auto [rx, ry, rz] = playerRot.GetVec3();
+   DrawFormatString(0, 1000, GetColor(255, 255, 255), "プレイヤー回転_X:%f  Y:%f  Z:%f ", rx, ry, rz);
+   auto playerFor = GetObjServer().GetVecData("PlayerFor");
+   auto [fx, fy, fz] = playerFor.GetVec3();
+   DrawFormatString(0, 1020, GetColor(255, 255, 255), "プレイヤー向き_X:%f  Y:%f  Z:%f ", fx, fy, fz);
+   // スティック入力値
+   DrawFormatString(0, 1040, Utility::GetColorCode(255, 255, 255), "左スティック_X : %d  Y : %d", _padLeftX, _padLeftY);
+   DrawFormatString(0, 1060, Utility::GetColorCode(255, 255, 255), "右スティック_X : %d  Y : %d", _padRightX, _padRightY);
+   // XYZ原点軸
    auto startX = Vector4(-10000.0, 0.0, 0.0);
    auto endX = Vector4(10000.0, 0.0, 0.0);
    DrawLine3D(AppMath::ToDX(startX), AppMath::ToDX(endX), Utility::GetColorCode(255, 0, 0));
@@ -85,6 +105,7 @@ void ModeInGameBase::DebugDraw() {
    auto startZ = Vector4(0.0, 0.0, -10000.0);
    auto endZ = Vector4(0.0, 0.0, 10000.0);
    DrawLine3D(AppMath::ToDX(startZ), AppMath::ToDX(endZ), Utility::GetColorCode(0, 0, 255));
+   // カメラ注視点
    auto camTarget = GetObjServer().GetVecData("CamTarget");
    auto targetStartX = camTarget + Vector4(-10.0, 0.0, 0.0);
    auto targetEndX = camTarget + Vector4(10.0, 0.0, 0.0);
@@ -95,17 +116,5 @@ void ModeInGameBase::DebugDraw() {
    auto targetStartZ = camTarget + Vector4(0.0, 0.0, -10.0);
    auto targetEndZ = camTarget + Vector4(10.0, 0.0, 10.0);
    DrawLine3D(AppMath::ToDX(targetStartZ), AppMath::ToDX(targetEndZ), Utility::GetColorCode(0, 0, 255));
-   DrawFormatString(0, 1015, Utility::GetColorCode(255, 255, 255), "LargeEnemyHP:%3.f PlayerHP:%3.f", _largeEnemyHp, _playerHp);
-   //プレイヤー情報描画
-   auto playerPos = GetObjServer().GetVecData("PlayerPos");
-   auto [px, py, pz] = playerPos.GetVec3();
-   DrawFormatString(0, 1030, GetColor(255, 255, 255), "PlyPosition_X:%f  Y:%f  Z:%f ", px, py, pz);
-   auto playerRot = GetObjServer().GetVecData("PlayerRot");
-   auto [rx, ry, rz] = playerRot.GetVec3();
-   DrawFormatString(0, 1045, GetColor(255, 255, 255), "PlyRotation_X:%f  Y:%f  Z:%f ", rx, ry, rz);
-   auto playerFor = GetObjServer().GetVecData("PlayerFor");
-   auto [fx, fy, fz] = playerFor.GetVec3();
-   DrawFormatString(0, 1060, GetColor(255, 255, 255), "PlyForward__X:%f  Y:%f  Z:%f ", fx, fy, fz);
-
 }
 #endif

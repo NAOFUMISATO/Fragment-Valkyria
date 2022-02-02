@@ -57,6 +57,9 @@ namespace FragmentValkyria {
           * \return モードボス
           */
          virtual InGameType GetInGameType()const { return InGameType::Boss; }
+
+      private:
+         int _gameCnt{0};
       };
    }
 }

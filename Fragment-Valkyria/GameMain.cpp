@@ -13,6 +13,7 @@
 #include "ObjectFactory.h"
 #include "LoadStageFromJson.h"
 #include "AppFrame.h"
+#include "ModeClearResult.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -46,7 +47,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
 
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
-
+   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
    return true;
 }
 

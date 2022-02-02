@@ -1,0 +1,22 @@
+{
+	"clear": [
+		{
+			"keyname": "NumberAndColon",
+			"filename": "number&colon.png",
+			"allnum": 11,
+			"xnum": 11,
+			"ynum": 1,
+			"xsize": 40,
+			"ysize": 40
+		},
+		{
+			"keyname": "ClearBg",
+			"filename": "clearbg.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 1920,
+			"ysize": 1080
+		}
+	]
+}

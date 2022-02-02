@@ -24,17 +24,13 @@ namespace FragmentValkyria {
        * \class モードタイトルクラス
        * \brief ゲームのタイトル処理を回す
        */
-      class ModeTitle : public Mode::ModeBase {
+      class ModeTitle : public ModeBase {
       public:
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体の参照
           */
          ModeTitle(Game::GameMain& gameMain);
-         /**
-          * \brief デストラクタ
-          */
-         ~ModeTitle() = default;
          /**
           * \brief 初期化処理
           */
@@ -58,9 +54,7 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _titleGrHandle{ -1 };  //!< ゲームタイトル画像ハンドル
-         int _guideGrHandle{ -1 };  //!< スタートガイド画像ハンドル
-         int _bgGrHandle{ -1 };     //!< タイトル背景画像ハンドル
+         std::tuple<int, int, int> _grHandles{ 0,0,0 };
          int _alpha{ 0 };           //!< スタートガイドの透明度
       };
    }

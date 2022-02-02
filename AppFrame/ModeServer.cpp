@@ -10,6 +10,9 @@
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
+#include <time.h>
+#include <DxLib.h>
+#include "Utility.h"
 #endif
 #include "ModeBaseRoot.h"
 #include "ModeFadeIn.h"
@@ -17,6 +20,9 @@
 
 namespace {
    constexpr auto CountMax = 4294967295;   //!< _frameCountの型unsigned intの範囲
+   constexpr auto DrawFPSPosX = 0;
+   constexpr auto DrawFPSPosY = 0;
+   constexpr auto DrawFPSColor = 255;
 }
  /**
   * \brief アプリケーションフレーム
@@ -142,6 +148,8 @@ namespace AppFrame {
          catch (std::logic_error& error) {
             OutputDebugString(error.what());
          }
+
+         _fpsCount = clock();
 #endif
          _modeList.back()->Input(input);   //リストの末尾のモードのみ入力処理を回す
       }
@@ -174,6 +182,11 @@ namespace AppFrame {
          for (auto&& mode : _modeList) {
             mode->Render();   //リストの全てのモードの描画処理を回す
          }
+#ifdef _DEBUG
+         auto nowCount = clock();
+         DrawFormatString(DrawFPSPosX, DrawFPSPosY, 
+            AppFrame::Math::Utility::GetColorCode(DrawFPSColor, DrawFPSColor, DrawFPSColor), "FPS : %d" , nowCount-_fpsCount);
+#endif
       }
 
       void ModeServer::FadeInsertBelowBack(char fadeType) {

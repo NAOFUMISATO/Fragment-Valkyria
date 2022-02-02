@@ -26,7 +26,7 @@ namespace FragmentValkyria {
          /**
           * \brief デストラクタ
           */
-         ~ModeBase() override;
+         ~ModeBase() override {};
          /**
           * \brief 初期化処理
           */

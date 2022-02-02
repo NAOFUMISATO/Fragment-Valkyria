@@ -4,8 +4,6 @@
 namespace FragmentValkyria {
    namespace Player {
       class RemainingBullet :public Sprite::SpriteBase {
-         using StockFlag = std::tuple<bool, bool, bool, bool, bool>;
-         using BulletPosX = std::tuple<int, int, int, int, int>;
       public:
          RemainingBullet(Game::GameMain& gameMain);
 
@@ -13,12 +11,14 @@ namespace FragmentValkyria {
          void Update() override;
          void Draw()override;
 
-         virtual SpriteType GetSprType() const { return SpriteType::UI; }
+         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
 
       private:
          void StockCheck(int stock);
-         StockFlag _stockFlag{ true,true ,true ,true ,true };
-         BulletPosX _bulletPosX{ 0,0,0,0,0 };
+         std::tuple<int, int, int, int, int> _xPositions{ 0,0,0,0,0 };
+         std::tuple<bool, bool, bool, bool, bool> _stockFlag{ 
+            true,true ,true ,true ,true 
+         };
       };
 
    }

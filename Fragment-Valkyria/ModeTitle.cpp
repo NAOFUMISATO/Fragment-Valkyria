@@ -39,9 +39,12 @@ void ModeTitle::Init() {
    loadJson.LoadSounds("title");
 
    auto& resServer = GetResServer();
-   _bgGrHandle = resServer.GetTexture("TitleBg");
-   _titleGrHandle = resServer.GetTexture("GameTitle");
-   _guideGrHandle = resServer.GetTexture("StartGuide");
+   
+   _grHandles = {
+      resServer.GetTexture("TitleBg"),
+      resServer.GetTexture("StartGuide"),
+      resServer.GetTexture("GameTitle")
+   };
 
    auto& soundServer = GetSoundServer();
    soundServer.Play("TitleBgm");
@@ -64,11 +67,12 @@ void ModeTitle::Update() {
 }
 
 void ModeTitle::Render() {
-   GetSimpTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, _bgGrHandle);
+   auto [bgGrHandle, guideGrHandle, titleGrHandle] = _grHandles;
+   GetSimpTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgGrHandle);
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-   GetSimpTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle,_guideGrHandle);
+   GetSimpTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle, guideGrHandle);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetSimpTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, _titleGrHandle);
+   GetSimpTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleGrHandle);
 
 }
 

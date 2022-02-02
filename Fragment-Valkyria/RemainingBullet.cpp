@@ -22,7 +22,7 @@ void RemainingBullet::Init() {
    _grHandles = GetResServer().GetTextures("RemainingBullet");
    _position = BulletPos;
    auto [x,y] = _position.GetVec2();
-   _bulletPosX = { 
+   _xPositions = { 
       static_cast<int>(x),
       static_cast<int>(x + DiffX),
       static_cast<int>(x + DiffX * ThirdMultRate),
@@ -39,7 +39,7 @@ void RemainingBullet::Update() {
 void RemainingBullet::Draw() {
    auto [x, y] = _position.GetVec2();
    auto [firstFlag, secondFlag, thirdFlag, fourthFlag, fifthFlag] = _stockFlag;
-   auto [firstX, secondX, thirdX, fourthX, fifthX] = _bulletPosX;
+   auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
    GetSimpTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
    GetSimpTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
    GetSimpTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);

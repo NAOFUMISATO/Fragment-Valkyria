@@ -58,6 +58,21 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render()override;
+
+         /**
+          * \brief 計測時間の取得
+          * \return インゲームで計測している時間
+          */
+         inline unsigned int ingameTimer() const { return _ingameTimer; }
+         /**
+          * \brief 計測時間の設定
+          * \param timer 設定する時間
+          */
+         inline void ingameTimer(unsigned int timer) { _ingameTimer = timer; }
+         /**
+          * \brief 計測時間を進める
+          */
+         inline void IngameTimerCount() { _ingameTimer++; }
          /**
           * \brief 画面設定の値を返す
           * \return 画面横サイズ、画面縦サイズ、画面ビット数
@@ -75,6 +90,7 @@ namespace FragmentValkyria {
          Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
 
       private:
+         unsigned int _ingameTimer{ 0 };
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
          std::unique_ptr<Stage::LoadStageFromJson> _loadStage;//!< ステージ情報管理クラスのユニークポインタ
       };

@@ -17,8 +17,7 @@ namespace FragmentValkyria {
       public:
          
          enum class SpriteType {
-            Sprite = 0,   //!< オブジェクト
-            UI            //!< ユーザーインターフェイス
+            Sprite = 0,   //!< スプライト
          };
          /**
           * \brief コンストラクタ

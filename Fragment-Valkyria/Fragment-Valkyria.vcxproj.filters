@@ -91,6 +91,12 @@
     <Filter Include="ソース ファイル\Sprite">
       <UniqueIdentifier>{59873b81-338c-49d3-8aaa-cb4891c09bb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Clear">
+      <UniqueIdentifier>{8d85358f-db24-4a7b-ad40-0cd8a5e8918d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Clear">
+      <UniqueIdentifier>{f37956c6-532c-4f64-ab35-d29692f4dd20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h">
@@ -204,6 +210,9 @@
     <ClInclude Include="ModeClearResult.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="ClearTime.h">
+      <Filter>ヘッダー ファイル\Clear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -313,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="ModeClearResult.cpp">
       <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearTime.cpp">
+      <Filter>ソース ファイル\Clear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

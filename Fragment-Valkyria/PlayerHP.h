@@ -45,7 +45,7 @@ namespace FragmentValkyria {
           * \brief スプライト種別:UIの取得
           * \return スプライト種別:UI
           */
-         virtual SpriteType GetSprType() const { return SpriteType::UI; }
+         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
 
       private:
          /**
