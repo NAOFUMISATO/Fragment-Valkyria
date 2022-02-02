@@ -83,6 +83,17 @@ namespace AppFrame {
          return Vector4(cx, cy, cz);
       }
 
+      bool Vector4::operator<(const Vector4 rhs) const {
+          auto length = Lenght();
+          auto rhsLength = rhs.Lenght();
+
+          if (length != rhsLength) {
+              return length < rhsLength;
+          }
+
+          return true;
+      }
+
       const Vector4 Vector4::operator +(const Vector4& rhs) const {
          auto [x, y, z] = rhs.GetVec3();
          return Vector4(_x + x, _y + y, _z + z);

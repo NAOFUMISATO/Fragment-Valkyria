@@ -13,6 +13,7 @@ namespace FragmentValkyria {
 	namespace Enemy {
 
 		class Laser : public Object::ObjectBase {
+            using Vector4 = AppFrame::Math::Vector4;
 		public:
 			Laser(Game::GameMain& gameMain);
 
@@ -35,8 +36,12 @@ namespace FragmentValkyria {
 			*/
 			void Draw() override;
 
+            void end(Vector4 endPos) { _end = endPos; }
+
 		private:
 
+            Vector4 _end{ Vector4(0.0, 0.0, 0.0) };
+            int _stateCnt{ 0 };
 		public:
             /**
             * \class レーザーの状態の基底クラス

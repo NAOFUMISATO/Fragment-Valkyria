@@ -13,7 +13,6 @@ using namespace FragmentValkyria::Enemy;
 
 PoorEnemyGatling::PoorEnemyGatling(Game::GameMain& gameMain) : LargeEnemy{ gameMain } {
 
-
 }
 
 void PoorEnemyGatling::Init() {

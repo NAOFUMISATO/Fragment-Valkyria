@@ -207,6 +207,9 @@
     <ClInclude Include="RemainingBullet.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
+     <ClInclude Include="LaserCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
     <ClInclude Include="ModeClearResult.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
@@ -319,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="RemainingBullet.cpp">
       <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
     <ClCompile Include="ModeClearResult.cpp">
       <Filter>ソース ファイル\Mode</Filter>

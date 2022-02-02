@@ -14,6 +14,7 @@
 #include "GameMain.h"
 #include "LargeEnemyCreator.h"
 #include "LargeEnemy.h"
+#include "LaserCreator.h"
 #include "PlayerCreator.h"
 #include "Player.h"
 #include "BossStageCreator.h"
@@ -47,6 +48,7 @@ void ModeBoss::Enter() {
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
+   objFactory.Register("Laser", std::make_unique<Create::LaserCreator>(_gameMain));
 
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用
