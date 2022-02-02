@@ -234,7 +234,7 @@ void LargeEnemy::StateDie::Update() {
 			--_owner._freezeTime;
 		}
 		else {
-			_owner.gameMain().modeServer().GoToMode("Title");
+			_owner.gameMain().modeServer().GoToMode("ClearResult");
 		}
 	}
 }

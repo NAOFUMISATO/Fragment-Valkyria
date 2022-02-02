@@ -2,7 +2,7 @@
 	"ingame": [
 		{
 			"keyname": "Player",
-			"filename": "Kamilla_SOTAI_test0128.mv1"
+			"filename": "Kamilla_MO.mv1"
 		},
 		{
 			"keyname": "LargeEnemy",
@@ -11,10 +11,6 @@
 		{
 			"keyname": "SkySphere",
 			"filename": "skysphere.mv1"
-		},
-		{
-			"keyname": "Ground",
-			"filename": "ground.mv1"
 		},
 		{
 			"keyname": "DrumRed",

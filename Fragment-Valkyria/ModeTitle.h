@@ -25,6 +25,7 @@ namespace FragmentValkyria {
        * \brief ゲームのタイトル処理を回す
        */
       class ModeTitle : public ModeBase {
+         using handles = std::vector<int>;
       public:
          /**
           * \brief コンストラクタ
@@ -54,8 +55,8 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         std::tuple<int, int, int> _grHandles{ 0,0,0 };
-         int _alpha{ 0 };           //!< スタートガイドの透明度
+         std::tuple<handles, handles, handles> _grHandles{ 0,0,0 };
+         int _alpha{ 255 };           //!< スタートガイドの透明度
       };
    }
 }

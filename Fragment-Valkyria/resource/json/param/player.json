@@ -1,6 +1,11 @@
 {
 	"player": [
 		{
+			"idle_animespeed":1.0,
+			"walk_animespeed":1.0,
+			"run_animespeed":1.0,
+			"shootready_animespeed":1.0,
+			"shoot_animespeed":1.0,
 			"move_speed": 5.0,
 			"rot_speed": 10.0,
 			"capsule_pos1": 30.0,
@@ -15,13 +20,6 @@
 					"x": 10.0,
 					"y": 10.0,
 					"z": 10.0
-				}
-			],
-			"next_pos": [
-				{
-					"x": 50.0,
-					"y": 50.0,
-					"z": 50.0
 				}
 			]
 		}

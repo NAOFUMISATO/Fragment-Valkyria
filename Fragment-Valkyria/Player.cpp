@@ -18,9 +18,14 @@
 using namespace FragmentValkyria::Player;
 
 namespace {
-    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",
-        { "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius"});
-
+    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
+       "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
+       "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius"});
+    const double IdleAnimeSpeed = paramMap["idle_animespeed"];
+    const double WalkAnimeSpeed = paramMap["walk_animespeed"];
+    const double RunAnimeSpeed = paramMap["run_animespeed"];
+    const double ShootReadyAnimeSpeed = paramMap["shootready_animespeed"];
+    const double ShootAnimeSpeed = paramMap["shoot_animespeed"];
     const double MoveSpeed = paramMap["move_speed"];
     const double CapsulePos1 = paramMap["capsule_pos1"];
     const double CapsulePos2 = paramMap["capsule_pos2"];
@@ -203,7 +208,7 @@ void Player::StateBase::Draw() {
 /// ‘Ò‹@
 void Player::StateIdle::Enter() {
    /*_owner._forwardSpeed = 0.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+   _owner._modelAnimeComponent->ChangeAnime("taiki_MO", true, IdleAnimeSpeed);
 }
 void Player::StateIdle::Input(InputManager& input) {
 
@@ -247,7 +252,7 @@ void Player::StateIdle::Update() {
 /// ‘–‚è
 void Player::StateRun::Enter() {
    /*_owner._forwardSpeed = 10.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_run", true);
+   _owner._modelAnimeComponent->ChangeAnime("run_motion", true, RunAnimeSpeed);
 }
 void Player::StateRun::Input(InputManager& input) {
     _owner.HitCheckFromFallObject();
@@ -313,7 +318,7 @@ void Player::StateRun::Update() {
 /// UŒ‚
 void Player::StateAttack::Enter() {
    /*_owner._forwardSpeed = 0.f;*/
-   _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_attack",false);
+   _owner._modelAnimeComponent->ChangeAnime("hassya_MO",false, ShootAnimeSpeed);
 }
 void Player::StateAttack::Update() {
    auto cnt = _owner._modelAnimeComponent->repeatedCount();
@@ -331,11 +336,12 @@ void Player::StateAttack::Draw() {
 }
 
 void Player::StateShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+    _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true, ShootReadyAnimeSpeed);
 }
 
 void Player::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick()) {
+       _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
         _owner._stateServer->PopBack();
         _owner._cameraComponent->SetZoom(false);
     }
@@ -386,7 +392,7 @@ void Player::StateKnockBack::Draw() {
 }
 
 void Player::StateDie::Enter() {
-    _owner.modelAnimeComponent().ChangeAnime("MO_SDChar_jumpStart", true);
+    _owner.modelAnimeComponent().ChangeAnime("run_motion", true,10.0);
     _timeOver = 60 * 2;
 }
 
@@ -408,13 +414,14 @@ void Player::StateDie::Draw() {
 }
 
 void Player::StateWeakShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+    _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true);
     _coolTime = 0;
 }
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
         _owner.WeakAttack();
+        _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
         --_owner._bulletStock;
         _coolTime = 60 * 3;
     }
@@ -431,7 +438,7 @@ void Player::StateWeakShootReady::Update() {
 }
 
 void Player::StateReload::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
+    _owner._modelAnimeComponent->ChangeAnime("walk_MO", true);
     _reloadCnt = 0;
 }
 
