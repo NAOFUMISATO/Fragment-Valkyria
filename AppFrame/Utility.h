@@ -3,7 +3,7 @@
  * \file   Utility.h
  * \brief  有用算術クラス
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, AHMD2000
  * \date   December 2021
  *********************************************************************/
 #include <tuple>
@@ -25,13 +25,15 @@ namespace AppFrame {
 
       using Plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
       using Sphere = std::tuple<Vector4/*position*/, double/*radian*/>;
-      using Capsule = std::tuple<Vector4/*position1*/, Vector4/*position2*/, double/*radian*/>;
+      using Line = std::tuple<Vector4/*位置*/, Vector4/*向き*/>;
+      using Segment = std::tuple<Vector4/*始点*/, Vector4/*終点へのベクトル*/>;
+      using Capsule = std::tuple<Vector4/*線分の始点*/, Vector4/*線分の終点*/, double/*半径*/>;
       using Collision = std::tuple<bool, Vector4>;
 
       /**
-       * \class 有用算術クラス
-       * \brief 全て静的メンバで構成
-       */
+      * \class 有用算術クラス
+      * \brief 全て静的メンバで構成
+      */
       class Utility {
       public:
          /**
@@ -94,6 +96,61 @@ namespace AppFrame {
           * \return 当たっているか
           */
          static bool CollisionCapsuleSphere(const Capsule& c, const Sphere& s);
+         /**
+          * \brief カプセルとカプセルの当たり判定
+          * \param c1
+          * \param c2
+          * \return 当たっているか
+          */
+         static bool CollisionCapsuleCapsule(const Capsule& c1, const Capsule& c2);
+         /**
+          * \brief 点と直線の最短距離をもとめる
+          * \param point 点の位置ベクトル
+          * \param line 直線
+          * \param h 点から直線へ降ろした垂線と直線との交点(戻り値)
+          * \param t 点から直線へ降ろした垂線と直線との交点へのベクトル係数(戻り値)
+          * \return 点と直線の最短距離
+          */
+         static double PointLineDistance(const Vector4& point, const Line& line, Vector4& h, double& t);
+         /**
+          * \brief p2からp1とp3に伸ばしたベクトルでできた角度が鋭角か
+          * \param p1 1つめの終点
+          * \param p2 始点
+          * \param p3 2つめの終点
+          * \return 鋭角かどうか
+          */
+         static bool IsSharpAngle(const Vector4& p1, const Vector4& p2, const Vector4& p3);
+         /**
+          * \brief 点と線分の最短距離をもとめる
+          * \param point 点の位置ベクトル
+          * \param segment 線分
+          * \param h 点から線分へ降ろした垂線と線分との交点(戻り値)
+          * \param t 点から線分へ降ろした垂線と線分との交点へのベクトル係数(戻り値)
+          * \return 点と線分の最短距離
+          */
+         static double PointSegmentDistance(const Vector4& point, const Segment& segment, Vector4& h, double& t);
+         /**
+          * \brief 
+          * \param l1 
+          * \param l2 
+          * \param p1 
+          * \param p2 
+          * \param t1 
+          * \param t2 
+          * \return 
+          */
+         static double LineLineDistance(const Line& l1, const Line& l2, Vector4& p1, Vector4& p2, double& t1, double& t2);
+         /**
+          * \brief 
+          * \param s1 
+          * \param s2 
+          * \param p1 
+          * \param p2 
+          * \param t1 
+          * \param t2 
+          * \return 
+          */
+         static double SegmentSegmentDistance(const Segment& s1, const Segment& s2, Vector4& p1, Vector4& p2, double& t1, double& t2);
         /**
          * \brief 指定したRGBのカラーコードの取得
          * \param r 赤値

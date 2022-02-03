@@ -88,6 +88,14 @@ void FallObject::HitCheckFromLargeEnemy() {
 	}
 }
 
+void FallObject::HitCheckFromLaser() {
+	auto report = _collisionComponent->report();
+
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromLaser) {
+		_stateServer->PushBack("Die");
+	}
+}
+
 void FallObject::CheckPlayerKnockBack() {
 	auto result = _collisionComponent->knockBack();
 	if (result) {
@@ -152,6 +160,8 @@ void FallObject::StateIdle::Update() {
 	_owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
 	_owner._collisionComponent->PlayerFromObjectRange();
 	_owner._collisionComponent->GatlingFromObjectModel();
+	_owner._collisionComponent->FallObjectFromLaser();
+	_owner.HitCheckFromLaser();
 }
 
 void FallObject::StateFall::Enter() {
@@ -222,7 +232,9 @@ void FallObject::StateShoot::Update() {
 	_owner.Shoot();
 
 	_owner._collisionComponent->ObjectModelFromLargeEnemy();
+	_owner._collisionComponent->FallObjectFromLaser();
 	_owner.HitCheckFromLargeEnemy();
+	_owner.HitCheckFromLaser();
 }
 
 void FallObject::StateDie::Enter() {

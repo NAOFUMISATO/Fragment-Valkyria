@@ -9,6 +9,8 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "Gatling.h"
+#include "Player.h"
+#include "Laser.h"
 #include "ObjectBase.h"
 #ifdef _DEBUG
 #include <stdexcept>
@@ -21,7 +23,7 @@ namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
 		{ "fallobject_range", "ply_radius", "ply_capsule_pos1",
 		 "ply_capsule_pos2", "gatling_radius", "fallobject_capsule_pos1",
-		"fallobject_capsule_pos2", "fallobject_radius" });
+		"fallobject_capsule_pos2", "fallobject_radius", "laser_radius"});
 
 	const double FallObjectRange = paramMap["fallobject_range"];     //!< フォールオブジェクトの球の半径
 	const double PlayerRadius = paramMap["ply_radius"];              //!< プレイヤーのカプセルの半径
@@ -31,6 +33,7 @@ namespace {
 	const double FallObjectCapsulePos1 = paramMap["fallobject_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
 	const double FallObjectCapsulePos2 = paramMap["fallobject_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
 	const double FallObjectRadius = paramMap["fallobject_radius"];         //!< フォールオブジェクトのカプセルの半径
+	const double LaserRadius = paramMap["laser_radius"];                   //!<レーザーのカプセルの半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -38,7 +41,13 @@ CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owne
 }
 
 void CollisionComponent::ObjectRangeFromPlayer() {
+	auto& player = dynamic_cast<Player::Player&>(_owner);
+	auto invincibleCnt = player.invincibleCnt();
+	if (invincibleCnt > 0) {
+		return;
+	}
 	auto plyPoint = _owner.position();
+	
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 
@@ -89,6 +98,9 @@ void CollisionComponent::PlayerFromObjectRange() {
 				if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
 					break;
 				}
+				if (objectBase.collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
+					break;
+				}
 				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
 			}
 			break;
@@ -105,8 +117,16 @@ void CollisionComponent::PlayerFromObjectRange() {
 		if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
 			break;
 		}
+		if (objectBase.collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
+			break;
+		}
+		auto& player = dynamic_cast<Player::Player&>(objectBase);
+		auto invincibleCnt = player.invincibleCnt();
+		if (invincibleCnt > 0) {
+			return;
+		}
 
-		auto plyPoint = objectBase.position();
+		auto plyPoint = player.position();
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromObjectRange);
 		} 
@@ -128,6 +148,11 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 		}
 		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 			continue;
+		}
+		auto& player = dynamic_cast<Player::Player&>(objectBase);
+		auto invincibleCnt = player.invincibleCnt();
+		if (invincibleCnt > 0) {
+			return;
 		}
 		// プレイヤー側のカプセルを設定
 		auto plyPos = objectBase.position();
@@ -179,12 +204,17 @@ void CollisionComponent::GatlingFromObjectModel() {
 }
 
 void CollisionComponent::GatlingFromPlayer() {
+	auto& player = dynamic_cast<Player::Player&>(_owner);
+	auto invincibleCnt = player.invincibleCnt();
+	if (invincibleCnt > 0) {
+		return;
+	}
 	auto playerPos = _owner.position();
 	auto capsulePos1 = playerPos + Vector4(0.0, 30.0, 0.0);
 	auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
 	auto casuleRadian = PlayerRadius/*30.0*/;
 
-	AppFrame::Math::Capsule plyCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
+	AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 
@@ -198,7 +228,7 @@ void CollisionComponent::GatlingFromPlayer() {
 		auto gatlingRadian = GatlingRadius/*100.0*/;
 
 		AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlingRadian);
-		if (AppFrame::Math::Utility::CollisionCapsuleSphere(plyCapsule, gatlingSphere)) {
+		if (AppFrame::Math::Utility::CollisionCapsuleSphere(playerCapsule, gatlingSphere)) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
 			_owner.collisionComponent().report().id(ReportId::HitFromGatling);
 			_owner.collisionComponent().damage(20.0);
@@ -213,8 +243,8 @@ void CollisionComponent::GatlingFromPlayer() {
 
 void CollisionComponent::ObjectModelFromLargeEnemy() {
 	auto fallObjectPos = _owner.position();
-	auto capsulePos1 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos1, 0.0);
-	auto capsulePos2 = fallObjectPos + Vector4(0.0, FallObjectCapsulePos2, 0.0);
+	auto capsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
+	auto capsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
 	auto capsuleRadian = static_cast<float>(FallObjectRadius);
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
@@ -262,6 +292,109 @@ void CollisionComponent::LargeEnemyFromBullet() {
 			objectBase.collisionComponent().damage(10.0);
 			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 			_owner.collisionComponent().hitPos(objectBase.position());
+		}
+	}
+
+}
+
+void CollisionComponent::FallObjectFromLaser() {
+	auto fallObjectPos = _owner.position();
+	auto fallObjectCapsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
+	auto fallObjectCapsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
+	auto fallObjectRadius = FallObjectRadius;
+
+	auto fallObjectCapsule = std::make_tuple(fallObjectCapsulePos1, fallObjectCapsulePos2, fallObjectRadius);
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Laser) {
+			continue;
+		}
+
+		auto& laser = dynamic_cast<Enemy::Laser&>(objectBase);
+		auto laserCapsulePos1 = laser.position();
+		auto laserCapsulePos2 = laser.end();
+		auto laserRadius = LaserRadius;
+
+		auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
+
+		if (AppFrame::Math::Utility::CollisionCapsuleCapsule(fallObjectCapsule, laserCapsule)) {
+			_owner.collisionComponent().report().id(ReportId::HitFromLaser);
+		}
+		break;
+		
+	}
+
+}
+
+void CollisionComponent::PlayerFromLaser() {
+	auto& player = dynamic_cast<Player::Player&>(_owner);
+	auto invincibleCnt = player.invincibleCnt();
+	if (invincibleCnt > 0) {
+		return;
+	}
+	auto playerPos = _owner.position();
+	auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+	auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+	auto playerCasuleRadian = PlayerRadius/*30.0*/;
+
+	AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCasuleRadian);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Laser) {
+			continue;
+		}
+
+		auto& laser = dynamic_cast<Enemy::Laser&>(objectBase);
+		auto laserCapsulePos1 = laser.position();
+		auto laserCapsulePos2 = laser.end();
+		auto laserRadius = LaserRadius;
+
+		auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
+
+		if (AppFrame::Math::Utility::CollisionCapsuleCapsule(playerCapsule, laserCapsule)) {
+			_owner.collisionComponent().report().id(ReportId::HitFromLaser);
+			_owner.collisionComponent().damage(20.0);
+			_owner.collisionComponent().hitPos(laser.position());
+		}
+		break;
+
+	}
+
+}
+
+void CollisionComponent::LargeEnemyFromPlayer() {
+
+	auto largeEnemyModel = _owner.modelAnimeComponent().modelHandle();
+	auto collision = _owner.modelAnimeComponent().FindFrame("S301_typeCO");
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+			continue;
+		}
+		auto& player = dynamic_cast<Player::Player&>(objectBase);
+		auto invincibleCnt = player.invincibleCnt();
+		if (invincibleCnt > 0) {
+			return;
+		}
+		auto playerPos = objectBase.position();
+		auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+		auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+		auto playerCasuleRadian = static_cast<float>(PlayerRadius)/*30.0*/;
+
+		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCasuleRadian);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+			objectBase.collisionComponent().hitPos(_owner.position());
+			objectBase.collisionComponent().damage(20.0);
 		}
 	}
 
