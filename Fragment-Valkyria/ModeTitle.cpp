@@ -39,12 +39,11 @@ void ModeTitle::Init() {
       resServer.GetTextures("TitleLogo")
    };
 
-   auto& soundServer = GetSoundServer();
-   soundServer.Play("TitleBgm");
-
 }
 
 void ModeTitle::Enter() {
+   auto& soundServer = GetSoundServer();
+   soundServer.Play("TitleBgm");
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {

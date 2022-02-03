@@ -85,10 +85,23 @@ void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate,d
    }
    // 新しくアタッチするアニメ番号をResourceServerから取得する
    _newAnimIndex = _owner.gameMain().resServer().GetModelAnimIndex(_key, animeName);
-   // 同一のアニメーションに切り替えようとしたなら返す
+#ifndef _DEBUG
    if (_animIndex == _newAnimIndex) {
       return;
    }
+#else
+   try {
+      if (_animIndex == _newAnimIndex) {
+         std::string message = animeName.data();
+         throw std::logic_error(
+            "----------モデル[" + _key + "]のアニメーション["+ message + "]にアタッチしようとしたところ" +
+            "同一のアニメーションにアタッチしました。ブレンドが実行されてない可能性があります----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
    // アニメーションブレンドのために新しいアニメーションにアタッチしておく
    _nextAttachNum = MV1AttachAnim(_modelHandle, _newAnimIndex,-1,FALSE);
    _blendRate = 0.f;    // ブレンド率の初期化

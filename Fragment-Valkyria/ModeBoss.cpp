@@ -35,7 +35,6 @@ void ModeBoss::Init() {
    loadJson.LoadTextures("ingame");
    auto& loadStage = _gameMain.loadStage();
    loadStage.LoadStageModels("Boss");
-   _gameMain.ingameTimer(0);
    ModeInGameBase::Init();
 }
 
@@ -62,6 +61,8 @@ void ModeBoss::Enter() {
    auto largeEnemy = objFactory.Create("LargeEnemy");
    objServer.Add(std::move(largeEnemy));
 
+   _gameMain.ingameTimer(0);
+
    ModeInGameBase::Enter();
 }
 
@@ -70,25 +71,26 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
       // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("Title", 'L');
    }
+   //-----------仮--------------
    if (input.GetMouse().LeftClick()) {
-      // 右クリックでタイトルへ遷移
       GetModeServer().GoToMode("ClearResult", 'S');
    }
-   //エフェクト仮描画
    if (input.GetKeyboard().ZClick()) {
       auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain,"Shot");
       GetEfcServer().Add(std::move(efcShot));
    }
+   //-----------仮--------------
    ModeInGameBase::Input(input);
 }
 
 void ModeBoss::Update() {
    ModeInGameBase::Update();
-   _gameCnt++;
 }
 
 void ModeBoss::Render() {
    ModeInGameBase::Render();
+#ifdef _DEBUG
    auto bossHp= GetObjServer().GetDoubleData("BossHP");
    DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),"ボスHP : %f", bossHp);
+#endif
 }

@@ -58,8 +58,6 @@ namespace FragmentValkyria {
           */
          virtual InGameType GetInGameType()const { return InGameType::Boss; }
 
-      private:
-         int _gameCnt{0};
       };
    }
 }

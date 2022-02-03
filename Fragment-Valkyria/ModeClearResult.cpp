@@ -12,6 +12,7 @@ void ModeClearResult::Init() {
 }
 
 void ModeClearResult::Enter() {
+   _born = true;
 }
 
 void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
