@@ -10,13 +10,13 @@
 			"keyname": "PlayerRightFootStep",
 			"filename": "PlayerRightFootStep.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 150
 		},
 		{
 			"keyname": "PlayerLeftFootStep",
 			"filename": "PlayerLeftFootStep.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 150
 		},
 		{
 			"keyname": "PlayerShoot",

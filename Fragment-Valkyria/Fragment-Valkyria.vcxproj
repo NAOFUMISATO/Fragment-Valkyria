@@ -189,6 +189,8 @@
     <ClInclude Include="ModeInGameBase.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
     <ClInclude Include="ModelComponent.h" />
+    <ClInclude Include="ModeMissionCompleted.h" />
+    <ClInclude Include="ModeMissionFailed.h" />
     <ClInclude Include="ModeTitle.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectFactory.h" />
@@ -231,6 +233,8 @@
     <ClCompile Include="ModeInGameBase.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
+    <ClCompile Include="ModeMissionCompleted.cpp" />
+    <ClCompile Include="ModeMissionFailed.cpp" />
     <ClCompile Include="ModeTitle.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
