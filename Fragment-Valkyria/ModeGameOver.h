@@ -17,8 +17,6 @@ namespace FragmentValkyria {
         
          void Render() override;
 
-         void Exit()override;
-
       private:
          int _grHandle{ -1 };
       };
