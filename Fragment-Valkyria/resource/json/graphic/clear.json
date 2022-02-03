@@ -2,7 +2,7 @@
 	"clear": [
 		{
 			"keyname": "NumberAndColon",
-			"filename": "number&colon.png",
+			"filename": "Number&Colon.png",
 			"allnum": 11,
 			"xnum": 11,
 			"ynum": 1,
@@ -11,7 +11,7 @@
 		},
 		{
 			"keyname": "ClearBg",
-			"filename": "clearbg.png",
+			"filename": "ClearBg.png",
 			"allnum": 1,
 			"xnum": 1,
 			"ynum": 1,

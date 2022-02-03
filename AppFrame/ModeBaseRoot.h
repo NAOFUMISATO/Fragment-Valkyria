@@ -58,7 +58,7 @@ namespace AppFrame {
          /**
           * \brief デストラクタ
           */
-         virtual ~ModeBaseRoot();
+         virtual ~ModeBaseRoot()=default;
          /**
           * \brief 初期化処理
           */

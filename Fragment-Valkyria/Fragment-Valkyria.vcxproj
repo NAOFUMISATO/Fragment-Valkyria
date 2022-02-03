@@ -185,6 +185,7 @@
     <ClInclude Include="ModeBase.h" />
     <ClInclude Include="ModeBoss.h" />
     <ClInclude Include="ModeClearResult.h" />
+    <ClInclude Include="ModeGameOver.h" />
     <ClInclude Include="ModeInGameBase.h" />
     <ClInclude Include="ModelAnimeComponent.h" />
     <ClInclude Include="ModelComponent.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeBoss.cpp" />
     <ClCompile Include="ModeClearResult.cpp" />
+    <ClCompile Include="ModeGameOver.cpp" />
     <ClCompile Include="ModeInGameBase.cpp" />
     <ClCompile Include="ModelAnimeComponent.cpp" />
     <ClCompile Include="ModelComponent.cpp" />

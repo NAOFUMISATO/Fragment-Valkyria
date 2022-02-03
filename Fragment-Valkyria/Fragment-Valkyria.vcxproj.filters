@@ -207,7 +207,7 @@
     <ClInclude Include="RemainingBullet.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
-     <ClInclude Include="LaserCreator.h">
+    <ClInclude Include="LaserCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
     <ClInclude Include="ModeClearResult.h">
@@ -215,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="ClearTime.h">
       <Filter>ヘッダー ファイル\Clear</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeGameOver.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="ClearTime.cpp">
       <Filter>ソース ファイル\Clear</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeGameOver.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

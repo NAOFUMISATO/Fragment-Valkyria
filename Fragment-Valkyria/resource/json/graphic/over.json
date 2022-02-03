@@ -1,0 +1,13 @@
+{
+	"over": [
+		{
+			"keyname": "OverBg",
+			"filename": "OverBg.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 1920,
+			"ysize": 1080
+		}
+	]
+}
