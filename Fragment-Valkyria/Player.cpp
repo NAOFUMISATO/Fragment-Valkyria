@@ -405,7 +405,7 @@ void Player::StateDie::Update() {
         --_timeOver;
     }
     else {
-        _owner.gameMain().modeServer().GoToMode("Title");
+        _owner.gameMain().modeServer().GoToMode("GameOver");
     }
 }
 

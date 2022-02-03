@@ -14,6 +14,7 @@
 #include "LoadStageFromJson.h"
 #include "AppFrame.h"
 #include "ModeClearResult.h"
+#include "ModeGameOver.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -48,6 +49,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
    _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
+   _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>(*this));
    return true;
 }
 

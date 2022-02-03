@@ -5,7 +5,7 @@ namespace {
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
-   constexpr auto DefalutScale = 1.0;
+   constexpr auto DefalutScale = 3.0;
    constexpr auto DefalutAngle = 0.0;
 
 }
@@ -16,14 +16,14 @@ ClearTime::ClearTime(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
 
 void ClearTime::Init() {
    _grHandles = GetResServer().GetTextures("NumberAndColon");
-   _position = { 960,540,0 };
+   _position = { 600,540,0 };
    auto [x, y] = _position.GetVec2();
    _xPositions = {
       static_cast<int>(x),
-      static_cast<int>(x + 50.0),
-      static_cast<int>(x + 50.0 * ThirdMultRate),
-      static_cast<int>(x + 50.0 * FourthMultRate),
-      static_cast<int>(x + 50.0 * FifthMultRate)
+      static_cast<int>(x + 150.0),
+      static_cast<int>(x + 150.0 * ThirdMultRate),
+      static_cast<int>(x + 150.0 * FourthMultRate),
+      static_cast<int>(x + 150.0 * FifthMultRate)
    };
 }
 

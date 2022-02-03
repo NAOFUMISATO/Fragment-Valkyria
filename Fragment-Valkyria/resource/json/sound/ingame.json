@@ -1,10 +1,46 @@
 {
 	"ingame": [
 		{
-			"keyname": "TitleBgm",
-			"filename": "sublight.wav",
+			"keyname": "PlayerDamage",
+			"filename": "PlayerDamage.wav",
 			"isload": true,
-			"volume": 20
+			"volume": 255
+		},
+		{
+			"keyname": "PlayerFootStep",
+			"filename": "PlayerFootStep.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "PlayerShoot",
+			"filename": "PlayerShoot.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "PlayerShootReady",
+			"filename": "PlayerShootReady.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "BossFootstep",
+			"filename": "BossFootstep.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "BossGatling",
+			"filename": "BossGatling.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "BossStan",
+			"filename": "BossStan.wav",
+			"isload": true,
+			"volume": 255
 		}
 	]
 }

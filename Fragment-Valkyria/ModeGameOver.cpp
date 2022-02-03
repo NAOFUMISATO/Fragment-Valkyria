@@ -27,7 +27,7 @@ void ModeGameOver::Enter() {
 
 void ModeGameOver::Input(AppFrame::Input::InputManager& input) {
    if (input.GetMouse().LeftClick()) {
-      GetModeServer().GoToMode("Totle", 'S');
+      GetModeServer().GoToMode("Title", 'S');
    }
 }
 
