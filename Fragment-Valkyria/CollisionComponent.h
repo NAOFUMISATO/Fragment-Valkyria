@@ -27,7 +27,8 @@ namespace FragmentValkyria {
 				HitFromFallObject,
 				HitFromGatling,
 				HitFromLargeEnemy,
-				HitFromBullet
+				HitFromBullet,
+				HitFromLaser
 			};
 
 			class Report {
@@ -56,6 +57,12 @@ namespace FragmentValkyria {
 			void ObjectModelFromLargeEnemy();
 
 			void LargeEnemyFromBullet();
+
+			void FallObjectFromLaser();
+
+			void PlayerFromLaser();
+
+			void LargeEnemyFromPlayer();
 
 			void PlayerKnockBack();
 

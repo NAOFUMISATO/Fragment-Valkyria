@@ -23,7 +23,7 @@ void LargeEnemy::Init() {
 	auto modelHandle = _modelAnimeComponent->modelHandle();
 	_collision = _modelAnimeComponent->FindFrame("S301_typeCO");
 	// フレーム1をナビメッシュとして使用
-	MV1SetupCollInfo(modelHandle, _collision);
+	MV1SetupCollInfo(modelHandle, _collision, 3, 6, 3);
 }
 
 void LargeEnemy::Input(InputManager& input) {
@@ -39,8 +39,6 @@ void LargeEnemy::Update() {
 	ComputeWorldTransform();
 	// モデルの更新
 	_modelAnimeComponent->Update();
-
-	GetObjServer().RegistVector("EnemyPos", _position);
 }
 
 void LargeEnemy::Draw() {
@@ -48,6 +46,8 @@ void LargeEnemy::Draw() {
 }
 
 void LargeEnemy::CreateGatling() {
+	//ガトリングを生成する座標を設定
+	GetObjServer().RegistVector("GatlingPos", _position);
 	auto gatling = gameMain().objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
 }
@@ -147,21 +147,24 @@ void LargeEnemy::StateIdle::Input(InputManager& input) {
 
 void LargeEnemy::StateIdle::Update() {
 
-	if (_owner._stateCnt >= 1 && _owner._stateCnt % 300 == 0) {
+	if (_owner._stateCnt >= 1 && _owner._stateCnt % (60 * 5) == 0) {
 		if (!_owner._fallObjectflag) {
 			/*_owner._stateServer->GoToState("Move");*/
 			_owner._stateServer->GoToState("FallObject");
 			/*_owner._stateServer->GoToState("Laser");*/
 		}
 		else if (!_owner._moving){
-			/*_owner._stateServer->GoToState("Move");*/
-			_owner._stateServer->GoToState("Laser");
+			_owner._stateServer->GoToState("Move");
 		}
-		else {
+		else if (!_owner._gatlingFlag){
 			_owner._stateServer->GoToState("Gatling");
 		}
-	}
+		else {
+			_owner._stateServer->GoToState("Laser");
+		}
 
+	}
+	_owner._collisionComponent->LargeEnemyFromPlayer();
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
 
@@ -198,6 +201,7 @@ void LargeEnemy::StateFallObject::Update() {
 void LargeEnemy::StateGatling::Enter() {
 	_owner._stateCnt = 0;
 	_owner._gatlingCnt = 10;
+	_owner._gatlingFlag = true;
 	_owner._modelAnimeComponent->ChangeAnime("beem", true);
 }
 
@@ -209,8 +213,6 @@ void LargeEnemy::StateGatling::Update() {
 
 	if (_owner._gatlingCnt <= 0) {
 		_owner._stateServer->GoToState("Idle");
-		_owner._fallObjectflag = false;
-		_owner._moving = false;
 	}
 
 	_owner.HitCheckFromFallObject();
@@ -246,7 +248,7 @@ void LargeEnemy::StateMove::Enter() {
 	_owner._endRotating = true;
 	_owner._modelAnimeComponent->ChangeAnime("walk", true);
 
-	auto result = AppFrame::Math::Utility::GetRandom(0, 1)/*1*/;
+	auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/true;
 	if (result) {
 		_owner._moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 		_owner._moved.Normalized();
@@ -291,6 +293,7 @@ void LargeEnemy::StateMove::Update() {
 		
 		++_owner._stateCnt;
 	}
+	_owner._collisionComponent->LargeEnemyFromPlayer();
 
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
@@ -298,13 +301,19 @@ void LargeEnemy::StateMove::Update() {
 
 void LargeEnemy::StateLaser::Enter() {
 	_owner._stateCnt = 0;
-	_owner._moving = true;
 	_owner._modelAnimeComponent->ChangeAnime("beem", true);
+	_createLaser = false;
 }
 
 void LargeEnemy::StateLaser::Update() {
-	if (_owner._stateCnt >= 60 * 3) {
+	if (_owner._stateCnt >= 60 * 3 && !_createLaser) {
 		_owner.CreateLaser();
+		_createLaser = true;
+	}
+	else if (_owner._stateCnt >= 60 * 6) {
+		_owner._fallObjectflag = false;
+		_owner._moving = false;
+		_owner._gatlingFlag = false;
 		_owner._stateServer->GoToState("Idle");
 	}
 

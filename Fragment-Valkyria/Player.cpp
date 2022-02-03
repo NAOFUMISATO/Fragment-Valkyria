@@ -184,6 +184,48 @@ void Player::HitCheckFromFallObject() {
     }
 }
 
+void Player::HitCheckFromLaser() {
+    auto report = _collisionComponent->report();
+
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLaser) {
+        auto hitPos = _collisionComponent->hitPos();
+        auto knockBackVec = _position - hitPos;
+        auto [x, y, z] = knockBackVec.GetVec3();
+        auto knockBackDelta = Vector4(x, 0.0, z);
+        knockBackDelta.Normalized();
+        _knockBack = knockBackDelta * 20.0;
+
+        _hp -= _collisionComponent->damage();
+
+        _collisionComponent->knockBack(true);
+
+        _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
+
+        _cameraComponent->SetZoom(false);
+
+        _stateServer->PushBack("KnockBack");
+    }
+}
+
+void Player::HitCheckFromLargeEnemy() {
+    auto report = _collisionComponent->report();
+
+    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+        auto hitPos = _collisionComponent->hitPos();
+        auto knockBackVec = _position - hitPos;
+        knockBackVec.Normalized();
+        _knockBack = knockBackVec * 10.0;
+
+        _hp -= _collisionComponent->damage();
+
+        _collisionComponent->knockBack(true);
+
+        _cameraComponent->SetZoom(false);
+
+        _stateServer->PushBack("KnockBack");
+    }
+}
+
 void Player::WeakAttack() {
     auto bullet = gameMain().objFactory().Create("Bullet");
     gameMain().objServer().Add(std::move(bullet));
@@ -206,8 +248,6 @@ void Player::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_idle", true);
 }
 void Player::StateIdle::Input(InputManager& input) {
-
-    _owner.HitCheckFromIdleFallObject();
 
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
@@ -239,9 +279,17 @@ void Player::StateIdle::Input(InputManager& input) {
 }
 void Player::StateIdle::Update() {
     _owner._collisionComponent->ObjectRangeFromPlayer();
+    _owner.HitCheckFromIdleFallObject();
+    
     _owner._collisionComponent->GatlingFromPlayer();
+    _owner._collisionComponent->PlayerFromLaser();
+    _owner.HitCheckFromLargeEnemy();
     _owner.HitCheckFromFallObject();
     _owner.HitCheckFromGatling();
+    _owner.HitCheckFromLaser();
+    
+    //–³“GŽžŠÔXV
+    --_owner._invincibleCnt;
 }
 
 /// ‘–‚è
@@ -250,7 +298,6 @@ void Player::StateRun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("MO_SDChar_run", true);
 }
 void Player::StateRun::Input(InputManager& input) {
-    _owner.HitCheckFromFallObject();
     _owner.HitCheckFromIdleFallObject();
 
     auto moved = false;
@@ -307,7 +354,14 @@ void Player::StateRun::Update() {
    _owner.Move(_owner._moved);
    _owner._collisionComponent->ObjectRangeFromPlayer();
    _owner._collisionComponent->GatlingFromPlayer();
+   _owner._collisionComponent->PlayerFromLaser();
+   _owner.HitCheckFromFallObject();
+   _owner.HitCheckFromLargeEnemy();
    _owner.HitCheckFromGatling();
+   _owner.HitCheckFromLaser();
+
+   //–³“GŽžŠÔXV
+   --_owner._invincibleCnt;
 }
 
 /// UŒ‚
@@ -343,11 +397,17 @@ void Player::StateShootReady::Input(InputManager& input) {
 
 void Player::StateShootReady::Update() {
     _owner.ShootRotate();
-
+   
     _owner._collisionComponent->GatlingFromPlayer();
-
+    _owner._collisionComponent->PlayerFromLaser();
+    _owner.HitCheckFromLargeEnemy();
     _owner.HitCheckFromFallObject();
     _owner.HitCheckFromGatling();
+    _owner.HitCheckFromLaser();
+
+    //–³“GŽžŠÔXV
+    --_owner._invincibleCnt;
+   
 }
 
 void Player::StateShootReady::Draw() {
@@ -376,7 +436,9 @@ void Player::StateKnockBack::Update() {
         _owner._stateServer->GoToState("Die");
     }
     else {
+        _owner._invincibleCnt = 60 * 2;
         _owner.collisionComponent().knockBack(false);
+        _owner.collisionComponent().report().id(Collision::CollisionComponent::ReportId::None);
         _owner._stateServer->GoToState("Idle");
     }
 }

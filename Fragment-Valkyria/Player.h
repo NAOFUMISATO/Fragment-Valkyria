@@ -69,6 +69,8 @@ namespace FragmentValkyria {
 
          double hp() { return _hp; }
 
+         int invincibleCnt() { return _invincibleCnt; }
+
       private:
          /**
           * \brief ˆÚ“®ˆ—
@@ -87,12 +89,17 @@ namespace FragmentValkyria {
 
          void HitCheckFromFallObject();
 
+         void HitCheckFromLaser();
+
+         void HitCheckFromLargeEnemy();
+
          void WeakAttack();
 
          double _rotateSpeed{ 0.0 };       //!< ‰ñ“]‘¬“x
          int _freezeTime{ 0 };
          double _hp{ 100.0 };
          int _bulletStock{ 5 };
+         int _invincibleCnt{ 0 };
 
          Vector4 _moved{ Vector4() };
          Vector4 _knockBack{ Vector4() };

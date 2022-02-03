@@ -3,7 +3,7 @@
  * \file   Utility.cpp
  * \brief  有用算術
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, AHMD2000
  * \date   December 2021
  *********************************************************************/
 #include <random>
@@ -178,6 +178,154 @@ namespace AppFrame {
           }
 
           return distance <= (cradian + sradian) * (cradian + sradian);
+      }
+
+      bool Utility::CollisionCapsuleCapsule(const Capsule& c1, const Capsule& c2) {
+          Vector4 p1, p2;
+          double t1, t2;
+          auto [start1, end1, r1] = c1;
+          auto [start2, end2, r2] = c2;
+          auto s1 = std::make_tuple(start1, end1 - start1);
+          auto s2 = std::make_tuple(start2, end2 - start2);
+          auto checkSize = SegmentSegmentDistance(s1, s2, p1, p2, t1, t2);
+
+          return (checkSize <= (r1 + r2));
+      }
+
+      double Utility::PointLineDistance(const Vector4& point, const Line& line, Vector4& h, double& t) {
+          auto [linepoint, direction] = line;
+          double length = direction.Dot(direction);
+          t = 0.0;
+
+          if (length > 0.0) {
+              t = direction.Dot(point - linepoint) / length;
+          }
+
+          h = linepoint + direction * t;
+
+          return (h - point).Lenght();
+      }
+
+      bool Utility::IsSharpAngle(const Vector4& p1, const Vector4& p2, const Vector4& p3) {
+          auto vector1 = p1 - p2;
+          auto vector2 = p3 - p2;
+          if (vector1.Dot(vector2) < 0.0) {
+              return false;
+          }
+          else {
+              return true;
+          }
+      }
+
+      double Utility::PointSegmentDistance(const Vector4& point, const Segment& segment, Vector4& h, double& t) {
+          auto [start, direction] = segment;
+          auto end = start + direction;
+
+          auto length = PointLineDistance(point, std::make_tuple(start, end - start), h, t);
+
+          if (!IsSharpAngle(point, start, end)) {
+              h = start;
+              return (start - point).Lenght();
+          }
+          else if (!IsSharpAngle(point, end, start)) {
+              h = end;
+              return (end - point).Lenght();
+          }
+
+          return length;
+      }
+
+      double Utility::LineLineDistance(const Line& l1, const Line& l2, Vector4& p1, Vector4& p2, double& t1, double& t2) {
+
+          auto [l1Point, l1Direction] = l1;
+          auto [l2Point, l2Direction] = l2;
+          //2直線が平行だったら点と直線の最短距離を返す
+          if (l1Direction.Cross(l2Direction).Lenght() == 0.0) {
+              double length = PointLineDistance(l1Point, l2, p2, t2);
+              p1 = l1Point;
+              t1 = 0.0;
+
+              return length;
+          }
+
+          double dotV1V2 = l1Direction.Dot(l2Direction);
+          double dotV1V1 = l1Direction.Dot(l1Direction);
+          double dotV2V2 = l2Direction.Dot(l2Direction);
+          auto l1PointFroml2Point = l1Point - l2Point;
+          t1 = (dotV1V2 * l2Direction.Dot(l1PointFroml2Point) - dotV2V2 * l1Direction.Dot(l1PointFroml2Point)) / (dotV1V1 * dotV2V2 - dotV1V2 * dotV1V2);
+          p1 = l1Point + l1Direction * t1;
+          t2 = l2Direction.Dot(p1 - l2Point) / dotV2V2;
+          p2 = l2Point + l2Direction * t2;
+
+
+          return (p2 - p1).Lenght();
+      }
+
+      double Utility::SegmentSegmentDistance(const Segment& s1, const Segment& s2, Vector4& p1, Vector4& p2, double& t1, double& t2) {
+          auto [start1, direction1] = s1;
+          auto [start2, direction2] = s2;
+          if (direction1.Lenght() <= 0.0) {
+              if (direction2.Lenght() <= 0.0) {
+                  double length = (start2 - start1).Lenght();
+
+                  p1 = start1;
+                  p2 = start2;
+                  t1 = t2 = 0.0;
+
+                  return length;
+              }
+              else {
+                  double length = PointSegmentDistance(start1, s2, p2, t2);
+                  p1 = start1;
+                  t1 = 0.0;
+
+                  std::clamp(t2, 0.0, 1.0);
+                  return length;
+              }
+          }
+          else if (direction2.Lenght() <= 0.0) {
+              double length = PointSegmentDistance(start2, s1, p1, t1);
+              p2 = start2;
+              std::clamp(t1, 0.0, 1.0);
+              t2 = 0.0;
+              return length;
+          }
+          //線分同士の判定になった場合
+          //平行だったら垂線と線分との交点の1つを線分1の始点に仮決定
+          if (direction1.Cross(direction2).Lenght() == 0.0) {
+              t1 = 0.0;
+              p1 = start1;
+              auto length = PointSegmentDistance(start1, s2, p2, t2);
+              if (0.0 <= t2 && t2 <= 1.0) {
+                  return length;
+              }
+          }
+          else {
+              //線分はねじれの関係
+              double length = LineLineDistance(s1, s2, p1, p2, t1, t2);
+              //線分内に垂線との交点があったらそのまま距離を返す
+              if (0.0 <= t1 && t1 <= 1.0 && 0.0 <= t2 && t2 <= 1.0) {
+                  return length;
+              }
+          }
+          //垂線との交点が線分外にあった場合
+          std::clamp(t1, 0.0, 1.0);
+          p1 = start1 + direction1 * t1;
+          auto length = PointSegmentDistance(p1, s2, p2, t2);
+          if (0.0 <= t2 && t2 <= 1.0) {
+              return length;
+          }
+          //線分2の垂線との交点が外側にある
+          std::clamp(t2, 0.0, 1.0);
+          p2 = start2 + direction2 * t2;
+          length = PointSegmentDistance(p2, s1, p1, t1);
+          if (0.0 <= t1 && t1 <= 1.0) {
+              return length;
+          }
+          //
+          std::clamp(t1, 0.0, 1.0);
+          p1 = start1 + direction1 * t1;
+          return (p2 - p1).Lenght();
       }
 
       unsigned int Utility::GetColorCode(unsigned char red, unsigned char green, unsigned char blue) {

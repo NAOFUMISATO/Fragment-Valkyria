@@ -48,7 +48,7 @@ void Laser::StateIdle::Enter() {
 }
 
 void Laser::StateIdle::Update() {
-	if (_owner._stateCnt >= 60 * 10) {
+	if (_owner._stateCnt >= 60 * 3) {
 		_owner.SetDead();
 	}
 

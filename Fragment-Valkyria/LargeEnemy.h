@@ -63,6 +63,7 @@ namespace FragmentValkyria {
             int _collision{ 0 };
             const int GatlingFrame{ 60 };
             bool _fallObjectflag{ false };
+            bool _gatlingFlag{ false };
             bool _moving{ false };
             bool _firstRotating{ true };
             bool _endRotating{ true };
@@ -233,6 +234,8 @@ namespace FragmentValkyria {
                  * \brief XVˆ—
                  */
                 void Update() override;
+            private:
+                bool _createLaser{ false };
             };
         };
     }
