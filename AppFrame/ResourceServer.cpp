@@ -51,6 +51,7 @@ namespace AppFrame {
       }
 
       void ResourceServer::LoadTexture(std::string_view key, Texture& texture) {
+#ifndef _DEBUG
          if (_textures.contains(key.data())) {
             auto&& [texture, handles] = _textures[key.data()];
             for (auto handle : handles) {
@@ -59,6 +60,23 @@ namespace AppFrame {
             handles.clear();        // 画像ハンドルコンテナの解放
             _textures.erase(key.data());  // 指定したキーの削除
          }
+#else
+         try {
+            if (_textures.contains(key.data())) {
+               auto&& [texture, handles] = _textures[key.data()];
+               for (auto handle : handles) {
+                  DeleteGraph(handle); // 登録済みの場合は画像を削除
+               }
+               handles.clear();        // 画像ハンドルコンテナの解放
+               _textures.erase(key.data());  // 指定したキーの削除
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]の画像が再度、読み込まれました。以前の画像ハンドルデータは破棄されます。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto filename = texture.textureName().data();
          auto [allnum, xnum, ynum, xsize, ysize] = texture.GetDivParams();
          std::vector<int> handles(allnum);
@@ -156,6 +174,7 @@ namespace AppFrame {
       }
 
       int ResourceServer::LoadModel(std::string_view key, const std::string_view filename) {
+#ifndef _DEBUG
          if (_models.contains(key.data())) {
             auto& [handles,animes] = _models[key.data()];
             for (auto handle : handles) {
@@ -165,6 +184,24 @@ namespace AppFrame {
             animes.clear();
             _models.erase(key.data());   // 指定したキーの削除
          }
+#else
+         try {
+            if (_models.contains(key.data())) {
+               auto& [handles, animes] = _models[key.data()];
+               for (auto handle : handles) {
+                  MV1DeleteModel(handle);   // 登録済みの場合はモデルを削除
+               }
+               handles.clear();             // モデルハンドルコンテナの解放
+               animes.clear();
+               _models.erase(key.data());   // 指定したキーの削除
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]のモデルが再度、読み込まれました。以前のモデルハンドルデータは破棄されます。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto handle = MV1LoadModel(filename.data());   // // DxLib::MV1LoadModelをコピーする
          std::vector<int> handles{ handle };
 
@@ -255,11 +292,26 @@ namespace AppFrame {
       }
 
       void ResourceServer::LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo) {
+#ifndef _DEBUG
          if (_sounds.contains(key.data())) {
             auto&& [filename, handle, volume] = _sounds[key.data()];
             DeleteSoundMem(handle);
             _sounds.erase(key.data());
          }
+#else
+         try {
+            if (_sounds.contains(key.data())) {
+               auto&& [filename, handle, volume] = _sounds[key.data()];
+               DeleteSoundMem(handle);
+               _sounds.erase(key.data());
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]の音源が再度、読み込まれました。以前の音源ハンドルデータは破棄されます。----------\n");
+            }
+         }
+         catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto [filename, isLoad, volume] = soundInfo;
          auto handle = -1;
          if (isLoad) {
@@ -301,10 +353,24 @@ namespace AppFrame {
       }
 
       void ResourceServer::LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo) {
+#ifndef _DEBUG
          if (_effects.contains(key.data())) {
             DeleteEffekseerEffect(_effects[key.data()]);
             _effects.erase(key.data());  // 指定したキーの削除
          }
+#else
+         try{
+            if (_effects.contains(key.data())) {
+               DeleteEffekseerEffect(_effects[key.data()]);
+               _effects.erase(key.data());  // 指定したキーの削除
+               std::string message = key.data();
+               throw std::logic_error("----------キー[" + message + "]のエフェクトが再度、読み込まれました。以前のエフェクトハンドルデータは破棄されます。----------\n");
+            }
+         }
+            catch (std::logic_error& error) {
+            OutputDebugString(error.what());
+         }
+#endif
          auto [fileName,scale] = effectInfo;
          auto handle = LoadEffekseerEffect(fileName.c_str(), static_cast<float>(scale));
          _effects.emplace(key, handle);
