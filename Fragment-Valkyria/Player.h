@@ -93,7 +93,6 @@ namespace FragmentValkyria {
          int _freezeTime{ 0 };
          double _hp{ 100.0 };
          int _bulletStock{ 5 };
-
          Vector4 _moved{ Vector4() };
          Vector4 _knockBack{ Vector4() };
          Vector4 _direction{ Vector4() };
@@ -101,7 +100,6 @@ namespace FragmentValkyria {
          Matrix44 _rightRotation{ Matrix44() };
          Matrix44 _leftRotation{ Matrix44() };
          Matrix44 _backRotation{ Matrix44() };
-
       public:
          /**
           * \class プレイヤー状態の基底クラス
@@ -171,6 +169,12 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+
+         private:
+            void FootStepSound();
+            int _footCnt{ 0 };
+            bool _footRightStep{ false };       //!< 足音処理のフラグ
+            bool _footLeftStep{ false };       //!< 足音処理のフラグ
          };
          /**
           * \class 攻撃状態クラス

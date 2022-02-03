@@ -30,6 +30,9 @@ namespace {
     const double CapsulePos1 = paramMap["capsule_pos1"];
     const double CapsulePos2 = paramMap["capsule_pos2"];
     const double CapsuleRadius = paramMap["capsule_radius"];
+
+    constexpr auto FootStepHeight = 3.0;   //!< ‘–‚èó‘ÔŽž‚Ì‘«‰¹”­¶‚‚³(‘«‚Ìb‚©‚ç‚ÌˆÊ’u)
+    constexpr auto FootStepStart = 10;     //!< ‘–‚èó‘Ô‘JˆÚŽž‚©‚ç‚Ì‘«‰¹–¢”­¶ƒtƒŒ[ƒ€
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -66,8 +69,8 @@ void Player::Update() {
    GetObjServer().RegistVector("PlayerRot", _rotation);
    GetObjServer().RegistVector("PlayerFor",GetForward());
 
-   auto handle = _modelAnimeComponent.get()->modelHandle();
-   auto headFrame = _modelAnimeComponent.get()->FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_Head");
+   auto handle = modelAnimeComponent().modelHandle();
+   auto headFrame = modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_Head");
    auto headPos = MV1GetFramePosition(handle, headFrame);
    GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
@@ -251,8 +254,9 @@ void Player::StateIdle::Update() {
 
 /// ‘–‚è
 void Player::StateRun::Enter() {
-   /*_owner._forwardSpeed = 10.0;*/
    _owner._modelAnimeComponent->ChangeAnime("run_motion", true, RunAnimeSpeed);
+   auto count = _owner.gameMain().modeServer().frameCount();
+   _footCnt = count;
 }
 void Player::StateRun::Input(InputManager& input) {
     _owner.HitCheckFromFallObject();
@@ -309,10 +313,12 @@ void Player::StateRun::Input(InputManager& input) {
    }
 }
 void Player::StateRun::Update() {
+   FootStepSound();
    _owner.Move(_owner._moved);
    _owner._collisionComponent->ObjectRangeFromPlayer();
    _owner._collisionComponent->GatlingFromPlayer();
    _owner.HitCheckFromGatling();
+
 }
 
 /// UŒ‚
@@ -337,10 +343,12 @@ void Player::StateAttack::Draw() {
 
 void Player::StateShootReady::Enter() {
     _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true, ShootReadyAnimeSpeed);
+    _owner.GetSoundComponent().Play("PlayerShootReady");
 }
 
 void Player::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick()) {
+       _owner.GetSoundComponent().Play("PlayerShoot");
        _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
         _owner._stateServer->PopBack();
         _owner._cameraComponent->SetZoom(false);
@@ -415,6 +423,7 @@ void Player::StateDie::Draw() {
 
 void Player::StateWeakShootReady::Enter() {
     _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true);
+    _owner.GetSoundComponent().Play("PlayerShootReady");
     _coolTime = 0;
 }
 
@@ -422,8 +431,10 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
         _owner.WeakAttack();
         _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
+        _owner.GetSoundComponent().Play("PlayerShoot");
         --_owner._bulletStock;
         _coolTime = 60 * 3;
+
     }
     if (input.GetXJoypad().LBClick()) {
         _owner._stateServer->PopBack();
@@ -456,4 +467,37 @@ void Player::StateReload::Update() {
     }
 
     ++_reloadCnt;
+}
+
+void Player::StateRun::FootStepSound() {
+   auto count = _owner.gameMain().modeServer().frameCount();
+   if (count - _footCnt >= FootStepStart) {
+      auto handle = _owner.modelAnimeComponent().modelHandle();
+      auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_RightToeBase");
+      auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_LeftToeBase");
+      auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
+      auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
+      auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
+      auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
+      if (rightFootY >= FootStepHeight) {
+         _footRightStep = true;
+      }
+      else {
+         if (_footRightStep) {
+            auto& soundServer = _owner.GetSoundComponent();
+            soundServer.Play("PlayerRightFootStep");
+            _footRightStep = false;
+         }
+      }
+      if (leftFootY >= FootStepHeight) {
+         _footLeftStep = true;
+      }
+      else {
+         if (_footLeftStep) {
+            auto& soundServer = _owner.GetSoundComponent();
+            soundServer.Play("PlayerLeftFootStep");
+            _footLeftStep = false;
+         }
+      }
+   }
 }

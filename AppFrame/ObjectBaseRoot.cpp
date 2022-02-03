@@ -5,7 +5,7 @@
 #include "StateServer.h"
 #include "DxUtility.h"
 #include "ModeServer.h"
-#include "SimpleTextureComponent.h"
+#include "TextureComponent.h"
 
 namespace AppFrame {
    namespace Object {
@@ -37,8 +37,12 @@ namespace AppFrame {
          return _gameBase.efcServer();
       }
 
-      Texture::SimpleTextureComponent& ObjectBaseRoot::GetSimpTexComponent() const {
-         return _gameBase.simpleTexComponent();
+      Texture::TextureComponent& ObjectBaseRoot::GetTexComponent() const {
+         return _gameBase.texComponent();
+      }
+
+      Sound::SoundComponent& ObjectBaseRoot::GetSoundComponent() const {
+         return _gameBase.soundComponent();
       }
 
       AppFrame::Resource::LoadResourceJson& ObjectBaseRoot::GetLoadJson() const{

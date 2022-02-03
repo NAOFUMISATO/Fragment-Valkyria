@@ -40,11 +40,11 @@ void RemainingBullet::Draw() {
    auto [x, y] = _position.GetVec2();
    auto [firstFlag, secondFlag, thirdFlag, fourthFlag, fifthFlag] = _stockFlag;
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
-   GetSimpTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
-   GetSimpTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
-   GetSimpTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
-   GetSimpTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthFlag]);
-   GetSimpTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthFlag]);
+   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
+   GetTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
+   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
+   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthFlag]);
+   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthFlag]);
 }
 
 void RemainingBullet::StockCheck(int stock) {

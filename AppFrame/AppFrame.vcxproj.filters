@@ -159,7 +159,7 @@
     <ClCompile Include="LoadParamJson.cpp">
       <Filter>ソース ファイル\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleTextureComponent.cpp">
+    <ClCompile Include="TextureComponent.cpp">
       <Filter>ソース ファイル\Texture</Filter>
     </ClCompile>
     <ClCompile Include="SpriteBaseRoot.cpp">
@@ -257,7 +257,7 @@
     <ClInclude Include="Singleton.h">
       <Filter>ヘッダー ファイル\Temp</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleTextureComponent.h">
+    <ClInclude Include="TextureComponent.h">
       <Filter>ヘッダー ファイル\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">

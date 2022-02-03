@@ -4,7 +4,7 @@
 #include "StateServer.h"
 #include "DxUtility.h"
 #include "ModeServer.h"
-#include "SimpleTextureComponent.h"
+#include "TextureComponent.h"
 #include "ResourceServer.h"
 
 namespace AppFrame {
@@ -16,7 +16,7 @@ namespace AppFrame {
       void SpriteBaseRoot::Draw() {
          auto [x, y] = _position.GetVec2();
          SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-         GetSimpTexComponent().TransDrawTexture(static_cast<int>(x), static_cast<int>(y), _cx, _cy, _scale, _angle, _grHandle, _turnFlag);
+         GetTexComponent().TransDrawTexture(static_cast<int>(x), static_cast<int>(y), _cx, _cy, _scale, _angle, _grHandle, _turnFlag);
          SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
       }
 
@@ -24,8 +24,8 @@ namespace AppFrame {
          return _gameBase.sprServer();
       }
 
-      Texture::SimpleTextureComponent& SpriteBaseRoot::GetSimpTexComponent() const {
-         return _gameBase.simpleTexComponent();
+      Texture::TextureComponent& SpriteBaseRoot::GetTexComponent() const {
+         return _gameBase.texComponent();
       }
 
       AppFrame::Resource::LoadResourceJson& SpriteBaseRoot::GetLoadJson() const {

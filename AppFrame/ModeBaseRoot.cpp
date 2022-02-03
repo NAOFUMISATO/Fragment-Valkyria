@@ -9,7 +9,7 @@
 #include "ModeBaseRoot.h"
 #include "ModeServer.h"
 #include "GameBase.h"
-#include "SimpleTextureComponent.h"
+#include "TextureComponent.h"
 #include "SpriteServer.h"
  /**
   * \brief アプリケーションフレーム
@@ -46,8 +46,8 @@ namespace AppFrame {
          return _gameBase.efcServer();
       }
 
-      Texture::SimpleTextureComponent& ModeBaseRoot::GetSimpTexComponent() const {
-         return _gameBase.simpleTexComponent();
+      Texture::TextureComponent& ModeBaseRoot::GetSimpTexComponent() const {
+         return _gameBase.texComponent();
       }
 
       Sprite::SpriteServer& ModeBaseRoot::GetSprServer() const {

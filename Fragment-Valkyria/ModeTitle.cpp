@@ -38,7 +38,7 @@ void ModeTitle::Init() {
       resServer.GetTextures("PressGuide"),
       resServer.GetTextures("TitleLogo")
    };
-
+  
 }
 
 void ModeTitle::Enter() {

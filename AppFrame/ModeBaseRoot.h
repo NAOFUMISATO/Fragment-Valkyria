@@ -32,7 +32,7 @@ namespace AppFrame {
       class EffectServer;
    }
    namespace Texture {
-      class SimpleTextureComponent;
+      class TextureComponent;
    }
    namespace Sprite {
       class SpriteServer;
@@ -124,7 +124,7 @@ namespace AppFrame {
           * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
           * \return 画像簡易描画クラスの参照
           */
-         Texture::SimpleTextureComponent& GetSimpTexComponent() const;
+         Texture::TextureComponent& GetSimpTexComponent() const;
          Sprite::SpriteServer& GetSprServer() const;
          /**
           * \brief フェード時間の設定

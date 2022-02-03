@@ -182,7 +182,7 @@ void FallObject::StateFall::Draw() {
 	FallObject::StateBase::Draw();
 	auto pointPosition = _owner._position;
 	pointPosition.SetY(FallPointPosY);
-	_owner.GetSimpTexComponent().DrawBillBoard(pointPosition, FallPointScale,DefaultPointAngle, _owner._fallPointHandles, FallPointAnimeSpeed);
+	_owner.GetTexComponent().DrawBillBoard(pointPosition, FallPointScale,DefaultPointAngle, _owner._fallPointHandles, FallPointAnimeSpeed);
 }
 
 void FallObject::StateSave::Enter() {

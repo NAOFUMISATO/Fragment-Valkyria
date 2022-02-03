@@ -17,7 +17,7 @@
 #include "LoadResourceJson.h"
 #include "EffectServer.h"
 #include "ObjectServer.h"
-#include "SimpleTextureComponent.h"
+#include "TextureComponent.h"
 #include "SpriteServer.h"
  /**
   * \brief アプリケーションフレーム
@@ -91,7 +91,7 @@ namespace AppFrame {
 
          _objServer = std::make_unique<Object::ObjectServer>();
 
-         _simpleTexComponent = std::make_unique<Texture::SimpleTextureComponent>(*this);
+         _texComponent = std::make_unique<Texture::TextureComponent>(*this);
 
          _sprServer = std::make_unique <Sprite::SpriteServer>();
 

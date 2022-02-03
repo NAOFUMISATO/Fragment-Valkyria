@@ -7,8 +7,14 @@
 			"volume": 255
 		},
 		{
-			"keyname": "PlayerFootStep",
-			"filename": "PlayerFootStep.wav",
+			"keyname": "PlayerRightFootStep",
+			"filename": "PlayerRightFootStep.wav",
+			"isload": true,
+			"volume": 255
+		},
+		{
+			"keyname": "PlayerLeftFootStep",
+			"filename": "PlayerLeftFootStep.wav",
 			"isload": true,
 			"volume": 255
 		},

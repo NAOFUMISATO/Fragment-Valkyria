@@ -24,7 +24,10 @@ namespace AppFrame {
       class EffectServer;
    }
    namespace Texture {
-      class SimpleTextureComponent;
+      class TextureComponent;
+   }
+   namespace Sound {
+      class SoundComponent;
    }
    /**
     * \brief オブジェクト関係
@@ -173,10 +176,11 @@ namespace AppFrame {
           */
          AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
          /**
-          * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
-          * \return 画像簡易描画クラスの参照
+          * \brief 画像描画クラスの参照をゲームベース経由で取得
+          * \return 画像描画クラスの参照
           */
-         Texture::SimpleTextureComponent& GetSimpTexComponent() const;
+         Texture::TextureComponent& GetTexComponent() const;
+         Sound::SoundComponent& GetSoundComponent() const;
 
       protected:
          /**

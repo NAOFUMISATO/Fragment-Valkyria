@@ -23,7 +23,7 @@
 #include "ObjectServer.h"
 #include "Singleton.h"
 #include "LoadParamJson.h"
-#include "SimpleTextureComponent.h"
+#include "TextureComponent.h"
 #include "SpriteBaseRoot.h"
 #include "SpriteServer.h"
 #include "Rect.h"

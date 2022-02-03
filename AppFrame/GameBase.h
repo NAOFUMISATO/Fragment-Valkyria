@@ -37,7 +37,7 @@ namespace AppFrame {
       class ObjectServer;
    }
    namespace Texture {
-      class SimpleTextureComponent;
+      class TextureComponent;
    }
    namespace Sprite {
       class SpriteServer;
@@ -149,7 +149,7 @@ namespace AppFrame {
           * \brief 画像の簡易描画クラスの参照を取得
           * \return 画像の簡易描画クラスのポインタ
           */
-         inline Texture::SimpleTextureComponent& simpleTexComponent() const { return *_simpleTexComponent; }
+         inline Texture::TextureComponent& texComponent() const { return *_texComponent; }
          inline Sprite::SpriteServer& sprServer() const { return *_sprServer; }
          /**
           * \brief ウィンドウモードに設定するか
@@ -179,7 +179,7 @@ namespace AppFrame {
          std::unique_ptr<Resource::LoadResourceJson> _loadresJson;   //!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;           //!< エフェクトの一括管理クラス
          std::unique_ptr<Object::ObjectServer> _objServer;           //!< オブジェクトの一括管理クラス
-         std::unique_ptr<Texture::SimpleTextureComponent> _simpleTexComponent;   //!< 画像の簡易描画クラス
+         std::unique_ptr<Texture::TextureComponent> _texComponent;   //!< 画像の簡易描画クラス
          std::unique_ptr<Sprite::SpriteServer> _sprServer;
       };
    }

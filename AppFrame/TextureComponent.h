@@ -1,6 +1,6 @@
 #pragma once
 /*****************************************************************//**
- * \file   SimpleTextureComponent.h
+ * \file   TextureComponent.h
  * \brief  画像及びビルボード簡易描画関数クラス
  * 
  * \author NAOFUMISATO
@@ -26,13 +26,13 @@ namespace AppFrame {
        * \class 画像及びビルボード簡易描画関数クラス
        * \brief 画像の描画及びアニメーションを簡易的に行う
        */
-      class SimpleTextureComponent {
+      class TextureComponent {
       public:
          /**
           * \brief コンストラクタ
           * \param gameBase ゲームベースの参照
           */
-         SimpleTextureComponent(Game::GameBase& gameBase);
+         TextureComponent(Game::GameBase& gameBase);
          /**
           * \brief 画像の描画を簡易的に行う
           * \param x 画像左上X座標

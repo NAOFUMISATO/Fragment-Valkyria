@@ -48,10 +48,10 @@ void ClearTime::Draw(){
    auto [x, y] = _position.GetVec2();
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
    auto [firstNo, secondNo, thirdNo, fourthNo, fifthNo] = _animeNos;
-   GetSimpTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthNo]);
-   GetSimpTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthNo]);
-   GetSimpTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdNo]);
-   GetSimpTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondNo]);
-   GetSimpTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstNo]);
+   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthNo]);
+   GetTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthNo]);
+   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdNo]);
+   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondNo]);
+   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstNo]);
 }
 

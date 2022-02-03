@@ -22,7 +22,7 @@ namespace AppFrame {
       class StateServer;
    }
    namespace Texture {
-      class SimpleTextureComponent;
+      class TextureComponent;
    }
    namespace Sprite {
       //二重インクルード防止
@@ -100,7 +100,7 @@ namespace AppFrame {
           * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
           * \return 画像簡易描画クラスの参照
           */
-         Texture::SimpleTextureComponent& GetSimpTexComponent() const;
+         Texture::TextureComponent& GetTexComponent() const;
          Resource::ResourceServer& GetResServer() const;
 
       protected:
