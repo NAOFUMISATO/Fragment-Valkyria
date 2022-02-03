@@ -124,7 +124,7 @@ namespace AppFrame {
           * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
           * \return 画像簡易描画クラスの参照
           */
-         Texture::TextureComponent& GetSimpTexComponent() const;
+         Texture::TextureComponent& GetTexComponent() const;
          Sprite::SpriteServer& GetSprServer() const;
          /**
           * \brief フェード時間の設定

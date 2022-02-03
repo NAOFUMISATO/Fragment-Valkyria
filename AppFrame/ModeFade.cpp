@@ -11,6 +11,16 @@
 #include "ModeFadeIn.h"
 #include "ModeFadeOut.h"
 #include "ModeServer.h"
+#include "Utility.h"
+namespace {
+   constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
+   constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
+   constexpr auto AlphaMin = 0.f;       //!< 透明度の最小値
+   constexpr auto AlphaMax = 255.f;     //!< 透明度の最大値
+   constexpr auto ShortFadeTime = 30.f; //!< フェード時間（小）
+   constexpr auto MiddleFadeTime = 60.f;//!< フェード時間（中）
+   constexpr auto LongFadeTime = 90.f;  //!< フェード時間（大）
+}
  /**
   * \brief アプリケーションフレーム
   */
@@ -19,34 +29,12 @@ namespace AppFrame {
     * \brief モード関係名前空間
     */
    namespace Mode {
-      namespace {
-         constexpr auto AlphaMin = 0.f;       //!< 透明度の最小値
-         constexpr auto AlphaMax = 255.f;     //!< 透明度の最大値
-         constexpr auto ShortFadeTime = 30.f; //!< フェード時間（小）
-         constexpr auto MiddleFadeTime = 60.f;//!< フェード時間（中）
-         constexpr auto LongFadeTime = 90.f;  //!< フェード時間（大）
-      }
-
-      ModeFadeBase::ModeFadeBase(Game::GameBase& appBase) : ModeBaseRoot(appBase),
-         _color(GetColor(0, 0, 0)) {
-      }
-
-      ModeFadeBase::~ModeFadeBase() {
-      }
-
-      void ModeFadeBase::Init() {
-         _color = GetColor(0, 0, 0);
-      }
-
-      void ModeFadeBase::Enter() {
-      }
-
-      void ModeFadeBase::Update() {
+      ModeFadeBase::ModeFadeBase(Game::GameBase& appBase) : ModeBaseRoot(appBase){
       }
 
       void ModeFadeBase::Render() {
          SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(_alpha));
-         DrawBox(0, 0, _width, _height, _color, TRUE);
+         DrawBox(0, 0, BoxWidth, BoxHeight, Math::Utility::GetColorCode(0, 0, 0), TRUE);
          SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
       }
 

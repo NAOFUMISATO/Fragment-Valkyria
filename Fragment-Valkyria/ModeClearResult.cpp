@@ -7,7 +7,6 @@ ModeClearResult::ModeClearResult(Game::GameMain& gameMain) : ModeBase{gameMain} 
 }
 
 void ModeClearResult::Init() {
-   GetLoadJson().LoadTextures("clear");
    _bgHandle = GetResServer().GetTexture("ClearBg");
 }
 
@@ -17,7 +16,7 @@ void ModeClearResult::Enter() {
 
 void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
    GetSprServer().Input(input);
-   if (input.GetXJoypad().AClick()) {
+   if (input.GetXJoypad().BClick()) {
       GetModeServer().GoToMode("Title");
    }
 }
@@ -31,7 +30,7 @@ void ModeClearResult::Update() {
 }
 
 void ModeClearResult::Render() {
-   GetSimpTexComponent().DrawTexture(0,0,1.0,0.0,_bgHandle);
+   GetTexComponent().DrawTexture(0,0,1.0,0.0,_bgHandle);
    GetSprServer().Render();
 }
 

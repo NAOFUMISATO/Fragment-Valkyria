@@ -413,7 +413,7 @@ void Player::StateDie::Update() {
         --_timeOver;
     }
     else {
-        _owner.gameMain().modeServer().GoToMode("GameOver");
+        _owner.gameMain().modeServer().PushBack("MissionFailed");
     }
 }
 

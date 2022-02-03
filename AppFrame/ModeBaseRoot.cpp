@@ -46,7 +46,7 @@ namespace AppFrame {
          return _gameBase.efcServer();
       }
 
-      Texture::TextureComponent& ModeBaseRoot::GetSimpTexComponent() const {
+      Texture::TextureComponent& ModeBaseRoot::GetTexComponent() const {
          return _gameBase.texComponent();
       }
 

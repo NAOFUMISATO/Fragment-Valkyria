@@ -15,6 +15,8 @@
 #include "AppFrame.h"
 #include "ModeClearResult.h"
 #include "ModeGameOver.h"
+#include "ModeMissionFailed.h"
+#include "ModeMissionCompleted.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -48,8 +50,10 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
 
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
-   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
+   _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));
+   _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>(*this));
    _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>(*this));
+   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
    return true;
 }
 

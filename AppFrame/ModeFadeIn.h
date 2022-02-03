@@ -27,9 +27,9 @@ namespace AppFrame {
           */
          ModeFadeIn(Game::GameBase& gameBase);
          /**
-          * \brief デフォルトデストラクタ
+          * \brief 初期化処理
           */
-         ~ModeFadeIn() = default;
+         void Init()override {};
          /**
           * \brief 入口処理
           */

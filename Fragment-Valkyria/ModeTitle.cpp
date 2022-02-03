@@ -47,7 +47,7 @@ void ModeTitle::Enter() {
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
-   if (input.GetMouse().LeftClick()) {
+   if (input.GetXJoypad().BClick()) {
       GetModeServer().GoToMode("Boss", 'L');
    }
 }
@@ -57,11 +57,11 @@ void ModeTitle::Update() {
 
 void ModeTitle::Render() {
    auto [bgGrHandle, guideGrHandle, titleGrHandle] = _grHandles;
-   GetSimpTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgGrHandle[0]);
+   GetTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgGrHandle[0]);
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-   GetSimpTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle, guideGrHandle, 2);
+   GetTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle, guideGrHandle, 2);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetSimpTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleGrHandle, 2);
+   GetTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleGrHandle, 2);
 
 }
 
