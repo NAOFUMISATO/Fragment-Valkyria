@@ -12,12 +12,14 @@
 namespace {
    // jsonファイルから値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("lightshadow", { "fog_enuble","fog_red","fog_green","fog_blue","fog_start",
+      "global_ambred","global_ambgreen","global_ambblue","global_ambalpha","alllight_difred","alllight_difgreen","alllight_difblue","alllight_difalpha",
       "fog_end","followlight_diff_y" ,"fixedlight_area" ,"fixedlight_atten_first" ,"fixedlight_atten_second","fixedlight_atten_third",
+      "alllight_spcred","alllight_spcgreen","alllight_spcblue","alllight_spcalpha","alllight_ambred","alllight_ambgreen","alllight_ambblue",
       "followlight_area","followlight_atten_first" ,"followlight_atten_second" ,"followlight_atten_third","fixedlight_difred","fixedlight_difgreen",
-      "fixedlight_difblue","fixedlight_difalpha","followlight_difred" ,"followlight_difgreen" ,"followlight_difblue","followlight_difalpha",
-      "fixedlight_spcred","fixedlight_spcgreen","fixedlight_spcblue","fixedlight_spcalpha","followlight_spcred" ,"followlight_spcgreen" ,
-      "followlight_spcblue","followlight_spcalpha","fixedlight_ambred","fixedlight_ambgreen","fixedlight_ambblue","fixedlight_ambalpha",
-      "followlight_ambred" ,"followlight_ambgreen" ,"followlight_ambblue","followlight_ambalpha","shadow_resolution" });
+      "alllight_ambalpha","fixedlight_difblue","fixedlight_difalpha","followlight_difred" ,"followlight_difgreen" ,"followlight_difblue",
+      "followlight_difalpha","fixedlight_spcred","fixedlight_spcgreen","fixedlight_spcblue","fixedlight_spcalpha","followlight_spcred" ,
+      "followlight_spcgreen" ,"followlight_spcblue","followlight_spcalpha","fixedlight_ambred","fixedlight_ambgreen","fixedlight_ambblue",
+      "fixedlight_ambalpha","followlight_ambred" ,"followlight_ambgreen" ,"followlight_ambblue","followlight_ambalpha","shadow_resolution" });
    const bool FogEnuble = paramMap["fog_enuble"];                             //!< フォグの有無
    const int FogRed= paramMap["fog_red"];                                     //!< フォグ色(赤)
    const int FogGreen = paramMap["fog_green"];                                //!< フォグ色(緑)
@@ -25,6 +27,22 @@ namespace {
    const float FogStart = paramMap["fog_start"];                              //!< フォグが始まる距離
    const float FogEnd = paramMap["fog_end"];                                  //!< フォグの色のみになる距離
    const double FollowLightDiffY = paramMap["followlight_diff_y"];            //!< 追従光源のプレイヤー頭位置からのY差分
+   const float GlobalAmbRed = paramMap["global_ambred"];                      //!< 全てのモデルに適応される環境光(赤)
+   const float GlobalAmbGreen = paramMap["global_ambgreen"];                  //!< 全てのモデルに適応される環境光(緑)
+   const float GlobalAmbBlue = paramMap["global_ambblue"];                    //!< 全てのモデルに適応される環境光(青)
+   const float GlobalAmbAlpha = paramMap["global_ambalpha"];                  //!< 全てのモデルに適応される環境光(透明度)
+   const float AllLightDifRed = paramMap["alllight_difred"];                  //!< 標準光源の拡散反射光(赤)
+   const float AllLightDifGreen = paramMap["alllight_difgreen"];              //!< 標準光源の拡散反射光(緑)
+   const float AllLightDifBlue = paramMap["alllight_difblue"];                //!< 標準光源の拡散反射光(青)
+   const float AllLightDifAlpha = paramMap["alllight_difalpha"];              //!< 標準光源の拡散反射光(透明度)
+   const float AllLightSpcRed = paramMap["alllight_spcred"];                  //!< 標準光源の鏡面反射光(赤)
+   const float AllLightSpcGreen = paramMap["alllight_spcgreen"];              //!< 標準光源の鏡面反射光(緑)
+   const float AllLightSpcBlue = paramMap["alllight_spcblue"];                //!< 標準光源の鏡面反射光(青)
+   const float AllLightSpcAlpha = paramMap["alllight_spcalpha"];              //!< 標準光源の鏡面反射光(透明度)
+   const float AllLightAmbRed = paramMap["alllight_ambred"];                  //!< 標準光源の環境光(赤)
+   const float AllLightAmbGreen = paramMap["alllight_ambgreen"];              //!< 標準光源の環境光(緑)
+   const float AllLightAmbBlue = paramMap["alllight_ambblue"];                //!< 標準光源の環境光(青)
+   const float AllLightAmbAlpha = paramMap["alllight_ambalpha"];              //!< 標準光源の環境光(透明度)
    const float FixedLightArea = paramMap["fixedlight_area"];                  //!< 固定光源の照射範囲
    const float FixedLightAttenFirst = paramMap["fixedlight_atten_first"];     //!< 固定光源の距離減衰パラメーター1(除算値)
    const float FixedLightAttenSecond = paramMap["fixedlight_atten_second"];   //!< 固定光源の距離減衰パラメーター2(除算値)
@@ -115,8 +133,14 @@ void LightAndShadow::Init() {
    SetFogColor(FogRed, FogGreen, FogBlue);
    // フォグの始点と終点の設定
    SetFogStartEnd(FogStart, FogEnd);
-   // 標準ライトを無効にする
-   SetLightEnable(false);
+   // 全てのモデルに適応される環境光の設定
+   SetGlobalAmbientLight(GetColorF(GlobalAmbRed, GlobalAmbGreen, GlobalAmbBlue, GlobalAmbAlpha));
+   // 標準光源の拡散反射光を設定
+   SetLightDifColor(GetColorF(AllLightDifRed, AllLightDifGreen, AllLightDifBlue, AllLightDifAlpha));
+   // 標準光源の鏡面反射光を設定
+   SetLightSpcColor(GetColorF(AllLightSpcRed, AllLightSpcGreen, AllLightSpcBlue, AllLightSpcAlpha));
+   // 標準光源の環境光を設定
+   SetLightAmbColor(GetColorF(AllLightAmbRed, AllLightAmbGreen, AllLightAmbBlue, AllLightAmbAlpha));
    // 各光源位置の初期化
    _lightPositions = {
       FixedLightPos,
