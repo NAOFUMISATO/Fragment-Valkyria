@@ -37,6 +37,7 @@ namespace FragmentValkyria {
 			void Draw() override;
 
             void end(Vector4 endPos) { _end = endPos; }
+            inline Vector4 end() { return _end; }
 
 		private:
 

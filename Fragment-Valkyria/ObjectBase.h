@@ -49,7 +49,8 @@ namespace FragmentValkyria {
             FallObject,
             Gatling,
             Bullet,
-            Laser
+            Laser,
+            PoorEnemyGatling
          };
          /**
           * \brief コンストラクタ
