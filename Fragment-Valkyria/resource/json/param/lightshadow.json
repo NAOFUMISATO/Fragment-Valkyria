@@ -1,25 +1,25 @@
 {
 	"lightshadow": [
 		{
-			"fog_enuble":true,
-			"fog_red":247,
-			"fog_green":188,
-			"fog_blue":101,
+			"fog_enuble":false,
+			"fog_red":200,
+			"fog_green":200,
+			"fog_blue":200,
 			"fog_start":50.0,
 			"fog_end":15000.0,
 			"followlight_diff_y":300.0,
-			"global_ambred":0.2,
-			"global_ambgreen":0.2,
-			"global_ambblue":0.2,
+			"global_ambred":0.5,
+			"global_ambgreen":0.5,
+			"global_ambblue":0.5,
 			"global_ambalpha":0.0,
-			"alllight_difred":1.0,
-			"alllight_difgreen":1.0,
-			"alllight_difblue":1.0,
-			"alllight_difalpha":1.0,
-			"alllight_spcred":0.5,
-			"alllight_spcgreen":0.5,
-			"alllight_spcblue":0.5,
-			"alllight_spcalpha":0.5,
+			"alllight_difred":0.3,
+			"alllight_difgreen":0.3,
+			"alllight_difblue":0.3,
+			"alllight_difalpha":0.3,
+			"alllight_spcred":0.3,
+			"alllight_spcgreen":0.3,
+			"alllight_spcblue":0.3,
+			"alllight_spcalpha":0.3,
 			"alllight_ambred":0.33,
 			"alllight_ambgreen":0.33,
 			"alllight_ambblue":0.33,
@@ -33,7 +33,7 @@
 			"followlight_atten_second":0.00005,
 			"followlight_atten_third":0.00001,
 			"fixedlight_difred":0.5,
-			"fixedlight_difgreen":1.0,
+			"fixedlight_difgreen":0.95,
 			"fixedlight_difblue":0.5,
 			"fixedlight_difalpha":1.0,
 			"followlight_difred":0.5,
@@ -65,7 +65,7 @@
 				{
 					"x": 0.0,
 					"y": 3000.0,
-					"z": -3000.0
+					"z": -2500.0
 				}
 			],
 			"shaodw_minarea": [
