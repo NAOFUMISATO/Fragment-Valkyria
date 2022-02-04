@@ -36,3 +36,27 @@ std::unique_ptr<Object::ObjectBase> ObjectFactory::Create(std::string_view type)
 void ObjectFactory::Clear() {
    _creatorMap.clear();
 }
+
+void ObjectFactory::SetSpawnTable(SpawnTable spawnTable) {
+    _spawnProgress = 0;
+    _progress = 0;
+    _spawnTable = spawnTable;
+}
+
+void ObjectFactory::UpdateSpawn() {
+    while (_spawnTable.size() > _spawnProgress) {
+        auto& spawnRecord = _spawnTable[_spawnProgress];
+        auto& [progress, key, position, rotation] = spawnRecord;
+        if (progress > _progress) {
+            break;
+        }
+        else {
+            auto&& object = Create(key);
+            object->position(position);
+            object->rotation(rotation);
+            _gameMain.objServer().Add(std::move(object));
+            ++_spawnProgress;
+        }
+    }
+    ++_progress;
+}

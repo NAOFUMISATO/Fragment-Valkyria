@@ -36,7 +36,6 @@ namespace {
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-    Init();
 }
 
 void Player::Player::Init(){
@@ -281,7 +280,7 @@ void Player::StateIdle::Input(InputManager& input) {
        _owner._stateServer->PushBack("WeakShootReady");
        _owner._cameraComponent->SetZoom(true);
    }
-   if (input.GetXJoypad().XClick()) {
+   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
    }
 }
@@ -345,7 +344,7 @@ void Player::StateRun::Input(InputManager& input) {
        _owner._stateServer->PushBack("WeakShootReady");
        _owner._cameraComponent->SetZoom(true);
    }
-   if (input.GetXJoypad().XClick()) {
+   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
    }
    if (!moved) {
@@ -428,7 +427,7 @@ void Player::StateShootReady::Draw() {
 }
 
 void Player::StateKnockBack::Enter() {
-    _owner._freezeTime = 20;
+    _owner._freezeTime = 60 * 0.5;
 }
 
 void Player::StateKnockBack::Input(InputManager& input) {
@@ -494,7 +493,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
         _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
         _owner.GetSoundComponent().Play("PlayerShoot");
         --_owner._bulletStock;
-        _coolTime = 60 * 3;
+        _coolTime = 60 * 1;
 
     }
     if (input.GetXJoypad().LBClick()) {
@@ -519,14 +518,10 @@ void Player::StateReload::Input(InputManager& input) {
 }
 
 void Player::StateReload::Update() {
-    if (_reloadCnt > 60) {
-        _reloadCnt = 0;
-        ++_owner._bulletStock;
-        if (_owner._bulletStock > 5) {
-            _owner._stateServer->GoToState("Idle");
-        }
+    if (_reloadCnt > 60 * 2) {
+        _owner._bulletStock = 5;
+        _owner._stateServer->GoToState("Idle");
     }
-
     ++_reloadCnt;
 }
 

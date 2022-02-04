@@ -43,6 +43,7 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeInGameBase::Update() {
+   GetObjFactory().UpdateSpawn();
    GetObjServer().Update();
    _lighting->Update();
    GetEfcServer().Update();

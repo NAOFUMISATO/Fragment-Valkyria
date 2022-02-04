@@ -337,9 +337,9 @@ void CollisionComponent::PlayerFromLaser() {
 	auto playerPos = _owner.position();
 	auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
 	auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
-	auto playerCasuleRadian = PlayerRadius/*30.0*/;
+	auto playerCapsuleRadius = PlayerRadius/*30.0*/;
 
-	AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCasuleRadian);
+	AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCapsuleRadius);
 
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 
@@ -387,9 +387,9 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 		auto playerPos = objectBase.position();
 		auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
 		auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
-		auto playerCasuleRadian = static_cast<float>(PlayerRadius)/*30.0*/;
+		auto playerCapsuleRadius = static_cast<float>(PlayerRadius)/*30.0*/;
 
-		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCasuleRadian);
+		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCapsuleRadius);
 
 		if (result.HitNum > 0) {
 			objectBase.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
@@ -398,6 +398,59 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 		}
 	}
 
+}
+
+void CollisionComponent::BulletFromPoorEnemyGatling() {
+	auto poorEnemyGatlingModel = _owner.modelAnimeComponent().modelHandle();
+	auto collision = _owner.modelAnimeComponent().FindFrame("Spider");
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Bullet) {
+			continue;
+		}
+		
+		auto bullet = objectBase.position();
+		auto bulletRadius = static_cast<float>(20.0);
+
+		auto result = MV1CollCheck_Sphere(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(bullet), bulletRadius);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+			_owner.collisionComponent().hitPos(_owner.position());
+			_owner.collisionComponent().damage(10.0);
+			_owner.collisionComponent().report().id(ReportId::HitFromBullet);
+		}
+	}
+}
+
+void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
+	auto fallObjectPos = _owner.position();
+	auto capsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
+	auto capsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
+	auto capsuleRadian = static_cast<float>(FallObjectRadius);
+
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::PoorEnemyGatling) {
+			continue;
+		}
+
+		auto poorEnemyGatlingModel = objectBase.modelAnimeComponent().modelHandle();
+		auto collision = objectBase.modelAnimeComponent().FindFrame("Spider");
+
+		auto result = MV1CollCheck_Capsule(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
+
+		if (result.HitNum > 0) {
+			objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+			objectBase.collisionComponent().damage(20.0);
+			_owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+		}
+	}
 }
 
 void CollisionComponent::PlayerKnockBack() {

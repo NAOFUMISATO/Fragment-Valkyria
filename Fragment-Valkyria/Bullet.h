@@ -46,6 +46,8 @@ namespace FragmentValkyria {
 
             void HitCheckFromLargeEnemy();
 
+            void HitCheckFromPoorEnemyGatling();
+
             Vector4 _moved{ Vector4() };
 
         public:

@@ -96,6 +96,14 @@ void FallObject::HitCheckFromLaser() {
 	}
 }
 
+void FallObject::HitCheckFromPoorEnemyGatling() {
+	auto report = _collisionComponent->report();
+
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+		_stateServer->PushBack("Die");
+	}
+}
+
 void FallObject::CheckPlayerKnockBack() {
 	auto result = _collisionComponent->knockBack();
 	if (result) {
@@ -173,7 +181,7 @@ void FallObject::StateFall::Input(InputManager& input) {
 }
 
 void FallObject::StateFall::Update() {
-	auto posY = (0.5 * Gravity*_owner._fallTimer * _owner._fallTimer);
+	auto posY = (0.5 * Gravity * _owner._fallTimer * _owner._fallTimer);
 
 	_owner._position.Add(0.0, -posY, 0.0);
 
@@ -232,9 +240,11 @@ void FallObject::StateShoot::Update() {
 	_owner.Shoot();
 
 	_owner._collisionComponent->ObjectModelFromLargeEnemy();
+	_owner._collisionComponent->PoorEnemyGatlingFromObjectModel();
 	_owner._collisionComponent->FallObjectFromLaser();
 	_owner.HitCheckFromLargeEnemy();
 	_owner.HitCheckFromLaser();
+	_owner.HitCheckFromPoorEnemyGatling();
 }
 
 void FallObject::StateDie::Enter() {

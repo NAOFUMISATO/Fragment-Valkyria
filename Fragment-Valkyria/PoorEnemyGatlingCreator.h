@@ -1,6 +1,6 @@
 #pragma once
 /*****************************************************************//**
- * \file   PoorEnemyCreator.h
+ * \file   PoorEnemyGatlingCreator.h
  * \brief  ƒKƒgƒŠƒ“ƒOUŒ‚‚ğ‚µ‚Ä‚­‚éG‹›“G‚Ì¶¬ƒNƒ‰ƒX
  * 
  * \author AHMD2000
@@ -13,10 +13,10 @@ namespace FragmentValkyria {
 
 	namespace Create {
 
-		class PoorEnemyGatringCreator : public CreatorBase
+		class PoorEnemyGatlingCreator : public CreatorBase
 		{
 		public:
-			PoorEnemyGatringCreator(Game::GameMain& gameMain);
+			PoorEnemyGatlingCreator(Game::GameMain& gameMain);
 
 		private:
 

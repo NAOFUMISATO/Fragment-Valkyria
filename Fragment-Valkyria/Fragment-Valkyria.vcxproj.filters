@@ -198,7 +198,7 @@
     <ClInclude Include="PoorEnemyGatling.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="PoorEnemyGatringCreator.h">
+    <ClInclude Include="PoorEnemyGatlingCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
     <ClInclude Include="Laser.h">
@@ -323,7 +323,7 @@
     <ClCompile Include="PoorEnemyGatling.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="PoorEnemyGatringCreator.cpp">
+    <ClCompile Include="PoorEnemyGatlingCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
     <ClCompile Include="Laser.cpp">

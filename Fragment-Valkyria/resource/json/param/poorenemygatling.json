@@ -1,0 +1,11 @@
+{
+	"poorenemygatling": [
+		{
+			"gravity": -0.01,
+            "rotate_speed": 10.0
+		}
+	],
+	"poorenemygatling_vec": [
+		
+	]
+}

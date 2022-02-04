@@ -6,26 +6,22 @@
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
-#include "LargeEnemy.h"
+#include "ObjectBase.h"
 namespace FragmentValkyria {
 	namespace Enemy {
 
-		class PoorEnemyGatling : public Enemy::LargeEnemy {
+		class PoorEnemyGatling : public Object::ObjectBase {
+            using Vector4 = AppFrame::Math::Vector4;
             using InputManager = AppFrame::Input::InputManager;
         public:
 			PoorEnemyGatling(Game::GameMain& gameMain);
 			virtual ~PoorEnemyGatling() override = default;
 
-            virtual ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
+            virtual ObjectType GetObjType() const override { return ObjectType::PoorEnemyGatling; };
             /**
             * \brief 初期化処理
             */
             virtual void Init() override;
-            /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            virtual void Input(InputManager& input) override;
             /**
              * \brief 更新処理
              */
@@ -36,6 +32,19 @@ namespace FragmentValkyria {
             void Draw() override;
 
         private:
+            void Fall();
+            void Rotate();
+            void CreateGatling();
+
+            void HitCheckFromBullet();
+            void HitCheckFromFallObject();
+
+            Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
+
+            int _stateCnt{ 0 };
+            double _hp{ 20.0 };
+
+            int _collision{ 0 };
 
         public:
             /**
@@ -75,10 +84,26 @@ namespace FragmentValkyria {
                  */
                 void Enter() override;
                 /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
+                 * \brief 更新処理
                  */
-                void Input(InputManager& input) override;
+                void Update() override;
+            };
+            /**
+            * \class 落下状態クラス
+            * \brief 落下状態の処理を回す
+            */
+            class StateFall : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ガトリング攻撃をしてくる雑魚敵の参照
+                 */
+                StateFall(PoorEnemyGatling& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
                 /**
                  * \brief 更新処理
                  */
@@ -88,27 +113,47 @@ namespace FragmentValkyria {
             * \class 移動状態クラス
             * \brief 移動状態の処理を回す
             */
-            class StateMove : public StateBase
+            class StateGatling : public StateBase
             {
             public:
                 /**
                  * \brief コンストラクタ
                  * \param owner ガトリング攻撃をしてくる雑魚敵の参照
                  */
-                StateMove(PoorEnemyGatling& owner) : StateBase{ owner } {};
+                StateGatling(PoorEnemyGatling& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */
                 void Enter() override;
                 /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
+                 * \brief 更新処理
                  */
-                void Input(InputManager& input) override;
+                void Update() override;
+            private:
+                int _gatlingCnt{ 5 };
+            };
+            /**
+            * \class 死亡状態クラス
+            * \brief 死亡状態の処理を回す
+            */
+            class StateDie : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ガトリング攻撃をしてくる雑魚敵の参照
+                 */
+                StateDie(PoorEnemyGatling& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
                 /**
                  * \brief 更新処理
                  */
                 void Update() override;
+            private:
+                int _timeOver{ 0 };
             };
 		};
 	}

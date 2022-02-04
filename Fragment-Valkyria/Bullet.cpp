@@ -13,7 +13,7 @@ using namespace FragmentValkyria::Player;
 
 namespace {
 	constexpr double Radius = 20.0;
-	constexpr double Speed = 10.0;
+	constexpr double Speed = 50.0;
 }
 
 Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -55,6 +55,14 @@ void Bullet::HitCheckFromLargeEnemy() {
 	}
 }
 
+void Bullet::HitCheckFromPoorEnemyGatling() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+	
+		_stateServer->GoToState("Die");
+	}
+}
+
 void Bullet::StateBase::Draw() {
 	auto pos = AppFrame::Math::ToDX(_owner._position);
 	auto radius = static_cast<float>(Radius);
@@ -74,6 +82,7 @@ void Bullet::StateShoot::Update() {
 	_owner._collisionComponent->LargeEnemyFromBullet();
 
 	_owner.HitCheckFromLargeEnemy();
+	_owner.HitCheckFromPoorEnemyGatling();
 }
 
 void Bullet::StateDie::Enter() {

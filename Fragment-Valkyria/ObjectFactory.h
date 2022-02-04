@@ -23,12 +23,14 @@ namespace FragmentValkyria {
     * \brief オブジェクト生成関係
     */
    namespace Create {
+       using Vector4 = AppFrame::Math::Vector4;
+       using SpawnRecord = std::tuple<unsigned int/*進捗状況*/, std::string/*呼びたいクリエイターの文字列*/, Vector4/*位置*/, Vector4/*回転*/>;
+       using SpawnTable = std::vector<SpawnRecord>;
       /**
        * \class オブジェクト生成の一括管理クラス
        * \brief 各オブジェクトの生成管理クラスを登録して使用する
        */
       class ObjectFactory {
-         using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
           * \brief コンストラクタ
@@ -53,9 +55,16 @@ namespace FragmentValkyria {
           */
          void Clear();
 
+         void SetSpawnTable(SpawnTable spawnTable);
+
+         void UpdateSpawn();
+
       private:
          Game::GameMain& _gameMain;   //!< ゲーム本体クラスの参照
          std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;   //!< オブジェクト生成管理クラスを登録する連想配列
+         SpawnTable _spawnTable;                                                      //!< オブジェクトを生成するテーブルのコンテナ
+         unsigned int _progress{ 0 };   //!< 進捗
+         unsigned int _spawnProgress{ 0 };//!< スポーンした数
       };
    }
 }
