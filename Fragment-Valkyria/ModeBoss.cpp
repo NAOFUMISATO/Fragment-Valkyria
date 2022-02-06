@@ -44,7 +44,6 @@ void ModeBoss::Enter() {
    auto& objFactory = GetObjFactory();
    objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
-   //objFactory.Register("Stage", std::make_unique<Create::StageCreator>(_gameMain));
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
@@ -55,9 +54,6 @@ void ModeBoss::Enter() {
    auto& objServer = GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-
-   //auto stage = objFactory.Create("Stage");
-   //objServer.Add(std::move(stage));
 
    auto largeEnemy = objFactory.Create("LargeEnemy");
    objServer.Add(std::move(largeEnemy));

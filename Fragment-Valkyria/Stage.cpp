@@ -46,6 +46,6 @@ void Stage::Update() {
 }
 
 void Stage::Draw() {
-   _skySphere->Draw(); // スカイスフィア
+   //_skySphere->Draw(); // スカイスフィア
    _stage->Draw();
 }

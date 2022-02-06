@@ -130,7 +130,7 @@ namespace FragmentValkyria {
          double _upDownAngle{ 0.0 };
          double _sideAngle{ 0.0 };
          std::tuple<double, double, double> _nearFarFov{   //!< ƒJƒƒ‰‚Ì•`‰æŒÀŠE(Žè‘O,‰œ)‹y‚ÑŽ‹–ìŠp‚ÌTupleŒ^(“§Ž‹•ÏŠ·‚ÉŽg—p)
-            std::make_tuple(200.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
+            std::make_tuple(50.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
 
          std::unique_ptr<StateServer> _stateServer;                        //!< ó‘Ô‚ÌˆêŠ‡ŠÇ—ƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^
 

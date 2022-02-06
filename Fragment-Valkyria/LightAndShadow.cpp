@@ -133,6 +133,7 @@ void LightAndShadow::Init() {
    SetFogColor(FogRed, FogGreen, FogBlue);
    // フォグの始点と終点の設定
    SetFogStartEnd(FogStart, FogEnd);
+   SetLightEnable(false);
    // 全てのモデルに適応される環境光の設定
    SetGlobalAmbientLight(GetColorF(GlobalAmbRed, GlobalAmbGreen, GlobalAmbBlue, GlobalAmbAlpha));
    // 標準光源の拡散反射光を設定

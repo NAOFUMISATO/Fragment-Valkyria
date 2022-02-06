@@ -1,7 +1,7 @@
 {
 	"lightshadow": [
 		{
-			"fog_enuble":true,
+			"fog_enuble":false,
 			"fog_red":247,
 			"fog_green":188,
 			"fog_blue":101,
@@ -65,7 +65,7 @@
 				{
 					"x": 0.0,
 					"y": 3000.0,
-					"z": -3000.0
+					"z": 0.0
 				}
 			],
 			"shaodw_minarea": [
