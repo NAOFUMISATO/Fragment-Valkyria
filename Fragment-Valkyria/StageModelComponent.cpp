@@ -1,5 +1,5 @@
 #include "StageModelComponent.h"
-#include "BossStage.h"
+#include "Stage.h"
 #include "StageData.h"
 #include "LoadStageFromJson.h"
 #include "GameMain.h"

@@ -15,6 +15,7 @@
 #include "ModelAnimeComponent.h"
 #include "LightAndShadow.h"
 #include "SpriteBase.h"
+#include "Stage.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -24,6 +25,7 @@ ModeInGameBase::ModeInGameBase(Game::GameMain& gameMain) : ModeBase{gameMain} {
 
 void ModeInGameBase::Init() {
    _lighting = std::make_unique<Lighting::LightAndShadow>(_gameMain);
+   _stage = std::make_unique<Stage::Stage>(_gameMain);
 }
 
 void ModeInGameBase::Enter() {
@@ -45,6 +47,7 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
 void ModeInGameBase::Update() {
    GetObjServer().Update();
    _lighting->Update();
+   _stage->Update();
    GetEfcServer().Update();
    GetSprServer().Update();
    _gameMain.IngameTimerCount();
@@ -52,6 +55,7 @@ void ModeInGameBase::Update() {
 
 void ModeInGameBase::Render() {
    _lighting->Render();
+   _stage->Draw();
    GetObjServer().Render();
 
    SetUseShadowMap(0, -1);

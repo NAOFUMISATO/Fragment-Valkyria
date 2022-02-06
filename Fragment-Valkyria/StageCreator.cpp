@@ -6,19 +6,20 @@
  * \author NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
-#include "BossStageCreator.h"
-#include "BossStage.h"
+#include "StageCreator.h"
+#include "Stage.h"
 #include "GameMain.h"
 #include "ObjectBase.h"
+#include "LightAndShadow.h"
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-BossStageCreator::BossStageCreator(Game::GameMain& gameMain) : CreatorBase{gameMain} {
+StageCreator::StageCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
 
 }
 
-std::unique_ptr<Object::ObjectBase> BossStageCreator::Create() {
+std::unique_ptr<Object::ObjectBase> StageCreator::Create() {
    /// ステージの生成
-   auto stage = std::make_unique<Stage::BossStage>(_gameMain);
+   auto stage = std::make_unique<Stage::Stage>(_gameMain);
    return std::move(stage);
 }

@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ModeBase.h"
 #include "LightAndShadow.h"
+#include "Stage.h"
 /**
  * \brief プロジェクト名
  */
@@ -18,9 +19,6 @@ namespace FragmentValkyria {
    }
    namespace Create {
       class ObjectFactory;
-   }
-   namespace Lighting {
-      class LightAndShadow;
    }
    /**
     * \brief モード関係
@@ -83,6 +81,7 @@ namespace FragmentValkyria {
          Create::ObjectFactory& GetObjFactory() const;
 
       protected:
+         std::unique_ptr<Stage::Stage> _stage;
          std::unique_ptr<Lighting::LightAndShadow> _lighting;
 #ifdef _DEBUG
          void DebugDraw();
