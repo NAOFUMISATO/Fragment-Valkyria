@@ -46,6 +46,26 @@ namespace AppFrame {
           */
          inline bool DRightPress() const { return _key.Buttons[XINPUT_BUTTON_DPAD_RIGHT]; }
          /**
+          * \brief XInputジョイパッドの十字キー上のトリガ判定を返す
+          * \return 十字キー上の押下判定
+          */
+         inline bool DUpClick() const { return _trg.Buttons[XINPUT_BUTTON_DPAD_UP]; }
+         /**
+          * \brief XInputジョイパッドの十字キー下のトリガ判定を返す
+          * \return 十字キー下の押下判定
+          */
+         inline bool DDownClick() const { return _trg.Buttons[XINPUT_BUTTON_DPAD_DOWN]; }
+         /**
+          * \brief XInputジョイパッドの十字キー左のトリガ判定を返す
+          * \return 十字キー左の押下判定
+          */
+         inline bool DLeftClick() const { return _trg.Buttons[XINPUT_BUTTON_DPAD_LEFT]; }
+         /**
+          * \brief XInputジョイパッドの十字キー右のトリガ判定を返す
+          * \return 十字キー右の押下判定
+          */
+         inline bool DRightClick() const { return _trg.Buttons[XINPUT_BUTTON_DPAD_RIGHT]; }
+         /**
           * \brief XInputジョイパッドのSTARTボタンのトリガ判定を返す
           * \return STARTボタンのトリガ判定
           */

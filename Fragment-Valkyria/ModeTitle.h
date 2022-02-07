@@ -56,9 +56,11 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         std::tuple<int, handles, handles, int, int> _grHandles{ -1,0,0,-1,-1 };
          std::unique_ptr<AppFrame::State::StateServer> _stateServer;
-         int _alpha{ 255 };           //!< スタートガイドの透明度
+         std::tuple<int, handles, handles, int, int, int> _grHandles{ -1,0,0,-1,-1,-1 };
+         bool _anyBotton{ true };
+         std::pair<int, int> _cusorPos{ 0,0 };
+         int _alpha{ 0 };
 
       public:
 
@@ -85,8 +87,7 @@ namespace FragmentValkyria {
 
             void Update() override;
 
-            void Draw()override;
-
+            void Exit()override;
          private:
             int _grHandle{ -1 };
          };
@@ -102,6 +103,8 @@ namespace FragmentValkyria {
             void Input(InputManager& input) override;
 
             void Update() override;
+
+            void Exit()override;
          };
 
          class StateEndSelect : public StateBase
@@ -115,6 +118,8 @@ namespace FragmentValkyria {
             void Input(InputManager& input) override;
 
             void Update() override;
+
+            void Exit()override;
          };
       };
    }
