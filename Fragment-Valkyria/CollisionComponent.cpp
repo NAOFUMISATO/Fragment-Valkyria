@@ -10,6 +10,8 @@
 #include "ModelAnimeComponent.h"
 #include "Gatling.h"
 #include "Player.h"
+#include "Stage.h"
+#include "StageModelComponent.h"
 #include "Laser.h"
 #include "ObjectBase.h"
 #ifdef _DEBUG
@@ -464,6 +466,20 @@ void CollisionComponent::PlayerKnockBack() {
 		if (objectBase.collisionComponent().knockBack()) {
 			_owner.collisionComponent().knockBack(true);
 		}
+	}
+}
+
+void CollisionComponent::CollisionStage() {
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+
+		auto& objectBase = ObjectBaseCast(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Stage) {
+			continue;
+		}
+		
+		auto& stage = dynamic_cast<Stage::Stage&>(objectBase);
+		stage.stageComponent().GetHandleAndCollNum("");
 	}
 }
 

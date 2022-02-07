@@ -71,6 +71,8 @@ namespace FragmentValkyria {
 
 			void PlayerKnockBack();
 
+			void CollisionStage();
+
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }
 
