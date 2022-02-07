@@ -11,6 +11,9 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
+   namespace Lighting {
+      class LightAndShadow;
+   }
    /**
     * \brief オブジェクト生成関係
     */
@@ -19,10 +22,10 @@ namespace FragmentValkyria {
        * \class ステージの生成管理クラス
        * \brief スカイスフィア及び地面の生成を行う
        */
-      class BossStageCreator : public CreatorBase {
+      class StageCreator : public CreatorBase {
       public:
           
-          BossStageCreator(Game::GameMain& gameMain);
+          StageCreator(Game::GameMain& gameMain);
 
       private:
          /**

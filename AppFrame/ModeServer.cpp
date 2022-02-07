@@ -33,8 +33,8 @@ namespace AppFrame {
     */
    namespace Mode {
       ModeServer::ModeServer(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
-         Register("FadeIn", std::make_shared<ModeFadeIn>(mode->GetGameBase()));
-         Register("FadeOut", std::make_shared<ModeFadeOut>(mode->GetGameBase()));
+         Register("FadeIn", std::make_shared<ModeFadeIn>(mode->gameBase()));
+         Register("FadeOut", std::make_shared<ModeFadeOut>(mode->gameBase()));
          Register(key, mode);
          PushBack(key);           // 最初のシーンをプッシュバック
          PushBack("FadeIn");      // 最初のシーンの上にフェードインをプッシュバック

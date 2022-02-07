@@ -44,7 +44,7 @@ namespace FragmentValkyria {
             Object = 0,   //!< オブジェクト
             Player,       //!< プレイヤー
             Enemy,        //!< 敵
-            BossStage,    //!< ボスステージ
+            Stage,        //!< ステージ
             LargeEnemy,
             FallObject,
             Gatling,

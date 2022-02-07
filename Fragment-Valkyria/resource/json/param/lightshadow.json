@@ -2,9 +2,9 @@
 	"lightshadow": [
 		{
 			"fog_enuble":false,
-			"fog_red":200,
-			"fog_green":200,
-			"fog_blue":200,
+			"fog_red":247,
+			"fog_green":188,
+			"fog_blue":101,
 			"fog_start":50.0,
 			"fog_end":15000.0,
 			"followlight_diff_y":300.0,
@@ -65,13 +65,13 @@
 				{
 					"x": 0.0,
 					"y": 3000.0,
-					"z": -2500.0
+					"z": -3000.0
 				}
 			],
 			"shaodw_minarea": [
 				{
 					"x": -2500.0,
-					"y": -1.0,
+					"y": -100.0,
 					"z": -2500.0
 				}
 			],

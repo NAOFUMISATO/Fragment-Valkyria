@@ -24,32 +24,32 @@ namespace FragmentValkyria {
       class StageModelComponent;
       /**
        * \class ステージクラス
-       * \brief スカイスフィア及び地面の管理を行う
+       * \brief スカイスフィア及びステージの管理を行う
        */
-      class BossStage : public Object::ObjectBase {
+      class Stage :public Object::ObjectBase {
       public:
          /**
           * \brief コンストラクタ
           * \param game ゲーム本体クラスの参照
           */
-         BossStage(Game::GameMain& game);
+         Stage(Game::GameMain& game);
          /**
           * \brief 更新処理
           */
-         virtual void Update() override;
+         void Update();
          /**
           * \brief 描画処理
           */
-         void Draw() override;
+         void Draw();
          /**
           * \brief オブジェクトの種別を返す
           * \return ステージ
           */
-         ObjectType GetObjType() const override { return ObjectType::BossStage; }
+         ObjectType GetObjType() const override { return ObjectType::Stage; }
 
       private:
          std::unique_ptr<Model::ModelComponent> _skySphere; //!< スカイスフィアのポインタ
-         std::unique_ptr<StageModelComponent> _stage;
+         std::unique_ptr<StageModelComponent> _stage;       //!< ステージのポインタ
       };
    }
 }

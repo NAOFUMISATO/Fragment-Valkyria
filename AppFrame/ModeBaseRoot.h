@@ -89,7 +89,7 @@ namespace AppFrame {
           * \brief ゲームベースの参照を取得
           * \return ゲームベースの参照
           */
-         inline Game::GameBase& GetGameBase() const { return _gameBase; }
+         inline Game::GameBase& gameBase() const { return _gameBase; }
          /**
           * \brief モード一括管理クラスの参照をゲームベース経由で取得
           * \return モード管理クラスの参照

@@ -196,8 +196,8 @@
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCreator.h" />
-    <ClInclude Include="BossStage.h" />
-    <ClInclude Include="BossStageCreator.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageCreator.h" />
     <ClInclude Include="PlayerHP.h" />
     <ClInclude Include="PoorEnemyGatlingCreator.h" />
     <ClInclude Include="PoorEnemyGatling.h" />
@@ -240,8 +240,8 @@
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCreator.cpp" />
-    <ClCompile Include="BossStage.cpp" />
-    <ClCompile Include="BossStageCreator.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageCreator.cpp" />
     <ClCompile Include="PoorEnemyGatling.cpp" />
     <ClCompile Include="PoorEnemyGatlingCreator.cpp" />
     <ClCompile Include="RemainingBullet.cpp" />

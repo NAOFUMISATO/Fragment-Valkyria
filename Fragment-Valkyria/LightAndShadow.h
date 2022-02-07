@@ -43,6 +43,7 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render();
+         int shadowHandle() { return _shadowHandle; }
 
       private:
          Game::GameMain& _gameMain;                                      //!< ゲーム本体クラスの参照
