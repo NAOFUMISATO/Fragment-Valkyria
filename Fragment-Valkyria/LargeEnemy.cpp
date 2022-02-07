@@ -54,6 +54,30 @@ void LargeEnemy::CreateGatling() {
 }
 
 void LargeEnemy::CreateLaser() {
+	for (auto&& objects : _gameMain.objServer().runObjects()) {
+		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*objects);
+
+		if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::FallObject) {
+
+			auto fallObjectToPly = _gameMain.objServer().GetVecData("PlayerPos") - objectBase.position();
+			auto [x, y, z] = fallObjectToPly.GetVec3();
+			auto checkSize = x * x + y * y + z * z;
+			auto checkPair = std::make_pair(checkSize, objectBase.position());
+			_objectDistance.emplace_back(checkPair);
+
+			continue;
+		}
+	}
+	std::sort(_objectDistance.begin(), _objectDistance.end());
+	if (_objectDistance.empty()) {
+		_gameMain.objServer().RegistVector("LaserDirectionPos", _gameMain.objServer().GetVecData("PlayerPos"));
+	}
+	else {
+		_gameMain.objServer().RegistVector("LaserDirectionPos", _objectDistance[0].second);
+	}
+
+	_objectDistance.clear();
+
 	auto laser = gameMain().objFactory().Create("Laser");
 	gameMain().objServer().Add(std::move(laser));
 }
