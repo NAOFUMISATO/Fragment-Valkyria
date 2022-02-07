@@ -17,8 +17,8 @@ namespace {
    const int TitleBgPosY = paramMap["bg_y"];        //!< タイトル背景Y位置
    const int GameTitlePosX = paramMap["title_x"];   //!< ゲームタイトルX位置
    const int GameTitlePosY = paramMap["title_y"];   //!< ゲームタイトルY位置
-   const int StartGuidePosX = paramMap["guide_x"];  //!< スタートガイドX位置
-   const int StartGuidePosY = paramMap["guide_y"];  //!< スタートガイドY位置
+   const int AnyBottonPosX = paramMap["guide_x"];  //!< スタートガイドX位置
+   const int AnyBottonPosY = paramMap["guide_y"];  //!< スタートガイドY位置
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
 }
@@ -34,11 +34,17 @@ void ModeTitle::Init() {
    auto& resServer = GetResServer();
    
    _grHandles = {
-      resServer.GetTextures("TitleBg"),
-      resServer.GetTextures("PressGuide"),
-      resServer.GetTextures("TitleLogo")
+      resServer.GetTexture("TitleBg"),
+      resServer.GetTextures("TitleLogo"),
+      resServer.GetTextures("AnyBotton"),
+      resServer.GetTexture("Start"),
+      resServer.GetTexture("End")
    };
-  
+
+   auto state = std::make_unique<AppFrame::State::StateServer>("AnyBotton", std::make_shared <StateAnyBotton>(*this));
+   state->Register("StartSelect", std::make_shared<StateStartSelect>(*this));
+   state->Register("EndSelect", std::make_shared<StateEndSelect>(*this));
+   _stateServer = std::move(state);
 }
 
 void ModeTitle::Enter() {
@@ -56,13 +62,35 @@ void ModeTitle::Update() {
 }
 
 void ModeTitle::Render() {
-   auto [bgGrHandle, guideGrHandle, titleGrHandle] = _grHandles;
-   GetTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgGrHandle[0]);
-   SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-   GetTexComponent().DrawTexture(StartGuidePosX, StartGuidePosY, DefaultGraphScale, DefaultGraphAngle, guideGrHandle, 2);
-   SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleGrHandle, 2);
+   auto [bgGrHandle, titleGrHandles,] = _grHandles;
+   GetTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgGrHandle);
+   _stateServer->Draw();
+   GetTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleGrHandles, 2);
 
+}
+
+void ModeTitle::StateBase::Draw() {
+   _owner.Render();
+}
+
+void ModeTitle::StateAnyBotton::Enter() {
+
+}
+
+void ModeTitle::StateAnyBotton::Input(InputManager& input){
+   if (input.GetXJoypad().XClick()|| input.GetXJoypad().YClick()|| input.GetXJoypad().AClick()|| input.GetXJoypad().BClick()) {
+      _owner._stateServer->GoToState("StartSelect");
+   }
+}
+
+void ModeTitle::StateAnyBotton::Update() {
+   
+}
+
+void ModeTitle::StateAnyBotton::Draw() {
+   SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+   _owner.GetTexComponent().DrawTexture(AnyBottonPosX, AnyBottonPosY, DefaultGraphScale, DefaultGraphAngle, guideGrHandle, 2);
+   SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 

@@ -26,6 +26,7 @@ namespace FragmentValkyria {
        */
       class ModeTitle : public ModeBase {
          using handles = std::vector<int>;
+         using InputManager = AppFrame::Input::InputManager;
       public:
          /**
           * \brief コンストラクタ
@@ -55,8 +56,66 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         std::tuple<handles, handles, handles> _grHandles{ 0,0,0 };
+         std::tuple<int, handles, handles, int, int> _grHandles{ -1,0,0,-1,-1 };
+         std::unique_ptr<AppFrame::State::StateServer> _stateServer;
          int _alpha{ 255 };           //!< スタートガイドの透明度
+
+      public:
+
+         class StateBase : public AppFrame::State::StateBaseRoot {
+         public:
+
+            StateBase(ModeTitle& owner) : _owner{ owner } {};
+
+            void Draw() override;
+
+         protected:
+            ModeTitle& _owner;   //!< カメラの参照
+         };
+
+         class StateAnyBotton : public StateBase
+         {
+         public:
+
+            StateAnyBotton(ModeTitle& owner) :StateBase{ owner } {};
+
+            void Enter() override;
+
+            void Input(InputManager& input) override;
+
+            void Update() override;
+
+            void Draw()override;
+
+         private:
+            int _grHandle{ -1 };
+         };
+
+         class StateStartSelect : public StateBase
+         {
+         public:
+
+            StateStartSelect(ModeTitle& owner) : StateBase{ owner } {};
+
+            void Enter() override;
+
+            void Input(InputManager& input) override;
+
+            void Update() override;
+         };
+
+         class StateEndSelect : public StateBase
+         {
+         public:
+
+            StateEndSelect(ModeTitle& owner) : StateBase{ owner } {};
+
+            void Enter() override;
+
+            void Input(InputManager& input) override;
+
+            void Update() override;
+         };
       };
    }
 }
