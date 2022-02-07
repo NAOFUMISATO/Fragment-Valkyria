@@ -26,8 +26,6 @@ namespace FragmentValkyria {
 			*/
 			virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
-			std::vector<std::pair<double, Vector4>> _distance;
-
 		};
 	}
 }

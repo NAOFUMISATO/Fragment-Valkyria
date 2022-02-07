@@ -74,6 +74,8 @@ namespace FragmentValkyria {
 
             Vector4 _moved{ 0.0, 0.0, 0.0 };
 
+            std::vector < std::pair<double, Vector4>> _objectDistance;
+
 
         public:
             /**
