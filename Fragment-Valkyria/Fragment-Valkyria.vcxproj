@@ -191,6 +191,7 @@
     <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="ModeMissionCompleted.h" />
     <ClInclude Include="ModeMissionFailed.h" />
+    <ClInclude Include="ModePause.h" />
     <ClInclude Include="ModeTitle.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectFactory.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="ModeMissionCompleted.cpp" />
     <ClCompile Include="ModeMissionFailed.cpp" />
+    <ClCompile Include="ModePause.cpp" />
     <ClCompile Include="ModeTitle.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />

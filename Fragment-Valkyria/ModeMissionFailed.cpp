@@ -14,10 +14,8 @@ ModeMissionFailed::ModeMissionFailed(Game::GameMain& gameMain) :ModeBase{gameMai
 }
 
 void ModeMissionFailed::Init() {
-   auto& loadJson = GetLoadJson();
-   loadJson.LoadTextures("over");
-   auto& resServer = GetResServer();
-   _grHandle = resServer.GetTexture("MissionFailed");
+   GetLoadJson().LoadTextures("over");
+   GetResServer().GetTexture("MissionFailed");
 }
 
 void ModeMissionFailed::Enter() {

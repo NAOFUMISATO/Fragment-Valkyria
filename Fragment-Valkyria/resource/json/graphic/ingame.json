@@ -26,6 +26,15 @@
 			"ynum": 1,
 			"xsize": 30,
 			"ysize": 60
+		},
+		{
+			"keyname": "Pause",
+			"filename": "Pause.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 560,
+			"ysize": 160
 		}
 	]
 }

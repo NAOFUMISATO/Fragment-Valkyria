@@ -19,6 +19,7 @@ namespace FragmentValkyria {
 
       private:
          int _grHandle{ -1 };
+         
       };
    }
 }

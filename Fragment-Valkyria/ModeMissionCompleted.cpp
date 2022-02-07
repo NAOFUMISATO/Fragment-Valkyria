@@ -14,10 +14,8 @@ ModeMissionCompleted::ModeMissionCompleted(Game::GameMain& gameMain) :ModeBase{ 
 }
 
 void ModeMissionCompleted::Init() {
-   auto& loadJson = GetLoadJson();
-   loadJson.LoadTextures("clear");
-   auto& resServer = GetResServer();
-   _grHandle = resServer.GetTexture("MissionCompleted");
+   GetLoadJson().LoadTextures("clear");
+   _grHandle = GetResServer().GetTexture("MissionCompleted");
 }
 
 void ModeMissionCompleted::Enter() {

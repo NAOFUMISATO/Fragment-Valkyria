@@ -31,8 +31,8 @@ namespace {
     const double CapsulePos2 = paramMap["capsule_pos2"];
     const double CapsuleRadius = paramMap["capsule_radius"];
 
-    constexpr auto FootStepHeight = 3.0;   //!< ‘–‚èó‘ÔŽž‚Ì‘«‰¹”­¶‚‚³(‘«‚Ìb‚©‚ç‚ÌˆÊ’u)
-    constexpr auto FootStepStart = 10;     //!< ‘–‚èó‘Ô‘JˆÚŽž‚©‚ç‚Ì‘«‰¹–¢”­¶ƒtƒŒ[ƒ€
+    constexpr auto FootStepHeight = 3.0;
+    constexpr auto FootStepStart = 10;
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
