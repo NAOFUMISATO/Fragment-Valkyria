@@ -9,8 +9,10 @@
 			"anybotton_y":650,
 			"start_x":760,
 			"start_y":550,
+			"option_x":760,
+			"option_y":750,
 			"end_x":760,
-			"end_y":750
+			"end_y":950
 		}	
 	]	
 }

@@ -1,0 +1,27 @@
+{
+	"option": [
+		{
+			"default_camera_sens":4.0,
+			"default_aim_sens":2.0,
+			"default_deadzone":500,
+			"sensivity_min":1.0,
+			"sensivity_max":10.0,
+			"deadzone_min":500,
+			"deadzone_max":5000,
+			"camerasens_x":10,
+			"camerasens_y":10,
+			"camerabar_x":610,
+			"camerabar_y":10,
+			"aimsens_x":10,
+			"aimsens_y":334,
+			"aimbar_x":610,
+			"aimbar_y":334,
+			"deadzone_x":10,
+			"deadzone_y":658,
+			"deadzonebar_x":610,
+			"deadzonebar_y":658,
+			"return_x":650,
+			"return_y":980
+		}	
+	]	
+}

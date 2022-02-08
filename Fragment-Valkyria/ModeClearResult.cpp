@@ -16,7 +16,7 @@ void ModeClearResult::Enter() {
 
 void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
    GetSprServer().Input(input);
-   if (input.GetXJoypad().BClick()) {
+   if (input.GetXJoypad().AClick()) {
       GetModeServer().GoToMode("Title");
    }
 }

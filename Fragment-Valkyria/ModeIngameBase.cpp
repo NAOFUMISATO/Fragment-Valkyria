@@ -34,7 +34,7 @@ void ModeInGameBase::Enter() {
 
 void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().StartClick()) {
-      GetModeServer().PushBack("Pause");
+      GetModeServer().PushBack("Option");
    }
    GetObjServer().Input(input);
    GetEfcServer().Input(input);

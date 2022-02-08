@@ -73,6 +73,10 @@ namespace FragmentValkyria {
           * \brief 計測時間を進める
           */
          inline void IngameTimerCount() { _ingameTimer++; }
+         inline std::tuple<double, double, int> sensitivity() const { return _sensitivity; }
+         inline void sensitivity(double cameraSens,double aimSens,int deadZone) { 
+            _sensitivity = std::make_tuple(cameraSens, aimSens, deadZone);
+         }
          /**
           * \brief 画面設定の値を返す
           * \return 画面横サイズ、画面縦サイズ、画面ビット数
@@ -91,6 +95,7 @@ namespace FragmentValkyria {
 
       private:
          unsigned int _ingameTimer{ 0 };
+         std::tuple<double, double, int> _sensitivity;
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
          std::unique_ptr<Stage::LoadStageFromJson> _loadStage;//!< ステージ情報管理クラスのユニークポインタ
       };

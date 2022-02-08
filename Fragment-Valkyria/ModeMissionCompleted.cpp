@@ -22,7 +22,7 @@ void ModeMissionCompleted::Enter() {
 }
 
 void ModeMissionCompleted::Input(AppFrame::Input::InputManager& input) {
-   if (input.GetXJoypad().BClick()) {
+   if (input.GetXJoypad().AClick()) {
       GetModeServer().PopBack();
       GetModeServer().GoToMode("ClearResult", 'S');
    }

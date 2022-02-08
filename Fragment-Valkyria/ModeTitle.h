@@ -57,10 +57,12 @@ namespace FragmentValkyria {
 
       private:
          std::unique_ptr<AppFrame::State::StateServer> _stateServer;
-         std::tuple<int, handles, handles, int, int, int> _grHandles{ -1,0,0,-1,-1,-1 };
-         bool _anyBotton{ true };
-         std::pair<int, int> _cusorPos{ 0,0 };
          int _alpha{ 0 };
+         bool _pushAnyBotton{ false };
+         std::pair<int, int> _cusorPos{ 0,0 };
+         std::tuple<int, handles, handles, int, int, int, int> _grHandles{
+           -1,0,0,-1,-1,-1,-1
+         };
 
       public:
 
@@ -72,11 +74,10 @@ namespace FragmentValkyria {
             void Draw() override;
 
          protected:
-            ModeTitle& _owner;   //!< ƒJƒƒ‰‚ÌŽQÆ
+            ModeTitle& _owner;
          };
 
-         class StateAnyBotton : public StateBase
-         {
+         class StateAnyBotton : public StateBase{
          public:
 
             StateAnyBotton(ModeTitle& owner) :StateBase{ owner } {};
@@ -85,15 +86,11 @@ namespace FragmentValkyria {
 
             void Input(InputManager& input) override;
 
-            void Update() override;
-
             void Exit()override;
-         private:
-            int _grHandle{ -1 };
+
          };
 
-         class StateStartSelect : public StateBase
-         {
+         class StateStartSelect : public StateBase{
          public:
 
             StateStartSelect(ModeTitle& owner) : StateBase{ owner } {};
@@ -102,13 +99,20 @@ namespace FragmentValkyria {
 
             void Input(InputManager& input) override;
 
-            void Update() override;
-
-            void Exit()override;
          };
 
-         class StateEndSelect : public StateBase
-         {
+         class StateOptionSelect : public StateBase {
+         public:
+
+            StateOptionSelect(ModeTitle& owner) : StateBase{ owner } {};
+
+            void Enter() override;
+
+            void Input(InputManager& input) override;
+
+         };
+
+         class StateEndSelect : public StateBase{
          public:
 
             StateEndSelect(ModeTitle& owner) : StateBase{ owner } {};
@@ -117,9 +121,6 @@ namespace FragmentValkyria {
 
             void Input(InputManager& input) override;
 
-            void Update() override;
-
-            void Exit()override;
          };
       };
    }

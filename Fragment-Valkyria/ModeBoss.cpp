@@ -55,11 +55,11 @@ void ModeBoss::Enter() {
    Create::SpawnTable spawnTable {
        std::make_tuple(0      , "PoorEnemyGatling", Vector4(500.0, 500.0, 500.0), Vector4(0.0, 0.0, 0.0)),
        std::make_tuple(0      , "PoorEnemyGatling", Vector4(1.0, 500.0, 0.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0      , "PoorEnemyGatling", Vector4(-500.0, 500.0, 500.0), Vector4(0.0, 0.0, 0.0)),
+       std::make_tuple(0,       "PoorEnemyGatling", Vector4(-500.0, 500.0, 500.0), Vector4(0.0, 0.0, 0.0)),
 
        std::make_tuple(60 * 10, "PoorEnemyGatling", Vector4(500.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0      , "PoorEnemyGatling", Vector4(0.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0      , "PoorEnemyGatling", Vector4(-500.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
+       std::make_tuple(0,       "PoorEnemyGatling", Vector4(0.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
+       std::make_tuple(0,       "PoorEnemyGatling", Vector4(-500.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
    };
 
    objFactory.SetSpawnTable(spawnTable);

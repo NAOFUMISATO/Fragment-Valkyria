@@ -15,14 +15,14 @@ ModeMissionFailed::ModeMissionFailed(Game::GameMain& gameMain) :ModeBase{gameMai
 
 void ModeMissionFailed::Init() {
    GetLoadJson().LoadTextures("over");
-   GetResServer().GetTexture("MissionFailed");
+   _grHandle = GetResServer().GetTexture("MissionFailed");
 }
 
 void ModeMissionFailed::Enter() {
 }
 
 void ModeMissionFailed::Input(AppFrame::Input::InputManager& input) {
-   if (input.GetXJoypad().BClick()) {
+   if (input.GetXJoypad().AClick()) {
       GetModeServer().PopBack();
       GetModeServer().GoToMode("GameOver", 'S');
    }

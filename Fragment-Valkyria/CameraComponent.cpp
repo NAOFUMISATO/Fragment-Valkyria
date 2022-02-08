@@ -86,44 +86,45 @@ void CameraComponent::StateNormal::Enter() {
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
+   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
    /* _owner._rotateMatrix = Matrix44();*/
-    if (input.GetXJoypad().RightStickY() >= 500) {
+    if (input.GetXJoypad().RightStickY() >= deadZone) {
         /*auto upMatrix = Matrix44();
         upMatrix.RotateX(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * upMatrix;*/
-        _owner._upDownAngle += 2.0;
+        _owner._upDownAngle += cameraSens;
         if (_owner._upDownAngle >= 10.0) {
             _owner._upDownAngle = 10.0;
         }
     }
-    if (input.GetXJoypad().RightStickY() <= -500) {
+    if (input.GetXJoypad().RightStickY() <= -deadZone) {
         /*auto downMatrix = Matrix44();
         downMatrix.RotateX(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * downMatrix;*/
-        _owner._upDownAngle -= 2.0;
+        _owner._upDownAngle -= cameraSens;
         if (_owner._upDownAngle <= -20.0) {
             _owner._upDownAngle = -20.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() >= 500) {
+    if (input.GetXJoypad().RightStickX() >= deadZone) {
         /*auto rightMatrix = Matrix44();
         rightMatrix.RotateY(2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * rightMatrix;*/
-        _owner._sideAngle -= 2.0;
+        _owner._sideAngle -= cameraSens;
         if (_owner._sideAngle <= -360.0) {
             _owner._sideAngle = 0.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() <= -500) {
+    if (input.GetXJoypad().RightStickX() <= -deadZone) {
         /*auto leftMatrix = Matrix44();
         leftMatrix.RotateY(-2.0, true);
 
         _owner._rotateMatrix = _owner._rotateMatrix * leftMatrix;*/
 
-        _owner._sideAngle += 2.0;
+        _owner._sideAngle += cameraSens;
         if (_owner._sideAngle >= 360.0) {
             _owner._sideAngle = 0.0;
         }
@@ -172,29 +173,30 @@ void CameraComponent::StateShootReady::Enter() {
 }
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
-    if (input.GetXJoypad().RightStickY() >= 500) {
-        _owner._upDownAngle += 2.0;
+   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+    if (input.GetXJoypad().RightStickY() >= deadZone) {
+        _owner._upDownAngle += aimSens;
         if (_owner._upDownAngle >= 10.0) {
             _owner._upDownAngle = 10.0;
         }
     }
-    if (input.GetXJoypad().RightStickY() <= -500) {
+    if (input.GetXJoypad().RightStickY() <= -deadZone) {
         
-        _owner._upDownAngle -= 2.0;
+        _owner._upDownAngle -= aimSens;
         if (_owner._upDownAngle <= -20.0) {
             _owner._upDownAngle = -20.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() >= 500) {
+    if (input.GetXJoypad().RightStickX() >= deadZone) {
 
-        _owner._sideAngle -= 2.0;
+        _owner._sideAngle -= aimSens;
         if (_owner._sideAngle <= -360.0) {
             _owner._sideAngle = 0.0;
         }
     }
-    if (input.GetXJoypad().RightStickX() <= -500) {
+    if (input.GetXJoypad().RightStickX() <= -deadZone) {
 
-        _owner._sideAngle += 2.0;
+        _owner._sideAngle += aimSens;
         if (_owner._sideAngle >= 360.0) {
             _owner._sideAngle = 0.0;
         }

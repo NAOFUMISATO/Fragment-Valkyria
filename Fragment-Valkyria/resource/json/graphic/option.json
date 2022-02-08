@@ -1,0 +1,68 @@
+{
+	"option": [
+		{
+			"keyname": "AdjustmentBar",
+			"filename": "AdjustmentBar.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 1080,
+			"ysize": 100
+		},
+		{
+			"keyname": "AimSensivity",
+			"filename": "AimSensivity.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 580,
+			"ysize": 100
+		},
+		{
+			"keyname": "BarCusor",
+			"filename": "BarCusor.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 50,
+			"ysize": 50
+		},
+		{
+			"keyname": "CameraSensivity",
+			"filename": "CameraSensivity.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 580,
+			"ysize": 100
+		},
+		{
+			"keyname": "OptionCusor",
+			"filename": "Cusor.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 580,
+			"ysize": 100
+		},
+		{
+			"keyname": "DeadZone",
+			"filename": "DeadZone.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 580,
+			"ysize": 100
+		},
+		{
+			"keyname": "Return",
+			"filename": "Return.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 580,
+			"ysize": 100
+		}
+
+	]
+}

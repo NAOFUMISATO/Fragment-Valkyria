@@ -21,7 +21,7 @@ void ModeGameOver::Enter() {
 }
 
 void ModeGameOver::Input(AppFrame::Input::InputManager& input) {
-   if (input.GetXJoypad().BClick()) {
+   if (input.GetXJoypad().AClick()) {
       GetModeServer().GoToMode("Title", 'S');
    }
 }
