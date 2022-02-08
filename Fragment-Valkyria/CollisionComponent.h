@@ -71,7 +71,9 @@ namespace FragmentValkyria {
 
 			void PlayerKnockBack();
 
-			void CollisionStage();
+			Vector4 PlayerCheckStage(const Vector4& pos, const Vector4& moved);
+
+			Vector4 BossCheckStage(const Vector4& pos, const Vector4& moved);
 
 			void report(Report report) { *_report = report; }
 			Report& report() { return *_report; }

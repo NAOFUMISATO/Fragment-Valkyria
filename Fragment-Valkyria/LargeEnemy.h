@@ -54,7 +54,7 @@ namespace FragmentValkyria {
 
             void HitCheckFromBullet();
 
-            void Move();
+            void Move(const Vector4& moved);
             void Rotate(bool& rotating);
             void SetAddRotate();
 

@@ -75,7 +75,7 @@ namespace FragmentValkyria {
          /**
           * \brief ˆÚ“®ˆ—
           */
-         void Move(Vector4 forward);
+         void Move(const Vector4& moved);
          /**
           * \brief ËŒ‚€”õó‘Ô‚Ì‰ñ“]ˆ—
           */

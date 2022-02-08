@@ -95,8 +95,12 @@ void Player::ComputeWorldTransform() {
    _worldTransform = world;
 }
 
-void Player::Move(Vector4 forward) {
-    _position = _position + forward;
+void Player::Move(const Vector4& moved) {
+    auto [x, y, z] = moved.GetVec3();
+    auto position = _position;
+    position = _collisionComponent->PlayerCheckStage(position, Vector4(x, y, 0.0));
+    position = _collisionComponent->PlayerCheckStage(position, Vector4(0.0, y, z));
+    _position = position;
 }
 
 void Player::ShootRotate() {
@@ -244,8 +248,12 @@ void Player::StateBase::Draw() {
    auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
    auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
    auto radian = static_cast<float>(CapsuleRadius);
+
+   auto start = _owner._position + Vector4(0.0, 50.0, 0.0);
+   auto end = _owner._position + Vector4(0.0, -10000.0, 0.0);
   
    DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
+   DrawLine3D(AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end), AppFrame::Math::Utility::GetColorCode(0, 255, 255));
 #endif
 
 }

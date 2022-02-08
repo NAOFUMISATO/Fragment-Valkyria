@@ -9,10 +9,13 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "Gatling.h"
+#include "GameMain.h"
 #include "Player.h"
 #include "Stage.h"
 #include "StageModelComponent.h"
+#include "LoadStageFromJson.h"
 #include "Laser.h"
+#include "ModeBoss.h"
 #include "ObjectBase.h"
 #ifdef _DEBUG
 #include <stdexcept>
@@ -469,17 +472,45 @@ void CollisionComponent::PlayerKnockBack() {
 	}
 }
 
-void CollisionComponent::CollisionStage() {
-	for (auto&& object : _owner.GetObjServer().runObjects()) {
+AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
+	
+	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
+	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
+	auto stageComponent = modeBoss->GetStage().stageComponent();
+    
+	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
 
-		auto& objectBase = ObjectBaseCast(*object);
+	auto newPos = pos + moved;
+	auto start = newPos + Vector4(0.0, 50.0, 0.0);
+	auto end = newPos + Vector4(0.0, -10000.0, 0.0);
+	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
+	if (result.HitFlag != 0) {
+		newPos = AppFrame::Math::ToMath(result.HitPosition);
+		return newPos;
+	}
+	else {
+		return pos;
+	}
+}
 
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Stage) {
-			continue;
-		}
-		
-		auto& stage = dynamic_cast<Stage::Stage&>(objectBase);
-		stage.stageComponent().GetHandleAndCollNum("");
+AppFrame::Math::Vector4 CollisionComponent::BossCheckStage(const Vector4& pos, const Vector4& moved) {
+
+	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
+	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
+	auto stageComponent = modeBoss->GetStage().stageComponent();
+
+	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_boss_c");
+
+	auto newPos = pos + moved;
+	auto start = newPos + Vector4(0.0, 50.0, 0.0);
+	auto end = newPos + Vector4(0.0, -10000.0, 0.0);
+	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
+	if (result.HitFlag != 0) {
+		newPos = AppFrame::Math::ToMath(result.HitPosition);
+		return newPos;
+	}
+	else {
+		return pos;
 	}
 }
 
