@@ -66,21 +66,29 @@ namespace FragmentValkyria {
           * \brief ワールド行列の取得
           */
          void ComputeWorldTransform() override;
-
-         double hp() { return _hp; }
-
-         int invincibleCnt() { return _invincibleCnt; }
-
+         /**
+          * \brief プレイヤーの体力の取得
+          * \return プレイヤーの体力
+          */
+         inline double hp() { return _hp; }
+         /**
+          * \brief 無敵時間の取得
+          * \return 無敵時間
+          */
+         inline int invincibleCnt() { return _invincibleCnt; }
       private:
          /**
           * \brief 移動処理
+          * \param moved
           */
          void Move(const Vector4& moved);
          /**
           * \brief 射撃準備状態の回転処理
           */
          void ShootRotate();
-
+         /**
+          * \brief 
+          */
          void HitCheckFromFallObjectRange();
 
          void HitCheckFromIdleFallObject();
@@ -95,16 +103,14 @@ namespace FragmentValkyria {
 
          void WeakAttack();
 
-         double _rotateSpeed{ 0.0 };       //!< 回転速度
          int _freezeTime{ 0 };
-         double _hp{ 100.0 };
          int _bulletStock{ 5 };
          int _invincibleCnt{ 0 };
-
+         double _rotateSpeed{ 0.0 };       //!< 回転速度
+         double _hp{ 100.0 };
          Vector4 _moved{ Vector4() };
          Vector4 _knockBack{ Vector4() };
          Vector4 _direction{ Vector4() };
-
          Matrix44 _rightRotation{ Matrix44() };
          Matrix44 _leftRotation{ Matrix44() };
          Matrix44 _backRotation{ Matrix44() };

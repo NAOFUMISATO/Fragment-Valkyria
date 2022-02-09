@@ -1,0 +1,19 @@
+{
+	"largeenemy": [
+		{
+			"gatling_frame":60
+			
+		}
+	],
+	"largeenemy_vec": [
+		{
+			"init_pos": [
+				{
+					"x": 10.0,
+					"y": 10.0,
+					"z": 10.0
+				}
+			]
+		}
+	]
+}

@@ -15,6 +15,12 @@
 
 using namespace FragmentValkyria::Enemy;
 
+namespace {
+	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
+	   "gatling_frame"});
+	const int GatlingFrame = paramMap["gatling_frame"];
+}
+
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 	
 }
@@ -143,7 +149,6 @@ void LargeEnemy::Rotate(bool& rotating) {
 			rotating = false;
 		}
 	}
-	
 }
 
 void LargeEnemy::SetAddRotate() {
@@ -236,7 +241,7 @@ void LargeEnemy::StateGatling::Enter() {
 }
 
 void LargeEnemy::StateGatling::Update() {
-	if (_owner._stateCnt % _owner.GatlingFrame == 0) {
+	if (_owner._stateCnt % GatlingFrame == 0) {
 		_owner.CreateGatling();
 		--_owner._gatlingCnt;
 	}
