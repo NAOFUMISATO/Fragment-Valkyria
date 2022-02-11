@@ -54,6 +54,10 @@ namespace AppFrame {
           * \param key 登録済みの状態に関連付けた文字列
           */
          void GoToState(std::string_view key);
+         /**
+          * \brief 状態リストの一番後ろの真下にモード挿入
+          * \param key 登録済みの状態に関連付けた文字列
+          */
          void InsertBelowBack(std::string_view key);
          /**
           * \brief 入力処理

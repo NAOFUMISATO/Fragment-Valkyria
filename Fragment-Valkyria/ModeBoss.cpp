@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   ModeBoss.cpp
- * \brief  モードインゲーム
+ * \brief  モードボス
  *
  * \author NAOFUMISATO
  * \date   December 2021

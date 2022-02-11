@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   LoadStageFromJson.cpp
+ * \brief  ステージの読み込みを行う
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "LoadStageFromJson.h"
 #include <nlohmann/json.hpp>
 #ifdef _DEBUG

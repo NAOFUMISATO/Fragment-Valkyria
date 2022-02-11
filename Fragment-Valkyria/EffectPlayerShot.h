@@ -41,8 +41,6 @@ namespace FragmentValkyria {
           */
          EffectType GetEfcType() const override { return EffectType::PlayerShot; }
 
-      private:
-         bool _play{ true };
       };
    }
 

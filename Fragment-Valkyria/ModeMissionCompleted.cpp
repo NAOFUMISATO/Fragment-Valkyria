@@ -1,9 +1,17 @@
+
+/*****************************************************************//**
+ * \file   ModeMissionCompleted.cpp
+ * \brief  モードミッション完遂
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ModeMissionCompleted.h"
 
 namespace {
    constexpr auto BgAlpha = 150;
-   constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
-   constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
+   constexpr auto BoxWidth = 1920;
+   constexpr auto BoxHeight = 1080;
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
 }

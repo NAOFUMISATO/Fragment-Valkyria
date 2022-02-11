@@ -101,7 +101,7 @@ namespace AppFrame {
          std::unordered_map<std::string, std::shared_ptr<ModeBaseRoot>> _modeRegistry;  //!< モードを登録する連想配列
          std::list<std::shared_ptr<ModeBaseRoot>> _modeList;                            //!< モードの処理を回す双方向配列
 #ifdef _DEBUG
-         unsigned int _fpsCount{ 0 };
+         unsigned int _fpsCount{ 0 };                                                   //!< ゲーム内処理速度カウント
 #endif
       };
    }

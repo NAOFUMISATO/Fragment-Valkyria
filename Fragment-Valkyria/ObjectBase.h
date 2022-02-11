@@ -109,7 +109,7 @@ namespace FragmentValkyria {
           * \return ƒJƒƒ‰ŠÇ—ƒNƒ‰ƒX
           */
          Camera::CameraComponent& cameraComponent() const { return *_cameraComponent; }
-
+         
          Collision::CollisionComponent& collisionComponent() { return *_collisionComponent; }
 
          void  collisionComponent(std::shared_ptr<Collision::CollisionComponent> collision) { _collisionComponent = collision; }

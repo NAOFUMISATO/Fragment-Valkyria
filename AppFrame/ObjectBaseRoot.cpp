@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   ObjectBaseRoot.cpp
+ * \brief  オブジェクトの基底の基底
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ObjectBaseRoot.h"
 #include "GameBase.h"
 #include "ObjectServer.h"

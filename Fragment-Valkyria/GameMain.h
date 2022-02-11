@@ -73,7 +73,17 @@ namespace FragmentValkyria {
           * \brief 計測時間を進める
           */
          inline void IngameTimerCount() { _ingameTimer++; }
+         /**
+          * \brief ゲーム内感度の取得
+          * \return ゲーム内感度
+          */
          inline std::tuple<double, double, int> sensitivity() const { return _sensitivity; }
+         /**
+          * \brief ゲーム内感度の設定
+          * \param cameraSens カメラ感度
+          * \param aimSens エイム感度
+          * \param deadZone デッドゾーン
+          */
          inline void sensitivity(double cameraSens,double aimSens,int deadZone) { 
             _sensitivity = std::make_tuple(cameraSens, aimSens, deadZone);
          }
@@ -94,8 +104,8 @@ namespace FragmentValkyria {
          Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
 
       private:
-         unsigned int _ingameTimer{ 0 };
-         std::tuple<double, double, int> _sensitivity;
+         unsigned int _ingameTimer{ 0 };                      //!< ゲーム内タイマー
+         std::tuple<double, double, int> _sensitivity;        //!< ゲーム内感度及びデッドゾーン値のTuple型
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
          std::unique_ptr<Stage::LoadStageFromJson> _loadStage;//!< ステージ情報管理クラスのユニークポインタ
       };

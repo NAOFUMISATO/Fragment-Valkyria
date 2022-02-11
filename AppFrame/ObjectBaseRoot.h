@@ -180,6 +180,10 @@ namespace AppFrame {
           * \return 画像描画クラスの参照
           */
          Texture::TextureComponent& GetTexComponent() const;
+         /**
+          * \brief サウンドコンポーネントの参照をゲームベース経由で取得
+          * \return サウンドコンポーネントの参照
+          */
          Sound::SoundComponent& GetSoundComponent() const;
 
       protected:
@@ -196,11 +200,11 @@ namespace AppFrame {
 
          ObjectState _objState{ ObjectState::Active }; //!< オブジェクトの種別変数
          std::unique_ptr<StateServer> _stateServer;    //!< 状態の一括管理クラスのポインタ
-         Game::GameBase& _gameBase;              //!< ゲーム本体クラスの参照
-         Matrix44 _worldTransform{ Matrix44() }; //!< ワ－ルド行列
-         Vector4 _position{ 0,0,0 };             //!< 位置
-         Vector4 _rotation{ 0,0,0 };             //!< 回転
-         Vector4 _scale{ 1,1,1 };                //!< 拡大率
+         Game::GameBase& _gameBase;                    //!< ゲーム本体クラスの参照
+         Matrix44 _worldTransform{ Matrix44() };       //!< ワ－ルド行列
+         Vector4 _position{ 0,0,0 };                   //!< 位置
+         Vector4 _rotation{ 0,0,0 };                   //!< 回転
+         Vector4 _scale{ 1,1,1 };                      //!< 拡大率
       };
    }
 }

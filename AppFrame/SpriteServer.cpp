@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   SpriteServer.cpp
+ * \brief  スプライトサーバー
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "SpriteServer.h"
 #include <DxLib.h>
 #ifdef _DEBUG

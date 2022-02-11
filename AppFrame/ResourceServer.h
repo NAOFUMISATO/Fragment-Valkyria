@@ -155,7 +155,7 @@ namespace AppFrame {
          virtual int GetEffectHandle(std::string_view key);
 
       private:
-         Game::GameBase& _gameBase;   //!< ゲームベースの参照
+         Game::GameBase& _gameBase;                                                        //!< ゲームベースの参照
          std::unordered_map<std::string, std::pair<Texture, std::vector<int>>> _textures;  //!< 任意の文字列をキーにしてDivGraphと画像ハンドルのペアを管理
          std::unordered_map<std::string, std::pair<std::vector<int>,
             std::unordered_map<std::string, int>>> _models;                                //!< 任意の文字列をキーにしてハンドルとアニメマップのペアを管理

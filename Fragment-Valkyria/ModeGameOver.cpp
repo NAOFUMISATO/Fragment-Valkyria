@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   ModeGameOver.cpp
+ * \brief  モードゲームオーバー
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ModeGameOver.h"
 #include "GameMain.h"
 using namespace FragmentValkyria::Mode;

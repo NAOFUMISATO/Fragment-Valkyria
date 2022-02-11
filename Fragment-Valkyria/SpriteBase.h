@@ -33,7 +33,7 @@ namespace FragmentValkyria {
          inline Game::GameMain& gameMain() const { return _gameMain; }
 
       protected:
-         Game::GameMain& _gameMain;              //!< ゲーム本体クラスの参照
+         Game::GameMain& _gameMain;  //!< ゲーム本体クラスの参照
       };
    }
 }

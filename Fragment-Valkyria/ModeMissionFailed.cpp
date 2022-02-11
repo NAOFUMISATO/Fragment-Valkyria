@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeMissionFailed.cpp
+ * \brief  モードミッション失敗
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ModeMissionFailed.h"
 
 namespace {

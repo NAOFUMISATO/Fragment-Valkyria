@@ -94,12 +94,7 @@ namespace AppFrame {
           * \brief メインループ内で実行する描画処理
           */
          virtual void Render();
-
-         /**
-          * \brief シャドウマップハンドルの取得
-          * \return シャドウマップハンドル
-          */
-         int shadowMapHandle() const { return _shadowMapHandle; }
+         
          /**
           * \brief ゲームの基底クラスのインスタンスを取得
           * \return ゲームの基底クラスのインスタンス
@@ -150,6 +145,10 @@ namespace AppFrame {
           * \return 画像の簡易描画クラスのポインタ
           */
          inline Texture::TextureComponent& texComponent() const { return *_texComponent; }
+         /**
+          * \brief スプライトサーバーの参照を取得
+          * \return スプライトサーバーのポインタ
+          */
          inline Sprite::SpriteServer& sprServer() const { return *_sprServer; }
          /**
           * \brief ウィンドウモードに設定するか
@@ -168,19 +167,18 @@ namespace AppFrame {
          inline virtual std::tuple<int, int, int> GraphSize() { return { 1280,1024,32 }; }
 
       protected:
-         int _shadowMapHandle{ -1 };            //!< シャドウマップハンドル
-         static GameBase* _gameInstance;        //!< ゲームのインスタンス
-         GameState _gState{ GameState::Play };                       //!< ゲーム状態
-         std::unique_ptr<Mode::ModeServer> _modeServer;              //!< モードの一括管理クラス
-         std::unique_ptr<Resource::ResourceServer> _resServer;       //!< リソースの一括管理クラス
-         std::unique_ptr<Input::InputManager> _inputManager;         //!< 入力の一括管理クラス
-         std::unique_ptr<Path::CurrentPathServer> _pathServer;       //!< パスの一括管理クラス
-         std::unique_ptr<Sound::SoundComponent> _soundComponent;     //!< サウンドの一括管理クラス
-         std::unique_ptr<Resource::LoadResourceJson> _loadresJson;   //!< jsonファイル管理クラス
-         std::unique_ptr<Effect::EffectServer> _efcServer;           //!< エフェクトの一括管理クラス
-         std::unique_ptr<Object::ObjectServer> _objServer;           //!< オブジェクトの一括管理クラス
-         std::unique_ptr<Texture::TextureComponent> _texComponent;   //!< 画像の簡易描画クラス
-         std::unique_ptr<Sprite::SpriteServer> _sprServer;
+         static GameBase* _gameInstance;                           //!< ゲームのインスタンス
+         GameState _gState{ GameState::Play };                     //!< ゲーム状態
+         std::unique_ptr<Mode::ModeServer> _modeServer;            //!< モードの一括管理クラス
+         std::unique_ptr<Resource::ResourceServer> _resServer;     //!< リソースの一括管理クラス
+         std::unique_ptr<Input::InputManager> _inputManager;       //!< 入力の一括管理クラス
+         std::unique_ptr<Path::CurrentPathServer> _pathServer;     //!< パスの一括管理クラス
+         std::unique_ptr<Sound::SoundComponent> _soundComponent;   //!< サウンドの一括管理クラス
+         std::unique_ptr<Resource::LoadResourceJson> _loadresJson; //!< jsonファイル管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;         //!< エフェクトの一括管理クラス
+         std::unique_ptr<Object::ObjectServer> _objServer;         //!< オブジェクトの一括管理クラス
+         std::unique_ptr<Texture::TextureComponent> _texComponent; //!< 画像の簡易描画クラス
+         std::unique_ptr<Sprite::SpriteServer> _sprServer;         //!< スプライトの一括管理クラス
       };
    }
 }

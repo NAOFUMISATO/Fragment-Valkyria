@@ -73,36 +73,67 @@ namespace AppFrame {
           * \return 最小値と最大値の範囲での一様分布での乱数
           */
          static float GetRandom(const float min, const float max);
-
-         // 矩形と線分の当たり判定
+         /**
+          * \brief 矩形と線分の当たり判定
+          * \param polygonPoint0 矩形頂点1
+          * \param polygonPoint1 矩形頂点2
+          * \param polygonPoint2 矩形頂点3
+          * \param polygonPoint3 矩形頂点4
+          * \param lineStart 線分始点
+          * \param lineEnd 線分終点
+          * \return 当たり判定及びどこが交差したか
+          */
          static Collision CollisionPolygonLine(const Vector4& polygonPoint0, const Vector4& polygonPoint1,
             const Vector4& polygonPoint2, const Vector4& polygonPoint3,
             const Vector4& lineStart, const Vector4& lineEnd);
-
-         // 面の法線を求める
+         /**
+          * \brief 面法線の計算
+          * \param point0 三角形頂点1
+          * \param point1 三角形頂点2
+          * \param point2 三角形頂点3
+          * \return 面法線ベクトル
+          */
          static Vector4 GetNormal(const Vector4& point0, const Vector4& point1, const Vector4& point2);
-
-         // 三角形と点の内外判定(point は必ず三角形と同平面である事)
+         /**
+          * \brief 三角形の内外判定
+          * \param trianglePoint0 三角形頂点1
+          * \param trianglePoint1 三角形頂点2
+          * \param trianglePoint2 三角形頂点3
+          * \param point 判定する点
+          * \return 内ならばtrue,外ならばfalseを返す
+          */
          static bool InsideTrianglePoint(const Vector4& trianglePoint0, const Vector4& trianglePoint1,
             const Vector4& trianglePoint2, const Vector4& point);
-         // 平面と線分の辺り判定
+         /**
+          * \brief 平面と線分の当たり判定
+          * \param p 平面位置
+          * \param lineStart 線分始点
+          * \param lineEnd 線分終点
+          * \param result 当たり判定及びどこが交差したか
+          * \return 当たり判定
+          */
          static bool CollisionPlaneLine(const Plane& p, const Vector4& lineStart, const Vector4& lineEnd, Collision& result);
-         //球と点の当たり判定
-         static bool CollisionSpherePoint(const Vector4& point, const Sphere& s);
+         /**
+          * \brief 球と点の当たり判定
+          * \param point 点
+          * \param sphere 球
+          * \return 当たり判定
+          */
+         static bool CollisionSpherePoint(const Vector4& point, const Sphere& sphere);
          /**
           * \brief カプセルと球の当たり判定
-          * \param c
-          * \param s
-          * \return 当たっているか
+          * \param capsule カプセル
+          * \param sphere 球
+          * \return 当たり判定
           */
-         static bool CollisionCapsuleSphere(const Capsule& c, const Sphere& s);
+         static bool CollisionCapsuleSphere(const Capsule& capsule, const Sphere& sphere);
          /**
           * \brief カプセルとカプセルの当たり判定
-          * \param c1
-          * \param c2
-          * \return 当たっているか
+          * \param capsule1 カプセル1
+          * \param capsule2 カプセル2
+          * \return 当たり判定
           */
-         static bool CollisionCapsuleCapsule(const Capsule& c1, const Capsule& c2);
+         static bool CollisionCapsuleCapsule(const Capsule& capsule1, const Capsule& capsule2);
          /**
           * \brief 点と直線の最短距離をもとめる
           * \param point 点の位置ベクトル
@@ -161,6 +192,9 @@ namespace AppFrame {
          static unsigned int GetColorCode(unsigned char red, unsigned char green, unsigned char blue);
 
       private:
+         /**
+          * \brief デフォルトデストラクタ
+          */
          Utility() = default;
       };
    }

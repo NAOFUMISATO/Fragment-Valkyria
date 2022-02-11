@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   AppFrame.h
+ * \brief  アプリケーションフレーム
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #pragma comment(lib,"AppFrame.lib")
 
 #include <DxLib.h>

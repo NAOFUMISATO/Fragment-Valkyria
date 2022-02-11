@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeOption.cpp
+ * \brief  モードオプション
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ModeOption.h"
 #include "GameMain.h"
 

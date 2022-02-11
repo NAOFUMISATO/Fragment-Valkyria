@@ -21,6 +21,10 @@ namespace FragmentValkyria {
    namespace Mode {
       class ModeBase : public AppFrame::Mode::ModeBaseRoot {
       public:
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体クラスの参照
+          */
          ModeBase(Game::GameMain& gameMain);
 
       protected:

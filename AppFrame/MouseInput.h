@@ -58,8 +58,8 @@ namespace AppFrame {
          inline Math::Vector4 GetDelta() const { return _delta; }
 
       private:
-         int _key{ 0 };   //!< 押下判定
-         int _trg{ 0 };   //!< トリガ判定
+         int _key{ 0 };                     //!< 押下判定
+         int _trg{ 0 };                     //!< トリガ判定
          Math::Vector4 _position{ 0,0,0 };  //!< マウスポインター座標
          Math::Vector4 _delta{ 0,0,0 };     //!< マウスポインター座標の変化量
       };

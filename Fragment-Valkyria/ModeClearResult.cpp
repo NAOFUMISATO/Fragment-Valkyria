@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeClearResult.cpp
+ * \brief  モードクリア画面
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ModeClearResult.h"
 #include "ClearTime.h"
 

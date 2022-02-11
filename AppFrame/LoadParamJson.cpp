@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   LoadParamJson.cpp
+ * \brief  jsonファイルからデータを読み込み、取得するクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "LoadParamJson.h"
 #include <string_view>
 #ifdef _DEBUG

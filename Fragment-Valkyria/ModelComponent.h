@@ -120,7 +120,7 @@ namespace FragmentValkyria {
          std::string _key;             //!< モデル及びアニメーションで使用するキー
          int _modelHandle{ -1 };       //!< モデルハンドル
          bool _isLighting{ true };     //!< ライティングを行うかのフラグ
-         bool _isPixelLighting{false};
+         bool _isPixelLighting{false}; //!< ピクセル単位でライティングを行うかのフラグ
       };
    }
 }

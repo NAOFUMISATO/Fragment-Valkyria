@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   SpriteBaseRoot.cpp
+ * \brief  スプライトの基底の基底
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "SpriteBaseRoot.h"
 #include "GameBase.h"
 #include "StateServer.h"

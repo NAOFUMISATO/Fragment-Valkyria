@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   StageModelComponent.cpp
+ * \brief  ステージモデルを一括管理する
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "StageModelComponent.h"
 #include "Stage.h"
 #include "StageData.h"

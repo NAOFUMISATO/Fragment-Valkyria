@@ -113,8 +113,8 @@ namespace FragmentValkyria {
 
          Object::ObjectBase& _owner;                 //!< オブジェクトベースの参照
          std::vector<int> _modelHandles{ -1 };       //!< モデルハンドル
-         bool _isLighting{ true };     //!< ライティングを行うかのフラグ
-         bool _isPixelLighting{ false };
+         bool _isLighting{ true };                   //!< ライティングを行うかのフラグ
+         bool _isPixelLighting{ false };             //!< ピクセルライティングを行うかのフラグ
       };
    }
 }

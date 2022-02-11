@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   RemainingBullet.cpp
+ * \brief  Žc’e‚ð•\Ž¦‚·‚é
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "RemainingBullet.h"
 #include "GameMain.h"
 

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectServer.cpp
+ * \brief   エフェクトサーバー
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "EffectServer.h"
 #include <EffekseerForDxLib.h>
 namespace AppFrame {
