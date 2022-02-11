@@ -74,32 +74,6 @@ namespace AppFrame {
          _runSprites.clear();
          _pendingSprites.clear();
       }
-
-      void SpriteServer::Register(std::string_view key, Vector4 vec) {
-         if (_sprRegistry.contains(key.data())) {
-            _sprRegistry[key.data()] = vec;
-         }
-         _sprRegistry.emplace(key, vec);
-      }
-
-      AppFrame::Math::Vector4 SpriteServer::GetVecData(std::string_view key) {
-#ifndef _DEBUG
-         if (!_sprRegistry.contains(key.data())) {
-            return{ 0,0,0 };
-         }
-#else
-         try {
-            if (!_sprRegistry.contains(key.data())) {
-               std::string message = key.data();
-               throw std::logic_error("----------キー[" + message + "]がオブジェクトレジストリに存在しませんでした。----------\n");
-            }
-         }
-         catch (std::logic_error& error) {
-            OutputDebugString(error.what());
-         }
-#endif
-         return _sprRegistry[key.data()];
-      }
    }
 }
 
