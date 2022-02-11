@@ -21,34 +21,37 @@ namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
        "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius"});
-    const double IdleAnimeSpeed = paramMap["idle_animespeed"];
-    const double WalkAnimeSpeed = paramMap["walk_animespeed"];
-    const double RunAnimeSpeed = paramMap["run_animespeed"];
-    const double ShootReadyAnimeSpeed = paramMap["shootready_animespeed"];
-    const double ShootAnimeSpeed = paramMap["shoot_animespeed"];
-    const double MoveSpeed = paramMap["move_speed"];
-    const double CapsulePos1 = paramMap["capsule_pos1"];
-    const double CapsulePos2 = paramMap["capsule_pos2"];
-    const double CapsuleRadius = paramMap["capsule_radius"];
 
-    constexpr auto FootStepHeight = 3.0;   //!< 走り状態時の足音発生高さ(足の甲からの位置)
-    constexpr auto FootStepStart = 10;     //!< 走り状態遷移時からの足音未発生フレーム
+    const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
+    const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
+    const double RunAnimeSpeed = paramMap["run_animespeed"];                  //!< 走り状態のアニメーションスピード
+    const double ShootReadyAnimeSpeed = paramMap["shootready_animespeed"];    //!< 射撃準備中のアニメーションスピード
+    const double ShootAnimeSpeed = paramMap["shoot_animespeed"];              //!< 射撃のアニメーションスピード
+    const double MoveSpeed = paramMap["move_speed"];                          //!< 移動の速さ
+    const double CapsulePos1 = paramMap["capsule_pos1"];                      //!< カプセルの一つ目の座標までの位置からの高さ
+    const double CapsulePos2 = paramMap["capsule_pos2"];                      //!< カプセルの二つ目の座標までの位置からの高さ
+    const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
+
+    constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
+    constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
 }
 
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
 void Player::Player::Init(){
+    // ベクトルを90度回転させるマトリクスの作成
     _rightRotation.RotateY(90.0, true);
+    // ベクトルを-90度回転させるマトリクスの作成
     _leftRotation.RotateY(-90.0, true);
+    // ベクトルを180度回転させるマトリクスの作成
     _backRotation.RotateY(180.0, true);
 }
 
 void Player::Input(InputManager& input) {
-   namespace AppMath = AppFrame::Math;
+   // カメラの入力処理を回す
    _cameraComponent->Input(input);
-   _rotateSpeed = 0;
-
+   // 各状態の入力処理を回す
    _stateServer->Input(input);
 }
 
@@ -60,7 +63,6 @@ void Player::Update() {
    // モデルの更新
    _modelAnimeComponent->Update();
    // カメラの更新
-   _cameraComponent->SetTarget(_position);
    _cameraComponent->SetPlyPos(_position);
    _cameraComponent->Update();
    // オブジェクトサーバーに位置を通知
@@ -79,10 +81,12 @@ void Player::Update() {
 }
 
 void Player::Draw() {
+    // 各状態の描画処理
    _stateServer->Draw();
 }
 
 void Player::ComputeWorldTransform() {
+    // ワールド行列の作成
    auto [sx, sy, sz] = _scale.GetVec3();
    auto [rx, ry, rz] = _rotation.GetVec3();
    auto [px, py, pz] = _position.GetVec3();
@@ -90,154 +94,202 @@ void Player::ComputeWorldTransform() {
    world.Scale(sx, sy, sz, true);
    world.RotateZ(rz, false);
    world.RotateX(rx, false);
+   // デフォルトでモデルが180度回転しているので180度回転させておく
    world.RotateY(ry + AppFrame::Math::DEGREES_180, false);
    world.Transfer(px, py, pz, false);
    _worldTransform = world;
 }
 
 void Player::Move(const Vector4& moved) {
+    // 移動量のベクトルの成分を分解
     auto [x, y, z] = moved.GetVec3();
+    // 位置を保存
     auto position = _position;
+    // x成分の移動後の位置を取得
     position = _collisionComponent->PlayerCheckStage(position, Vector4(x, y, 0.0));
+    // z成分の移動後の位置を取得
     position = _collisionComponent->PlayerCheckStage(position, Vector4(0.0, y, z));
+    // xとzの移動後の成分を位置に設定する
     _position = position;
 }
 
 void Player::ShootRotate() {
-    // カメラから向く方向の単位ベクトルをもとめる
+    // カメラから注視点への単位ベクトルをもとめる
     auto camForward = _cameraComponent->GetForward();
-
+    // カメラから注視点への単位ベクトルの高さをなくす
     auto [x, y, z] = camForward.GetVec3();
     auto direction = Vector4(x, 0.0, z);
+    // Y軸からみたモデルの向いている方向の角度を設定
     auto radius = std::atan2(x, z);
     _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
-
 }
 
 void Player::HitCheckFromFallObjectRange() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromObjectRange) {
+        // 当たり判定結果がオブジェクトを持ち上げられる範囲にいるとなっていたら射撃準備状態へ
         _stateServer->PushBack("ShootReady");
+        // カメラのズームをさせる
         _cameraComponent->SetZoom(true);
     }
 }
 
 void Player::HitCheckFromIdleFallObject() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
+        // 待機状態の落下オブジェクトとあたっていたら
+        // 当たったポリゴンの法線を取得
         auto normal = _collisionComponent->hitPos();
-        auto moveVec = _moved * MoveSpeed;
-        auto slideVec = moveVec.Cross(normal);
-        slideVec = normal.Cross(slideVec);
 
-        _position = _position + normal * MoveSpeed /*+ slideVec*/;
-
+        //// 移動量のベクトルの取得
+        //auto moveVec = _moved * MoveSpeed;
+        //// 移動量のベクトルと法線の外積をとる
+        //auto slideVec = moveVec.Cross(normal);
+        //// 法線と移動量のベクトルと法線の外積の結果との外積の結果からスライドさせるべき方向のベクトルを取得
+        //slideVec = normal.Cross(slideVec);
+   
+        // 法線に移動の速さをかけたベクトル分位置をずらす
+        _position = _position + normal * MoveSpeed;
+        // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
 }
 
 void Player::HitCheckFromGatling() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromGatling) {
+        // ガトリングと当たっていたら
+        // ガトリングの位置を取得
         auto hitPos = _collisionComponent->hitPos();
+        // ノックバックさせる向きの取得
         auto knockBackVec = _position - hitPos;
+        // 高さがあるので高さをなくす
         auto [x, y, z] = knockBackVec.GetVec3();
         auto knockBackDelta = Vector4(x, 0.0, z);
         knockBackDelta.Normalized();
+        // ノックバック量の設定
         _knockBack = knockBackDelta * 10.0;
-
+        // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
-
+        // ノックバックしていると設定
         _collisionComponent->knockBack(true);
-
+        // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
-
+        // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
-
+        // ノックバック状態へ
         _stateServer->PushBack("KnockBack");
     }
 }
 
 void Player::HitCheckFromFallObject() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromFallObject) {
+        // 落下中の落下オブジェクトと当たっていたら
+        // 落下オブジェクトの位置を取得
         auto hitPos = _collisionComponent->hitPos();
-        
+        // 落下オブジェクトの位置の成分を分解
         auto [hitX, hitY, hitZ] = hitPos.GetVec3();
+        // プレイヤーの位置の成分を分解
         auto [posX, posY, posZ] = _position.GetVec3();
+        // もし落下オブジェクトが真上にあったら
         if (hitX == posX && posZ == hitZ) {
+            // Y軸からみたモデルの回転角度の取得
             auto rotateY = _rotation.GetY();
+            // Y軸からみたモデルの回転マトリクス作成
             Matrix44 mat = Matrix44();
             mat.RotateY(rotateY, true);
-            Vector4 vec = Vector4(0.0, 0.0, 1.0);
+            // モデルが向いている方向の反対方向のベクトル生成
+            Vector4 vec = Vector4(0.0, 0.0, -1.0);
             vec.Normalized();
-            auto knockBackDelta = vec * mat * -1.0;
-            knockBackDelta.Normalized();
+            auto knockBackDelta = vec * mat;
+            // ノックバック量のベクトルを設定
             _knockBack = knockBackDelta * 10.0;
         }
         else {
+            // 落下オブジェクトが真上にない場合
+            // ノックバック量のベクトルを設定
             auto knockBackVec = _position - hitPos;
+            // 高さをなくす
             auto [x, y, z] = knockBackVec.GetVec3();
             auto knockBackDelta = Vector4(x, 0.0, z);
             knockBackDelta.Normalized();
             _knockBack = knockBackDelta * 10.0;
         }
-
+        // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
-
+        // ノックバックしていると設定
         _collisionComponent->knockBack(true);
-
+        // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
-
+        // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
-
+        // ノックバック状態へ
         _stateServer->PushBack("KnockBack");
     }
 }
 
 void Player::HitCheckFromLaser() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
-
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromLaser) {
+        // レーザーと当たっていたら
+        // レーザーの位置を取得
         auto hitPos = _collisionComponent->hitPos();
+        // ノックバック量のベクトルを設定
         auto knockBackVec = _position - hitPos;
+        // 高さをなくす
         auto [x, y, z] = knockBackVec.GetVec3();
         auto knockBackDelta = Vector4(x, 0.0, z);
         knockBackDelta.Normalized();
         _knockBack = knockBackDelta * 20.0;
-
+        // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
-
+        // ノックバックしていると設定
         _collisionComponent->knockBack(true);
-
+        // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
-
+        // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
-
+        // ノックバック状態へ
         _stateServer->PushBack("KnockBack");
     }
 }
 
 void Player::HitCheckFromLargeEnemy() {
+    // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
-
+    // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+        // ラージエネミーと当たっていたら
+        // ラージエネミーの位置を取得
         auto hitPos = _collisionComponent->hitPos();
+        // ノックバック量のベクトルを設定
         auto knockBackVec = _position - hitPos;
         knockBackVec.Normalized();
         _knockBack = knockBackVec * 10.0;
-
+        // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
-
+        // ノックバックしていると設定
         _collisionComponent->knockBack(true);
-
+        // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
-
+        // ノックバック状態へ
         _stateServer->PushBack("KnockBack");
     }
 }
 
 void Player::WeakAttack() {
+    // 遠隔弱攻撃の弾を生成してオブジェクトサーバーへ追加
     auto bullet = gameMain().objFactory().Create("Bullet");
     gameMain().objServer().Add(std::move(bullet));
 }
@@ -314,21 +366,22 @@ void Player::StateRun::Enter() {
    _footCnt = count;
 }
 void Player::StateRun::Input(InputManager& input) {
+    // 待機状態の落下オブジェクトと当たっているか確認
     _owner.HitCheckFromIdleFallObject();
-
+    // 移動しているかのフラグを作成して初期ではしていないと設定
     auto moved = false;
-    // カメラから前進方向単位ベクトルをもとめる
+    // カメラから注視点への方向単位ベクトルをもとめる
     auto camForward = _owner._cameraComponent->GetForward();
     auto [x, y, z] = camForward.GetVec3();
+    // 高さをなくす
     _owner._direction = Vector4(x, 0.0, z);
+    // 移動量のベクトルを初期化
     _owner._moved = Vector4();
    if (input.GetKeyboard().SpaceClick()) {
       _owner._stateServer->PushBack("Attack");
       return;
    }
-   /*if (input.GetKeyboard().WPress()) {
-      return;
-   }*/
+   
    if (input.GetXJoypad().LeftStickX() >= 3000) {
        _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
        moved = true;
@@ -377,13 +430,12 @@ void Player::StateRun::Update() {
    _owner.HitCheckFromGatling();
    _owner.HitCheckFromLaser();
 
-   //無敵時間更新
+   // 無敵時間更新
    --_owner._invincibleCnt;
 }
 
 /// 攻撃
 void Player::StateAttack::Enter() {
-   /*_owner._forwardSpeed = 0.f;*/
    _owner._modelAnimeComponent->ChangeAnime("hassya_MO",false, ShootAnimeSpeed);
 }
 void Player::StateAttack::Update() {
@@ -425,7 +477,7 @@ void Player::StateShootReady::Update() {
     _owner.HitCheckFromGatling();
     _owner.HitCheckFromLaser();
 
-    //無敵時間更新
+    // 無敵時間更新
     --_owner._invincibleCnt;
    
 }

@@ -98,16 +98,16 @@ namespace FragmentValkyria {
              * \brief 打った時の注視点に向かって進む処理
              */
             void Shoot();
-            double _fallTimer{ 0.0 };         //!< 落下状態の進捗
-            double _upDownAngle{ 0.0 };       //!< ふわふわさせる時のサインの値を取るときの角度
-            double _rotateAngle{ 0.0 };       //!< 不規則な回転さをせる時のサインの値を取るときの角度
-            bool _saveFlag{ false };          //!< ふわふわ浮かせるか
-            bool _isFall{ true };             //!< 落下状態かどうか
-            bool _residual{ true };           //!< 残留オブジェクトか
-            int _collision{ 0 };
-            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
-            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };
-            std::string_view _collisionName{ "" };
+            double _fallTimer{ 0.0 };                          //!< 落下状態の進捗
+            double _upDownAngle{ 0.0 };                        //!< ふわふわさせる時のサインの値を取るときの角度
+            double _rotateAngle{ 0.0 };                        //!< 不規則な回転さをせる時のサインの値を取るときの角度
+            bool _saveFlag{ false };                           //!< ふわふわ浮かせるか
+            bool _isFall{ true };                              //!< 落下状態かどうか
+            bool _residual{ true };                            //!< 残留オブジェクトか
+            int _collision{ 0 };                               //!< モデルのコリジョンフレーム番号
+            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };  //!< 浮く状態に入った時の位置ベクトル
+            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
+            std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
             std::vector<int> _fallPointHandles{ -1 };
 
         public:

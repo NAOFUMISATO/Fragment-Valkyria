@@ -123,8 +123,8 @@ void LargeEnemy::HitCheckFromBullet() {
 void LargeEnemy::Move(const Vector4& moved) {
 	auto [x, y, z] = moved.GetVec3();
 	auto position = _position;
-	position = _collisionComponent->BossCheckStage(position, Vector4(x, y, 0.0));
-	position = _collisionComponent->BossCheckStage(position, Vector4(0.0, y, z));
+	position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(x, y, 0.0));
+	position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(0.0, y, z));
 
 	_position = position;
 }
