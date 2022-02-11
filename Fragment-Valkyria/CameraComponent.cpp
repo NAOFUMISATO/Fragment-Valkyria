@@ -108,7 +108,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
     }
     //右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
     if (input.GetXJoypad().RightStickX() <= -deadZone) {
-
+        _owner._sideAngle += cameraSens;
         if (_owner._sideAngle >= 360.0) {
             _owner._sideAngle = 0.0;
         }
