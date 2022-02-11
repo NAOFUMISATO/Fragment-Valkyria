@@ -80,6 +80,8 @@ namespace FragmentValkyria {
           */
          Create::ObjectFactory& GetObjFactory() const;
 
+         inline Stage::Stage& GetStage() { return *_stage; }
+
       protected:
          std::unique_ptr<Stage::Stage> _stage;
          std::unique_ptr<Lighting::LightAndShadow> _lighting;

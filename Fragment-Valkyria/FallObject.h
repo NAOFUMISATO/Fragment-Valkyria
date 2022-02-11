@@ -1,30 +1,42 @@
 #pragma once
 /*****************************************************************//**
  * \file   FallObject.h
- * \brief  
+ * \brief  落下オブジェクトの処理を回すクラス
  * 
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
-
+    /**
+     * \brief 敵関係
+     */
 	namespace Enemy {
-
+        /**
+         * \class 落下オブジェクトクラス
+         * \brief 落下オブジェクトクラスを管理する
+         */
 		class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;
             using Vector4 = AppFrame::Math::Vector4;
 		public:
+            /**
+             * \brief コンストラクタ
+             * \param gameMain ゲーム本体の参照
+             */
 			FallObject(Game::GameMain& gameMain);
+            /**
+             * \brief デフォルトデストラクタ
+             */
 			virtual ~FallObject() override = default;
-
 			/**
 		    * \brief オブジェクトの種類を返す
-		    * \return 落ちてくるオブジェクト
+		    * \return 落下オブジェクト
 		    */
 			ObjectType GetObjType() const override { return ObjectType::FallObject; };
-
             /**
             * \brief 初期化処理
             */
@@ -42,49 +54,73 @@ namespace FragmentValkyria {
             * \brief 描画処理
             */
             void Draw() override;
-
-
+            /**
+             * \brief 残留オブジェクトか確認
+             * \return 残留オブジェクトかどうか
+             */
             bool residual() { return _residual; }
+            /**
+             * \brief 残留オブジェクトかどうか設定
+             * \param residual 残留オブジェクトかどうか
+             */
             void residual(bool residual) { _residual = residual; }
 
         private:
+            /**
+             * \brief プレイヤーが浮く範囲内にいるか確認
+             */
             void HitCheckFromPlayerPoint();
+            /**
+             * \brief ラージエネミーのオブジェクトと当たっているか確認
+             */
             void HitCheckFromLargeEnemy();
+            /**
+             * \brief レーザーと当たっているか確認
+             */
             void HitCheckFromLaser();
+            /**
+             * \brief ガトリング攻撃をしてくる雑魚敵と当たっているか確認
+             */
             void HitCheckFromPoorEnemyGatling();
+            /**
+             * \brief プレイヤーがノックバックしているか確認
+             */
             void CheckPlayerKnockBack();
+            /**
+             * \brief 浮かせながら回転させる処理
+             */
             void Save();
+            /**
+             * \brief 上に上げていく処理
+             */
             void Up();
+            /**
+             * \brief 打った時の注視点に向かって進む処理
+             */
             void Shoot();
-
-            double _fallTimer{ 0.0 };
-            double _upDownAngle{ 0.0 };
-            double _rotateAngle{ 0.0 };
-            bool _saveFlag{ false };
-            bool _isFall{ true };
-
-            bool _residual{ true };
-
-            int _collision{ 0 };
-
-            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };
-            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };
-
-            std::string_view _collisionName{ "" };
-
+            double _fallTimer{ 0.0 };                          //!< 落下状態の進捗
+            double _upDownAngle{ 0.0 };                        //!< ふわふわさせる時のサインの値を取るときの角度
+            double _rotateAngle{ 0.0 };                        //!< 不規則な回転さをせる時のサインの値を取るときの角度
+            bool _saveFlag{ false };                           //!< ふわふわ浮かせるか
+            bool _isFall{ true };                              //!< 落下状態かどうか
+            bool _residual{ true };                            //!< 残留オブジェクトか
+            int _collision{ 0 };                               //!< モデルのコリジョンフレーム番号
+            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };  //!< 浮く状態に入った時の位置ベクトル
+            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
+            std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
             std::vector<int> _fallPointHandles{ -1 };
 
         public:
             /**
-            * \class プレイヤー状態の基底クラス
-            * \brief 各プレイヤーの状態はこれを派生して定義する
+            * \class 落下オブジェクトの状態の基底クラス
+            * \brief 各落下オブジェクトの状態はこれを派生して定義する
             */
             class StateBase : public AppFrame::State::StateBaseRoot
             {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner 落ちてくるオブジェクトの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateBase(FallObject& owner) : _owner{ owner } {};
                 /**
@@ -93,7 +129,7 @@ namespace FragmentValkyria {
                 virtual void Draw() override;
 
             protected:
-                FallObject& _owner;   //!< プレイヤーの参照
+                FallObject& _owner;   //!< 落下オブジェクトの参照
             };
             /**
              * \class 待機状態クラス
@@ -104,7 +140,7 @@ namespace FragmentValkyria {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner 落ちてくるオブジェクトの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateIdle(FallObject& owner) : StateBase{ owner } {};
                 /**
@@ -130,7 +166,7 @@ namespace FragmentValkyria {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner プレイヤーの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateFall(FallObject& owner) : StateBase{ owner } {};
                 /**
@@ -160,7 +196,7 @@ namespace FragmentValkyria {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner プレイヤーの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateSave(FallObject& owner) : StateBase{ owner } {};
                 /**
@@ -186,7 +222,7 @@ namespace FragmentValkyria {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner プレイヤーの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateShoot(FallObject& owner) : StateBase{ owner } {};
                 /**
@@ -212,7 +248,7 @@ namespace FragmentValkyria {
             public:
                 /**
                  * \brief コンストラクタ
-                 * \param owner 落ちてくるオブジェクトの参照
+                 * \param owner 落下オブジェクトの参照
                  */
                 StateDie(FallObject& owner) : StateBase{ owner } {};
                 /**

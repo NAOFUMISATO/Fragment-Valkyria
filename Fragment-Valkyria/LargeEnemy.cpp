@@ -15,6 +15,12 @@
 
 using namespace FragmentValkyria::Enemy;
 
+namespace {
+	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
+	   "gatling_frame"});
+	const int GatlingFrame = paramMap["gatling_frame"];
+}
+
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 	
 }
@@ -114,8 +120,13 @@ void LargeEnemy::HitCheckFromBullet() {
 	}
 }
 
-void LargeEnemy::Move() {
-	_position = _position + _moved * 30.0;
+void LargeEnemy::Move(const Vector4& moved) {
+	auto [x, y, z] = moved.GetVec3();
+	auto position = _position;
+	position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(x, y, 0.0));
+	position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(0.0, y, z));
+
+	_position = position;
 }
 
 void LargeEnemy::Rotate(bool& rotating) {
@@ -138,7 +149,6 @@ void LargeEnemy::Rotate(bool& rotating) {
 			rotating = false;
 		}
 	}
-	
 }
 
 void LargeEnemy::SetAddRotate() {
@@ -231,7 +241,7 @@ void LargeEnemy::StateGatling::Enter() {
 }
 
 void LargeEnemy::StateGatling::Update() {
-	if (_owner._stateCnt % _owner.GatlingFrame == 0) {
+	if (_owner._stateCnt % GatlingFrame == 0) {
 		_owner.CreateGatling();
 		--_owner._gatlingCnt;
 	}
@@ -277,6 +287,7 @@ void LargeEnemy::StateMove::Enter() {
 	if (result) {
 		_owner._moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 		_owner._moved.Normalized();
+		_owner._moved = _owner._moved * 30.0;
 	}
 	else {
 		auto degree = AppFrame::Math::Utility::GetRandom(0.0, 360.0);
@@ -312,8 +323,7 @@ void LargeEnemy::StateMove::Update() {
 			}
 		}
 		else if (_owner._stateCnt >= 60 * 1 ) {
-
-			_owner.Move();
+			_owner.Move(_owner._moved);
 		}
 		
 		++_owner._stateCnt;

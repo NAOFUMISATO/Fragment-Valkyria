@@ -3,7 +3,7 @@
  * \file   Player.h
  * \brief  プレイヤーの処理を回すクラス
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, AHMD2000
  * \date   December 2021
  *********************************************************************/
 #include "ObjectBase.h"
@@ -66,48 +66,65 @@ namespace FragmentValkyria {
           * \brief ワールド行列の取得
           */
          void ComputeWorldTransform() override;
-
-         double hp() { return _hp; }
-
-         int invincibleCnt() { return _invincibleCnt; }
-
+         /**
+          * \brief プレイヤーの体力の取得
+          * \return プレイヤーの体力
+          */
+         inline double hp() { return _hp; }
+         /**
+          * \brief 無敵時間の取得
+          * \return 無敵時間
+          */
+         inline int invincibleCnt() { return _invincibleCnt; }
       private:
          /**
           * \brief 移動処理
+          * \param moved 移動量のベクトル
           */
-         void Move(Vector4 forward);
+         void Move(const Vector4& moved);
          /**
           * \brief 射撃準備状態の回転処理
           */
          void ShootRotate();
-
+         /**
+          * \brief 落下オブジェクトを持ち上げられる範囲にいるか確認
+          */
          void HitCheckFromFallObjectRange();
-
+         /**
+          * \brief 待機状態の落下オブジェクトと当たっているか確認
+          */
          void HitCheckFromIdleFallObject();
-
+         /**
+          * \brief ガトリングと当たっているか確認
+          */
          void HitCheckFromGatling();
-
+         /**
+          * \brief 落下中の落下オブジェクトと当たっているか確認
+          */
          void HitCheckFromFallObject();
-
+         /**
+          * \brief レーザーと当たっているか確認
+          */
          void HitCheckFromLaser();
-
+         /**
+          * \brief ラージエネミーと当たっているか確認
+          */
          void HitCheckFromLargeEnemy();
-
+         /**
+          * \brief 遠隔弱攻撃をする
+          */
          void WeakAttack();
 
-         double _rotateSpeed{ 0.0 };       //!< 回転速度
-         int _freezeTime{ 0 };
-         double _hp{ 100.0 };
-         int _bulletStock{ 5 };
-         int _invincibleCnt{ 0 };
-
-         Vector4 _moved{ Vector4() };
-         Vector4 _knockBack{ Vector4() };
-         Vector4 _direction{ Vector4() };
-
-         Matrix44 _rightRotation{ Matrix44() };
-         Matrix44 _leftRotation{ Matrix44() };
-         Matrix44 _backRotation{ Matrix44() };
+         int _freezeTime{ 0 };                      //!< ノックバックする時間
+         int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
+         int _invincibleCnt{ 0 };                   //!< 無敵時間
+         double _hp{ 100.0 };                       //!< ヒットポイント
+         Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
+         Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
+         Vector4 _direction{ Vector4() };           //!< 前進方向のベクトル
+         Matrix44 _rightRotation{ Matrix44() };     //!< ベクトルを90度回転させるマトリクス
+         Matrix44 _leftRotation{ Matrix44() };      //!< ベクトルを-90度回転させるマトリクス
+         Matrix44 _backRotation{ Matrix44() };      //!< ベクトルを180度回転させるマトリクス
       public:
          /**
           * \class プレイヤー状態の基底クラス
@@ -330,8 +347,8 @@ namespace FragmentValkyria {
 
          };
          /**
-          * \class 待機状態クラス
-          * \brief 待機状態の処理を回す
+          * \class 装填状態クラス
+          * \brief 装填状態の処理を回す
           */
          class StateReload : public StateBase
          {

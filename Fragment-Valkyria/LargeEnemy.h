@@ -7,20 +7,37 @@
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
-
+    /**
+     * \brief 敵関係
+     */
     namespace Enemy {
-
+        /**
+         * \class ラージエネミークラス
+         * \brief ラージエネミークラスを管理する
+         */
         class LargeEnemy : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
             using Matrix44 = AppFrame::Math::Matrix44;
             using InputManager = AppFrame::Input::InputManager;
         public:
+            /**
+             * \brief コンストラクタ
+             * \param gameMain ゲーム本体の参照
+             */
             LargeEnemy(Game::GameMain& gameMain);
+            /**
+             * \brief デフォルトデストラクタ
+             */
             virtual ~LargeEnemy() override = default;
-
+            /**
+             * \brief オブジェクトの種別を返す
+             * \return ラージエネミー
+             */
             virtual ObjectType GetObjType() const override { return ObjectType::LargeEnemy; };
-
             /**
             * \brief 初期化処理
             */
@@ -38,31 +55,51 @@ namespace FragmentValkyria {
              * \brief 描画処理
              */
             void Draw() override;
-
-
+            /**
+             * \brief ガトリングの生成
+             */
             void CreateGatling();
-
+            /**
+             * \brief レーザーの生成
+             */
             void CreateLaser();
-
+            /**
+             * \brief ボスの体力の取得
+             * \return ボスの体力
+             */
             double hp() { return _hp; }
-
         private:
-
+            /**
+             * \brief 落下オブジェクトを生成する
+             */
             void CreateFallObject();
-
+            /**
+             * \brief 落下オブジェクトに当たったか確認
+             */
             void HitCheckFromFallObject();
-
+            /**
+             * \brief プレイヤーの遠隔弱攻撃の弾に当たったか確認
+             */
             void HitCheckFromBullet();
-
-            void Move();
+            /**
+             * \brief 移動処理
+             * \param moved 移動量のベクトル
+             */
+            void Move(const Vector4& moved);
+            /**
+             * \brief 回転処理
+             * \param rotating 回転するか
+             */
             void Rotate(bool& rotating);
+            /**
+             * \brief 回転の角速度の設定
+             */
             void SetAddRotate();
-
-            int _stateCnt{ 0 };
-            int _gatlingCnt{ 0 };
-            int _collision{ 0 };
-            const int GatlingFrame{ 60 };
-            bool _fallObjectflag{ false };
+            int _stateCnt{ 0 };              //!< 各状態に入ってからの進捗
+            int _gatlingCnt{ 0 };            //!< ガトリングの弾を打つ回数
+            int _collision{ 0 };             //!< モデルのコリジョンフレーム番号
+            int _freezeTime{ 0 };            //!< 死亡してからゲームクリアまでのフレーム数
+            bool _fallObjectflag{ false };   //!< 落下オブジェクトを
             bool _gatlingFlag{ false };
             bool _moving{ false };
             bool _firstRotating{ true };
@@ -70,13 +107,10 @@ namespace FragmentValkyria {
             double _rotateDot{ 0.0 };
             double _addRotate{ 1.0 };
             double _hp{ 100.0 };
-            int _freezeTime{ 0 };
 
-            Vector4 _moved{ 0.0, 0.0, 0.0 };
+            Vector4 _moved{ 0.0, 0.0, 0.0 }; //!< 移動量のベクトル
 
             std::vector < std::pair<double, Vector4>> _objectDistance;
-
-
         public:
             /**
             * \class ラージエネミーの状態の基底クラス
@@ -237,7 +271,7 @@ namespace FragmentValkyria {
                  */
                 void Update() override;
             private:
-                bool _createLaser{ false };
+                bool _createLaser{ false };   //!< レーザーを生成したか
             };
         };
     }

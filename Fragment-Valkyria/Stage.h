@@ -46,6 +46,7 @@ namespace FragmentValkyria {
           * \return ステージ
           */
          ObjectType GetObjType() const override { return ObjectType::Stage; }
+         StageModelComponent& stageComponent() { return *_stage; }
 
       private:
          std::unique_ptr<Model::ModelComponent> _skySphere; //!< スカイスフィアのポインタ

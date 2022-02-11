@@ -78,7 +78,6 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Draw() override {};
-
          /**
           * \brief オブジェクトの種別を返す（純粋仮想関数化）
           * \return 派生先で定義

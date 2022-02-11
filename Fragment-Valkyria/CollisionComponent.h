@@ -1,100 +1,190 @@
 #pragma once
 /*****************************************************************//**
  * \file   CollisionServer.h
- * \brief  当たり判定を行うクラス
+ * \brief  当たり判定処理を行うクラス
  * 
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
 #include "AppFrame.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
-
+	//二重インクルード防止
 	namespace Object {
 		class ObjectBase;
 	}
-
+	/**
+	 * \brief 当たり判定関係
+	 */
 	namespace Collision {
-
+		/**
+		 * \class 当たり判定処理を行うクラス
+		 * \brief 当たり判定処理を行うクラスを管理する
+		 */
 		class CollisionComponent {
 			using Vector4 = AppFrame::Math::Vector4;
 		public:
+			/**
+			 * \brief 当たり判定結果の列挙
+			 */
 			enum class ReportId {
-				None,
-				HitFromPlayer,
-				HitFromObjectRange,
-				HitFromIdleFallObject,
-				HitFromFallObject,
-				HitFromGatling,
-				HitFromLargeEnemy,
-				HitFromBullet,
-				HitFromLaser,
-				HitFromPoorEnemyGatling
+				None,                      //!< 当たっていない
+				HitFromPlayer,             //!< プレイヤーと当たった
+				HitFromObjectRange,        //!< オブジェクトを持ち上げられる範囲にいる
+				HitFromIdleFallObject,     //!< 待機状態の落下するオブジェクトと当たった
+				HitFromFallObject,         //!< 落下している落下するオブジェクトと当たった
+				HitFromGatling,            //!< ガトリングと当たった
+				HitFromLargeEnemy,         //!< ラージエネミーと当たった
+				HitFromBullet,             //!< 遠隔弱攻撃の弾と当たった
+				HitFromLaser,              //!< レーザーと当たった
+				HitFromPoorEnemyGatling    //!< ガトリング攻撃をしてくる雑魚敵と当たった
 			};
-
+			/**
+			 * \brief 当たり判定結果を管理するクラス
+			 */
 			class Report {
 			public:
-
+				/**
+				 * \brief 当たり判定結果の設定
+				 * \param id 当たり判定結果
+				 */
 				void id(ReportId id) { _id = id; }
+				/**
+				 * \brief 当たり判定結果の取得
+				 * \return 当たり判定結果
+				 */
 				ReportId& id() { return _id; }
 
 			private:
-				ReportId _id{ ReportId::None };
-
+				ReportId _id{ ReportId::None };  //!< 当たり判定の結果
 			};
-
+			/**
+			 * \brief コンストラクタ
+			 * \param owner オブジェクトの参照
+			 */
 			CollisionComponent(Object::ObjectBase& owner);
-
+			/**
+			 * \brief プレイヤーがオブジェクトの持ち上げられる範囲にいるか確認
+			 */
 			void ObjectRangeFromPlayer();
-
+			/**
+			 * \brief オブジェクトを持ち上げられる範囲にプレイヤーがいるか確認
+			 */
 			void PlayerFromObjectRange();
-
+			/**
+			 * \brief 落下するオブジェクトのモデルと当たっているか判定
+			 * \param fall 落下中か
+			 */
 			void PlayerFromFallObjectModel(bool fall);
-
+			/**
+			 * \brief オブジェクトのモデルにガトリングが当たっているか確認
+			 */
 			void GatlingFromObjectModel();
-
+			/**
+			 * \brief プレイヤーがガトリングに当たっているか確認
+			 */
 			void GatlingFromPlayer();
-
+			/**
+			 * \brief ラージエネミーのモデルに落下するオブジェクトが当たったか確認
+			 */
 			void ObjectModelFromLargeEnemy();
-
+			/**
+			 * \brief 遠隔弱攻撃の弾がラージエネミーに当たったか確認
+			 */
 			void LargeEnemyFromBullet();
-
+			/**
+			 * \brief レーザーが落下するオブジェクトに当たっているか確認
+			 */
 			void FallObjectFromLaser();
-
+			/**
+			 * \brief レーザーがプレイヤーと当たっているか確認
+			 */
 			void PlayerFromLaser();
-
+			/**
+			 * \brief プレイヤーがラージエネミーのモデルと当たっているか確認
+			 */
 			void LargeEnemyFromPlayer();
-
+			/**
+			 * \brief ガトリング攻撃をしてくる雑魚敵が遠隔弱攻撃の弾と当たっているか確認
+			 */
 			void BulletFromPoorEnemyGatling();
-
+			/**
+			 * \brief 落下するオブジェクトがガトリング攻撃をしてくる雑魚敵と当たったか確認
+			 */
 			void PoorEnemyGatlingFromObjectModel();
-
+			/**
+			 * \brief プレイヤーがノックバックしているか確認
+			 */
 			void PlayerKnockBack();
-
+			/**
+			 * \brief プレイヤーとステージが当たっているか確認
+			 * \param pos プレイヤーの位置
+			 * \param moved プレイヤーの移動量のベクトル
+			 * \return 移動後の位置
+			 */
+			Vector4 PlayerCheckStage(const Vector4& pos, const Vector4& moved);
+			/**
+			 * \brief ラージエネミーとステージが当たっているか確認
+			 * \param pos ラージエネミーの位置
+			 * \param moved ラージエネミーの移動量のベクトル
+			 * \return 移動後の位置
+			 */
+			Vector4 LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved);
+			/**
+			 * \brief 当たり判定結果を管理するポインタの設定
+			 * \param report 当たり判定結果を管理するクラス
+			 */
 			void report(Report report) { *_report = report; }
+			/**
+			 * \brief 当たり判定結果を管理するクラスの参照の取得
+			 * \return 当たり判定結果を管理するクラスの参照
+			 */
 			Report& report() { return *_report; }
-
+			/**
+			 * \brief 当たった位置の設定
+			 * \param pos 当たった位置
+			 */
 			void hitPos(Vector4 pos) { _hitPos = pos; }
-
+			/**
+			 * \brief 当たった位置の取得
+			 * \return 当たった位置
+			 */
 			Vector4 hitPos() { return _hitPos; }
-
+			/**
+			 * \brief ダメージ量の設定
+			 * \param damage ダメージ量
+			 */
 			void damage(double damage) { _damage = damage; }
-
+			/**
+			 * \brief ダメージ量の取得
+			 * \return ダメージ量
+			 */
 			double damage() { return _damage; }
-
+			/**
+			 * \brief ノックバックしているか設定
+			 * \param knockBack ノックバックしているか
+			 */
 			void knockBack(bool knockBack) { _knockBack = knockBack; }
-
+			/**
+			 * \brief ノックバックしているかの取得
+			 * \return ノックバックしているか
+			 */
 			bool knockBack() { return _knockBack; }
 		private:
-
+			/**
+			 * \brief オブジェクトベースルート型をオブジェクトベース型に変換する
+			 * \param obj 変換したいオブジェクト
+			 * \return 変換後のオブジェクト
+			 */
 			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
 
-			Object::ObjectBase& _owner;
-			std::unique_ptr<Report> _report;
-			double _damage{ 0.0 };
-
-			bool _knockBack{ false };
-			Vector4 _hitPos;
+			Object::ObjectBase& _owner;              //!< オブジェクトの参照
+			std::unique_ptr<Report> _report;         //!< 当たり判定結果を管理するポインタ
+			double _damage{ 0.0 };                   //!< ダメージ量
+			bool _knockBack{ false };                //!< プレイヤーがノックバックしているか
+			Vector4 _hitPos;                         //!< 当たった位置
 
 		};
 
