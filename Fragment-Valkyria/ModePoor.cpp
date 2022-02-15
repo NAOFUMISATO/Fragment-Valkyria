@@ -65,7 +65,7 @@ void ModePoor::Enter() {
 
 void ModePoor::Input(AppFrame::Input::InputManager& input) {
    //-----------‰¼--------------
-   if (input.GetMouse().RightClick()) {
+   if (input.GetXJoypad().StartClick()) {
       GetModeServer().GoToMode("Movie",'L');
    }
    if (input.GetMouse().LeftClick()) {
