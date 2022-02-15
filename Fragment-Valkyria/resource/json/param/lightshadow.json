@@ -11,7 +11,7 @@
 			"global_ambred":0.5,
 			"global_ambgreen":0.5,
 			"global_ambblue":0.5,
-			"global_ambalpha":0.0,
+			"global_ambalpha":0.5,
 			"alllight_difred":0.3,
 			"alllight_difgreen":0.3,
 			"alllight_difblue":0.3,

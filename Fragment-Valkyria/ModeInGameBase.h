@@ -35,7 +35,8 @@ namespace FragmentValkyria {
           * \brief インゲーム種別の取得
           */
          enum class InGameType {
-            Boss   //!< モードボス
+            Boss,   //!< モードボス戦
+            Poor    //!< モード雑魚戦
          };
 
          /**
@@ -43,10 +44,6 @@ namespace FragmentValkyria {
           * \param game ゲーム本体の参照
           */
          ModeInGameBase(Game::GameMain& gameMain);
-         /**
-          * \brief 初期化処理
-          */
-         void Init() override;
          /**
           * \brief 入口処理
           */

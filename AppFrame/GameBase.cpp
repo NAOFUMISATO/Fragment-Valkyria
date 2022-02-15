@@ -58,11 +58,10 @@ namespace AppFrame {
 #ifndef _DEBUG
          SetBackgroundColor(0, 0, 0);
 #else
-         SetBackgroundColor(0, 0, 255);
+         SetBackgroundColor(0, 0, 0);
 #endif
          //•`‰ææ‚ğ— ‰æ–Ê‚ÉƒZƒbƒg
          SetDrawScreen(DX_SCREEN_BACK);
-
          // Effekseer‚Ì‰Šú‰»
          if (Effekseer_Init(8000) == -1)
          {

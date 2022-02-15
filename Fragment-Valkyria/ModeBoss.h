@@ -33,7 +33,7 @@ namespace FragmentValkyria {
          /**
           * \brief ‰Šú‰»ˆ—
           */
-         void Init() override;
+         void Init()override {};
          /**
           * \brief “üŒûˆ—
           */

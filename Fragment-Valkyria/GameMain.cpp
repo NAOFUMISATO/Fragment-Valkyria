@@ -18,6 +18,8 @@
 #include "ModeMissionFailed.h"
 #include "ModeMissionCompleted.h"
 #include "ModeOption.h"
+#include "ModePoor.h"
+#include "ModeMovie.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -34,6 +36,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
       {"Sound",{"resource/sound"}},
       {"Effect",{"resource/effect"}},
       {"Stage",{"resource/stage"}},
+      {"Movie",{"resource/movie"}},
       {"TextureJson",{"resource/json/graphic" }},
       {"ModelJson",{"resource/json/model" }},
       {"SoundJson",{"resource/json/sound" }},
@@ -50,6 +53,8 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
 
+   _modeServer->Register("Poor",std::make_shared<Mode::ModePoor>(*this));
+   _modeServer->Register("Movie" ,std::make_shared<Mode::ModeMovie>(*this));
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
    _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
    _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));

@@ -40,7 +40,7 @@ namespace FragmentValkyria {
          /**
           * \brief “üŒûˆ—
           */
-         virtual void Enter()override;
+         void Enter()override;
          /**
           * \brief “ü—Íˆ—
           * \param input “ü—ÍˆêŠ‡ŠÇ—ƒNƒ‰ƒX‚ÌQÆ

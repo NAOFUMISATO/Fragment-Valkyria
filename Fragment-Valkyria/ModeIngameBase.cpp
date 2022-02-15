@@ -23,12 +23,9 @@ using namespace FragmentValkyria;
 ModeInGameBase::ModeInGameBase(Game::GameMain& gameMain) : ModeBase{gameMain} {
 }
 
-void ModeInGameBase::Init() {
+void ModeInGameBase::Enter() {
    _lighting = std::make_unique<Lighting::LightAndShadow>(_gameMain);
    _stage = std::make_unique<Stage::Stage>(_gameMain);
-}
-
-void ModeInGameBase::Enter() {
    Update();
 }
 

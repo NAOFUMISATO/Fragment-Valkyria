@@ -32,10 +32,6 @@ namespace FragmentValkyria {
           */
          LightAndShadow(Game::GameMain& gameMain);
          /**
-          * \brief 初期化処理
-          */
-         void Init();
-         /**
           * \brief 更新処理
           */
          void Update();
@@ -43,7 +39,6 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render();
-         int shadowHandle() { return _shadowHandle; }
 
       private:
          Game::GameMain& _gameMain;                                      //!< ゲーム本体クラスの参照

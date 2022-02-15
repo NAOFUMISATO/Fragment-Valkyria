@@ -112,10 +112,6 @@ namespace {
 using namespace FragmentValkyria::Lighting;
 
 LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
-   Init();
-}
-
-void LightAndShadow::Init() {
    namespace AppMath = AppFrame::Math;
 #ifdef _DEBUG
    // マテリアルのライティング情報の設定
@@ -133,7 +129,7 @@ void LightAndShadow::Init() {
    SetFogColor(FogRed, FogGreen, FogBlue);
    // フォグの始点と終点の設定
    SetFogStartEnd(FogStart, FogEnd);
-   SetLightEnable(false);
+   //SetLightEnable(false);
    // 全てのモデルに適応される環境光の設定
    SetGlobalAmbientLight(GetColorF(GlobalAmbRed, GlobalAmbGreen, GlobalAmbBlue, GlobalAmbAlpha));
    // 標準光源の拡散反射光を設定
@@ -147,12 +143,12 @@ void LightAndShadow::Init() {
       FixedLightPos,
       { 0, 0, 0 }
    };
-   
+
    auto [firstLightPos, secondLightPos] = _lightPositions;
    // 各光源の位置、影響範囲及び距離減衰率を設定し、ポイント光源を生成、ライトハンドルに情報を保存する
    _lightHandles = {
       CreatePointLightHandle(AppMath::ToDX(firstLightPos), FixedLightArea,FixedLightAttenFirst, FixedLightAttenSecond, FixedLightAttenThird),
-      CreatePointLightHandle(AppMath::ToDX(secondLightPos),FollowLightArea, FollowLightAttenFirst, FollowLightAttenSecond, FollowLightAttenThird)
+      -1//CreatePointLightHandle(AppMath::ToDX(secondLightPos),FollowLightArea, FollowLightAttenFirst, FollowLightAttenSecond, FollowLightAttenThird)
    };
 
    auto [firstLightHandle, secondLightHandle] = _lightHandles;
@@ -168,8 +164,8 @@ void LightAndShadow::Init() {
    // シャドウマップの解像度を設定しシャドウマップを生成、シャドウマップハンドルに保存する
    _shadowHandle = MakeShadowMap(ShadowResolution, ShadowResolution);
 
-   auto shadowMinArea = ShadowMinArea;
    auto shadowMaxArea = ShadowMaxArea;
+   auto shadowMinArea = ShadowMinArea;
    // シャドウマップの影響範囲を設定
    SetShadowMapDrawArea(_shadowHandle, AppMath::ToDX(shadowMinArea), AppMath::ToDX(shadowMaxArea));
 }

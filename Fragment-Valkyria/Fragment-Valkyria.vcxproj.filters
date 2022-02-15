@@ -228,6 +228,12 @@
     <ClInclude Include="ModeOption.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="ModePoor.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeMovie.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -354,6 +360,12 @@
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="ModeOption.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="ModePoor.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeMovie.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
   </ItemGroup>

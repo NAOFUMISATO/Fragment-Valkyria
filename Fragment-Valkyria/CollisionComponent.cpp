@@ -16,6 +16,7 @@
 #include "LoadStageFromJson.h"
 #include "Laser.h"
 #include "ModeBoss.h"
+#include "ModePoor.h"
 #include "ObjectBase.h"
 #ifdef _DEBUG
 #include <stdexcept>
@@ -560,8 +561,8 @@ void CollisionComponent::PlayerKnockBack() {
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
 	
-	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
-	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
+	auto modeBase = _owner.gameMain().modeServer().GetMode("Poor");
+	auto modeBoss = std::dynamic_pointer_cast<Mode::ModePoor>(modeBase);
 	auto stageComponent = modeBoss->GetStage().stageComponent();
     
 	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");

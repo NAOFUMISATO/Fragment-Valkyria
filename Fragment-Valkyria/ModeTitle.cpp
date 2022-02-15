@@ -118,7 +118,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
       _owner._stateServer->GoToState("OptionSelect");
    }
    if (input.GetXJoypad().AClick()) {
-      _owner.GetModeServer().GoToMode("Boss", 'L');
+      _owner.GetModeServer().GoToMode("Poor", 'L');
    }
 }
 
