@@ -25,14 +25,12 @@ namespace FragmentValkyria {
     */
    namespace Create {
        class SpawnRecord;
-       using Vector4 = AppFrame::Math::Vector4;
-       //using SpawnRecord = std::tuple<unsigned int/*進捗状況*/, std::string/*呼びたいクリエイターの文字列*/, Vector4/*位置*/, Vector4/*回転*/>;
-       //using SpawnTable = std::vector<SpawnRecord>;
       /**
        * \class オブジェクト生成の一括管理クラス
        * \brief 各オブジェクトの生成管理クラスを登録して使用する
        */
       class ObjectFactory {
+         using Vector4 = AppFrame::Math::Vector4;
          using SpawnTable = std::vector<SpawnRecord>;
       public:
          /**
