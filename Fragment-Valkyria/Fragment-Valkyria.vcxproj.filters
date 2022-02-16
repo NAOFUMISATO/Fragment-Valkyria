@@ -234,6 +234,9 @@
     <ClInclude Include="ModeMovie.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="SpawnRecord.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">

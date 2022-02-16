@@ -41,17 +41,9 @@ void ModeBoss::Enter() {
    objFactory.Register("Laser", std::make_unique<Create::LaserCreator>(_gameMain));
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
 
-   Create::SpawnTable spawnTable {
-       std::make_tuple(0      , "PoorEnemyGatling", Vector4(500.0, 500.0, 500.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0      , "PoorEnemyGatling", Vector4(1.0, 500.0, 0.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0,       "PoorEnemyGatling", Vector4(-500.0, 500.0, 500.0), Vector4(0.0, 0.0, 0.0)),
+   objFactory.LoadSpawnTables("boss", { "bosswave1","bosswave2" ,"bosswave3" ,"bosswave4" });
 
-       std::make_tuple(60 * 10, "PoorEnemyGatling", Vector4(500.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0,       "PoorEnemyGatling", Vector4(0.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
-       std::make_tuple(0,       "PoorEnemyGatling", Vector4(-500.0, 500.0, -500.0), Vector4(0.0, 0.0, 0.0)),
-   };
-
-   objFactory.SetSpawnTable(spawnTable);
+   objFactory.SetSpawnTable("bosswave1");
 
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用

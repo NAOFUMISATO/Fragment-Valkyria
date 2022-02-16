@@ -13,6 +13,7 @@ namespace FragmentValkyria {
          void Render()override;
       
       private:
+         bool _play{ true };
          int _mvHandle{ -1 };
       };
    }

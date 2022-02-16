@@ -13,6 +13,7 @@
 #include <vector>
 #include <string_view>
 #include <filesystem>
+#include <fstream>
 #include <nlohmann/json.hpp>
  /**
   * \brief アプリケーションフレーム

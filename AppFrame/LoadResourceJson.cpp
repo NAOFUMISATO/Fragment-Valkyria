@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <windows.h>
 #endif
-#include <fstream>
 #include "GameBase.h"
 #include "CurrentPathServer.h"
 #include "ResourceServer.h"
