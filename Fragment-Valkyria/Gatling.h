@@ -48,6 +48,8 @@ namespace FragmentValkyria {
             void HitCheckFromObjectModel();
             void HitCheckFromPlayer();
 
+            void OutStageCheck();
+
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
 

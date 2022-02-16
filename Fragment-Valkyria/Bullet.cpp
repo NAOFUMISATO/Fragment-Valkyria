@@ -63,6 +63,14 @@ void Bullet::HitCheckFromPoorEnemyGatling() {
 	}
 }
 
+void Bullet::OutCheckFromStage() {
+	auto report = _collisionComponent->report();
+	if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
+
+		_stateServer->GoToState("Die");
+	}
+}
+
 void Bullet::StateBase::Draw() {
 	auto pos = AppFrame::Math::ToDX(_owner._position);
 	auto radius = static_cast<float>(Radius);
@@ -80,9 +88,11 @@ void Bullet::StateShoot::Input(InputManager& input) {
 void Bullet::StateShoot::Update() {
 	_owner.Move();
 	_owner._collisionComponent->LargeEnemyFromBullet();
+	_owner._collisionComponent->OutStage();
 
 	_owner.HitCheckFromLargeEnemy();
 	_owner.HitCheckFromPoorEnemyGatling();
+	_owner.OutCheckFromStage();
 }
 
 void Bullet::StateDie::Enter() {

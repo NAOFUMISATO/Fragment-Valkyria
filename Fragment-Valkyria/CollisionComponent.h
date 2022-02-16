@@ -39,7 +39,8 @@ namespace FragmentValkyria {
 				HitFromLargeEnemy,         //!< ラージエネミーと当たった
 				HitFromBullet,             //!< 遠隔弱攻撃の弾と当たった
 				HitFromLaser,              //!< レーザーと当たった
-				HitFromPoorEnemyGatling    //!< ガトリング攻撃をしてくる雑魚敵と当たった
+				HitFromPoorEnemyGatling,   //!< ガトリング攻撃をしてくる雑魚敵と当たった
+				OutStage,                  //!< ステージの外にいる
 			};
 			/**
 			 * \brief 当たり判定結果を管理するクラス
@@ -132,6 +133,10 @@ namespace FragmentValkyria {
 			 * \return 移動後の位置
 			 */
 			Vector4 LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved);
+			/**
+			 * \brief ステージ外にいるか確認
+			 */
+			void OutStage();
 			/**
 			 * \brief 当たり判定結果を管理するポインタの設定
 			 * \param report 当たり判定結果を管理するクラス

@@ -11,7 +11,7 @@
  /**
   * \brief プロジェクト名
   */
-namespace FragmentValkyria {
+ namespace FragmentValkyria {
     namespace Game {
         class GameMain;
     }

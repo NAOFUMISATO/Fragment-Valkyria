@@ -30,6 +30,11 @@ void LargeEnemy::Init() {
 	_collision = _modelAnimeComponent->FindFrame("S301_typeCO");
 	// フレーム1をナビメッシュとして使用
 	MV1SetupCollInfo(modelHandle, _collision, 3, 6, 3);
+	// 行動に追加する状態の文字列のベクターを作成
+	_actionList.emplace_back("FallObject");
+	_actionList.emplace_back("Gatling");
+	_actionList.emplace_back("Move");
+	_actionList.emplace_back("Laser");
 }
 
 void LargeEnemy::Input(InputManager& input) {
@@ -182,23 +187,16 @@ void LargeEnemy::StateIdle::Input(InputManager& input) {
 
 void LargeEnemy::StateIdle::Update() {
 
-	if (_owner._stateCnt >= 1 && _owner._stateCnt % (60 * 5) == 0) {
-		if (!_owner._fallObjectflag) {
-			/*_owner._stateServer->GoToState("Move");*/
-			_owner._stateServer->GoToState("FallObject");
-			/*_owner._stateServer->GoToState("Laser");*/
+	// 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
+	if (_owner._stateCnt >= 60 * 1) {
+		if (_owner._action.empty()) {
+			_owner._action = _owner._actionList;
 		}
-		else if (!_owner._moving){
-			_owner._stateServer->GoToState("Move");
-		}
-		else if (!_owner._gatlingFlag){
-			_owner._stateServer->GoToState("Gatling");
-		}
-		else {
-			_owner._stateServer->GoToState("Laser");
-		}
-
+		auto random = AppFrame::Math::Utility::GetRandom(0, _owner._action.size() - 1);
+		_owner._stateServer->GoToState(_owner._action[random]);
+		_owner._action.erase(_owner._action.begin() + random);
 	}
+
 	_owner._collisionComponent->LargeEnemyFromPlayer();
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
