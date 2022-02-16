@@ -42,6 +42,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
       {"SoundJson",{"resource/json/sound" }},
       {"EffectJson",{"resource/json/effect"}},
       {"StageJson",{"resource/json/stage"}},
+      {"SpawnJson",{"resource/json/spawntable"}},
       {"ParamJson",{"resource/json/param"}}
    };
 

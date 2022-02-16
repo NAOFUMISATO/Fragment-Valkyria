@@ -20,7 +20,7 @@ void ModeMovie::Init() {
 
 void ModeMovie::Enter() {
    SeekMovieToGraph(_mvHandle, 0);
-   PlayMovieToGraph(_mvHandle);
+   _play = true;
 }
 
 void ModeMovie::Input(AppFrame::Input::InputManager& input) {
@@ -30,6 +30,10 @@ void ModeMovie::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeMovie::Update() {
+   if (_play) {
+      PlayMovieToGraph(_mvHandle);
+      _play = false;
+   }
    if (!GetMovieStateToGraph(_mvHandle)) {
       GetModeServer().GoToMode("Boss");
    }

@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "AppFrame.h"
 #include "CreatorBase.h"
+#include "SpawnRecord.h"
  /**
   * \brief プロジェクト名
   */
@@ -23,14 +24,16 @@ namespace FragmentValkyria {
     * \brief オブジェクト生成関係
     */
    namespace Create {
+       class SpawnRecord;
        using Vector4 = AppFrame::Math::Vector4;
-       using SpawnRecord = std::tuple<unsigned int/*進捗状況*/, std::string/*呼びたいクリエイターの文字列*/, Vector4/*位置*/, Vector4/*回転*/>;
-       using SpawnTable = std::vector<SpawnRecord>;
+       //using SpawnRecord = std::tuple<unsigned int/*進捗状況*/, std::string/*呼びたいクリエイターの文字列*/, Vector4/*位置*/, Vector4/*回転*/>;
+       //using SpawnTable = std::vector<SpawnRecord>;
       /**
        * \class オブジェクト生成の一括管理クラス
        * \brief 各オブジェクトの生成管理クラスを登録して使用する
        */
       class ObjectFactory {
+         using SpawnTable = std::vector<SpawnRecord>;
       public:
          /**
           * \brief コンストラクタ
@@ -55,15 +58,22 @@ namespace FragmentValkyria {
           */
          void Clear();
 
-         void SetSpawnTable(SpawnTable spawnTable);
+         void SetSpawnTable(std::string_view key);
 
          void UpdateSpawn();
+
+         void LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string_view> tableNames);
+
+         void LoadSpawnTable(std::string_view key, SpawnTable& spawnTables);
+
+         SpawnTable GetSpawnTable(std::string_view key);
 
       private:
          Game::GameMain& _gameMain;   //!< ゲーム本体クラスの参照
          std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;   //!< オブジェクト生成管理クラスを登録する連想配列
-         SpawnTable _spawnTable;                                                      //!< オブジェクトを生成するテーブルのコンテナ
-         unsigned int _progress{ 0 };   //!< 進捗
+         std::unordered_map<std::string, SpawnTable> _spawnTableMap;
+         SpawnTable _spawnTable;
+         unsigned int _progress{ 0 };     //!< 進捗
          unsigned int _spawnProgress{ 0 };//!< スポーンした数
       };
    }

@@ -199,6 +199,7 @@
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCreator.h" />
+    <ClInclude Include="SpawnRecord.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageCreator.h" />
     <ClInclude Include="PlayerHP.h" />

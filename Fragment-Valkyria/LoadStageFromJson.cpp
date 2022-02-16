@@ -12,7 +12,6 @@
 #include <stdexcept>
 #include <windows.h>
 #endif
-#include <fstream>
 #include "GameMain.h"
 #include "StageData.h"
 #include <utility>
