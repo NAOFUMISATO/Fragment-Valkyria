@@ -75,6 +75,7 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
 
 void ModeBoss::Update() {
    ModeInGameBase::Update();
+   _lighting->Update();
 }
 
 void ModeBoss::Render() {

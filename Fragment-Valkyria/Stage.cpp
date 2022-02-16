@@ -14,18 +14,13 @@
 using namespace FragmentValkyria::Stage;
 
 Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
-   // スカイスフィアのモデル
-   _skySphere = std::make_unique<Model::ModelComponent>(*this);
-   _skySphere->SetModel("SkySphere");
-   _skySphere->SetScale({ 80.f,  80.f, 80.f });
+   _stageComponent = std::make_unique<StageModelComponent>(*this);
+   _stageComponent->SetModels("Stage");
+   _stageComponent->PixelLightingON();
 
-   _stage = std::make_unique<StageModelComponent>(*this);
-   _stage->SetModels("Stage");
-   _stage->PixelLightingON();
-
-   auto [charaCollHandle, charaCollNum] = _stage->GetHandleAndCollNum("stage_character_c");
-   auto [bossCollHandle, bossCollNum] = _stage->GetHandleAndCollNum("stage_boss_c");
-   auto [objCollHandle, objCollNum] = _stage->GetHandleAndCollNum("stage_object_c");
+   auto [charaCollHandle, charaCollNum] = _stageComponent->GetHandleAndCollNum("stage_character_c");
+   auto [bossCollHandle, bossCollNum] = _stageComponent->GetHandleAndCollNum("stage_boss_c");
+   auto [objCollHandle, objCollNum] = _stageComponent->GetHandleAndCollNum("stage_object_c");
 
    // プレイヤーのコリジョンフレームをナビメッシュとして使用
    MV1SetupCollInfo(charaCollHandle, charaCollNum, 8, 1, 8);
@@ -42,11 +37,8 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
 }
 
 void Stage::Update() {
-   // スカイスフィアをプレイヤと同じ位置にする
-   _skySphere->SetPosition(GetObjServer().GetVecData("PlayerPos"));
 }
 
 void Stage::Draw() {
-   //_skySphere->Draw(); // スカイスフィア
-   _stage->Draw();
+   _stageComponent->Draw();
 }

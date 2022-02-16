@@ -15,6 +15,7 @@
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
+#include "ModelAnimeComponent.h"
 #include "EffectPlayerShot.h" //‰¼
 
 using namespace FragmentValkyria::Mode;

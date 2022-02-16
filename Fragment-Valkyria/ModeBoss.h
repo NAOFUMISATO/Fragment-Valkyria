@@ -27,10 +27,6 @@ namespace FragmentValkyria {
           */
          ModeBoss(Game::GameMain& gameMain);
          /**
-          * \brief デフォルトデストラクタ
-          */
-         ~ModeBoss() = default;
-         /**
           * \brief 初期化処理
           */
          void Init()override {};

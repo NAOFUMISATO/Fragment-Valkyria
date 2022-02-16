@@ -75,6 +75,7 @@ void ModeInGameBase::Exit() {
    GetSprServer().Clear();
    GetResServer().DeleteDuplicateModels();
    GetObjFactory().Clear();
+   DeleteLightHandleAll();
 }
 
 Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {

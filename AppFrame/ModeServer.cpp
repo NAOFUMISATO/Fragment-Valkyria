@@ -232,5 +232,9 @@ namespace AppFrame {
          pushMode->Enter();                // 指定のモード(フェード)入口処理
          _modeList.push_back(pushMode);    // リストの末尾に指定のモード(フェード)を追加する
       }
+
+      std::shared_ptr<ModeBaseRoot> ModeServer::GetNowMode() {
+         return _modeList.back();
+      }
    }
 }

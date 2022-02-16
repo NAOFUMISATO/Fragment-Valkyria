@@ -84,7 +84,7 @@ namespace AppFrame {
           * \return ゲームのフレーム
           */
          unsigned int frameCount() { return _frameCount; }
-
+         std::shared_ptr<ModeBaseRoot > GetNowMode();
       private:
          /**
           * \brief モードリストの一番後ろの真下にフェード(アウトorイン)モード挿入し、フェード時間を設定する

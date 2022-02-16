@@ -561,9 +561,9 @@ void CollisionComponent::PlayerKnockBack() {
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
 	
-	auto modeBase = _owner.gameMain().modeServer().GetMode("Poor");
-	auto modeBoss = std::dynamic_pointer_cast<Mode::ModePoor>(modeBase);
-	auto stageComponent = modeBoss->GetStage().stageComponent();
+	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+	auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
+	auto stageComponent = modeIngame->GetStage().stageComponent();
     
 	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
 
@@ -582,9 +582,9 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
 
 AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
 
-	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
-	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
-	auto stageComponent = modeBoss->GetStage().stageComponent();
+	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+	auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
+	auto stageComponent = modeIngame->GetStage().stageComponent();
 
 	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_boss_c");
 
