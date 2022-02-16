@@ -54,7 +54,7 @@ namespace AppFrame {
           * \brief エフェクトの処理を回す動的配列を取得する
           * return エフェクトの処理を回す動的配列
           */
-         std::vector<std::unique_ptr<EffectBaseRoot>>& runEffects() { return _runEffects; };
+         std::vector<std::unique_ptr<EffectBaseRoot>>& runEffects() { return _runEffects; }
 
       private:
          bool _updating{ false };                                       //!< 更新しているかのフラグ

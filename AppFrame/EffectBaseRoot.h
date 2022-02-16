@@ -44,7 +44,7 @@ namespace AppFrame{
           * \brief コンストラクタ
           * \param gameBase ゲームベースの参照
           */
-         EffectBaseRoot(Game::GameBase& gameBase);
+         EffectBaseRoot(Game::GameBase& gameBase,std::string_view key);
          /**
           * \brief デフォルトデストラクタ
           */

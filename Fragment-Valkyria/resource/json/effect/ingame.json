@@ -6,9 +6,9 @@
 			"scale": 10.0
 		},
 		{
-			"keyname": "Gun",
-			"filename": "Gun.efkefc",
-			"scale": 10.0
+			"keyname": "ObjFall",
+			"filename": "ObjectFall.efkefc",
+			"scale": 35.0
 		},
 		{
 			"keyname": "Run",

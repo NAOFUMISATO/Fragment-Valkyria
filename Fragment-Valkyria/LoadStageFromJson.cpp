@@ -99,8 +99,8 @@ void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
 std::vector<std::pair<int, StageData>> LoadStageFromJson::GetStageModels(std::string_view key) {
 #ifndef _DEBUG
    if (!_stageModelsMap.contains(key.data())) {
-      std::vector<std::pair<int, StageData>> vs = { std::make_pair(-1,StageData()) };
-      return vs;
+      auto  stageData = { std::make_pair(-1,StageData()) };
+      return stageData;
    }
 #else
    try {

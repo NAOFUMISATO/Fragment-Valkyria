@@ -11,5 +11,5 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBase::EffectBase(Game::GameMain& gameMain,std::string_view key) : EffectBaseRoot{ gameMain }, _gameMain{gameMain} {
+EffectBase::EffectBase(Game::GameMain& gameMain,std::string_view key) : EffectBaseRoot{ gameMain,key }, _gameMain{gameMain} {
 }

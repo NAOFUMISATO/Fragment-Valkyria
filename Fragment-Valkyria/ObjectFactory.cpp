@@ -40,6 +40,10 @@ std::unique_ptr<Object::ObjectBase> ObjectFactory::Create(std::string_view type)
 
 void ObjectFactory::Clear() {
    _creatorMap.clear();
+   for (auto& [key,spawnTable] : _spawnTableMap) {
+      spawnTable.clear();
+   }
+   _spawnTableMap.clear();
 }
 
 void ObjectFactory::SetSpawnTable(std::string_view key) {
@@ -126,8 +130,20 @@ void ObjectFactory::LoadSpawnTables(const std::filesystem::path jsonName, const 
 }
 
 ObjectFactory::SpawnTable ObjectFactory::GetSpawnTable(std::string_view key) {
+#ifndef _DEBUG
    if (!_spawnTableMap.contains(key.data())) {
       return SpawnTable{ SpawnRecord() };
    }
+#else
+   try {
+      if (!_spawnTableMap.contains(key.data())) {
+         std::string message = key.data();
+         throw std::logic_error("----------キー[" + message + "]がスポーンテーブルコンテナに存在しませんでした。----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
    return _spawnTableMap[key.data()];
 }

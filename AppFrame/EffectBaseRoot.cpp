@@ -11,7 +11,7 @@
 #include "ResourceServer.h"
 namespace AppFrame {
    namespace Effect {
-      EffectBaseRoot::EffectBaseRoot(Game::GameBase& gameBase) :_gameBase{gameBase} {
+      EffectBaseRoot::EffectBaseRoot(Game::GameBase& gameBase, std::string_view key) :_gameBase{gameBase} {
       }
 
       void EffectBaseRoot::Draw() {

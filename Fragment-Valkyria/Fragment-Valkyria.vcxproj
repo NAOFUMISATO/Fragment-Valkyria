@@ -170,6 +170,7 @@
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CreatorBase.h" />
     <ClInclude Include="EffectBase.h" />
+    <ClInclude Include="EffectObjFall.h" />
     <ClInclude Include="EffectPlayerShot.h" />
     <ClInclude Include="FallObject.h" />
     <ClInclude Include="FallObjectCreator.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
+    <ClCompile Include="EffectObjFall.cpp" />
     <ClCompile Include="EffectPlayerShot.cpp" />
     <ClCompile Include="Gatling.cpp" />
     <ClCompile Include="FallObject.cpp" />

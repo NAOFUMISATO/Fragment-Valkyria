@@ -10,6 +10,7 @@
 #include "CollisionComponent.h"
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
+#include "EffectObjFall.h"
 
 using namespace FragmentValkyria::Enemy;
 
@@ -188,6 +189,10 @@ void FallObject::StateFall::Update() {
 	if (_owner._position.GetY() <= 0.0) {
 		auto [oldPosX, oldPosY, oldPosZ] = _owner._position.GetVec3();
 		_owner._position = AppFrame::Math::Vector4(oldPosX, 0.0, oldPosZ);
+		auto efcFall = std::make_unique<Effect::EffectObjFall>(_owner._gameMain, "ObjFall");
+		efcFall->SetPosition(_owner._position);
+		efcFall->SetSpeed(2.0);
+		_owner.GetEfcServer().Add(std::move(efcFall));
 		_owner._stateServer->PushBack("Idle");
 	}
 
