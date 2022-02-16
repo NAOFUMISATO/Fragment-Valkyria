@@ -83,6 +83,10 @@ namespace FragmentValkyria {
              */
             void HitCheckFromPoorEnemyGatling();
             /**
+             * \brief ステージ外にいるか確認
+             */
+            void OutStageCheck();
+            /**
              * \brief プレイヤーがノックバックしているか確認
              */
             void CheckPlayerKnockBack();

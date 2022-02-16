@@ -24,8 +24,8 @@ namespace FragmentValkyria {
 			ObjectType GetObjType() const override { return ObjectType::Bullet; };
 
             /**
-          * \brief ‰Šú‰»ˆ—
-          */
+             * \brief ‰Šú‰»ˆ—
+             */
             virtual void Init() override;
             /**
              * \brief “ü—Íˆ—
@@ -47,6 +47,8 @@ namespace FragmentValkyria {
             void HitCheckFromLargeEnemy();
 
             void HitCheckFromPoorEnemyGatling();
+
+            void OutCheckFromStage();
 
             Vector4 _moved{ Vector4() };
 

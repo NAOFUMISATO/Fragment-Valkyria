@@ -110,7 +110,10 @@ namespace FragmentValkyria {
 
             Vector4 _moved{ 0.0, 0.0, 0.0 }; //!< 移動量のベクトル
 
-            std::vector < std::pair<double, Vector4>> _objectDistance;
+            std::vector<std::pair<double, Vector4>> _objectDistance;
+
+            std::vector<std::string> _actionList;
+            std::vector<std::string> _action;
         public:
             /**
             * \class ラージエネミーの状態の基底クラス
@@ -251,8 +254,8 @@ namespace FragmentValkyria {
                 bool _endGetplyPos{ true };
             };
             /**
-            * \class ガトリング攻撃状態クラス
-            * \brief ガトリング攻撃状態の処理を回す
+            * \class レーザー攻撃状態クラス
+            * \brief レーザー攻撃状態の処理を回す
             */
             class StateLaser : public StateBase
             {

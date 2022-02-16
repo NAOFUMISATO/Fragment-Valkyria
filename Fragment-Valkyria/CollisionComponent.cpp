@@ -543,17 +543,17 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
 }
 
 void CollisionComponent::PlayerKnockBack() {
-	//オブジェクトサーバーの各オブジェクトを取得
+	// オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
+		// オブジェクトベース型にキャスト
 		auto& objectBase = ObjectBaseCast(*object);
-		//プレイヤーじゃなかったら何もしない
+		// プレイヤーじゃなかったら何もしない
 		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
-		//プレイヤーがノックバックしているか
+		// プレイヤーがノックバックしているか
 		if (objectBase.collisionComponent().knockBack()) {
-			//ノックバックしていたらプレイヤーがノックバックしていると設定
+			// ノックバックしていたらプレイヤーがノックバックしていると設定
 			_owner.collisionComponent().knockBack(true);
 		}
 	}
@@ -599,6 +599,30 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 	else {
 		return pos;
 	}
+}
+
+void CollisionComponent::OutStage() {
+	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
+	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
+	auto stageComponent = modeBoss->GetStage().stageComponent();
+
+	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_object_c");
+	// 位置の取得
+	auto position = _owner.position();
+	// 線分の作成
+	// 始点
+	auto start = position + Vector4(0.0, 50.0, 0.0);
+	// 終点
+	auto end = position + Vector4(0.0, -10000.0, 0.0);
+
+	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
+
+	if (result.HitFlag == 0) {
+		_owner.collisionComponent().report().id(ReportId::OutStage);
+		return;
+	}
+	
+	return;
 }
 
 FragmentValkyria::Object::ObjectBase& CollisionComponent::ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj) {
