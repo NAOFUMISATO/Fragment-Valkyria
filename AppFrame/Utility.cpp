@@ -279,14 +279,14 @@ namespace AppFrame {
                   p1 = start1;
                   t1 = 0.0;
 
-                  std::clamp(t2, 0.0, 1.0);
+                  t2 = std::clamp(t2, 0.0, 1.0);
                   return length;
               }
           }
           else if (direction2.Lenght() <= 0.0) {
               double length = PointSegmentDistance(start2, s1, p1, t1);
               p2 = start2;
-              std::clamp(t1, 0.0, 1.0);
+              t1 = std::clamp(t1, 0.0, 1.0);
               t2 = 0.0;
               return length;
           }
@@ -309,21 +309,21 @@ namespace AppFrame {
               }
           }
           //垂線との交点が線分外にあった場合
-          std::clamp(t1, 0.0, 1.0);
+          t1 = std::clamp(t1, 0.0, 1.0);
           p1 = start1 + direction1 * t1;
           auto length = PointSegmentDistance(p1, s2, p2, t2);
           if (0.0 <= t2 && t2 <= 1.0) {
               return length;
           }
           //線分2の垂線との交点が外側にある
-          std::clamp(t2, 0.0, 1.0);
+          t2 = std::clamp(t2, 0.0, 1.0);
           p2 = start2 + direction2 * t2;
           length = PointSegmentDistance(p2, s1, p1, t1);
           if (0.0 <= t1 && t1 <= 1.0) {
               return length;
           }
           //
-          std::clamp(t1, 0.0, 1.0);
+          t1 = std::clamp(t1, 0.0, 1.0);
           p1 = start1 + direction1 * t1;
           return (p2 - p1).Lenght();
       }

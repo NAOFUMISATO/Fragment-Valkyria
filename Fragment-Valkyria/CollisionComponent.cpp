@@ -602,8 +602,8 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 }
 
 void CollisionComponent::OutStage() {
-	auto modeBase = _owner.gameMain().modeServer().GetMode("Boss");
-	auto modeBoss = std::dynamic_pointer_cast<Mode::ModeBoss>(modeBase);
+	auto modeBase = _owner.gameMain().modeServer().GetMode("Poor");
+	auto modeBoss = std::dynamic_pointer_cast<Mode::ModePoor>(modeBase);
 	auto stageComponent = modeBoss->GetStage().stageComponent();
 
 	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_object_c");
