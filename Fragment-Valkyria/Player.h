@@ -76,6 +76,12 @@ namespace FragmentValkyria {
           * \return 無敵時間
           */
          inline int invincibleCnt() { return _invincibleCnt; }
+         /**
+          * \brief エイム中かの取得
+          * \return エイム中ならばtrue、でなければfalse
+          */
+         inline bool isAim() { return _isAim; }
+
       private:
          /**
           * \brief 移動処理
@@ -118,7 +124,8 @@ namespace FragmentValkyria {
          int _freezeTime{ 0 };                      //!< ノックバックする時間
          int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
          int _invincibleCnt{ 0 };                   //!< 無敵時間
-         int _portion{ 3 };                         //!< ポーションの数
+         int _portionStock{ 3 };                    //!< ポーションの数
+         bool _isAim{false};                        //!< エイム中か
          double _hp{ 100.0 };                       //!< ヒットポイント
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
@@ -255,6 +262,10 @@ namespace FragmentValkyria {
               * \brief 描画処理
               */
              void Draw() override;
+             /**
+              * \brief 出口処理
+              */
+             void Exit()override;
          };
          /**
           * \class ノックバック状態クラス
@@ -343,6 +354,11 @@ namespace FragmentValkyria {
               * \brief 更新処理
               */
              void Update() override;
+             /**
+              * \brief 出口処理
+              */
+             void Exit()override;
+
          private:
              int _coolTime{ 0 };
 
@@ -383,22 +399,22 @@ namespace FragmentValkyria {
          class StateRecovery : public StateBase
          {
          public:
-             /**
-              * \brief コンストラクタ
-              * \param owner プレイヤーの参照
-              */
-             StateRecovery(Player& owner) : StateBase{ owner } {};
-             /**
-              * \brief 入口処理
-              */
-             void Enter() override;
-             /**
-              * \brief 更新処理
-              */
-             void Update() override;
+            /**
+             * \brief コンストラクタ
+             * \param owner プレイヤーの参照
+             */
+            StateRecovery(Player& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
 
          private:
-             int _recoveryCnt{ 0 };
+            int _recoveryCnt{ 0 };
          };
       };
    }

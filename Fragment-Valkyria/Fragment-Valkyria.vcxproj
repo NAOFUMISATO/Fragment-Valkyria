@@ -179,6 +179,7 @@
     <ClInclude Include="GatlingCreator.h" />
     <ClInclude Include="LargeEnemy.h" />
     <ClInclude Include="LargeEnemyCreator.h" />
+    <ClInclude Include="LargeEnemyHP.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="LaserCreator.h" />
     <ClInclude Include="LightAndShadow.h" />
@@ -200,6 +201,8 @@
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCreator.h" />
+    <ClInclude Include="RemainingPortion.h" />
+    <ClInclude Include="Reticle.h" />
     <ClInclude Include="SpawnRecord.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageCreator.h" />
@@ -228,6 +231,7 @@
     <ClCompile Include="LargeEnemy.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LargeEnemyCreator.cpp" />
+    <ClCompile Include="LargeEnemyHP.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="LaserCreator.cpp" />
     <ClCompile Include="LightAndShadow.cpp" />
@@ -249,6 +253,8 @@
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCreator.cpp" />
+    <ClCompile Include="RemainingPortion.cpp" />
+    <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageCreator.cpp" />
     <ClCompile Include="PoorEnemyGatling.cpp" />

@@ -37,9 +37,9 @@ namespace FragmentValkyria {
          void Update()override;
          /**
           * \brief オブジェクトの種別の取得
-          * \return プレイヤー射撃エフェクト
+          * \return エフェクト
           */
-         EffectType GetEfcType() const override { return EffectType::PlayerShot; }
+         EffectType GetEfcType() const override { return EffectType::Effect; }
 
       };
    }

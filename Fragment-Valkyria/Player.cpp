@@ -15,7 +15,6 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "GameMain.h"
-using namespace FragmentValkyria::Player;
 
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
@@ -39,16 +38,19 @@ namespace {
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
 }
 
+using namespace FragmentValkyria::Player;
+
 Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
-void Player::Player::Init(){
+void Player::Init(){
     // ベクトルを90度回転させるマトリクスの作成
     _rightRotation.RotateY(90.0, true);
     // ベクトルを-90度回転させるマトリクスの作成
     _leftRotation.RotateY(-90.0, true);
     // ベクトルを180度回転させるマトリクスの作成
     _backRotation.RotateY(180.0, true);
+    _isAim = false;     // エイム中かのフラグをfalse
 }
 
 void Player::Input(InputManager& input) {
@@ -81,6 +83,7 @@ void Player::Update() {
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
    GetObjServer().RegistDouble("PlayerHP",_hp);
    GetObjServer().RegistDouble("PlayerBulletStock",static_cast<double>(_bulletStock));
+   GetObjServer().RegistDouble("PlayerPortionStock", static_cast<double>(_portionStock));
 }
 
 void Player::Draw() {
@@ -346,8 +349,8 @@ void Player::StateIdle::Input(InputManager& input) {
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
    }
-   if (input.GetXJoypad().YClick() && _owner._portion > 0 && _owner._hp < 100.0) {
-       --_owner._portion;
+   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+       --_owner._portionStock;
        _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -415,8 +418,8 @@ void Player::StateRun::Input(InputManager& input) {
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
    }
-   if (input.GetXJoypad().YClick() && _owner._portion > 0 && _owner._hp < 100.0) {
-       --_owner._portion;
+   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+       --_owner._portionStock;
        _owner._stateServer->GoToState("Recovery");
    }
    if (!moved) {
@@ -467,6 +470,7 @@ void Player::StateAttack::Draw() {
 void Player::StateShootReady::Enter() {
     _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true, ShootReadyAnimeSpeed);
     _owner.GetSoundComponent().Play("PlayerShootReady");
+    _owner._isAim = true;
 }
 
 void Player::StateShootReady::Input(InputManager& input) {
@@ -494,7 +498,11 @@ void Player::StateShootReady::Update() {
 }
 
 void Player::StateShootReady::Draw() {
-    _owner._modelAnimeComponent->Draw();
+   _owner._modelAnimeComponent->Draw();
+}
+
+void Player::StateShootReady::Exit() {
+   _owner._isAim = false;
 }
 
 void Player::StateKnockBack::Enter() {
@@ -556,6 +564,7 @@ void Player::StateWeakShootReady::Enter() {
     _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true);
     _owner.GetSoundComponent().Play("PlayerShootReady");
     _coolTime = 0;
+    _owner._isAim = true;
 }
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
@@ -577,6 +586,10 @@ void Player::StateWeakShootReady::Update() {
     _owner.ShootRotate();
 
     --_coolTime;
+}
+
+void Player::StateWeakShootReady::Exit() {
+   _owner._isAim = false;
 }
 
 void Player::StateReload::Enter() {

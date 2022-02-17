@@ -14,6 +14,9 @@
 #include "ModelAnimeComponent.h"
 #include "PlayerHP.h"
 #include "RemainingBullet.h"
+#include "RemainingPortion.h"
+#include "Reticle.h"
+
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
@@ -54,7 +57,11 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("Recovery", std::make_shared<Player::Player::StateRecovery>(*player));
    player->stateServer(std::move(state));
 
-   _gameMain.sprServer().Add(std::make_unique<Player::PlayerHP>(_gameMain));
-   _gameMain.sprServer().Add(std::make_unique<Player::RemainingBullet>(_gameMain));
+   auto& sprServer = _gameMain.sprServer();
+   sprServer.Add(std::make_unique<Player::PlayerHP>(_gameMain));
+   sprServer.Add(std::make_unique<Player::RemainingBullet>(_gameMain));
+   sprServer.Add(std::make_unique<Player::RemainingPortion>(_gameMain));
+   sprServer.Add(std::make_unique<Player::Reticle>(_gameMain));
+
    return std::move(player);
 }

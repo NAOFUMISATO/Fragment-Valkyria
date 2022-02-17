@@ -29,9 +29,7 @@ namespace FragmentValkyria {
           * \brief エフェクトの種別
           */
          enum class EffectType {
-            Effect=0,   //!< エフェクト
-            PlayerShot, //!< プレイヤー射撃
-            ObjFall     //!< オブジェクト落下
+            Effect = 0    //!< エフェクト
          };
          /**
           * \brief コンストラクタ

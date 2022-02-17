@@ -9,6 +9,7 @@
 #include "LargeEnemyCreator.h"
 #include "GameMain.h"
 #include "LargeEnemy.h"
+#include "LargeEnemyHP.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectBase.h"
 
@@ -39,6 +40,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
 	state->Register("Laser", std::make_shared<Enemy::LargeEnemy::StateLaser>(*largeEnemy));
 	largeEnemy->stateServer(std::move(state));
+
+	_gameMain.sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>(_gameMain));
 
 	return std::move(largeEnemy);
 }

@@ -35,6 +35,7 @@ void LargeEnemy::Init() {
 	_actionList.emplace_back("Gatling");
 	_actionList.emplace_back("Move");
 	_actionList.emplace_back("Laser");
+	_hp = 1000.0;
 }
 
 void LargeEnemy::Input(InputManager& input) {

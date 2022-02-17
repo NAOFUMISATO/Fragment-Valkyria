@@ -8,7 +8,6 @@ namespace FragmentValkyria {
    namespace Game {
       class GameMain;
    }
-   
    namespace Sprite {
       class SpriteBase :public AppFrame::Sprite::SpriteBaseRoot {
          using Vector4 = AppFrame::Math::Vector4;

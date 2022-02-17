@@ -13,7 +13,7 @@ namespace{
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "bullet_diff_x" });
    const double DiffX = paramMap["bullet_diff_x"];
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "bullet_pos" });
-   const auto BulletPos = vecParamMap["bullet_pos"];
+   const auto PortionPos = vecParamMap["bullet_pos"];
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
@@ -28,7 +28,7 @@ RemainingBullet::RemainingBullet(Game::GameMain& gameMain) :Sprite::SpriteBase{g
 
 void RemainingBullet::Init() {
    _grHandles = GetResServer().GetTextures("RemainingBullet");
-   _position = BulletPos;
+   _position = PortionPos;
    auto [x,y] = _position.GetVec2();
    _xPositions = { 
       static_cast<int>(x),

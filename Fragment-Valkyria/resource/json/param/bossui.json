@@ -1,0 +1,25 @@
+{
+	"bossui": [
+		{
+			"frontcolor_red":0,
+			"frontcolor_green":255,
+			"frontcolor_blue":0,
+			"backcolor_red":255,
+			"backcolor_green":0,
+			"backcolor_blue":0,
+			"redbar_speed":0.02,
+			"max_hp":1000.0
+		}	
+	],	
+	"bossui_vec": [
+		{
+			"hp_pos": [
+				{
+					"x": 30.0,
+					"y": 950.0,
+					"z": 0
+				}
+			]
+		}
+	]
+}

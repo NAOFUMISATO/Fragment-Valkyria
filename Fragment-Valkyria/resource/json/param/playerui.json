@@ -11,22 +11,30 @@
 			"shake_width":3.0,
 			"redbar_speed":0.02,
 			"max_hp":100.0,
-			"bullet_diff_x":30
+			"bullet_diff_x":50,
+			"portion_diff_x":50
 		}	
 	],	
 	"playerui_vec": [
 		{
 			"hp_pos": [
 				{
-					"x": 30.0,
-					"y": 30.0,
+					"x": 100.0,
+					"y": 40.0,
 					"z": 0
 				}
 			],
 			"bullet_pos": [
 				{
-					"x": 200.0,
-					"y": 120.0,
+					"x": 250.0,
+					"y": 70.0,
+					"z": 0
+				}
+			],
+			"portion_pos": [
+				{
+					"x": 100.0,
+					"y": 70.0,
 					"z": 0
 				}
 			]
