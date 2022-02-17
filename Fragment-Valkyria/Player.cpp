@@ -20,7 +20,8 @@ using namespace FragmentValkyria::Player;
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
-       "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius"});
+       "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
+        "rocovery_rate", "max_hp"});
 
     const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
@@ -31,6 +32,8 @@ namespace {
     const double CapsulePos1 = paramMap["capsule_pos1"];                      //!< カプセルの一つ目の座標までの位置からの高さ
     const double CapsulePos2 = paramMap["capsule_pos2"];                      //!< カプセルの二つ目の座標までの位置からの高さ
     const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
+    const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
+    const double RecoveryRate = paramMap["rocovery_rate"];                     //!< ヒットポイントの最大値からの回復する割合
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -343,6 +346,10 @@ void Player::StateIdle::Input(InputManager& input) {
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
    }
+   if (input.GetXJoypad().YClick() && _owner._portion > 0 && _owner._hp < 100.0) {
+       --_owner._portion;
+       _owner._stateServer->GoToState("Recovery");
+   }
 }
 void Player::StateIdle::Update() {
     _owner._collisionComponent->ObjectRangeFromPlayer();
@@ -407,6 +414,10 @@ void Player::StateRun::Input(InputManager& input) {
    }
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
        _owner._stateServer->GoToState("Reload");
+   }
+   if (input.GetXJoypad().YClick() && _owner._portion > 0 && _owner._hp < 100.0) {
+       --_owner._portion;
+       _owner._stateServer->GoToState("Recovery");
    }
    if (!moved) {
        _owner._stateServer->PopBack();
@@ -487,7 +498,7 @@ void Player::StateShootReady::Draw() {
 }
 
 void Player::StateKnockBack::Enter() {
-    _owner._freezeTime = 60 * 0.5;
+    _owner._freezeTime = 30;
 }
 
 void Player::StateKnockBack::Input(InputManager& input) {
@@ -569,7 +580,7 @@ void Player::StateWeakShootReady::Update() {
 }
 
 void Player::StateReload::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("walk_MO", true);
+    _owner._modelAnimeComponent->ChangeAnime("hassya_MO", true);
     _reloadCnt = 0;
 }
 
@@ -616,4 +627,22 @@ void Player::StateRun::FootStepSound() {
          }
       }
    }
+}
+
+void Player::StateRecovery::Enter() {
+    _owner._modelAnimeComponent->ChangeAnime("hassya_MO", true);
+    _recoveryCnt = 0;
+}
+
+void Player::StateRecovery::Update() {
+    if (_recoveryCnt > 60 * 2) {
+        auto recovery = MaxHp * RecoveryRate;
+        _owner._hp += recovery;
+        if (_owner._hp >= 100.0) {
+            _owner._hp = 100.0;
+        }
+        _owner._stateServer->GoToState("Idle");
+    }
+
+    ++_recoveryCnt;
 }

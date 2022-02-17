@@ -40,6 +40,7 @@ namespace FragmentValkyria {
             void HitCheckFromFallObject();
 
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
+            Vector4 _gatlingMoveDirection{ Vector4(0.0, 0.0, 0.0) };
 
             int _stateCnt{ 0 };
             double _hp{ 20.0 };

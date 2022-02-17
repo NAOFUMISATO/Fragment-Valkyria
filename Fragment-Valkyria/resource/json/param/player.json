@@ -10,7 +10,9 @@
 			"rot_speed": 10.0,
 			"capsule_pos1": 30.0,
 			"capsule_pos2": 60.0,
-			"capsule_radius": 30.0
+			"capsule_radius": 30.0,
+			"rocovery_rate": 0.5,
+			"max_hp": 100.0
 		}
 	],
 	"player_vec": [

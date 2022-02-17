@@ -80,6 +80,10 @@ void CameraComponent::Placement() {
     _position = _plyPos + _plyToPos;
 }
 
+void CameraComponent::Vibration() {
+
+}
+
 void CameraComponent::StateNormal::Input(InputManager& input) {
    auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
    //右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
