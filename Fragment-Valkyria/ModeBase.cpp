@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ModeBase.h"
 #include "GameMain.h"
+#include "ObjectBase.h"
 
 using namespace FragmentValkyria::Mode;
 

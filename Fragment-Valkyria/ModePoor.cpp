@@ -1,5 +1,6 @@
 
 #include "ModePoor.h"
+#include <stdexcept>
 #include "BulletCreator.h"
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
@@ -52,7 +53,7 @@ void ModePoor::Enter() {
    objServer.Add(std::move(player));
 
    _gameMain.ingameTimer(0);
-
+   _wave = 1;
    ModeInGameBase::Enter();
 }
 
@@ -74,6 +75,41 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
 
 void ModePoor::Update() {
    ModeInGameBase::Update();
+   auto&& runObjects = GetObjServer().runObjects();
+
+   auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
+      [](std::unique_ptr<AppFrame::Object::ObjectBaseRoot>& obj) {
+#ifndef _DEBUG
+         auto& objectBase = dynamic_cast<FragmentValkyria::Object::ObjectBase&>(*obj);
+#else
+         try {
+            auto& objectBase = dynamic_cast<Object::ObjectBase&>(*obj);
+         }
+         catch (std::bad_cast&) {
+            OutputDebugString("----------ダウンキャスト失敗----------");
+         }
+         auto& objectBase = dynamic_cast<Object::ObjectBase&>(*obj);
+#endif
+         return (objectBase.GetObjType() == Object::ObjectBase::ObjectType::PoorEnemyGatling) && objectBase.IsActive(); });
+   if (!isActiveEnemy) {
+      switch (_wave){
+      case 1:
+         GetObjFactory().SetSpawnTable("poorwave2");
+         _wave++;
+         break;
+      case 2:
+         GetObjFactory().SetSpawnTable("poorwave3");
+         _wave++;
+         break;
+      case 3:
+         GetObjFactory().SetSpawnTable("poorwave4");
+         _wave++;
+         break;
+      case 4:
+         GetModeServer().GoToMode("Movie");
+         break;
+      }
+   }
 }
 
 void ModePoor::Render() {

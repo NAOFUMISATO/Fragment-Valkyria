@@ -17,6 +17,9 @@ namespace FragmentValkyria {
           * \return ƒ‚[ƒhG‹›í
           */
          virtual InGameType GetInGameType()const { return InGameType::Poor; }
+
+      private:
+         int _wave{ 0 };
       };
    }
 }
