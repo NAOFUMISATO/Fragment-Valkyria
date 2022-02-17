@@ -19,6 +19,7 @@ namespace FragmentValkyria {
          virtual InGameType GetInGameType()const { return InGameType::Poor; }
 
       private:
+         void WaveProcess();
          int _wave{ 0 };
       };
    }

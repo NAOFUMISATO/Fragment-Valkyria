@@ -75,8 +75,15 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
 
 void ModePoor::Update() {
    ModeInGameBase::Update();
-   auto&& runObjects = GetObjServer().runObjects();
+   WaveProcess();
+}
 
+void ModePoor::Render() {
+   ModeInGameBase::Render();
+}
+
+void ModePoor::WaveProcess() {
+   auto&& runObjects = GetObjServer().runObjects();
    auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<AppFrame::Object::ObjectBaseRoot>& obj) {
 #ifndef _DEBUG
@@ -92,7 +99,7 @@ void ModePoor::Update() {
 #endif
          return (objectBase.GetObjType() == Object::ObjectBase::ObjectType::PoorEnemyGatling) && objectBase.IsActive(); });
    if (!isActiveEnemy) {
-      switch (_wave){
+      switch (_wave) {
       case 1:
          GetObjFactory().SetSpawnTable("poorwave2");
          _wave++;
@@ -110,8 +117,4 @@ void ModePoor::Update() {
          break;
       }
    }
-}
-
-void ModePoor::Render() {
-   ModeInGameBase::Render();
 }
