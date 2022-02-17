@@ -58,8 +58,14 @@ void LargeEnemy::Draw() {
 }
 
 void LargeEnemy::CreateGatling() {
+	auto handle = modelAnimeComponent().modelHandle();
+	auto gatlingFrame = modelAnimeComponent().FindFrameChild("root", "gatling3");
+	auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
 	//ÉKÉgÉäÉìÉOÇê∂ê¨Ç∑ÇÈç¿ïWÇê›íË
-	GetObjServer().RegistVector("GatlingPos", _position);
+	GetObjServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
+	auto plyPos = GetObjServer().GetVecData("PlayerPos");
+	auto gatlingDirection = plyPos - AppFrame::Math::ToMath(gatlingPos);
+	GetObjServer().RegistVector("GatlingMoveDirection", gatlingDirection);
 	auto gatling = gameMain().objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
 }
@@ -192,7 +198,7 @@ void LargeEnemy::StateIdle::Update() {
 		if (_owner._action.empty()) {
 			_owner._action = _owner._actionList;
 		}
-		auto random = AppFrame::Math::Utility::GetRandom(0, _owner._action.size() - 1);
+		auto random = AppFrame::Math::Utility::GetRandom(0, static_cast<int>(_owner._action.size()) - 1);
 		_owner._stateServer->GoToState(_owner._action[random]);
 		_owner._action.erase(_owner._action.begin() + random);
 	}

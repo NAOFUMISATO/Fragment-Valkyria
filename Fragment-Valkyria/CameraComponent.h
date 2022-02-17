@@ -124,6 +124,10 @@
           * \brief カメラの位置と注視点の設定
           */
          void Placement();
+         /**
+          * \brief カメラの振動
+          */
+         void Vibration();
          bool _zoom{ false };                                               //!< ズームするか
          Vector4 _position{ 0, 0, 0 };                                      //!< 位置
          Vector4 _target{ 0, 0, 0 };                                        //!< 注視点

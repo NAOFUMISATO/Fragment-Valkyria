@@ -66,10 +66,11 @@ void PoorEnemyGatling::Rotate() {
 }
 
 void PoorEnemyGatling::CreateGatling() {
-	/*auto handle = modelAnimeComponent().modelHandle();
+	auto handle = modelAnimeComponent().modelHandle();
 	auto gatlingFrame = modelAnimeComponent().FindFrame("Spider_Armature");
-	auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);*/
-	_gameMain.objServer().RegistVector("GatlingPos", _position/*AppFrame::Math::ToMath(gatlingPos)*/);
+	auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
+	_gameMain.objServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
+	_gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
 	auto gatling = _gameMain.objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
 }
@@ -142,12 +143,13 @@ void PoorEnemyGatling::StateFall::Update() {
 
 void PoorEnemyGatling::StateGatling::Enter() {
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+	_owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos");
 	_owner._stateCnt = 0;
 	_gatlingCnt = 5;
 }
 
 void PoorEnemyGatling::StateGatling::Update() {
-	_owner.Rotate();
+	/*_owner.Rotate();*/
 	if (_owner._stateCnt % 60 == 0) {
 		_owner.CreateGatling();
 		--_gatlingCnt;

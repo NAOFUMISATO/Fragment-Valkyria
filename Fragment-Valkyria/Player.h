@@ -118,6 +118,7 @@ namespace FragmentValkyria {
          int _freezeTime{ 0 };                      //!< ノックバックする時間
          int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
          int _invincibleCnt{ 0 };                   //!< 無敵時間
+         int _portion{ 3 };                         //!< ポーションの数
          double _hp{ 100.0 };                       //!< ヒットポイント
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
@@ -374,6 +375,30 @@ namespace FragmentValkyria {
 
          private:
              int _reloadCnt{ 0 };
+         };
+         /**
+          * \class 回復状態クラス
+          * \brief 回復状態の処理を回す
+          */
+         class StateRecovery : public StateBase
+         {
+         public:
+             /**
+              * \brief コンストラクタ
+              * \param owner プレイヤーの参照
+              */
+             StateRecovery(Player& owner) : StateBase{ owner } {};
+             /**
+              * \brief 入口処理
+              */
+             void Enter() override;
+             /**
+              * \brief 更新処理
+              */
+             void Update() override;
+
+         private:
+             int _recoveryCnt{ 0 };
          };
       };
    }

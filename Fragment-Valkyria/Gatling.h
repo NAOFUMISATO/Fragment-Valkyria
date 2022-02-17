@@ -42,6 +42,11 @@ namespace FragmentValkyria {
             * \brief 描画処理
             */
             void Draw() override;
+            ///**
+            // * \brief 移動する向きのベクトルの設定
+            // * \param moved 移動する向きのベクトル
+            // */
+            //void moved(Vector4& moved) { _moved = moved; }
 
 		private:
             void Move();
