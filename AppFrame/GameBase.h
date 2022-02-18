@@ -94,7 +94,7 @@ namespace AppFrame {
           * \brief メインループ内で実行する描画処理
           */
          virtual void Render();
-         
+
          /**
           * \brief ゲームの基底クラスのインスタンスを取得
           * \return ゲームの基底クラスのインスタンス
@@ -136,11 +136,6 @@ namespace AppFrame {
           */
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
          /**
-          * \brief オブジェクトサーバーの参照を取得
-          * \return オブジェクトサーバーのポインタ
-          */
-         inline Object::ObjectServer& objServer() const { return *_objServer; }
-         /**
           * \brief 画像の簡易描画クラスの参照を取得
           * \return 画像の簡易描画クラスのポインタ
           */
@@ -176,7 +171,6 @@ namespace AppFrame {
          std::unique_ptr<Sound::SoundComponent> _soundComponent;   //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadResourceJson> _loadresJson; //!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;         //!< エフェクトの一括管理クラス
-         std::unique_ptr<Object::ObjectServer> _objServer;         //!< オブジェクトの一括管理クラス
          std::unique_ptr<Texture::TextureComponent> _texComponent; //!< 画像の簡易描画クラス
          std::unique_ptr<Sprite::SpriteServer> _sprServer;         //!< スプライトの一括管理クラス
       };

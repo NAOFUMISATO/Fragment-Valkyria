@@ -26,8 +26,6 @@
 #include "LoadResourceJson.h"
 #include "EffectBaseRoot.h"
 #include "EffectServer.h"
-#include "ObjectBaseRoot.h"
-#include "ObjectServer.h"
 #include "Singleton.h"
 #include "LoadParamJson.h"
 #include "TextureComponent.h"

@@ -11,6 +11,7 @@
 #include "FallObject.h"
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
@@ -31,9 +32,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 
 	for (auto&& object : _gameMain.objServer().runObjects()) {
 
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
-
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
 			continue;
 		}
 		++_createNum;
@@ -42,14 +41,12 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
 	if (_createNum > MaxNum) {
 		for (auto&& object : _gameMain.objServer().runObjects()) {
 
-			auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
-
-			if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+			if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
 				continue;
 			}
-			auto& fallObject = dynamic_cast<Enemy::FallObject&>(objectBase);
+			auto& fallObject = dynamic_cast<Enemy::FallObject&>(*object);
 			if (fallObject.residual()) {
-				objectBase.SetDead();
+				object->SetDead();
 				--_createNum;
 				if (_createNum <= MaxNum) {
 					break;

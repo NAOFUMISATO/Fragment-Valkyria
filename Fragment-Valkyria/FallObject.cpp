@@ -11,6 +11,7 @@
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
 #include "EffectObjFall.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Enemy;
 

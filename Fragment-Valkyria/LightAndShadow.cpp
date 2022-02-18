@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "LightAndShadow.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 namespace {
    // jsonファイルから値を取得する

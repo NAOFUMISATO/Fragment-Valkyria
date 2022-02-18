@@ -1,12 +1,7 @@
 #pragma once
-#include "ObjectBaseRoot.h"
-#include "Vector4.h"
-#include <vector>
-#include <unordered_map>
-/**
- * \brief アプリケーションフレーム
- */
-namespace AppFrame {
+#include "ObjectBase.h"
+
+namespace FragmentValkyria {
    /**
     * \brief オブジェクト関係
     */
@@ -16,13 +11,13 @@ namespace AppFrame {
        * \brief ObjectBaseで登録するオブジェクトを一括管理する
        */
       class ObjectServer {
-         using Vector4 = Math::Vector4;
+         using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
           * \brief オブジェクトを動的配列に追加する
           * \param object 追加するオブジェクト
           */
-         void Add(std::unique_ptr<ObjectBaseRoot> object);
+         void Add(std::unique_ptr<ObjectBase> object);
          /**
           * \brief _runObjectsに登録されているActive状態のオブジェクトの入力処理を回す
           * \param input 入力一括管理クラスの参照
@@ -55,7 +50,7 @@ namespace AppFrame {
          /**
           * \brief オブジェクトの処理を回す動的配列を取得する
           */
-         std::vector<std::unique_ptr<ObjectBaseRoot>>& runObjects() { return _runObjects; };
+         std::vector<std::unique_ptr<ObjectBase>>& runObjects() { return _runObjects; };
          /**
           * \brief レジストリに登録したオブジェクトのVecto4データを取得する
           * \param key オブジェクトのVecto4データに関連付けた任意の文字列
@@ -70,11 +65,11 @@ namespace AppFrame {
          double GetDoubleData(std::string_view key);
 
       private:
-         bool _updating{ false };                                       //!< 更新しているかのフラグ
-         std::vector<std::unique_ptr<ObjectBaseRoot>> _runObjects;      //!< オブジェクトの処理を回す用の動的配列
-         std::vector<std::unique_ptr<ObjectBaseRoot>> _pendingObjects;  //!< 保留中のオブジェクトを登録しておく動的配列
-         std::unordered_map<std::string, Vector4> _objVecData;          //!< オブジェクトのVector4データを登録しておく連想配列
-         std::unordered_map<std::string, double> _objDoubleData;        //!< オブジェクトのdoubleデータを登録しておく連想配列
+         bool _updating{ false };                                  //!< 更新しているかのフラグ
+         std::vector<std::unique_ptr<ObjectBase>> _runObjects;     //!< オブジェクトの処理を回す用の動的配列
+         std::vector<std::unique_ptr<ObjectBase>> _pendingObjects; //!< 保留中のオブジェクトを登録しておく動的配列
+         std::unordered_map<std::string, Vector4> _objVecData;     //!< オブジェクトのVector4データを登録しておく連想配列
+         std::unordered_map<std::string, double> _objDoubleData;   //!< オブジェクトのdoubleデータを登録しておく連想配列
       };
    }
 }

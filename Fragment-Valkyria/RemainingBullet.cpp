@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "RemainingBullet.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 namespace{
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "bullet_diff_x" });

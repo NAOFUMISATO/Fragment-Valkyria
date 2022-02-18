@@ -8,10 +8,13 @@
  *********************************************************************/
 #include "ModeBase.h"
 #include "GameMain.h"
-#include "ObjectBase.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Mode;
 
 ModeBase::ModeBase(Game::GameMain& gameMain) : ModeBaseRoot{ gameMain }, _gameMain{ gameMain } {
 }
 
+FragmentValkyria::Object::ObjectServer& ModeBase::GetObjServer() const {
+   return _gameMain.objServer();
+}

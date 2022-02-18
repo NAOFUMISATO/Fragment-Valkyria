@@ -11,6 +11,7 @@
 #include "Laser.h"
 #include "GameMain.h"
 #include "ModelAnimeComponent.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
@@ -23,13 +24,12 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create()
 {
 	auto laser = std::make_unique<Enemy::Laser>(_gameMain);
 	for (auto&& objects : _gameMain.objServer().runObjects()) {
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*objects);
-
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+		
+		if (objects->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
 			continue;
 		}
-		auto handle = objectBase.modelAnimeComponent().modelHandle();
-		auto laserFrame = objectBase.modelAnimeComponent().FindFrameChild("root", "gatling3");
+		auto handle = objects->modelAnimeComponent().modelHandle();
+		auto laserFrame = objects->modelAnimeComponent().FindFrameChild("root", "gatling3");
 		auto laserPos = MV1GetFramePosition(handle, laserFrame);
 		auto startPos = laserPos;
 

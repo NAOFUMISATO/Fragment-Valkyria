@@ -15,6 +15,9 @@ namespace FragmentValkyria {
    namespace Game {
       class GameMain;
    }
+   namespace Object {
+      class ObjectServer;
+   }
    /**
     * \brief モード関係
     */
@@ -26,6 +29,11 @@ namespace FragmentValkyria {
           * \param gameMain ゲーム本体クラスの参照
           */
          ModeBase(Game::GameMain& gameMain);
+         /**
+          * \brief オブジェクト一括管理クラスの参照をゲームベース経由で取得
+          * \return オブジェクト一括管理クラスの参照
+          */
+         Object::ObjectServer& GetObjServer() const;
 
       protected:
          Game::GameMain& _gameMain; //!< ゲームクラスの参照

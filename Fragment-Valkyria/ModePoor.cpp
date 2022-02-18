@@ -85,19 +85,8 @@ void ModePoor::Render() {
 void ModePoor::WaveProcess() {
    auto&& runObjects = GetObjServer().runObjects();
    auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
-      [](std::unique_ptr<AppFrame::Object::ObjectBaseRoot>& obj) {
-#ifndef _DEBUG
-         auto& objectBase = dynamic_cast<FragmentValkyria::Object::ObjectBase&>(*obj);
-#else
-         try {
-            auto& objectBase = dynamic_cast<Object::ObjectBase&>(*obj);
-         }
-         catch (std::bad_cast&) {
-            OutputDebugString("----------ダウンキャスト失敗----------");
-         }
-         auto& objectBase = dynamic_cast<Object::ObjectBase&>(*obj);
-#endif
-         return (objectBase.GetObjType() == Object::ObjectBase::ObjectType::PoorEnemyGatling) && objectBase.IsActive(); });
+      [](std::unique_ptr<Object::ObjectBase>& obj) {
+         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemyGatling) && obj->IsActive(); });
    if (!isActiveEnemy) {
       switch (_wave) {
       case 1:

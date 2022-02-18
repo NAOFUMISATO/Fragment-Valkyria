@@ -7,15 +7,10 @@
  * \date   December 2021
  *********************************************************************/
 #include "ObjectServer.h"
-#include <DxLib.h>
-#ifdef _DEBUG
-#include <stdexcept>
-#include <windows.h>
-#endif
 
-namespace AppFrame {
+namespace FragmentValkyria {
    namespace Object {
-      void ObjectServer::Add(std::unique_ptr<ObjectBaseRoot> obj) {
+      void ObjectServer::Add(std::unique_ptr<ObjectBase> obj) {
          obj->Init();
          if (_updating) {
             // 更新中は保留中の動的配列に追加する

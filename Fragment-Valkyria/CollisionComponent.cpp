@@ -18,6 +18,7 @@
 #include "ModeBoss.h"
 #include "ModePoor.h"
 #include "ObjectBase.h"
+#include "ObjectServer.h"
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
@@ -52,14 +53,12 @@ void CollisionComponent::ObjectRangeFromPlayer() {
 	auto plyPoint = _owner.position();
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//落下するオブジェクトじゃない場合なにもしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
 			continue;
 		}
 		//落下するオブジェクトの位置取得
-		auto objectPos = objectBase.position();
+		auto objectPos = object->position();
 		//落下するオブジェクトを持ち上げられる球の範囲の半径
 		auto objectRadian = FallObjectRange;
 		//自前の球を定義
@@ -67,12 +66,12 @@ void CollisionComponent::ObjectRangeFromPlayer() {
 		//球と点の当たり判定をとる
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			//当たっていたら落下するオブジェクトの当たり判定の結果にプレイヤーに当たっていると設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
+			object->collisionComponent().report().id(ReportId::HitFromPlayer);
 			break;
 		}
 		else {
 			//当たっていなかったら落下するオブジェクトの当たり判定の結果に当たっていないと設定
-			objectBase.collisionComponent().report().id(ReportId::None);
+			object->collisionComponent().report().id(ReportId::None);
 		}
 	}
 }
@@ -86,63 +85,59 @@ void CollisionComponent::PlayerFromObjectRange() {
 	AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//当たり判定の結果がプレイヤーと当たっているか確認
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromPlayer) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
 			//オブジェクトサーバーの各オブジェクトを取得
 			for (auto&& plyObject : _owner.GetObjServer().runObjects()) {
-				//オブジェクトベース型にキャスト
-				auto& ply = ObjectBaseCast(*plyObject);
 				//プレイヤーじゃなければ何もしない
-				if (ply.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+				if (plyObject->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 					continue;
 				}
 				//他のオブジェクトに当たっていた場合は終了する
-				if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
+				if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 					break;
 				}
-				if (objectBase.collisionComponent().report().id() == ReportId::HitFromFallObject) {
+				if (object->collisionComponent().report().id() == ReportId::HitFromFallObject) {
 					break;
 				}
-				if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
+				if (object->collisionComponent().report().id() == ReportId::HitFromGatling) {
 					break;
 				}
-				if (objectBase.collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
+				if (object->collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
 					break;
 				}
 				//プレイヤーが他のオブジェクトと当たっていなかったら落下するオブジェクトを持ち上げられる球の範囲にいると設定
-				ply.collisionComponent().report().id(ReportId::HitFromObjectRange);
+				plyObject->collisionComponent().report().id(ReportId::HitFromObjectRange);
 			}
 			break;
 		}
 		//プレイヤーじゃなければ何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
 		//他のオブジェクトに当たっていた場合は終了する
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 			break;
 		}
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromFallObject) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromFallObject) {
 			break;
 		}
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromGatling) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromGatling) {
 			break;
 		}
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
 			break;
 		}
 		//プレイヤーの位置取得
-		auto plyPoint = objectBase.position();
+		auto plyPoint = object->position();
 		//球と点の当たり判定をとる
 		if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
 			//当たっていたらプレイヤーの当たり判定の結果にオブジェクトを持ち上げられる範囲にいると設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromObjectRange);
+			object->collisionComponent().report().id(ReportId::HitFromObjectRange);
 		} 
 		else {
 			//当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
-			objectBase.collisionComponent().report().id(ReportId::None);
+			object->collisionComponent().report().id(ReportId::None);
 		}
 	}
 }
@@ -154,22 +149,20 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 	auto collision = MV1SearchFrame(objectModel, "drum_green_c");
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//プレイヤーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
 		//当たり判定の結果が待機状態の落下するオブジェクトと当たっている場合何もしない
-		if (objectBase.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
+		if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
 			continue;
 		}
 		//プレイヤーの参照型の取得
-		auto& player = dynamic_cast<Player::Player&>(objectBase);
+		auto& player = dynamic_cast<Player::Player&>(*object);
 		//無敵時間の取得
 		auto invincibleCnt = player.invincibleCnt();
 		// プレイヤー側のカプセルを設定
-		auto plyPos = objectBase.position();
+		auto plyPos = object->position();
 		//カプセルの一つ目の位置
 		auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, PlayerCapsulePos1, 0.0);
 		//カプセルの二つ目の位置
@@ -187,17 +180,17 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 					return;
 				}
 				//無敵時間じゃない場合当たった位置に落下するオブジェクトの位置を設定
-				objectBase.collisionComponent().hitPos(_owner.position());
+				object->collisionComponent().hitPos(_owner.position());
 				//プレイヤーの当たり判定の結果に落下するオブジェクトのモデルと当たったと設定
-				objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+				object->collisionComponent().report().id(ReportId::HitFromFallObject);
 				//ダメージを20.0に設定
-				objectBase.collisionComponent().damage(20.0);
+				object->collisionComponent().damage(20.0);
 			}
 			else {
 				//落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
-				objectBase.collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
+				object->collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
 				//プレイヤーの当たり判定の結果に待機状態の落下するオブジェクトと当たったと設定
-				objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+				object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
 			}
 		}
 	}
@@ -210,21 +203,19 @@ void CollisionComponent::GatlingFromObjectModel() {
 	auto collision = MV1SearchFrame(objectModel, "drum_green_c");
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//ガトリングじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
 			continue;
 		}
 		// ガトリング側の球を設定
-		auto gatlingPos = objectBase.position();
+		auto gatlingPos = object->position();
 		auto radian = static_cast<float>(GatlingRadius);
 		//球とモデルの当たり判定の結果を取得
 		auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
 		//当たり判定の結果が当たっているか確認
 		if (result.HitNum > 0) {
 			//ガトリングの当たり判定結果に待機状態の落下するオブジェクトと当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+			object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
 		}
 	}
 }
@@ -250,14 +241,12 @@ void CollisionComponent::GatlingFromPlayer() {
 	AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//ガトリングじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
 			continue;
 		}
 		//ガトリングの位置の取得
-		auto gatling = objectBase.position();
+		auto gatling = object->position();
 		//ガトリングの半径の設定
 		auto gatlingRadian = GatlingRadius;
 		//自前の球を定義
@@ -265,13 +254,13 @@ void CollisionComponent::GatlingFromPlayer() {
 		//カプセルと球で当たり判定をとる
 		if (AppFrame::Math::Utility::CollisionCapsuleSphere(playerCapsule, gatlingSphere)) {
 			//当たっていたらガトリング側の当たり判定の結果をプレイヤーと当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromPlayer);
+			object->collisionComponent().report().id(ReportId::HitFromPlayer);
 			//プレイヤー側の当たり判定の結果をガトリングと当たったと設定
 			_owner.collisionComponent().report().id(ReportId::HitFromGatling);
 			//ダメージの設定
 			_owner.collisionComponent().damage(20.0);
 			//プレイヤーの当たった位置にガトリングの位置を設定
-			_owner.collisionComponent().hitPos(objectBase.position());
+			_owner.collisionComponent().hitPos(object->position());
 		}
 	}
 }
@@ -287,24 +276,22 @@ void CollisionComponent::ObjectModelFromLargeEnemy() {
 	auto capsuleRadian = static_cast<float>(FallObjectRadius);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//ラージエネミーじゃない場合何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
 			continue;
 		}
 		//ラージエネミーのモデルのハンドルの取得
-		auto largeEnemyModel = objectBase.modelAnimeComponent().modelHandle();
+		auto largeEnemyModel = object->modelAnimeComponent().modelHandle();
 		//ラージエネミーのモデルのコリジョンフレーム番号の取得
-		auto collision = objectBase.modelAnimeComponent().FindFrame("S301_typeCO");
+		auto collision = object->modelAnimeComponent().FindFrame("S301_typeCO");
 		//モデルとカプセルの当たり判定を取る
 		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
 		//当たり判定の結果が当たっているか確認
 		if (result.HitNum > 0) {
 			//当たっていたらラージエネミーの当たり判定結果を落下するオブジェクトと当たっていると設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+			object->collisionComponent().report().id(ReportId::HitFromFallObject);
 			//ダメージの設定
-			objectBase.collisionComponent().damage(20.0);
+			object->collisionComponent().damage(20.0);
 			//落下するオブジェクトの当たり判定結果をラージエネミーと当たったと設定
 			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 		}
@@ -317,25 +304,23 @@ void CollisionComponent::LargeEnemyFromBullet() {
 	//遠隔弱攻撃の弾の半径を設定
 	auto bulletRadius = static_cast<float>(20.0);
 	//オブジェクトサーバーの各オブジェクトを取得
-	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
+	for (auto&& object : _owner.GetObjServer().runObjects()){
 		//ラージエネミーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
 			continue;
 		}
 		//ラージエネミーのモデルのハンドルを取得
-		auto largeEnemyModel = objectBase.modelAnimeComponent().modelHandle();
+		auto largeEnemyModel = object->modelAnimeComponent().modelHandle();
 		//ラージエネミーのモデルのコリジョンフレーム番号の取得
-		auto collision = objectBase.modelAnimeComponent().FindFrame("S301_typeCO");
+		auto collision = object->modelAnimeComponent().FindFrame("S301_typeCO");
 		//モデルと球の当たり判定を取る
 		auto result = MV1CollCheck_Sphere(largeEnemyModel, collision, AppFrame::Math::ToDX(bulletPos), bulletRadius);
 		//当たり判定の結果から当たっているか確認
 		if (result.HitNum > 0) {
 			//当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromBullet);
+			object->collisionComponent().report().id(ReportId::HitFromBullet);
 			//ダメージの設定
-			objectBase.collisionComponent().damage(10.0);
+			object->collisionComponent().damage(10.0);
 			//遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
 			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 		}
@@ -355,14 +340,12 @@ void CollisionComponent::FallObjectFromLaser() {
 	auto fallObjectCapsule = std::make_tuple(fallObjectCapsulePos1, fallObjectCapsulePos2, fallObjectRadius);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//レーザーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Laser) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
 			continue;
 		}
 		//レーザーの参照型にキャスト
-		auto& laser = dynamic_cast<Enemy::Laser&>(objectBase);
+		auto& laser = dynamic_cast<Enemy::Laser&>(*object);
 		//レーザーのカプセルを作成
 		//カプセルの一つ目の位置
 		auto laserCapsulePos1 = laser.position();
@@ -402,14 +385,12 @@ void CollisionComponent::PlayerFromLaser() {
 	AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCapsuleRadius);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//レーザーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Laser) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
 			continue;
 		}
 		//レーザーの参照型にキャスト
-		auto& laser = dynamic_cast<Enemy::Laser&>(objectBase);
+		auto& laser = dynamic_cast<Enemy::Laser&>(*object);
 		//レーザーのカプセルを作成
 		//カプセルの一つ目の位置
 		auto laserCapsulePos1 = laser.position();
@@ -439,14 +420,12 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 	auto collision = _owner.modelAnimeComponent().FindFrame("S301_typeCO");
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//プレイヤーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
 		//プレイヤー型の参照の取得
-		auto& player = dynamic_cast<Player::Player&>(objectBase);
+		auto& player = dynamic_cast<Player::Player&>(*object);
 		//無敵時間の取得
 		auto invincibleCnt = player.invincibleCnt();
 		//無敵時間中だったら何もしない
@@ -454,7 +433,7 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 			return;
 		}
 		//プレイヤーのカプセルの作成
-		auto playerPos = objectBase.position();
+		auto playerPos = object->position();
 		//カプセルの一つ目の位置
 		auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
 		//カプセルの二つ目の位置
@@ -466,11 +445,11 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 		//当たり判定の結果を確認
 		if (result.HitNum > 0) {
 			//当たっていたらプレイヤーの当たり判定結果をラージエネミーと当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+			object->collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 			//当たった位置にラージエネミーの位置を設定
-			objectBase.collisionComponent().hitPos(_owner.position());
+			object->collisionComponent().hitPos(_owner.position());
 			//ダメージの設定
-			objectBase.collisionComponent().damage(20.0);
+			object->collisionComponent().damage(20.0);
 		}
 	}
 }
@@ -482,15 +461,13 @@ void CollisionComponent::BulletFromPoorEnemyGatling() {
 	auto collision = _owner.modelAnimeComponent().FindFrame("Spider");
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//遠隔弱攻撃の弾じゃなかったらなにもしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Bullet) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Bullet) {
 			continue;
 		}
 		//遠隔弱攻撃の弾の球の作成
 		//球の位置
-		auto bullet = objectBase.position();
+		auto bullet = object->position();
 		//球の半径
 		auto bulletRadius = static_cast<float>(20.0);
 		//モデルと球の当たり判定を取る
@@ -498,7 +475,7 @@ void CollisionComponent::BulletFromPoorEnemyGatling() {
 		//当たり判定の結果を確認
 		if (result.HitNum > 0) {
 			//当たっていたら遠隔弱攻撃の弾の当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+			object->collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
 			//ダメージの設定
 			_owner.collisionComponent().damage(10.0);
 			//ガトリング攻撃をしてくる雑魚敵の当たり判定結果を遠隔弱攻撃の弾と当たったと設定
@@ -518,24 +495,22 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
 	auto capsuleRadian = static_cast<float>(FallObjectRadius);
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		//オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		//ガトリング攻撃をしてくる雑魚敵じゃなければ何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::PoorEnemyGatling) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::PoorEnemyGatling) {
 			continue;
 		}
 		//ガトリング攻撃をしてくる雑魚敵のモデルハンドルを取得
-		auto poorEnemyGatlingModel = objectBase.modelAnimeComponent().modelHandle();
+		auto poorEnemyGatlingModel = object->modelAnimeComponent().modelHandle();
 		//モデルのコリジョンフレーム番号を取得
-		auto collision = objectBase.modelAnimeComponent().FindFrame("Spider");
+		auto collision = object->modelAnimeComponent().FindFrame("Spider");
 		//モデルとカプセルの当たり判定を取る
 		auto result = MV1CollCheck_Capsule(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
 		//当たり判定の結果を確認
 		if (result.HitNum > 0) {
 			//ガトリング攻撃をしてくる雑魚敵の当たり判定結果を落下するオブジェクトと当たったと設定
-			objectBase.collisionComponent().report().id(ReportId::HitFromFallObject);
+			object->collisionComponent().report().id(ReportId::HitFromFallObject);
 			//ダメージの設定
-			objectBase.collisionComponent().damage(20.0);
+			object->collisionComponent().damage(20.0);
 			//落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
 			_owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
 		}
@@ -545,14 +520,12 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
 void CollisionComponent::PlayerKnockBack() {
 	// オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
-		// オブジェクトベース型にキャスト
-		auto& objectBase = ObjectBaseCast(*object);
 		// プレイヤーじゃなかったら何もしない
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
 		// プレイヤーがノックバックしているか
-		if (objectBase.collisionComponent().knockBack()) {
+		if (object->collisionComponent().knockBack()) {
 			// ノックバックしていたらプレイヤーがノックバックしていると設定
 			_owner.collisionComponent().knockBack(true);
 		}
@@ -622,24 +595,4 @@ void CollisionComponent::OutStage() {
 		return;
 	}
 	return;
-}
-
-FragmentValkyria::Object::ObjectBase& CollisionComponent::ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj) {
-#ifndef _DEBUG
-	auto& objectBase = dynamic_cast<Object::ObjectBase&>(obj);
-
-	return objectBase;
-	
-#else
-	try {
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(obj);
-
-		return objectBase;
-	}
-	catch (std::bad_cast&) {
-		OutputDebugString("----------ダウンキャスト失敗----------");
-	}
-#endif
-
-	return dynamic_cast<Object::ObjectBase&>(obj);
 }

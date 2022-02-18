@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "Bullet.h"
 #include "CollisionComponent.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Player;
 

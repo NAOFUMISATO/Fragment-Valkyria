@@ -1,6 +1,9 @@
 #include "Reticle.h"
 #include "GameMain.h"
 #include "Player.h"
+#include "ObjectServer.h"
+#include "PlayerHP.h"
+
 using namespace FragmentValkyria::Player;
 
 Reticle::Reticle(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
@@ -14,9 +17,8 @@ void Reticle::Init() {
 
 void Reticle::Update() {
    for (auto&& object : _gameMain.objServer().runObjects()) {
-      auto& obj = dynamic_cast<Object::ObjectBase&>(*object);
-      if (obj.GetObjType() == Object::ObjectBase::ObjectType::Player) {
-         auto& player = dynamic_cast<Player&>(obj);
+      if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+         auto& player = dynamic_cast<Player&>(*object);
          _isAim = player.isAim();
       }
    }

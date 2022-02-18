@@ -11,6 +11,7 @@
 #include "ModelAnimeComponent.h"
 #include "ObjectFactory.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Enemy;
 
