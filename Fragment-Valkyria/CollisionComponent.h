@@ -178,12 +178,6 @@ namespace FragmentValkyria {
 			 */
 			bool knockBack() { return _knockBack; }
 		private:
-			/**
-			 * \brief オブジェクトベースルート型をオブジェクトベース型に変換する
-			 * \param obj 変換したいオブジェクト
-			 * \return 変換後のオブジェクト
-			 */
-			Object::ObjectBase& ObjectBaseCast(AppFrame::Object::ObjectBaseRoot& obj);
 
 			Object::ObjectBase& _owner;              //!< オブジェクトの参照
 			std::unique_ptr<Report> _report;         //!< 当たり判定結果を管理するポインタ

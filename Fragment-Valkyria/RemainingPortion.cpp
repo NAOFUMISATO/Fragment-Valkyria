@@ -1,5 +1,6 @@
 #include "RemainingPortion.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "portion_diff_x" });

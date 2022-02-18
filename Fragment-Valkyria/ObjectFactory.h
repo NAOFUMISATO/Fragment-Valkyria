@@ -70,7 +70,7 @@ namespace FragmentValkyria {
          Game::GameMain& _gameMain;   //!< ゲーム本体クラスの参照
          std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;   //!< オブジェクト生成管理クラスを登録する連想配列
          std::unordered_map<std::string, SpawnTable> _spawnTableMap;
-         SpawnTable _spawnTable;
+         SpawnTable _spawnTable{ SpawnRecord() };
          unsigned int _progress{ 0 };     //!< 進捗
          unsigned int _spawnProgress{ 0 };//!< スポーンした数
       };

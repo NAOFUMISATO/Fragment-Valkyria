@@ -9,6 +9,7 @@
 #include "GatlingCreator.h"
 #include "Gatling.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Create;
 using namespace FragmentValkyria;

@@ -12,6 +12,7 @@
 #include "LargeEnemyHP.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectBase.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
@@ -43,12 +44,10 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 
 	for (auto&& object : _gameMain.objServer().runObjects()) {
 
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
-
-		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
 			continue;
 		}
-		largeEnemy->cameraComponent(objectBase.cameraComponent());
+		largeEnemy->cameraComponent(object->cameraComponent());
 	}
 
 	_gameMain.sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>(_gameMain));

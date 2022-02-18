@@ -30,10 +30,6 @@ namespace AppFrame {
          return _gameBase.modeServer(); 
       }
 
-      Object::ObjectServer& ModeBaseRoot::GetObjServer() const {
-         return _gameBase.objServer(); 
-      }
-
       Resource::ResourceServer& ModeBaseRoot::GetResServer() const {
          return _gameBase.resServer(); 
       }

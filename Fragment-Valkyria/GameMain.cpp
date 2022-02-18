@@ -12,7 +12,7 @@
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
 #include "LoadStageFromJson.h"
-#include "AppFrame.h"
+#include "ObjectServer.h"
 #include "ModeClearResult.h"
 #include "ModeGameOver.h"
 #include "ModeMissionFailed.h"
@@ -49,6 +49,8 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    pathSer.RegistCurrentPath(pathToUsed);
 
    _objFactory = std::make_unique<Create::ObjectFactory>(*this);
+
+   _objServer = std::make_unique<Object::ObjectServer>();
 
    _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
 

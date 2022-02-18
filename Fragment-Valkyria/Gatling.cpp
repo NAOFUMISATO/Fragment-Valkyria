@@ -9,6 +9,7 @@
 #include "Gatling.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Enemy;
 

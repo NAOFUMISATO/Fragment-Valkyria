@@ -9,6 +9,7 @@
 #include "BulletCreator.h"
 #include "Bullet.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;

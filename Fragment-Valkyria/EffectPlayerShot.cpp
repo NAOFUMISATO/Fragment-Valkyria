@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "EffectPlayerShot.h"
 #include "GameMain.h"
+#include "ObjectServer.h"
 
 using namespace FragmentValkyria::Effect;
 

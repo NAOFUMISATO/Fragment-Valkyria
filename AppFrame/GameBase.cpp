@@ -16,7 +16,6 @@
 #include "CurrentPathServer.h"
 #include "LoadResourceJson.h"
 #include "EffectServer.h"
-#include "ObjectServer.h"
 #include "TextureComponent.h"
 #include "SpriteServer.h"
  /**
@@ -90,8 +89,6 @@ namespace AppFrame {
          _loadresJson = std::make_unique<Resource::LoadResourceJson>(*this);
 
          _efcServer = std::make_unique<Effect::EffectServer>();
-
-         _objServer = std::make_unique<Object::ObjectServer>();
 
          _texComponent = std::make_unique<Texture::TextureComponent>(*this);
 

@@ -18,6 +18,10 @@ namespace FragmentValkyria {
    namespace Create {
       class ObjectFactory;
    }
+   namespace Object {
+      class ObjectServer;
+      class ObjectBase;
+   }
    namespace Stage {
       class LoadStageFromJson;
    }
@@ -102,10 +106,16 @@ namespace FragmentValkyria {
           * \return ステージ情報管理クラスの参照
           */
          Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
+         /**
+          * \brief オブジェクトサーバーの参照を取得
+          * \return オブジェクトサーバーのポインタ
+          */
+         inline Object::ObjectServer& objServer() const { return *_objServer; }
 
       private:
          unsigned int _ingameTimer{ 0 };                      //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;        //!< ゲーム内感度及びデッドゾーン値のTuple型
+         std::unique_ptr<Object::ObjectServer> _objServer;         //!< オブジェクトの一括管理クラス
          std::unique_ptr<Create::ObjectFactory> _objFactory;  //!< オブジェクト生成一括管理クラスのユニークポインタ
          std::unique_ptr<Stage::LoadStageFromJson> _loadStage;//!< ステージ情報管理クラスのユニークポインタ
       };
