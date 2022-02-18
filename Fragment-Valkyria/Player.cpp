@@ -302,6 +302,12 @@ void Player::WeakAttack() {
 
 void Player::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
+   if (_owner._invincibleCnt > 0) {
+       MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 0.1f);
+   }
+   else {
+       MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 1.0f);
+   }
 #ifdef _DEBUG
    auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
    auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
@@ -586,6 +592,8 @@ void Player::StateWeakShootReady::Update() {
     _owner.ShootRotate();
 
     --_coolTime;
+    // 無敵時間更新
+    --_owner._invincibleCnt;
 }
 
 void Player::StateWeakShootReady::Exit() {
@@ -607,6 +615,9 @@ void Player::StateReload::Update() {
         _owner._stateServer->GoToState("Idle");
     }
     ++_reloadCnt;
+
+    // 無敵時間更新
+    --_owner._invincibleCnt;
 }
 
 void Player::StateRun::FootStepSound() {
@@ -658,4 +669,7 @@ void Player::StateRecovery::Update() {
     }
 
     ++_recoveryCnt;
+
+    // 無敵時間更新
+    --_owner._invincibleCnt;
 }
