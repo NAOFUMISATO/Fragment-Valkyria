@@ -82,7 +82,7 @@ namespace {
    const auto ShadowMinArea = vecParamMap["shaodw_minarea"];                  //!< 落ち影描画範囲最小値
    const auto ShadowMaxArea = vecParamMap["shaodw_maxarea"];                  //!< 落ち影描画範囲最大値
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
    constexpr auto MatDifRed = 0.0f;           //!< マテリアルの拡散反射光(赤)
    constexpr auto MatDifGreen = 0.0f;         //!< マテリアルの拡散反射光(緑)
    constexpr auto MatDifBlue = 0.0f;          //!< マテリアルの拡散反射光(青)
@@ -106,14 +106,14 @@ namespace {
    constexpr auto LightSphereRed = 0;         //!< 光源球体色(赤)
    constexpr auto LightSphereGreen = 128;     //!< 光源球体色(緑)
    constexpr auto LightSphereBlue = 200;      //!< 光源球体色(青)
-#endif
+//#endif
 }
 
 using namespace FragmentValkyria::Lighting;
 
 LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
    namespace AppMath = AppFrame::Math;
-#ifdef _DEBUG
+//#ifdef _DEBUG
    // マテリアルのライティング情報の設定
    MATERIALPARAM material;
    material.Diffuse = GetColorF(MatDifRed, MatDifGreen, MatDifBlue, MatDifAlpha);
@@ -122,7 +122,7 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
    material.Emissive = GetColorF(MatEmiRed, MatEmiGreen, MatEmiBlue, MatEmiAlpha);
    material.Power = MatPower;
    SetMaterialParam(material);
-#endif
+//#endif
    // フォグを有効にする
    SetFogEnable(FogEnuble);
    // フォグの色の設定
