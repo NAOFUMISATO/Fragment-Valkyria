@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   LargeEnemyCreator.cpp
- * \brief  
+ * \brief  ラージエネミー生成クラス
  * 
  * \author AHMD2000
  * \date   January 2022
@@ -39,6 +39,16 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 	state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
 	state->Register("Laser", std::make_shared<Enemy::LargeEnemy::StateLaser>(*largeEnemy));
 	largeEnemy->stateServer(std::move(state));
+
+	for (auto&& object : _gameMain.objServer().runObjects()) {
+
+		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*object);
+
+		if (objectBase.GetObjType() != Object::ObjectBase::ObjectType::Player) {
+			continue;
+		}
+		largeEnemy->cameraComponent(objectBase.cameraComponent());
+	}
 
 	return std::move(largeEnemy);
 }

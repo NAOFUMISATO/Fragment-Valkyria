@@ -107,7 +107,7 @@ namespace FragmentValkyria {
           * \brief カメラ管理クラスの取得
           * \return カメラ管理クラス
           */
-         Camera::CameraComponent& cameraComponent() const { return *_cameraComponent; }
+         const std::shared_ptr<Camera::CameraComponent>& cameraComponent() const { return _cameraComponent; }
          
          Collision::CollisionComponent& collisionComponent() { return *_collisionComponent; }
 
