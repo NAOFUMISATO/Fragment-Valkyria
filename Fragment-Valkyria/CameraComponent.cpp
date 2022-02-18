@@ -10,6 +10,12 @@
 #include "GameMain.h"
 using namespace FragmentValkyria::Camera;
 
+namespace {
+    const double CenterHeight = 60.0;
+    const double SpringK = 1.0;
+    const double DivideT = 10.0;
+}
+
 CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 
@@ -78,10 +84,15 @@ void CameraComponent::Placement() {
     _target = _plyPos + _plyToTarget;
     //プレイヤーの位置からカメラの位置を設定する
     _position = _plyPos + _plyToPos;
+    _position.Add(0.0, _vibrationValue, 0.0);
 }
 
 void CameraComponent::Vibration() {
-
+    for (auto i = 0.0; i < DivideT; ++i) {
+        _vibrationValue += _vibrationVelocity / DivideT;
+        _vibrationVelocity += (-SpringK * (_vibrationValue - CenterHeight)) / DivideT;
+    }
+    _vibrationVelocity *= 0.9;
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
@@ -133,6 +144,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
 
 void CameraComponent::StateNormal::Update() {
     _owner.Rotate();
+    _owner.Vibration();
     _owner.Placement();
     //ズームする場合はズーム状態へ
     if (_owner._zoom) {
@@ -154,6 +166,7 @@ void CameraComponent::StateZoomIn::Update() {
         _owner._stateServer->PushBack("ShootReady");
     }
     _owner.Rotate();
+    _owner.Vibration();
     _owner.Placement();
 }
 
@@ -209,6 +222,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
 
 void CameraComponent::StateShootReady::Update() {
     _owner.Rotate();
+    _owner.Vibration();
     _owner.Placement();
     //ズームしない場合ズームアウト状態へ
     if (!_owner._zoom) {
@@ -226,5 +240,6 @@ void CameraComponent::StateZoomOut::Update() {
         _owner._stateServer->PushBack("Normal");
     }
     _owner.Rotate();
+    _owner.Vibration();
     _owner.Placement();
 }

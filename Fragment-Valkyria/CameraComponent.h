@@ -98,6 +98,11 @@
           * \param zoom ÉYÅ[ÉÄÇ∑ÇÈÇ©
           */
          void SetZoom(bool zoom) { _zoom = zoom; }
+         /**
+          * \brief 
+          * \param velo
+          */
+         void SetVibValue(double value) { _vibrationValue = value; }
 
       private:
          /**
@@ -148,6 +153,8 @@
          double _zoomRateRadian{ 0.0 };                                     //!< ÉYÅ[ÉÄÇ∑ÇÈäÑçáÇÃÉTÉCÉìÇÃílÇãÅÇﬂÇÈÉâÉWÉAÉì
          double _upDownAngle{ 0.0 };                                        //!< ÉJÉÅÉâÇÃè„â∫ÇÃâÒì]ÇÃäpìx
          double _sideAngle{ 0.0 };                                          //!< ÉJÉÅÉâÇÃç∂âEÇÃâÒì]ÇÃäpìx
+         double _vibrationVelocity{ 0.0 };                                  //!< êUìÆÇ≥ÇπÇÈÇ∆Ç´Ç…égÇ§ë¨ìx
+         double _vibrationValue{ 60.0 };                                     //!< êUìÆÇµÇΩéûÇÃYÇÃà íu
          std::tuple<double, double, double> _nearFarFov{                    //!< ÉJÉÅÉâÇÃï`âÊå¿äE(éËëO,âú)ãyÇ—éãñÏäpÇÃTupleå^(ìßéãïœä∑Ç…égóp)
             std::make_tuple(50.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
 

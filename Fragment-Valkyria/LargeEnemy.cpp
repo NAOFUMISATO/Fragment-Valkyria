@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "LargeEnemy.h"
+#include "CameraComponent.h"
 #include "GameMain.h"
 #include "ObjectFactory.h"
 #include "CollisionComponent.h"
@@ -228,6 +229,7 @@ void LargeEnemy::StateFallObject::Update() {
 	}
 
 	if (_owner._stateCnt == 0) {
+		_owner._cameraComponent->SetVibValue(0.0);
 		_owner.CreateFallObject();
 	}
 
@@ -242,7 +244,7 @@ void LargeEnemy::StateGatling::Enter() {
 	_owner._stateCnt = 0;
 	_owner._gatlingCnt = 10;
 	_owner._gatlingFlag = true;
-	_owner._modelAnimeComponent->ChangeAnime("beem", true);
+	_owner._modelAnimeComponent->ChangeAnime("walk", true);
 }
 
 void LargeEnemy::StateGatling::Update() {
