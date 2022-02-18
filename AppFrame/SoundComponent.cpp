@@ -40,6 +40,18 @@ namespace AppFrame {
          }
       }
 
+      void SoundComponent::Stop(std::string_view key) {
+         auto&& [filename, handle, volume] = _gameBase.resServer().GetSoundInfo(key);
+         if (handle != -1) {
+            // ì«Ç›çûÇ›óLÇË
+            StopSoundMem(handle);
+         }
+         else {
+            // ì«Ç›çûÇ›ñ≥Çµ
+            StopMusic();
+         }
+      }
+
       void SoundComponent::Play(std::string_view key, int playType) {
          auto&& [filename, handle, volume] = _gameBase.resServer().GetSoundInfo(key);
 

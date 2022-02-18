@@ -50,7 +50,11 @@ namespace AppFrame {
           * \param changeVolume 変更先の音量
           */
          void ChangeVolume(std::string_view key, int changeVolume);
-
+         /**
+          * \brief 音源を停止する
+          * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
+          */
+         void Stop(std::string_view key);
       protected:
          /**
           * \brief 音量の変更を行った後、プレイタイプを指定し再生する

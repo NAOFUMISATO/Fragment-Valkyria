@@ -1,6 +1,18 @@
 {
 	"ingame": [
 		{
+			"keyname": "PoorBattle",
+			"filename": "PoorBattle.mp3",
+			"isload": false,
+			"volume": 50
+		},
+		{
+			"keyname": "BossBattle",
+			"filename": "BossBattle.mp3",
+			"isload": false,
+			"volume": 50
+		},
+		{
 			"keyname": "PlayerDamage",
 			"filename": "PlayerDamage.wav",
 			"isload": true,
@@ -10,13 +22,13 @@
 			"keyname": "PlayerRightFootStep",
 			"filename": "PlayerRightFootStep.wav",
 			"isload": true,
-			"volume": 150
+			"volume": 100
 		},
 		{
 			"keyname": "PlayerLeftFootStep",
 			"filename": "PlayerLeftFootStep.wav",
 			"isload": true,
-			"volume": 150
+			"volume": 100
 		},
 		{
 			"keyname": "PlayerShoot",
@@ -31,22 +43,34 @@
 			"volume": 255
 		},
 		{
-			"keyname": "BossFootstep",
-			"filename": "BossFootstep.wav",
+			"keyname": "BossFootStep",
+			"filename": "BossFootStep.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 100
 		},
 		{
 			"keyname": "BossGatling",
 			"filename": "BossGatling.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 100
 		},
 		{
 			"keyname": "BossStan",
 			"filename": "BossStan.wav",
 			"isload": true,
 			"volume": 255
+		},
+		{
+			"keyname": "BossBeam",
+			"filename": "BossBeam.wav",
+			"isload": true,
+			"volume": 50
+		},
+		{
+			"keyname": "BossCharge",
+			"filename": "BossCharge.wav",
+			"isload": true,
+			"volume": 50
 		}
 	]
 }

@@ -318,7 +318,7 @@ void Player::StateBase::Draw() {
 /// ‘Ò‹@
 void Player::StateIdle::Enter() {
    /*_owner._forwardSpeed = 0.0;*/
-   _owner._modelAnimeComponent->ChangeAnime("taiki_MO", true, IdleAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("stay", true, IdleAnimeSpeed);
 }
 void Player::StateIdle::Input(InputManager& input) {
 
@@ -371,7 +371,7 @@ void Player::StateIdle::Update() {
 
 /// ‘–‚è
 void Player::StateRun::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("run_motion", true, RunAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("run", true, RunAnimeSpeed);
    auto count = _owner.gameMain().modeServer().frameCount();
    _footCnt = count;
 }
@@ -450,7 +450,7 @@ void Player::StateRun::Update() {
 
 /// UŒ‚
 void Player::StateAttack::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("hassya_MO",false, ShootAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop",false, ShootAnimeSpeed);
 }
 void Player::StateAttack::Update() {
    auto cnt = _owner._modelAnimeComponent->repeatedCount();
@@ -468,7 +468,7 @@ void Player::StateAttack::Draw() {
 }
 
 void Player::StateShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true, ShootReadyAnimeSpeed);
+    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_loop", true, ShootReadyAnimeSpeed);
     _owner.GetSoundComponent().Play("PlayerShootReady");
     _owner._isAim = true;
 }
@@ -476,7 +476,7 @@ void Player::StateShootReady::Enter() {
 void Player::StateShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick()) {
        _owner.GetSoundComponent().Play("PlayerShoot");
-       _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
+       _owner._modelAnimeComponent->ChangeAnime("H_attack_attack", false, ShootAnimeSpeed);
         _owner._stateServer->PopBack();
         _owner._cameraComponent->SetZoom(false);
     }
@@ -506,7 +506,9 @@ void Player::StateShootReady::Exit() {
 }
 
 void Player::StateKnockBack::Enter() {
+   _owner.modelAnimeComponent().ChangeAnime("damaged", false,1.2);
     _owner._freezeTime = 30;
+
 }
 
 void Player::StateKnockBack::Input(InputManager& input) {
@@ -539,7 +541,7 @@ void Player::StateKnockBack::Draw() {
 }
 
 void Player::StateDie::Enter() {
-    _owner.modelAnimeComponent().ChangeAnime("run_motion", true,10.0);
+    _owner.modelAnimeComponent().ChangeAnime("dawn", false);
     _timeOver = 60 * 2;
 }
 
@@ -561,7 +563,7 @@ void Player::StateDie::Draw() {
 }
 
 void Player::StateWeakShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("kamae_MO", true);
+    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
     _owner.GetSoundComponent().Play("PlayerShootReady");
     _coolTime = 0;
     _owner._isAim = true;
@@ -570,7 +572,7 @@ void Player::StateWeakShootReady::Enter() {
 void Player::StateWeakShootReady::Input(InputManager& input) {
     if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
         _owner.WeakAttack();
-        _owner._modelAnimeComponent->ChangeAnime("hassya_MO", false, ShootAnimeSpeed);
+        _owner._modelAnimeComponent->ChangeAnime("L_attack_attack", false, ShootAnimeSpeed);
         _owner.GetSoundComponent().Play("PlayerShoot");
         --_owner._bulletStock;
         _coolTime = 60 * 1;
@@ -593,7 +595,7 @@ void Player::StateWeakShootReady::Exit() {
 }
 
 void Player::StateReload::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("hassya_MO", true);
+    _owner._modelAnimeComponent->ChangeAnime("stealth_sit", true,0.8);
     _reloadCnt = 0;
 }
 
@@ -643,7 +645,7 @@ void Player::StateRun::FootStepSound() {
 }
 
 void Player::StateRecovery::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("hassya_MO", true);
+    _owner._modelAnimeComponent->ChangeAnime("heal", false);
     _recoveryCnt = 0;
 }
 

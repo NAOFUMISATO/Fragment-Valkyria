@@ -242,13 +242,14 @@ void LargeEnemy::StateGatling::Enter() {
 	_owner._stateCnt = 0;
 	_owner._gatlingCnt = 10;
 	_owner._gatlingFlag = true;
-	_owner._modelAnimeComponent->ChangeAnime("beem", true);
+	_owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
 
 void LargeEnemy::StateGatling::Update() {
 	if (_owner._stateCnt % GatlingFrame == 0) {
 		_owner.CreateGatling();
 		--_owner._gatlingCnt;
+		_owner.GetSoundComponent().Play("BossGatling");
 	}
 
 	if (_owner._gatlingCnt <= 0) {
@@ -286,7 +287,7 @@ void LargeEnemy::StateMove::Enter() {
 	_owner._moving = true;
 	_owner._firstRotating = true;
 	_owner._endRotating = true;
-	_owner._modelAnimeComponent->ChangeAnime("walk", true);
+	_owner._modelAnimeComponent->ChangeAnime("walk_0", true);
 
 	auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/true;
 	if (result) {
@@ -304,9 +305,37 @@ void LargeEnemy::StateMove::Enter() {
 	}
 
 	_owner.SetAddRotate();
+	_footCnt = 0;
 }
 
 void LargeEnemy::StateMove::Update() {
+	auto count = _owner.gameMain().modeServer().frameCount();
+	auto handle = _owner.modelAnimeComponent().modelHandle();
+	auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_right_hand");
+	auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_left_hand");
+	auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
+	auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
+	auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
+	auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
+	if (rightFootY >= 40.0) {
+		_footRightStep = true;
+	}
+	else {
+		if (_footRightStep) {
+			_owner.GetSoundComponent().Play("BossFootstep");
+			_footRightStep = false;
+		}
+	}
+	if (leftFootY >= 40.0) {
+		_footLeftStep = true;
+	}
+	else {
+		if (_footLeftStep) {
+			_owner.GetSoundComponent().Play("BossFootStep");
+			_footLeftStep = false;
+		}
+	}
+	
 	if (_owner._firstRotating) {
 		_owner.Rotate(_owner._firstRotating);
 	}
@@ -343,11 +372,13 @@ void LargeEnemy::StateLaser::Enter() {
 	_owner._stateCnt = 0;
 	_owner._modelAnimeComponent->ChangeAnime("beem", true);
 	_createLaser = false;
+	_owner.GetSoundComponent().Play("BossCharge");
 }
 
 void LargeEnemy::StateLaser::Update() {
 	if (_owner._stateCnt >= 60 * 3 && !_createLaser) {
 		_owner.CreateLaser();
+		_owner.GetSoundComponent().Play("BossBeam");
 		_createLaser = true;
 	}
 	else if (_owner._stateCnt >= 60 * 6) {

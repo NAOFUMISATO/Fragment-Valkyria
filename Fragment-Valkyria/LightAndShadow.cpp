@@ -212,9 +212,9 @@ void LightAndShadow::Render() {
    DrawSphere3D(AppMath::ToDX(firstLightPos), LightSphereRadius, LightSphereDiv,
       Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue),
       Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), TRUE);
-   DrawSphere3D(AppMath::ToDX(secondLightPos), LightSphereRadius, LightSphereDiv,
-      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), 
-      Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), TRUE);
+   //DrawSphere3D(AppMath::ToDX(secondLightPos), LightSphereRadius, LightSphereDiv,
+   //   Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), 
+   //   Utility::GetColorCode(LightSphereRed, LightSphereGreen, LightSphereBlue), TRUE);
 #endif
 }
 

@@ -251,6 +251,9 @@ namespace FragmentValkyria {
                 void Update() override;
 
             private:
+               bool _footRightStep{ false };       //!< 足音処理のフラグ
+               bool _footLeftStep{ false };       //!< 足音処理のフラグ
+                int _footCnt{ 0 };
                 bool _endGetplyPos{ true };
             };
             /**
