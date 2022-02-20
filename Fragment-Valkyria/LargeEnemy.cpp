@@ -72,7 +72,7 @@ void LargeEnemy::CreateGatling() {
 	auto gatlingDirection = plyPos - AppFrame::Math::ToMath(gatlingPos);
 	GetObjServer().RegistVector("GatlingMoveDirection", gatlingDirection);
 	auto gatling = gameMain().objFactory().Create("Gatling");
-	gameMain().objServer().Add(std::move(gatling));
+	GetObjServer().Add(std::move(gatling));
 }
 
 void LargeEnemy::CreateLaser() {
@@ -92,16 +92,16 @@ void LargeEnemy::CreateLaser() {
 	}
 	std::sort(_objectDistance.begin(), _objectDistance.end());
 	if (_objectDistance.empty()) {
-		_gameMain.objServer().RegistVector("LaserDirectionPos", _gameMain.objServer().GetVecData("PlayerPos"));
+		GetObjServer().RegistVector("LaserDirectionPos", _gameMain.objServer().GetVecData("PlayerPos"));
 	}
 	else {
-		_gameMain.objServer().RegistVector("LaserDirectionPos", _objectDistance[0].second);
+		GetObjServer().RegistVector("LaserDirectionPos", _objectDistance[0].second);
 	}
 
 	_objectDistance.clear();
 
 	auto laser = gameMain().objFactory().Create("Laser");
-	gameMain().objServer().Add(std::move(laser));
+	GetObjServer().Add(std::move(laser));
 }
 
 void LargeEnemy::CreateFallObject() {
@@ -139,7 +139,7 @@ void LargeEnemy::CreateFallObject() {
 	rightTransMatrix.RotateY(45.0, true);
 	leftTransMatrix.RotateY(-45.0, true);
 
-	auto MoveVec = _gameMain.objServer().GetVecData("CamTarget") - _gameMain.objServer().GetVecData("CamPos");
+	auto MoveVec = GetObjServer().GetVecData("CamTarget") - GetObjServer().GetVecData("CamPos");
 	MoveVec.Normalized();
 
 	auto rightMoveVec = MoveVec * rightTransMatrix;
