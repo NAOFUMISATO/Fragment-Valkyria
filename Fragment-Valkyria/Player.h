@@ -117,6 +117,10 @@ namespace FragmentValkyria {
           */
          void HitCheckFromLargeEnemy();
          /**
+          * \brief G‹›“G‚Æ“–‚½‚Á‚Ä‚¢‚é‚©Šm”F
+          */
+         void HitCheckFromPoorEnemy();
+         /**
           * \brief ‰“ŠuãUŒ‚‚ğ‚·‚é
           */
          void WeakAttack();

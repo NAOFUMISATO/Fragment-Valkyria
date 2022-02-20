@@ -118,9 +118,11 @@ void PoorEnemyGatling::StateIdle::Update() {
 	if (_owner._stateCnt >= 60 * 7) {
 		_owner._stateServer->GoToState("Gatling");
 	}
-	_owner.collisionComponent().BulletFromPoorEnemyGatling();
+	_owner.collisionComponent().BulletFromPoorEnemyGatling(); 
+	_owner.collisionComponent().PoorEnemyFromPlayer();
 	_owner.HitCheckFromBullet();
 	_owner.HitCheckFromFallObject();
+	
 	++_owner._stateCnt;
 }
 
@@ -159,6 +161,7 @@ void PoorEnemyGatling::StateGatling::Update() {
 		}
 	}
 	_owner.collisionComponent().BulletFromPoorEnemyGatling();
+	_owner.collisionComponent().PoorEnemyFromPlayer();
 	_owner.HitCheckFromBullet();
 	_owner.HitCheckFromFallObject();
 	++_owner._stateCnt;

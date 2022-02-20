@@ -36,7 +36,8 @@ namespace FragmentValkyria {
 				HitFromIdleFallObject,     //!< 待機状態の落下するオブジェクトと当たった
 				HitFromFallObject,         //!< 落下している落下するオブジェクトと当たった
 				HitFromGatling,            //!< ガトリングと当たった
-				HitFromLargeEnemy,         //!< ラージエネミーと当たった
+				HitFromLargeEnemy,         //!< ボスと当たった
+				HitFromPoorEnemy,          //!< 雑魚敵と当たった
 				HitFromBullet,             //!< 遠隔弱攻撃の弾と当たった
 				HitFromLaser,              //!< レーザーと当たった
 				HitFromPoorEnemyGatling,   //!< ガトリング攻撃をしてくる雑魚敵と当たった
@@ -107,6 +108,10 @@ namespace FragmentValkyria {
 			 * \brief プレイヤーがラージエネミーのモデルと当たっているか確認
 			 */
 			void LargeEnemyFromPlayer();
+			/**
+			 * \brief プレイヤーが雑魚敵のモデルと当たっているか確認
+			 */
+			void PoorEnemyFromPlayer();
 			/**
 			 * \brief ガトリング攻撃をしてくる雑魚敵が遠隔弱攻撃の弾と当たっているか確認
 			 */

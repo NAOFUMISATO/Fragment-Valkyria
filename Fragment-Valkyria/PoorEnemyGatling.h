@@ -17,7 +17,7 @@ namespace FragmentValkyria {
 			PoorEnemyGatling(Game::GameMain& gameMain);
 			virtual ~PoorEnemyGatling() override = default;
 
-            virtual ObjectType GetObjType() const override { return ObjectType::PoorEnemyGatling; };
+            virtual ObjectType GetObjType() const override { return ObjectType::PoorEnemyGatling; }
             /**
             * \brief ‰Šú‰»ˆ—
             */

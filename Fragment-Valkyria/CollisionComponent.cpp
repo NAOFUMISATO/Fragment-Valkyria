@@ -433,7 +433,7 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 			return;
 		}
 		//プレイヤーのカプセルの作成
-		auto playerPos = object->position();
+		auto playerPos = player.position();
 		//カプセルの一つ目の位置
 		auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
 		//カプセルの二つ目の位置
@@ -444,12 +444,53 @@ void CollisionComponent::LargeEnemyFromPlayer() {
 		auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCapsuleRadius);
 		//当たり判定の結果を確認
 		if (result.HitNum > 0) {
-			//当たっていたらプレイヤーの当たり判定結果をラージエネミーと当たったと設定
-			object->collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+			//当たっていたらプレイヤーの当たり判定結果をボスと当たったと設定
+			player.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 			//当たった位置にラージエネミーの位置を設定
-			object->collisionComponent().hitPos(_owner.position());
+			player.collisionComponent().hitPos(_owner.position());
 			//ダメージの設定
-			object->collisionComponent().damage(20.0);
+			player.collisionComponent().damage(20.0);
+		}
+	}
+}
+
+void CollisionComponent::PoorEnemyFromPlayer() {
+	//ラージエネミーのモデルのハンドルの取得
+	auto poorEnemyModel = _owner.modelAnimeComponent().modelHandle();
+	//ラージエネミーのモデルのコリジョンフレーム番号の取得
+	auto collision = _owner.modelAnimeComponent().FindFrame("Spider");
+	//オブジェクトサーバーの各オブジェクトを取得
+	for (auto&& object : _owner.GetObjServer().runObjects()) {
+		//プレイヤーじゃなかったら何もしない
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
+			continue;
+		}
+		//プレイヤー型の参照の取得
+		auto& player = dynamic_cast<Player::Player&>(*object);
+		//無敵時間の取得
+		auto invincibleCnt = player.invincibleCnt();
+		//無敵時間中だったら何もしない
+		if (invincibleCnt > 0) {
+			return;
+		}
+		//プレイヤーのカプセルの作成
+		auto playerPos = player.position();
+		//カプセルの一つ目の位置
+		auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+		//カプセルの二つ目の位置
+		auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+		//カプセルの半径
+		auto playerCapsuleRadius = static_cast<float>(PlayerRadius);
+		//モデルとカプセルの当たり判定を取る
+		auto result = MV1CollCheck_Capsule(poorEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCapsuleRadius);
+		//当たり判定の結果を確認
+		if (result.HitNum > 0) {
+			//当たっていたらプレイヤーの当たり判定結果を雑魚敵と当たったと設定
+			player.collisionComponent().report().id(ReportId::HitFromPoorEnemy);
+			//当たった位置にラージエネミーの位置を設定
+			player.collisionComponent().hitPos(_owner.position());
+			//ダメージの設定
+			player.collisionComponent().damage(20.0);
 		}
 	}
 }

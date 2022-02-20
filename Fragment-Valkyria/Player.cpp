@@ -3,7 +3,7 @@
  * \file   Player.cpp
  * \brief  プレイヤーの処理を回すクラス
  *
- * \author NAOFUMISATO
+ * \author AHMD2000,NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
 #include "Player.h"
@@ -294,6 +294,29 @@ void Player::HitCheckFromLargeEnemy() {
     }
 }
 
+void Player::HitCheckFromPoorEnemy() {
+   // 当たり判定結果クラスの参照の取得
+   auto report = _collisionComponent->report();
+   // 当たり判定結果の確認
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemy) {
+      // 雑魚敵と当たっていたら
+      // 雑魚敵の位置を取得
+      auto hitPos = _collisionComponent->hitPos();
+      // ノックバック量のベクトルを設定
+      auto knockBackVec = _position - hitPos;
+      knockBackVec.Normalized();
+      _knockBack = knockBackVec * 10.0;
+      // ダメージ量分ヒットポイントを減らす
+      _hp -= _collisionComponent->damage();
+      // ノックバックしていると設定
+      _collisionComponent->knockBack(true);
+      // カメラのズームをしないと設定
+      _cameraComponent->SetZoom(false);
+      // ノックバック状態へ
+      _stateServer->PushBack("KnockBack");
+   }
+}
+
 void Player::WeakAttack() {
     // 遠隔弱攻撃の弾を生成してオブジェクトサーバーへ追加
     auto bullet = gameMain().objFactory().Create("Bullet");
@@ -367,6 +390,7 @@ void Player::StateIdle::Update() {
     _owner._collisionComponent->GatlingFromPlayer();
     _owner._collisionComponent->PlayerFromLaser();
     _owner.HitCheckFromLargeEnemy();
+    _owner.HitCheckFromPoorEnemy();
     _owner.HitCheckFromFallObject();
     _owner.HitCheckFromGatling();
     _owner.HitCheckFromLaser();
@@ -447,6 +471,7 @@ void Player::StateRun::Update() {
    _owner._collisionComponent->PlayerFromLaser();
    _owner.HitCheckFromFallObject();
    _owner.HitCheckFromLargeEnemy();
+   _owner.HitCheckFromPoorEnemy();
    _owner.HitCheckFromGatling();
    _owner.HitCheckFromLaser();
 
@@ -494,6 +519,7 @@ void Player::StateShootReady::Update() {
     _owner._collisionComponent->GatlingFromPlayer();
     _owner._collisionComponent->PlayerFromLaser();
     _owner.HitCheckFromLargeEnemy();
+    _owner.HitCheckFromPoorEnemy();
     _owner.HitCheckFromFallObject();
     _owner.HitCheckFromGatling();
     _owner.HitCheckFromLaser();
