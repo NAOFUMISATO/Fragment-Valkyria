@@ -23,6 +23,7 @@ namespace AppFrame {
       constexpr uint32_t _rowMax = 4;     //!< 行数
       constexpr uint32_t _columnMax = 4;  //!< 列数
       using MatrixArray = std::array<std::array<double, _columnMax>, _rowMax>;   //!< 行列表現の二次配列
+      using Quaternion = std::tuple<double, double, double, double>;                     //!< クォータニオンを表すtuple型
       /**
        * \class 4次元行列クラス
        * \brief 行列計算を行う自作クラス
@@ -156,6 +157,13 @@ namespace AppFrame {
           * \param make 単位化するか
           */
          void RotateAnyVec(const Vector4 vec, const double degree, bool make);
+         /**
+          * \brief 
+          * \param vec
+          * \param degree
+          * \param make
+          */
+         void RotateAnyVecQuaternion(const Vector4 vec, const double degree, bool make);
          /**
           * \brief 回転行列を乗算
           * \return 乗算した行列
