@@ -50,7 +50,8 @@ void Player::Init(){
     _leftRotation.RotateY(-90.0, true);
     // ベクトルを180度回転させるマトリクスの作成
     _backRotation.RotateY(180.0, true);
-    _isAim = false;     // エイム中かのフラグをfalse
+    _isAim = false;        // エイム中かのフラグをfalse
+    _isDeadMotion = false; // 死亡モーション中かのフラグをfalse
 }
 
 void Player::Input(InputManager& input) {
@@ -575,6 +576,7 @@ void Player::StateKnockBack::Draw() {
 void Player::StateDie::Enter() {
     _owner.modelAnimeComponent().ChangeAnime("dawn", false);
     _timeOver = 60 * 2;
+    _owner._isDeadMotion = true;
 }
 
 void Player::StateDie::Input(InputManager& input) {

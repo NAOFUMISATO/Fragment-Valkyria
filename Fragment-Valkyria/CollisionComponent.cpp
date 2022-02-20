@@ -19,6 +19,7 @@
 #include "ModePoor.h"
 #include "ObjectBase.h"
 #include "ObjectServer.h"
+#include "Player.h"
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
@@ -580,7 +581,15 @@ void CollisionComponent::PlayerKnockBack() {
 }
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
-	
+	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+			auto& player = dynamic_cast<Player::Player&>(*object);
+			// プレイヤーが死亡モーションならば返す
+			if (player.isDeadMotion()) {
+				return pos;
+			};
+		}
+	}
 	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
 	auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
 	auto stageComponent = modeIngame->GetStage().stageComponent();
@@ -601,7 +610,15 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
 }
 
 AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
-
+	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+			// プレイヤーが死亡モーションならば返す
+			auto& player = dynamic_cast<Player::Player&>(*object);
+			if (player.isDeadMotion()) {
+				return pos;
+			};
+		}
+	}
 	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
 	auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
 	auto stageComponent = modeIngame->GetStage().stageComponent();
@@ -622,6 +639,15 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 }
 
 void CollisionComponent::OutStage() {
+	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+			auto& player = dynamic_cast<Player::Player&>(*object);
+			// プレイヤーが死亡モーションならば返す
+			if (player.isDeadMotion()) {
+				return;
+			};
+		}
+	}
 	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
 	auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
 	auto stageComponent = modeInGameBase->GetStage().stageComponent();

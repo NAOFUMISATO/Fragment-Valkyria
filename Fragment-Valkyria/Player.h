@@ -81,7 +81,11 @@ namespace FragmentValkyria {
           * \return エイム中ならばtrue、でなければfalse
           */
          inline bool isAim() { return _isAim; }
-
+         /**
+          * \brief 死亡モーション中かの取得
+          * \return 死亡モーション中ならばtrue,でなければfalse
+          */
+         inline bool isDeadMotion() { return _isDeadMotion; }
       private:
          /**
           * \brief 移動処理
@@ -129,7 +133,8 @@ namespace FragmentValkyria {
          int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
          int _invincibleCnt{ 0 };                   //!< 無敵時間
          int _portionStock{ 3 };                    //!< ポーションの数
-         bool _isAim{false};                        //!< エイム中か
+         bool _isAim{ false };                      //!< エイム中か
+         bool _isDeadMotion{ false };               //!< 死亡モーション中か
          double _hp{ 100.0 };                       //!< ヒットポイント
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
