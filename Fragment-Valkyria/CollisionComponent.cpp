@@ -106,6 +106,9 @@ void CollisionComponent::PlayerFromObjectRange() {
 				if (object->collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
 					break;
 				}
+				if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
+					break;
+				}
 				//プレイヤーが他のオブジェクトと当たっていなかったら落下するオブジェクトを持ち上げられる球の範囲にいると設定
 				plyObject->collisionComponent().report().id(ReportId::HitFromObjectRange);
 			}
@@ -126,6 +129,9 @@ void CollisionComponent::PlayerFromObjectRange() {
 			break;
 		}
 		if (object->collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
+			break;
+		}
+		if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
 			break;
 		}
 		//プレイヤーの位置取得
