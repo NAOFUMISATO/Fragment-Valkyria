@@ -14,13 +14,15 @@
 #include "ModelAnimeComponent.h"
 #include "PoorEnemyGatling.h"
 #include "ObjectServer.h"
-
+#include "FallObject.h"
 using namespace FragmentValkyria::Enemy;
 
 namespace {
 	auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
 	   "gatling_frame"});
 	const int GatlingFrame = paramMap["gatling_frame"];
+
+	constexpr auto MaxNum = 6;
 }
 
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -103,8 +105,59 @@ void LargeEnemy::CreateLaser() {
 }
 
 void LargeEnemy::CreateFallObject() {
-	auto fallObject = gameMain().objFactory().Create("FallObject");
-	gameMain().objServer().Add(std::move(fallObject));
+	using Vector4 = AppFrame::Math::Vector4;
+	using Matrix44 = AppFrame::Math::Matrix44;
+
+	_createNum = 3;
+
+	for (auto&& object : _gameMain.objServer().runObjects()) {
+
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+			continue;
+		}
+		++_createNum;
+	}
+
+	if (_createNum > MaxNum) {
+		for (auto&& object : _gameMain.objServer().runObjects()) {
+
+			if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+				continue;
+			}
+			auto& fallObject = dynamic_cast<Enemy::FallObject&>(*object);
+			if (fallObject.residual()) {
+				object->SetDead();
+				--_createNum;
+				if (_createNum <= MaxNum) {
+					break;
+				}
+			}
+		}
+	}
+	auto rightTransMatrix = Matrix44();
+	auto leftTransMatrix = Matrix44();
+	rightTransMatrix.RotateY(45.0, true);
+	leftTransMatrix.RotateY(-45.0, true);
+
+	auto MoveVec = _gameMain.objServer().GetVecData("CamTarget") - _gameMain.objServer().GetVecData("CamPos");
+	MoveVec.Normalized();
+
+	auto rightMoveVec = MoveVec * rightTransMatrix;
+	auto leftMoveVec = MoveVec * leftTransMatrix;
+
+	constexpr double distance = 1000.0;
+
+	std::array<Vector4, 3> startPosition = {
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0),
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
+		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+	};
+
+	for (auto i = 0; i < 3; ++i) {
+		auto fallObject = gameMain().objFactory().Create("FallObject");
+		fallObject->position(startPosition[i]);
+		_gameMain.objServer().Add(std::move(fallObject));
+	}
 }
 
 void LargeEnemy::HitCheckFromFallObject() {

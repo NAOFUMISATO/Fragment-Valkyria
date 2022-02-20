@@ -28,10 +28,6 @@ namespace FragmentValkyria {
 			* \return プレイヤーのインスタンス
 			*/
 			virtual std::unique_ptr<Object::ObjectBase> Create() override;
-
-			std::unique_ptr<Object::ObjectBase> _fallObject{ std::make_unique<Enemy::FallObject>(_gameMain) };
-
-			int _createNum{ 0 };
 		};
 	}
 }

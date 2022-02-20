@@ -53,27 +53,6 @@ namespace AppFrame {
             return radion * DEGREES_180 / PI;
          }
          /**
-          * \brief 一様分布での乱数の取得(int型)
-          * \param min 最小値
-          * \param max 最大値
-          * \return 最小値と最大値の範囲での一様分布での乱数
-          */
-         static int GetRandom(const int min, const int max);
-         /**
-          * \brief 一様分布での乱数の取得(double型)
-          * \param min 最小値
-          * \param max 最大値
-          * \return 最小値と最大値の範囲での一様分布での乱数
-          */
-         static double GetRandom(const double min, const double max);
-         /**
-          * \brief 一様分布での乱数の取得(float型)
-          * \param min 最小値
-          * \param max 最大値
-          * \return 最小値と最大値の範囲での一様分布での乱数
-          */
-         static float GetRandom(const float min, const float max);
-         /**
           * \brief 矩形と線分の当たり判定
           * \param polygonPoint0 矩形頂点1
           * \param polygonPoint1 矩形頂点2
@@ -190,6 +169,34 @@ namespace AppFrame {
          * \return カラーコード
          */
          static unsigned int GetColorCode(unsigned char red, unsigned char green, unsigned char blue);
+         /**
+          * \brief 一様分布での乱数の取得(int型)
+          * \param min 最小値
+          * \param max 最大値
+          * \return 最小値と最大値の範囲での一様分布での乱数
+          */
+         static int GetRandom(const int min, const int max);
+         /**
+          * \brief 一様分布での乱数の取得(double型)
+          * \param min 最小値
+          * \param max 最大値
+          * \return 最小値と最大値の範囲での一様分布での乱数
+          */
+         static double GetRandom(const double min, const double max);
+         /**
+          * \brief 一様分布での乱数の取得(float型)
+          * \param min 最小値
+          * \param max 最大値
+          * \return 最小値と最大値の範囲での一様分布での乱数
+          */
+         static float GetRandom(const float min, const float max);
+         /**
+          * \brief 一様分布での乱数の取得(Vector4型)
+          * \param min 最小値
+          * \param max 最大値
+          * \return 最小値と最大値の範囲での一様分布での乱数
+          */
+         static Vector4 GetRandom(const Vector4 min, const Vector4 max);
 
       private:
          /**

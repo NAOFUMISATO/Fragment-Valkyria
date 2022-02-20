@@ -40,6 +40,7 @@ void ModePoor::Enter() {
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
+   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
 
    objFactory.LoadSpawnTables("poor", {"poorwave1","poorwave2" ,"poorwave3" ,"poorwave4" });

@@ -107,6 +107,7 @@ namespace FragmentValkyria {
             double _rotateDot{ 0.0 };
             double _addRotate{ 1.0 };
             double _hp{ 100.0 };
+            int _createNum{ 0 };
 
             Vector4 _moved{ 0.0, 0.0, 0.0 }; //!< ˆÚ“®—Ê‚ÌƒxƒNƒgƒ‹
 

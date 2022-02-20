@@ -26,19 +26,6 @@ namespace AppFrame {
     */
    namespace Math {
 
-      int Utility::GetRandom(const int min, const int max) {
-         std::uniform_int_distribution<> distr(min, max);
-         return distr(random);
-      }
-      double Utility::GetRandom(const double min, const double max) {
-         std::uniform_real_distribution<> distr(min, max);
-         return distr(random);
-      }
-      float Utility::GetRandom(const float min, const float max) {
-         std::uniform_real_distribution<> distr(min, max);
-         return static_cast<float>(distr(random));
-      }
-
       // ãÈå`Ç∆ê¸ï™ÇÃìñÇΩÇËîªíË
       Collision Utility::CollisionPolygonLine(const Vector4& polygon_point0, const Vector4& polygon_point1,
          const Vector4& polygon_point2, const Vector4& polygon_point3,
@@ -399,6 +386,27 @@ namespace AppFrame {
          auto strCode = "0x" + redCode + greenCode + blueCode;
          unsigned int colorCode = std::stoi(strCode, nullptr, 16);
          return colorCode;
+      }
+
+      int Utility::GetRandom(const int min, const int max) {
+         std::uniform_int_distribution<> distr(min, max);
+         return distr(random);
+      }
+      double Utility::GetRandom(const double min, const double max) {
+         std::uniform_real_distribution<> distr(min, max);
+         return distr(random);
+      }
+      float Utility::GetRandom(const float min, const float max) {
+         std::uniform_real_distribution<> distr(min, max);
+         return static_cast<float>(distr(random));
+      }
+      Vector4 Utility::GetRandom(const Vector4 min, const Vector4 max) {
+         auto [minX, minY, minZ] = min.GetVec3();
+         auto [maxX, maxY, maxZ] = max.GetVec3();
+         auto randX = Utility::GetRandom(minX, maxX);
+         auto randY = Utility::GetRandom(minY, maxY);
+         auto randZ = Utility::GetRandom(minZ, maxZ);
+         return Vector4(randX, randY, randZ);
       }
    }
 }
