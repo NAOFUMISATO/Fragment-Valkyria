@@ -320,7 +320,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
 			//当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
 			object->collisionComponent().report().id(ReportId::HitFromBullet);
 			//ダメージの設定
-			objectBase.collisionComponent().damage(100.0);
+			object->collisionComponent().damage(100.0);
 			//遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
 			_owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
 		}
