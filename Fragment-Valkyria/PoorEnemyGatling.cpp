@@ -146,7 +146,7 @@ void PoorEnemyGatling::StateFall::Update() {
 
 void PoorEnemyGatling::StateGatling::Enter() {
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
-	_owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos");
+	_owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 	_owner._stateCnt = 0;
 	_gatlingCnt = 5;
 }
