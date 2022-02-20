@@ -52,6 +52,7 @@ void Bullet::Move() {
 void Bullet::HitCheckFromLargeEnemy() {
 	auto report = _collisionComponent->report();
 	if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+		/*SetDead();*/
 		_stateServer->GoToState("Die");
 	}
 }
@@ -59,7 +60,7 @@ void Bullet::HitCheckFromLargeEnemy() {
 void Bullet::HitCheckFromPoorEnemyGatling() {
 	auto report = _collisionComponent->report();
 	if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
-	
+		SetDead();
 		_stateServer->GoToState("Die");
 	}
 }
@@ -67,7 +68,7 @@ void Bullet::HitCheckFromPoorEnemyGatling() {
 void Bullet::OutCheckFromStage() {
 	auto report = _collisionComponent->report();
 	if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
-
+		SetDead();
 		_stateServer->GoToState("Die");
 	}
 }

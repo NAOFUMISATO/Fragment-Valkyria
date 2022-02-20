@@ -235,6 +235,43 @@ namespace AppFrame {
 
       }
 
+      void Matrix44::RotateAnyVecQuaternion(const Vector4 vec, const double degree, bool make) {
+          // クォータニオン生成
+          Quaternion qRot;
+          // 任意軸の単位化
+          auto anyVec = vec.Normalize();
+          auto [sin, cos] = GetSinCos(degree / 2.0);
+          auto [x, y, z] = anyVec.GetVec3();
+          x = sin * x;
+          y = sin * y;
+          z = sin * z;
+          auto w = cos;
+          qRot = std::make_tuple(x, y, z, w);
+
+          if (make) {
+              Unit();
+
+              _rowColumn[0][0] = 1.0 - 2.0 * (std::get<1>(qRot) * std::get<1>(qRot) + std::get<2>(qRot) * std::get<2>(qRot));
+              _rowColumn[0][1] = 2.0 * (std::get<0>(qRot) * std::get<1>(qRot) - std::get<3>(qRot) * std::get<2>(qRot));
+              _rowColumn[0][2] = 2.0 * (std::get<0>(qRot) * std::get<2>(qRot) + std::get<3>(qRot) * std::get<1>(qRot));
+              _rowColumn[1][0] = 2.0 * (std::get<0>(qRot) * std::get<1>(qRot) + std::get<3>(qRot) * std::get<2>(qRot));
+              _rowColumn[1][1] = 1.0 - 2.0 * (std::get<0>(qRot) * std::get<0>(qRot) + std::get<2>(qRot) * std::get<2>(qRot));
+              _rowColumn[1][2] = 2.0 * (std::get<1>(qRot) * std::get<2>(qRot) - std::get<3>(qRot) * std::get<0>(qRot));
+              _rowColumn[2][0] = 2.0 * (std::get<0>(qRot) * std::get<2>(qRot) - std::get<3>(qRot) * std::get<1>(qRot));
+              _rowColumn[2][1] = 2.0 * (std::get<1>(qRot) * std::get<2>(qRot) + std::get<3>(qRot) * std::get<0>(qRot));
+              _rowColumn[2][2] = 1.0 - 2.0 * (std::get<0>(qRot) * std::get<0>(qRot) + std::get<1>(qRot) * std::get<1>(qRot));
+          }
+          else {
+              MatrixArray array{ {{1.0 - 2.0 * (std::get<1>(qRot) * std::get<1>(qRot) + std::get<2>(qRot) * std::get<2>(qRot)), 2.0 * (std::get<0>(qRot) * std::get<1>(qRot) - std::get<3>(qRot) * std::get<2>(qRot)), 2.0 * (std::get<0>(qRot) * std::get<2>(qRot) + std::get<3>(qRot) * std::get<1>(qRot)), 0},
+                                 {2.0 * (std::get<0>(qRot) * std::get<1>(qRot) + std::get<3>(qRot) * std::get<2>(qRot)), 1.0 - 2.0 * (std::get<0>(qRot) * std::get<0>(qRot) + std::get<2>(qRot) * std::get<2>(qRot)), 2.0 * (std::get<1>(qRot) * std::get<2>(qRot) - std::get<3>(qRot) * std::get<0>(qRot)), 0},
+                                 {2.0 * (std::get<0>(qRot) * std::get<2>(qRot) - std::get<3>(qRot) * std::get<1>(qRot)), 2.0 * (std::get<1>(qRot) * std::get<2>(qRot) + std::get<3>(qRot) * std::get<0>(qRot)), 1.0 - 2.0 * (std::get<0>(qRot) * std::get<0>(qRot) + std::get<1>(qRot) * std::get<1>(qRot)), 0},
+                                 {0, 0, 0, 1}} };
+              Matrix44 rotAny(array);
+
+              *this = *this * rotAny;
+          }
+      }
+
       const Matrix44 Matrix44::GetRotate() const {
          MatrixArray noneTransfer = _rowColumn;
 

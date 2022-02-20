@@ -134,10 +134,10 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
     auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
     //上下の回転のマトリクス作成
     Matrix44 rotateUpDown = Matrix44();
-    rotateUpDown.RotateAnyVec(anyAxisVec, _owner._upDownAngle, true);
+    rotateUpDown.RotateAnyVecQuaternion(anyAxisVec, _owner._upDownAngle, true);
     //左右の回転のマトリクス作成
     Matrix44 rotateSide = Matrix44();
-    rotateSide.RotateAnyVec(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
+    rotateSide.RotateAnyVecQuaternion(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
     //上下の回転と左右の回転を合わせたマトリクスを作成
     _owner._rotateMatrix = rotateSide * rotateUpDown;
 }
