@@ -146,17 +146,18 @@ void LargeEnemy::CreateFallObject() {
 	auto leftMoveVec = MoveVec * leftTransMatrix;
 
 	constexpr double distance = 1000.0;
+	auto playerPos = GetObjServer().GetVecData("PlayerPos");
 
 	std::array<Vector4, 3> startPosition = {
-		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0),
-		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
-		_gameMain.objServer().GetVecData("PlayerPos") + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+		playerPos + Vector4(0.0, 500.0, 0.0),
+		playerPos + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
+		playerPos + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
 	};
 
 	for (auto i = 0; i < 3; ++i) {
 		auto fallObject = gameMain().objFactory().Create("FallObject");
 		fallObject->position(startPosition[i]);
-		_gameMain.objServer().Add(std::move(fallObject));
+		GetObjServer().Add(std::move(fallObject));
 	}
 }
 
