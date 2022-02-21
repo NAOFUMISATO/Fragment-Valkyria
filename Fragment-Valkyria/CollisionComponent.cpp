@@ -669,3 +669,29 @@ void CollisionComponent::OutStage() {
 	}
 	return;
 }
+
+bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
+	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+			auto& player = dynamic_cast<Player::Player&>(*object);
+			// プレイヤーが死亡モーションならば返す
+			if (player.isDeadMotion()) {
+				return false;
+			};
+		}
+	}
+	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+	auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
+	auto stageComponent = modeInGameBase->GetStage().stageComponent();
+
+	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
+	// 位置の取得
+	auto [x, y, z] = pos.GetVec3();
+	// 線分の作成
+	auto start = Vector4(x, 50.0, z);   // 始点
+	auto end = Vector4(x, -10000.0, z); // 終点
+
+	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
+
+	return result.HitFlag;
+}

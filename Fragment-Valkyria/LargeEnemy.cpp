@@ -366,33 +366,7 @@ void LargeEnemy::StateMove::Enter() {
 }
 
 void LargeEnemy::StateMove::Update() {
-	auto count = _owner.gameMain().modeServer().frameCount();
-	auto handle = _owner.modelAnimeComponent().modelHandle();
-	auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_right_hand");
-	auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_left_hand");
-	auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
-	auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
-	auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
-	auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
-	if (rightFootY >= 40.0) {
-		_footRightStep = true;
-	}
-	else {
-		if (_footRightStep) {
-			_owner.GetSoundComponent().Play("BossFootstep");
-			_footRightStep = false;
-		}
-	}
-	if (leftFootY >= 40.0) {
-		_footLeftStep = true;
-	}
-	else {
-		if (_footLeftStep) {
-			_owner.GetSoundComponent().Play("BossFootStep");
-			_footLeftStep = false;
-		}
-	}
-	
+	FootStepSound();
 	if (_owner._firstRotating) {
 		_owner.Rotate(_owner._firstRotating);
 	}
@@ -423,6 +397,35 @@ void LargeEnemy::StateMove::Update() {
 
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
+}
+
+void LargeEnemy::StateMove::FootStepSound() {
+	auto count = _owner.gameMain().modeServer().frameCount();
+	auto handle = _owner.modelAnimeComponent().modelHandle();
+	auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_right_hand");
+	auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_left_hand");
+	auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
+	auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
+	auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
+	auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
+	if (rightFootY >= 40.0) {
+		_footRightStep = true;
+	}
+	else {
+		if (_footRightStep) {
+			_owner.GetSoundComponent().Play("BossFootstep");
+			_footRightStep = false;
+		}
+	}
+	if (leftFootY >= 40.0) {
+		_footLeftStep = true;
+	}
+	else {
+		if (_footLeftStep) {
+			_owner.GetSoundComponent().Play("BossFootStep");
+			_footLeftStep = false;
+		}
+	}
 }
 
 void LargeEnemy::StateLaser::Enter() {

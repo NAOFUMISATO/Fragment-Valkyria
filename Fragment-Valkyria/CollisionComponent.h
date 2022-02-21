@@ -139,6 +139,12 @@ namespace FragmentValkyria {
 			 */
 			Vector4 LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved);
 			/**
+			 * \brief 指定位置の垂線とステージが当たっているかの確認
+			 * \param pos 垂線を出現させる位置(Y軸は考慮しない)
+			 * \return 指定位置の垂線とステージが当たっているか
+			 */
+			bool IsLineFromStage(const Vector4& pos);
+			/**
 			 * \brief ステージ外にいるか確認
 			 */
 			void OutStage();
