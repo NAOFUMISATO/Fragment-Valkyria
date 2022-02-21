@@ -97,6 +97,10 @@ namespace FragmentValkyria {
           */
          void ShootRotate();
          /**
+          * \brief プレイヤーの回転の処理
+          */
+         void Rotate();
+         /**
           * \brief 落下オブジェクトを持ち上げられる範囲にいるか確認
           */
          void HitCheckFromFallObjectRange();
@@ -139,6 +143,7 @@ namespace FragmentValkyria {
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
          Vector4 _direction{ Vector4() };           //!< 前進方向のベクトル
+         Vector4 _rotateDir{ Vector4() };           //!< プレイヤーの向かせたい向き
          Matrix44 _rightRotation{ Matrix44() };     //!< ベクトルを90度回転させるマトリクス
          Matrix44 _leftRotation{ Matrix44() };      //!< ベクトルを-90度回転させるマトリクス
          Matrix44 _backRotation{ Matrix44() };      //!< ベクトルを180度回転させるマトリクス

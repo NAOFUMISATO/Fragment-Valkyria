@@ -20,7 +20,7 @@ namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
        "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
-        "rocovery_rate", "max_hp"});
+        "rocovery_rate", "max_hp", "rotate_rate"});
 
     const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
@@ -32,7 +32,8 @@ namespace {
     const double CapsulePos2 = paramMap["capsule_pos2"];                      //!< カプセルの二つ目の座標までの位置からの高さ
     const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
     const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
-    const double RecoveryRate = paramMap["rocovery_rate"];                     //!< ヒットポイントの最大値からの回復する割合
+    const double RecoveryRate = paramMap["rocovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
+    const double RotateRate = paramMap["rotate_rate"];                      //!< 回転を緩やかにするとき面積が0だった時の回転させる値
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -52,6 +53,8 @@ void Player::Init(){
     _backRotation.RotateY(180.0, true);
     _isAim = false;        // エイム中かのフラグをfalse
     _isDeadMotion = false; // 死亡モーション中かのフラグをfalse
+
+    _rotateDir = GetForward() * RotateRate;
 }
 
 void Player::Input(InputManager& input) {
@@ -129,6 +132,14 @@ void Player::ShootRotate() {
     // Y軸からみたモデルの向いている方向の角度を設定
     auto radius = std::atan2(x, z);
     _rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
+}
+
+void Player::Rotate() {
+    auto forward = GetForward();
+    forward = forward * RotateRate;
+    auto rotateVec = forward.Cross(_rotateDir);
+    auto rotateValue = rotateVec.GetY();
+    _rotation.Add(Vector4(0.0, rotateValue, 0.0));
 }
 
 void Player::HitCheckFromFallObjectRange() {
@@ -385,6 +396,7 @@ void Player::StateIdle::Input(InputManager& input) {
    }
 }
 void Player::StateIdle::Update() {
+    _owner.Rotate();
     _owner._collisionComponent->ObjectRangeFromPlayer();
     _owner.HitCheckFromIdleFallObject();
     
@@ -458,15 +470,21 @@ void Player::StateRun::Input(InputManager& input) {
    } 
    else {
        _owner._moved.Normalized();
+       if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
+           Matrix44 mat;
+           mat.RotateY(1.0, true);
+           _owner._rotateDir = _owner._moved * mat * 20.0;
+       }
+       else {
+           _owner._rotateDir = _owner._moved * RotateRate;
+       }
        _owner._moved = _owner._moved * MoveSpeed;
-       auto [x, y, z] = _owner._moved.GetVec3();
-       auto radian = std::atan2(x, z);
-       _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radian));
    }
 }
 void Player::StateRun::Update() {
    FootStepSound();
    _owner.Move(_owner._moved);
+   _owner.Rotate();
    _owner._collisionComponent->ObjectRangeFromPlayer();
    _owner._collisionComponent->GatlingFromPlayer();
    _owner._collisionComponent->PlayerFromLaser();
