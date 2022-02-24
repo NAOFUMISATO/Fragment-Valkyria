@@ -33,7 +33,7 @@ namespace {
     const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
     const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
     const double RecoveryRate = paramMap["rocovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
-    const double RotateRate = paramMap["rotate_rate"];                      //!< 回転を緩やかにするとき面積が0だった時の回転させる値
+    const double RotateRate = paramMap["rotate_rate"];                        //!< 回転をさせるときのベクトルの面積を求めるときのベクトルの大きさ
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -138,7 +138,7 @@ void Player::Rotate() {
     auto forward = GetForward();
     forward = forward * RotateRate;
     auto rotateVec = forward.Cross(_rotateDir);
-    auto rotateValue = rotateVec.GetY();
+    auto rotateValue = 0.5 * rotateVec.GetY();
     _rotation.Add(Vector4(0.0, rotateValue, 0.0));
 }
 
