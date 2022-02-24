@@ -258,6 +258,9 @@
     <ClInclude Include="PoorEnemyMelee.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="PoorEnemyMeleeCreator.h">
+      <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -412,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="PoorEnemyMelee.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="PoorEnemyMeleeCreator.cpp">
+      <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -544,7 +544,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
 	//オブジェクトサーバーの各オブジェクトを取得
 	for (auto&& object : _owner.GetObjServer().runObjects()) {
 		//ガトリング攻撃をしてくる雑魚敵じゃなければ何もしない
-		if (object->GetObjType() != Object::ObjectBase::ObjectType::PoorEnemyGatling) {
+		if (object->GetObjType() != Object::ObjectBase::ObjectType::PoorEnemy) {
 			continue;
 		}
 		//ガトリング攻撃をしてくる雑魚敵のモデルハンドルを取得

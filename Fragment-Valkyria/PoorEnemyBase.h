@@ -11,28 +11,24 @@ namespace FragmentValkyria {
          void Init()override;
          void Update()override;
          void Draw()override;
-
+         virtual ObjectType GetObjType() const override { return ObjectType::PoorEnemy; }
+         
       protected:
          void Fall();
          void Rotate();
-         void CreateGatling();
-
          void HitCheckFromBullet();
          void HitCheckFromFallObject();
-
+         
          int _stateCnt{ 0 };
-         int _collision{ 0 };
+         int _collNum{ 0 };
          double _hp{ 20.0 };
          std::vector<std::string> _actionList;
          std::vector<std::string> _action;
-         Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
-         Vector4 _gatlingMoveDirection{ Vector4(0.0, 0.0, 0.0) };
 
       public:
          class StateBase : public AppFrame::State::StateBaseRoot
          {
          public:
-            
             StateBase(PoorEnemyBase& owner) : _owner{ owner } {};
             /**
              * \brief ï`âÊèàóù
@@ -58,10 +54,8 @@ namespace FragmentValkyria {
             void Update() override;
          };
          
-         class StateFall : public StateBase
-         {
+         class StateFall : public StateBase{
          public:
-            
             StateFall(PoorEnemyBase& owner) : StateBase{ owner } {};
             /**
              * \brief ì¸å˚èàóù

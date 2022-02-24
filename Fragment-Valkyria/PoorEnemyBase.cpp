@@ -22,14 +22,18 @@ PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gam
 
 void PoorEnemyBase::Init() {
 	auto modelHandle = _modelAnimeComponent->modelHandle();
-	_collision = _modelAnimeComponent->FindFrame("Spider");
+	_collNum = _modelAnimeComponent->FindFrame("Spider");
 	// フレーム1をナビメッシュとして使用
-	MV1SetupCollInfo(modelHandle, _collision, 1, 1, 1);
+	MV1SetupCollInfo(modelHandle, _collNum, 1, 1, 1);
 }
 
 void PoorEnemyBase::Update() {
 	//コリジョン情報の更新
-	MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collision);
+	MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collNum);
+	_collisionComponent->BulletFromPoorEnemyGatling();
+	_collisionComponent->PoorEnemyFromPlayer();
+	HitCheckFromBullet();
+	HitCheckFromFallObject();
 	// 状態の更新
 	_stateServer->Update();
 	// ワールド行列の更新
@@ -57,16 +61,6 @@ void PoorEnemyBase::Rotate() {
 	auto forward = Vector4(0.0, 0.0, 1.0) * rotate;
 	auto addRotate = 0.5 * forward.Cross(toPlayer).GetY();
 	_rotation.Add(Vector4(0.0, addRotate * RotateSpeed, 0.0));
-}
-
-void PoorEnemyBase::CreateGatling() {
-	auto handle = modelAnimeComponent().modelHandle();
-	auto gatlingFrame = modelAnimeComponent().FindFrame("Spider_Armature");
-	auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
-	_gameMain.objServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
-	_gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
-	auto gatling = _gameMain.objFactory().Create("Gatling");
-	gameMain().objServer().Add(std::move(gatling));
 }
 
 void PoorEnemyBase::HitCheckFromBullet() {
@@ -108,14 +102,6 @@ void PoorEnemyBase::StateIdle::Enter() {
 
 void PoorEnemyBase::StateIdle::Update() {
 	_owner.Rotate();
-	if (_owner._stateCnt >= OneFrame * 7) {
-		_owner._stateServer->GoToState("Gatling");
-	}
-	_owner.collisionComponent().BulletFromPoorEnemyGatling();
-	_owner.collisionComponent().PoorEnemyFromPlayer();
-	_owner.HitCheckFromBullet();
-	_owner.HitCheckFromFallObject();
-
 	++_owner._stateCnt;
 }
 

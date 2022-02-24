@@ -56,11 +56,11 @@ namespace FragmentValkyria {
             Enemy,            //!< 敵
             Stage,            //!< ステージ
             LargeEnemy,       
+            PoorEnemy,
             FallObject,
             Gatling,
             Bullet,
-            Laser,
-            PoorEnemyGatling
+            Laser
          };
 
          /**

@@ -27,6 +27,9 @@
 		{
 			"keyname": "PoorEnemyGatling",
 			"filename": "Spider_3.mv1"
+		},{
+			"keyname": "PoorEnemyMelee",
+			"filename": "Spider_3.mv1"
 		}
 	]
 }

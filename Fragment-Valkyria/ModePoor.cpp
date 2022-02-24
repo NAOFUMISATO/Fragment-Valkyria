@@ -12,6 +12,7 @@
 #include "PlayerCreator.h"
 #include "Player.h"
 #include "PoorEnemyGatlingCreator.h"
+#include "PoorEnemyMeleeCreator.h"
 #include "StageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
@@ -42,6 +43,7 @@ void ModePoor::Enter() {
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
+   objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>(_gameMain));
 
    objFactory.LoadSpawnTables("poor", {"poorwave1","poorwave2" ,"poorwave3" ,"poorwave4" });
 
@@ -87,7 +89,7 @@ void ModePoor::WaveProcess() {
    auto&& runObjects = GetObjServer().runObjects();
    auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
-         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemyGatling) && obj->IsActive(); });
+         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
    if (!isActiveEnemy) {
       switch (_wave) {
       case 1:

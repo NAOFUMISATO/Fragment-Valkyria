@@ -13,6 +13,7 @@ PoorEnemyMelee::PoorEnemyMelee(Game::GameMain& gameMain) : PoorEnemyBase{ gameMa
 }
 
 void PoorEnemyMelee::Init() {
+	PoorEnemyBase::Init();
 	_actionList.emplace_back("FallObject");
 	_actionList.emplace_back("Gatling");
 	_actionList.emplace_back("Move");
@@ -20,6 +21,8 @@ void PoorEnemyMelee::Init() {
 }
 
 void PoorEnemyMelee::Rush(){
+	
+	
 }
 
 
@@ -28,18 +31,26 @@ void PoorEnemyMelee::StateIdle::Enter() {
 }
 
 void PoorEnemyMelee::StateIdle::Update() {
+	if (_owner._stateCnt >= 60 * 7) {
+		_owner._stateServer->GoToState("Rush");
+	}
    PoorEnemyBase::StateIdle::Update();
 }
 
 
 void PoorEnemyMelee::StateRush::Enter() {
-
+	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+	_owner._stateCnt = 0;
+	_moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+	_moved.Normalized();
 }
 
 void PoorEnemyMelee::StateRush::Update() {
-
-}
-
-void PoorEnemyMelee::StateRush::Draw() {
-
+	if (_owner._stateCnt <= 60*3) {
+		_owner._position = _owner._position + _moved * 10.0;
+	}
+	else {
+		_owner._stateServer->GoToState("Idle");
+	}
+	_owner._stateCnt++;
 }
