@@ -116,19 +116,20 @@ void LargeEnemy::CreateFallObject() {
 	rightTransMatrix.RotateY(45.0, true);
 	leftTransMatrix.RotateY(-45.0, true);
 
-	auto MoveVec = GetObjServer().GetVecData("CamTarget") - GetObjServer().GetVecData("CamPos");
+	auto MoveVec = GetObjServer().GetVecData("PlayerPos") - _position;
+	auto LargeEnemyToPlyDistance = MoveVec.Lenght();
 	MoveVec.Normalized();
 
 	auto rightMoveVec = MoveVec * rightTransMatrix;
 	auto leftMoveVec = MoveVec * leftTransMatrix;
 
-	constexpr double distance = 1000.0;
+	auto distance = LargeEnemyToPlyDistance - 1000.0;
 	auto playerPos = GetObjServer().GetVecData("PlayerPos");
 
 	std::array<Vector4, 3> startPosition = {
 		playerPos + Vector4(0.0, 500.0, 0.0),
-		playerPos + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
-		playerPos + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+		_position + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
+		_position + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
 	};
 
 	for (auto i = 0; i < 3; ++i) {
@@ -318,10 +319,10 @@ void LargeEnemy::StateGatling::Enter() {
 }
 
 void LargeEnemy::StateGatling::Update() {
-	if (_owner._stateCnt % GatlingFrame == 0 && _owner._attack == false) {
+	if (_owner._stateCnt % GatlingFrame == 0 && _owner._attack == false && _owner._stateCnt >= 100) {
 		_owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
 		_owner._rotateDir.Normalized();
-		_owner._rotateDir = _owner._rotateDir * 5.0;
+		_owner._rotateDir = _owner._rotateDir * 50.0;
 		_owner._attack = true;
 		_owner._rotating = true;
 		++_owner._stateCnt;
@@ -486,5 +487,13 @@ void LargeEnemy::StateLaser::Update() {
 	}
 
 	++_owner._stateCnt;
+
+}
+
+void LargeEnemy::StateFanGatling::Enter() {
+
+}
+
+void LargeEnemy::StateFanGatling::Update() {
 
 }

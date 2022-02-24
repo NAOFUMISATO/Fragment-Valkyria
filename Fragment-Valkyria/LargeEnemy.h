@@ -221,8 +221,29 @@ namespace FragmentValkyria {
                 void Update() override;
             };
             /**
-            * \class ガトリング攻撃状態クラス
-            * \brief ガトリング攻撃状態の処理を回す
+            * \class 扇状ガトリング攻撃状態クラス
+            * \brief 扇状ガトリング攻撃状態の処理を回す
+            */
+            class StateFanGatling : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateFanGatling(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+            * \class 死状態クラス
+            * \brief 死亡状態の処理を回す
             */
             class StateDie : public StateBase
             {
