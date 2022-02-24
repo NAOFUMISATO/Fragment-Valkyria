@@ -20,19 +20,14 @@ void PoorEnemyMelee::Init() {
 	_actionList.emplace_back("Laser");
 }
 
-void PoorEnemyMelee::Rush(){
-	
-	
-}
-
 
 void PoorEnemyMelee::StateIdle::Enter() {
    PoorEnemyBase::StateIdle::Enter();
 }
 
 void PoorEnemyMelee::StateIdle::Update() {
-	if (_owner._stateCnt >= 60 * 7) {
-		_owner._stateServer->GoToState("Rush");
+	if (_owner._stateCnt >= 60 * 5) {
+		_owner._stateServer->GoToState("SideStep");
 	}
    PoorEnemyBase::StateIdle::Update();
 }

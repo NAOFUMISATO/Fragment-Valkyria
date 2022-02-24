@@ -9,9 +9,6 @@ namespace FragmentValkyria {
          PoorEnemyMelee(Game::GameMain& gameMain);
          void Init()override;
 
-      private:
-         void Rush();
-
       public:
          class StateIdle : public PoorEnemyBase::StateIdle {
          public:

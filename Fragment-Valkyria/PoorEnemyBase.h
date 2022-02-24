@@ -26,8 +26,7 @@ namespace FragmentValkyria {
          std::vector<std::string> _action;
 
       public:
-         class StateBase : public AppFrame::State::StateBaseRoot
-         {
+         class StateBase : public AppFrame::State::StateBaseRoot{
          public:
             StateBase(PoorEnemyBase& owner) : _owner{ owner } {};
             /**
@@ -39,8 +38,7 @@ namespace FragmentValkyria {
             PoorEnemyBase& _owner;
          };
         
-         class StateIdle : public StateBase
-         {
+         class StateIdle : public StateBase{
          public:
             
             StateIdle(PoorEnemyBase& owner) : StateBase{ owner } {};
@@ -52,6 +50,25 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+         };
+
+         class StateSideStep : public StateBase {
+         public:
+
+            StateSideStep(PoorEnemyBase& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+
+         private:
+            void SideStepDecide();
+            Vector4 _moveOnDir{ 0,0,0 };
+            Vector4 _moveOnPos{ 0,0,0 };
          };
          
          class StateFall : public StateBase{
@@ -67,8 +84,7 @@ namespace FragmentValkyria {
             void Update() override;
          };
          
-         class StateDie : public StateBase
-         {
+         class StateDie : public StateBase{
          public:
             
             StateDie(PoorEnemyBase& owner) : StateBase{ owner } {};

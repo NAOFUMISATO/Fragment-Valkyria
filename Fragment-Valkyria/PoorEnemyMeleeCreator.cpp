@@ -20,6 +20,7 @@ std::unique_ptr<Object::ObjectBase> PoorEnemyMeleeCreator::Create() {
 	auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared <Enemy::PoorEnemyMelee::StateFall>(*poorEnemyMelee));
 	state->Register("Idle", std::make_shared<Enemy::PoorEnemyMelee::StateIdle>(*poorEnemyMelee));
 	state->Register("Rush", std::make_shared<Enemy::PoorEnemyMelee::StateRush>(*poorEnemyMelee));
+	state->Register("SideStep", std::make_shared<Enemy::PoorEnemyMelee::StateSideStep>(*poorEnemyMelee));
 	state->Register("Die", std::make_shared<Enemy::PoorEnemyMelee::StateDie>(*poorEnemyMelee));
 	poorEnemyMelee->stateServer(std::move(state));
 

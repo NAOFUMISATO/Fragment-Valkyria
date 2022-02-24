@@ -14,10 +14,13 @@ namespace {
 	const double Gravity = paramMap["gravity"];
 	const double RotateSpeed = paramMap["rotate_speed"];
 	constexpr auto OneFrame = 60;
+	constexpr auto DegreeQuarter = 90;
+	constexpr auto StepDistance = 1000.0;
+	constexpr auto StepSpeed = 15.0;
+	constexpr auto StepDistanceLimit = 100.0;
 }
 
 PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
-
 }
 
 void PoorEnemyBase::Init() {
@@ -105,6 +108,19 @@ void PoorEnemyBase::StateIdle::Update() {
 	++_owner._stateCnt;
 }
 
+void PoorEnemyBase::StateSideStep::Enter() {
+   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|lump", true);
+	SideStepDecide();
+}
+
+void PoorEnemyBase::StateSideStep::Update() {
+	auto length = (_moveOnPos - _owner._position).Lenght();
+	if (length <= StepDistanceLimit){
+		_owner._stateServer->GoToState("Idle");
+	}
+	_owner._position = _owner._position + _moveOnDir * StepSpeed;
+}
+
 void PoorEnemyBase::StateFall::Enter() {
 	_owner._modelAnimeComponent->ChangeAnime("Spider_Armature|fall", true);
 	_owner._stateCnt = 0;
@@ -137,3 +153,44 @@ void PoorEnemyBase::StateDie::Update() {
 	--_timeOver;
 }
 
+void PoorEnemyBase::StateSideStep::SideStepDecide() {
+	auto moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+	moved.Normalized();
+	auto quarterRight = AppFrame::Math::Matrix44();
+	auto quarterLeft = AppFrame::Math::Matrix44();
+	quarterRight.RotateY(DegreeQuarter, false);
+	quarterLeft.RotateY(-DegreeQuarter, false);
+	auto rightDir = moved * quarterRight;
+	auto leftDir = moved * quarterLeft;
+	auto rightPos = _owner._position + rightDir * StepDistance;
+	auto leftPos = _owner._position + leftDir * StepDistance;
+	auto isRightSafeZone = _owner._collisionComponent->IsLineFromStage(rightPos);
+	auto isLeftSafeZone = _owner._collisionComponent->IsLineFromStage(leftPos);
+	auto random = AppFrame::Math::Utility::GetRandom(0, 1);
+	if (random == 0) {
+		if (isRightSafeZone) {
+			_moveOnDir = rightDir;
+			_moveOnPos = rightPos;
+		}
+		else if (isLeftSafeZone) {
+			_moveOnDir = leftDir;
+			_moveOnPos = leftPos;
+		}
+		else {
+			_owner._stateServer->GoToState("Idle");
+		}
+	}
+	if (random == 1) {
+		if (isLeftSafeZone) {
+			_moveOnDir = leftDir;
+			_moveOnPos = leftPos;
+		}
+		else if (isRightSafeZone) {
+			_moveOnDir = rightDir;
+			_moveOnPos = rightPos;
+		}
+		else {
+			_owner._stateServer->GoToState("Idle");
+		}
+	}
+}
