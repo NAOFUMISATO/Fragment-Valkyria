@@ -76,29 +76,6 @@ void LargeEnemy::CreateGatling() {
 }
 
 void LargeEnemy::CreateLaser() {
-	for (auto&& objects : _gameMain.objServer().runObjects()) {
-		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*objects);
-
-		if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::FallObject) {
-
-			auto fallObjectToPly = _gameMain.objServer().GetVecData("PlayerPos") - objectBase.position();
-			auto [x, y, z] = fallObjectToPly.GetVec3();
-			auto checkSize = x * x + y * y + z * z;
-			auto checkPair = std::make_pair(checkSize, objectBase.position());
-			_objectDistance.emplace_back(checkPair);
-
-			continue;
-		}
-	}
-	std::sort(_objectDistance.begin(), _objectDistance.end());
-	if (_objectDistance.empty()) {
-		GetObjServer().RegistVector("LaserDirectionPos", _gameMain.objServer().GetVecData("PlayerPos"));
-	}
-	else {
-		GetObjServer().RegistVector("LaserDirectionPos", _objectDistance[0].second);
-	}
-
-	_objectDistance.clear();
 
 	auto laser = gameMain().objFactory().Create("Laser");
 	GetObjServer().Add(std::move(laser));
@@ -161,6 +138,33 @@ void LargeEnemy::CreateFallObject() {
 	}
 }
 
+void LargeEnemy::SetLaserPosition() {
+	for (auto&& objects : _gameMain.objServer().runObjects()) {
+		auto& objectBase = dynamic_cast<Object::ObjectBase&>(*objects);
+
+		if (objectBase.GetObjType() == Object::ObjectBase::ObjectType::FallObject) {
+
+			auto fallObjectToPly = _gameMain.objServer().GetVecData("PlayerPos") - objectBase.position();
+			auto [x, y, z] = fallObjectToPly.GetVec3();
+			auto checkSize = x * x + y * y + z * z;
+			auto checkPair = std::make_pair(checkSize, objectBase.position());
+			_objectDistance.emplace_back(checkPair);
+
+			continue;
+		}
+	}
+	std::sort(_objectDistance.begin(), _objectDistance.end());
+	if (_objectDistance.empty()) {
+		GetObjServer().RegistVector("LaserDirectionPos", _gameMain.objServer().GetVecData("PlayerPos"));
+	}
+	else {
+		auto [x, y, z] = _objectDistance[0].second.GetVec3();
+		GetObjServer().RegistVector("LaserDirectionPos", Vector4(x, 0.0, z));
+	}
+
+	_objectDistance.clear();
+}
+
 void LargeEnemy::HitCheckFromFallObject() {
 	auto report = _collisionComponent->report();
 	if (report.id() == Collision::CollisionComponent::ReportId::HitFromFallObject) {
@@ -197,9 +201,9 @@ void LargeEnemy::Move(const Vector4& moved) {
 	_position = position;
 }
 
-void LargeEnemy::Rotate(bool& rotating) {
+void LargeEnemy::AugularRotate(bool& rotating) {
 	_rotation.Add(0.0, _addRotate, 0.0);
-
+	
 	Matrix44 rotateY = Matrix44();
 	rotateY.RotateY(_rotation.GetY(), true);
 	Vector4 forward = Vector4(-1.0, 0.0, 0.0);
@@ -217,6 +221,17 @@ void LargeEnemy::Rotate(bool& rotating) {
 			rotating = false;
 		}
 	}
+}
+
+void LargeEnemy::AreaRotate(bool& rotating) {
+	// モデルがデフォルトでZ座標のマイナス方向を向いているので反転させておく
+	auto forward = GetForward() * -1.0;
+	auto area = forward.Cross(_rotateDir);
+	auto rotateValue = 0.5 * area.GetY();
+	if (rotateValue <= 0.0 && rotateValue >= -0.1 || rotateValue >= 0.0 && rotateValue <= 0.1) {
+		rotating = false;
+	}
+	_rotation.Add(0.0, rotateValue, 0.0);
 }
 
 void LargeEnemy::SetAddRotate() {
@@ -303,10 +318,26 @@ void LargeEnemy::StateGatling::Enter() {
 }
 
 void LargeEnemy::StateGatling::Update() {
-	if (_owner._stateCnt % GatlingFrame == 0) {
-		_owner.CreateGatling();
-		--_owner._gatlingCnt;
-		_owner.GetSoundComponent().Play("BossGatling");
+	if (_owner._stateCnt % GatlingFrame == 0 && _owner._attack == false) {
+		_owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+		_owner._rotateDir.Normalized();
+		_owner._rotateDir = _owner._rotateDir * 5.0;
+		_owner._attack = true;
+		_owner._rotating = true;
+		++_owner._stateCnt;
+	}
+
+	if (_owner._attack) {
+		_owner.AreaRotate(_owner._rotating);
+		if (!_owner._rotating) {
+			_owner.CreateGatling();
+			--_owner._gatlingCnt;
+			_owner.GetSoundComponent().Play("BossGatling");
+			_owner._attack = false;
+		}
+	}
+	else {
+		++_owner._stateCnt;
 	}
 
 	if (_owner._gatlingCnt <= 0) {
@@ -315,8 +346,6 @@ void LargeEnemy::StateGatling::Update() {
 
 	_owner.HitCheckFromFallObject();
 	_owner.HitCheckFromBullet();
-
-	++_owner._stateCnt;
 }
 
 void LargeEnemy::StateDie::Enter() {
@@ -368,7 +397,7 @@ void LargeEnemy::StateMove::Enter() {
 void LargeEnemy::StateMove::Update() {
 	FootStepSound();
 	if (_owner._firstRotating) {
-		_owner.Rotate(_owner._firstRotating);
+		_owner.AugularRotate(_owner._firstRotating);
 	}
 	else {
 
@@ -381,7 +410,7 @@ void LargeEnemy::StateMove::Update() {
 			}
 
 			if (_owner._endRotating) {
-				_owner.Rotate(_owner._endRotating);
+				_owner.AugularRotate(_owner._endRotating);
 			}
 			else {
 				_owner._stateServer->GoToState("Idle");
@@ -429,7 +458,12 @@ void LargeEnemy::StateMove::FootStepSound() {
 }
 
 void LargeEnemy::StateLaser::Enter() {
+	_owner.SetLaserPosition();
+	_owner._rotateDir = _owner._gameMain.objServer().GetVecData("LaserDirectionPos") - _owner._position;
+	_owner._rotateDir.Normalized();
+	_owner._rotateDir = _owner._rotateDir * 5.0;
 	_owner._stateCnt = 0;
+	_owner._rotating = true;
 	_owner._modelAnimeComponent->ChangeAnime("beem", true);
 	_createLaser = false;
 	_owner.GetSoundComponent().Play("BossCharge");
@@ -437,9 +471,12 @@ void LargeEnemy::StateLaser::Enter() {
 
 void LargeEnemy::StateLaser::Update() {
 	if (_owner._stateCnt >= 60 * 3 && !_createLaser) {
-		_owner.CreateLaser();
-		_owner.GetSoundComponent().Play("BossBeam");
-		_createLaser = true;
+		_owner.AreaRotate(_owner._rotating);
+		if (!_owner._rotating) {
+			_owner.CreateLaser();
+			_owner.GetSoundComponent().Play("BossBeam");
+			_createLaser = true;
+		}
 	}
 	else if (_owner._stateCnt >= 60 * 6) {
 		_owner._fallObjectflag = false;
@@ -449,4 +486,5 @@ void LargeEnemy::StateLaser::Update() {
 	}
 
 	++_owner._stateCnt;
+
 }
