@@ -119,7 +119,7 @@ void PoorEnemyBase::StateIdle::Update() {
 }
 
 void PoorEnemyBase::StateSideStep::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|lump", true);
+   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
    SideStepDecide();
 }
 

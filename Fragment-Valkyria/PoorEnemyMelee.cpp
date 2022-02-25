@@ -24,8 +24,8 @@ void PoorEnemyMelee::Init() {
 void PoorEnemyMelee::Rush(const Vector4& moved) {
    auto [x, y, z] = moved.GetVec3();
    auto position = _position;
-   position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(x, y, 0.0));
-   position = _collisionComponent->LargeEnemyCheckStage(position, Vector4(0.0, y, z));
+   position = _collisionComponent->PoorEnemyCheckStage(position, Vector4(x, y, 0.0));
+   position = _collisionComponent->PoorEnemyCheckStage(position, Vector4(0.0, y, z));
    _position = position;
 }
 

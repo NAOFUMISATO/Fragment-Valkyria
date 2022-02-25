@@ -30,6 +30,8 @@ void CameraComponent::Init() {
     auto posToTarget = _target - _position;
     posToTarget.Normalized();
     _posToTarget = posToTarget * 300.0;
+    // カメラの描画限界および、視野角の初期化
+    _nearFarFov = { 100.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0) };
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
@@ -50,6 +52,8 @@ void CameraComponent::Update() {
     auto projectionMatrix = GetCameraProjectionMatrix(cameraNear, cameraFar, fov);
     SetupCamera_ProjectionMatrix(ToDX(projectionMatrix));
 
+    // 3Dサウンドのリスナー設定(カメラと同一)
+    Set3DSoundListenerPosAndFrontPosAndUpVec(ToDX(_position), ToDX(_target), ToDX(_up));
 }
 
 AppFrame::Math::Matrix44 CameraComponent::GetCameraViewMatrix(AppFrame::Math::Vector4& cameraPosition, AppFrame::Math::Vector4& cameraTarget, AppFrame::Math::Vector4& cameraUp) {

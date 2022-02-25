@@ -11,10 +11,10 @@
  /**
   * \brief プロジェクト名
   */
- namespace FragmentValkyria {
-    namespace Game {
-        class GameMain;
-    }
+namespace FragmentValkyria {
+   namespace Game {
+      class GameMain;
+   }
    /**
     * \brief カメラ関係
     */
@@ -86,7 +86,7 @@
           * \param state 各状態クラスのインスタンス
           */
          void stateServer(std::unique_ptr<StateServer> state) {
-             _stateServer = std::move(state);
+            _stateServer = std::move(state);
          }
          /**
           * \brief 状態一括管理クラスの取得
@@ -99,7 +99,7 @@
           */
          void SetZoom(bool zoom) { _zoom = zoom; }
          /**
-          * \brief 
+          * \brief
           * \param velo
           */
          void SetVibValue(double value) { _vibrationValue = value; }
@@ -137,7 +137,7 @@
          Vector4 _position{ 0, 0, 0 };                                      //!< 位置
          Vector4 _target{ 0, 0, 0 };                                        //!< 注視点
          Vector4 _up{ 0, 1 ,0 };                                            //!< 上方向
-         Vector4 _forwardOfTarget{ 0, 0, 1};                                //!< 注視点オブジェクトの向き
+         Vector4 _forwardOfTarget{ 0, 0, 1 };                                //!< 注視点オブジェクトの向き
          Vector4 _plyToPos{ 0, 0, 0 };                                      //!< プレイヤーの位置からのカメラの位置へのベクトル
          Vector4 _plyToTarget{ 0, 0, 0 };                                   //!< プレイヤーの位置からのカメラの注視点へのベクトル
          Vector4 _firstPlyToPos{ 0, 0, 0 };                                 //!< カメラが生成された時のプレイヤーの位置からカメラの位置までのベクトル
@@ -154,110 +154,108 @@
          double _upDownAngle{ 0.0 };                                        //!< カメラの上下の回転の角度
          double _sideAngle{ 0.0 };                                          //!< カメラの左右の回転の角度
          double _vibrationVelocity{ 0.0 };                                  //!< 振動させるときに使う速度
-         double _vibrationValue{ 60.0 };                                     //!< 振動した時のYの位置
-         std::tuple<double, double, double> _nearFarFov{                    //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
-            std::make_tuple(100.0,10000.0,AppFrame::Math::Utility::DegreeToRadian(60.0)) };
-
-         std::unique_ptr<StateServer> _stateServer;                        //!< 状態の一括管理クラスのポインタ
+         double _vibrationValue{ 60.0 };                                    //!< 振動した時のYの位置
+         std::tuple<double, double, double> _nearFarFov{ 0.0,0.0,0.0 };     //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
+         std::unique_ptr<StateServer> _stateServer;                         //!< 状態の一括管理クラスのポインタ
 
       public:
-          /**
-          * \class カメラの状態の基底クラス
-          * \brief 各カメラの状態はこれを派生して定義する
-          */
-          class StateBase : public AppFrame::State::StateBaseRoot {
-          public:
-              /**
-              * \brief コンストラクタ
-              * \param owner カメラの参照
-              */
-              StateBase(CameraComponent& owner) : _owner{ owner } {};
-
-          protected:
-              CameraComponent& _owner;   //!< カメラの参照
-          };
-          /**
-          * \class 通常状態クラス
-          * \brief 通常状態の処理を回す
-          */
-          class StateNormal : public StateBase
-          {
-          public:
-              /**
-               * \brief コンストラクタ
-               * \param owner カメラの参照
-               */
-              StateNormal(CameraComponent& owner) : StateBase{ owner } {};
-              /**
-               * \brief 入力処理
-               * \param input 入力一括管理クラスの参照
-               */
-              void Input(InputManager& input) override;
-              /**
-               * \brief 更新処理
-               */
-              void Update() override;
-          };
-          /**
-          * \class ズームイン状態クラス
-          * \brief ズームイン状態の処理を回す
-          */
-          class StateZoomIn : public StateBase
-          {
-          public:
-              /**
-               * \brief コンストラクタ
-               * \param owner カメラの参照
-               */
-              StateZoomIn(CameraComponent& owner) : StateBase{ owner } {};
-              /**
-               * \brief 入口処理
-               */
-              void Enter() override;
-              /**
-               * \brief 更新処理
-               */
-              void Update() override;
-          };
-          /**
-         * \class 射撃準備状態クラス
-         * \brief 射撃準備状態の処理を回す
+         /**
+         * \class カメラの状態の基底クラス
+         * \brief 各カメラの状態はこれを派生して定義する
          */
-          class StateShootReady : public StateBase
-          {
-          public:
-              /**
-               * \brief コンストラクタ
-               * \param owner カメラの参照
-               */
-              StateShootReady(CameraComponent& owner) : StateBase{ owner } {};
-              /**
-               * \brief 入力処理
-               * \param input 入力一括管理クラスの参照
-               */
-              void Input(InputManager& input) override;
-              /**
-               * \brief 更新処理
-               */
-              void Update() override;
-          };
-          /**
-          * \class ズームアウト状態クラス
-          * \brief ズームアウト状態の処理を回す
-          */
-          class StateZoomOut : public StateBase
-          {
-          public:
-              /**
-               * \brief コンストラクタ
-               * \param owner カメラの参照
-               */
-              StateZoomOut(CameraComponent& owner) : StateBase{ owner } {};
-              /**
-               * \brief 更新処理
-               */
-              void Update() override;
-          };
+         class StateBase : public AppFrame::State::StateBaseRoot {
+         public:
+            /**
+            * \brief コンストラクタ
+            * \param owner カメラの参照
+            */
+            StateBase(CameraComponent& owner) : _owner{ owner } {};
+
+         protected:
+            CameraComponent& _owner;   //!< カメラの参照
+         };
+         /**
+         * \class 通常状態クラス
+         * \brief 通常状態の処理を回す
+         */
+         class StateNormal : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner カメラの参照
+             */
+            StateNormal(CameraComponent& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
+         /**
+         * \class ズームイン状態クラス
+         * \brief ズームイン状態の処理を回す
+         */
+         class StateZoomIn : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner カメラの参照
+             */
+            StateZoomIn(CameraComponent& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
+         /**
+        * \class 射撃準備状態クラス
+        * \brief 射撃準備状態の処理を回す
+        */
+         class StateShootReady : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner カメラの参照
+             */
+            StateShootReady(CameraComponent& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
+         /**
+         * \class ズームアウト状態クラス
+         * \brief ズームアウト状態の処理を回す
+         */
+         class StateZoomOut : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner カメラの参照
+             */
+            StateZoomOut(CameraComponent& owner) : StateBase{ owner } {};
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
       };
    }
 }
