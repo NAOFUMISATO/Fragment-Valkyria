@@ -74,6 +74,10 @@ namespace FragmentValkyria {
              */
             void CreateFallObject();
             /**
+             * \brief レーザーを打つ場所を決める
+             */
+            void SetLaserPosition();
+            /**
              * \brief 落下オブジェクトに当たったか確認
              */
             void HitCheckFromFallObject();
@@ -90,7 +94,11 @@ namespace FragmentValkyria {
              * \brief 回転処理
              * \param rotating 回転するか
              */
-            void Rotate(bool& rotating);
+            void AugularRotate(bool& rotating);
+            /**
+             * \brief 面積による回転
+             */
+            void AreaRotate(bool& rotating);
             /**
              * \brief 回転の角速度の設定
              */
@@ -104,12 +112,15 @@ namespace FragmentValkyria {
             bool _moving{ false };
             bool _firstRotating{ true };
             bool _endRotating{ true };
+            bool _rotating{ false };
+            bool _attack{ false };
             double _rotateDot{ 0.0 };
             double _addRotate{ 1.0 };
             double _hp{ 100.0 };
             int _createNum{ 0 };
 
             Vector4 _moved{ 0.0, 0.0, 0.0 }; //!< 移動量のベクトル
+            Vector4 _rotateDir{ 0.0, 0.0, 0.0 }; //!< 回転の向きのベクトル
 
             std::vector<std::pair<double, Vector4>> _objectDistance;
 
@@ -210,8 +221,29 @@ namespace FragmentValkyria {
                 void Update() override;
             };
             /**
-            * \class ガトリング攻撃状態クラス
-            * \brief ガトリング攻撃状態の処理を回す
+            * \class 扇状ガトリング攻撃状態クラス
+            * \brief 扇状ガトリング攻撃状態の処理を回す
+            */
+            class StateFanGatling : public StateBase
+            {
+            public:
+                /**
+                 * \brief コンストラクタ
+                 * \param owner ラージエネミーの参照
+                 */
+                StateFanGatling(LargeEnemy& owner) : StateBase{ owner } {};
+                /**
+                 * \brief 入口処理
+                 */
+                void Enter() override;
+                /**
+                 * \brief 更新処理
+                 */
+                void Update() override;
+            };
+            /**
+            * \class 死状態クラス
+            * \brief 死亡状態の処理を回す
             */
             class StateDie : public StateBase
             {
