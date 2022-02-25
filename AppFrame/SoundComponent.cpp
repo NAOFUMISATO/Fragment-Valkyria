@@ -11,6 +11,7 @@
 #include <DxLib.h>
 #include "ResourceServer.h"
 #include "GameBase.h"
+#include "DxUtility.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -20,15 +21,15 @@ namespace AppFrame {
     */
    namespace Sound {
 
-      void SoundComponent::Play(std::string_view key) {
-         Play(key, DX_PLAYTYPE_BACK);
+      void SoundComponent::Play(std::string_view key, Math::Vector4 pos) {
+         Play(key, DX_PLAYTYPE_BACK,pos);
       }
-      void SoundComponent::PlayLoop(std::string_view key) {
-         Play(key, DX_PLAYTYPE_LOOP);
+      void SoundComponent::PlayLoop(std::string_view key, Math::Vector4 pos) {
+         Play(key, DX_PLAYTYPE_LOOP, pos);
       }
 
       void SoundComponent::ChangeVolume(std::string_view key, int changeVolume) {
-         auto&& [filename, handle, volume] = _gameBase.resServer().GetSoundInfo(key);
+         auto&& [soundData, handle] = _gameBase.resServer().GetSoundInfo(key);
 
          if (handle != -1) {
             // 読み込み有り
@@ -41,7 +42,7 @@ namespace AppFrame {
       }
 
       void SoundComponent::Stop(std::string_view key) {
-         auto&& [filename, handle, volume] = _gameBase.resServer().GetSoundInfo(key);
+         auto&& [soundData, handle] = _gameBase.resServer().GetSoundInfo(key);
          if (handle != -1) {
             // 読み込み有り
             StopSoundMem(handle);
@@ -52,17 +53,22 @@ namespace AppFrame {
          }
       }
 
-      void SoundComponent::Play(std::string_view key, int playType) {
-         auto&& [filename, handle, volume] = _gameBase.resServer().GetSoundInfo(key);
-
+      void SoundComponent::Play(std::string_view key, int playType, Math::Vector4 pos) {
+         auto&& [soundData, handle] = _gameBase.resServer().GetSoundInfo(key);
+         auto fileName = soundData.fileName();
+         auto [volume, is3Dsound, radius] = soundData.GetSoundParams();
          if (handle != -1) {
             // 読み込み有り
+            if (is3Dsound) {
+               // 3Dサウンドならば再生する位置を設定
+               Set3DPositionSoundMem(Math::ToDX(pos), handle);
+            }
             PlaySoundMem(handle, playType, TRUE);
             ChangeVolumeSoundMem(volume, handle);
          }
          else {
             // 読み込み無し
-            PlayMusic(filename.c_str(), playType);
+            PlayMusic(fileName.data(), playType);
             SetVolumeMusic(volume);
          }
       }

@@ -148,8 +148,6 @@ namespace FragmentValkyria {
          Matrix44 _rotateMatrix{ Matrix44() };                              //!< プレイヤーから位置へのベクトルと注視点へのベクトルを回転させるマトリクス
          Matrix44 _anyAxisMatrix{ Matrix44() };                             //!< ベクトルを90度回転させるためのマトリクス
          Game::GameMain& _gameMain;                                         //!< ゲーム本体クラスの参照
-         double _targetDistance{ 500 };                                     //!< 注視点オブジェクトとのZ座標の距離
-         double _vertDistance{ 120 };                                       //!< 注視点オブジェクトとのY座標の距離
          double _zoomRateRadian{ 0.0 };                                     //!< ズームする割合のサインの値を求めるラジアン
          double _upDownAngle{ 0.0 };                                        //!< カメラの上下の回転の角度
          double _sideAngle{ 0.0 };                                          //!< カメラの左右の回転の角度

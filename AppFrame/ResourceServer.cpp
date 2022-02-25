@@ -77,7 +77,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto filename = texture.textureName().data();
+         auto filename = texture.fileName().data();
          auto [allnum, xnum, ynum, xsize, ysize] = texture.GetDivParams();
          std::vector<int> handles(allnum);
          LoadDivGraph(filename, allnum, xnum, ynum, xsize, ysize, handles.data());   // DxLib::LoadDivGraphをコピーする
@@ -285,23 +285,23 @@ namespace AppFrame {
 
       void ResourceServer::ClearSounds() {
          for (auto&& [key, sound] : _sounds) {
-            auto&& [filename, handle, volume] = sound;
+            auto&& [soudData, handle] = sound;
             DeleteSoundMem(handle);
          }
          _sounds.clear();
       }
 
-      void ResourceServer::LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo) {
+      void ResourceServer::LoadSound(std::string_view key, std::pair<SoundData, bool> soundDataAndIsLoad) {
 #ifndef _DEBUG
          if (_sounds.contains(key.data())) {
-            auto&& [filename, handle, volume] = _sounds[key.data()];
+            auto&& [soudData, handle] = _sounds[key.data()];
             DeleteSoundMem(handle);
             _sounds.erase(key.data());
          }
 #else
          try {
             if (_sounds.contains(key.data())) {
-               auto&& [filename, handle, volume] = _sounds[key.data()];
+               auto&& [soundData, handle] = _sounds[key.data()];
                DeleteSoundMem(handle);
                _sounds.erase(key.data());
                std::string message = key.data();
@@ -312,20 +312,26 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto [filename, isLoad, volume] = soundInfo;
+         auto [soundData, isLoad] = soundDataAndIsLoad;
+         auto [volume, is3Dsound, radius] = soundData.GetSoundParams();
          auto handle = -1;
          if (isLoad) {
-            handle = LoadSoundMem(filename.c_str());
+            auto fileName = soundData.fileName();
+            SetCreate3DSoundFlag(is3Dsound);
+            handle = LoadSoundMem(fileName.data());
+            if (is3Dsound) {
+               Set3DRadiusSoundMem(radius, handle);
+            }
          }
          // キーとデータをmapに登録
-         _sounds.emplace(key, std::make_tuple(filename, handle, volume));
+         _sounds.emplace(key, std::make_pair(soundData, handle));
       }
 
       /// 音ファイル情報の取得
-      std::tuple<std::string, int, int> ResourceServer::GetSoundInfo(std::string_view key) {
+      std::pair<SoundData, int> ResourceServer::GetSoundInfo(std::string_view key) {
 #ifndef _DEBUG
          if (!_sounds.contains(key.data())) {
-            return std::make_tuple("", -1, 0);   // キーが未登録
+            return std::make_pair(SoundData(), -1);   // キーが未登録
          }
 #else
          try {

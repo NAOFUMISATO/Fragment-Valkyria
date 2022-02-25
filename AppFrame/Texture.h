@@ -25,29 +25,25 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param textureName ファイル名
+          * \param fileName ファイル名
           * \param allNum 全ての画像枚数
           * \param xNum 画像の横分割数
           * \param yNum 画像の横分割数
           * \param xSize 分割された画像一つの横サイズ
           * \param ySize 分割された画像一つの縦サイズ
           */
-         Texture(std::string_view textureName, int allNum, int xNum, int yNum, int xSize, int ySize) :
-            _textureName(textureName),_allNum(allNum), _xNum(xNum), _yNum(yNum), _xSize(xSize), _ySize(ySize) {
+         Texture(std::string_view fileName, int allNum, int xNum, int yNum, int xSize, int ySize) :
+            _fileName(fileName),_allNum(allNum), _xNum(xNum), _yNum(yNum), _xSize(xSize), _ySize(ySize) {
          };
          /**
-          * \brief コンストラクタ
+          * \brief 空のコンストラクタ
           */
          Texture() {};
-         /**
-          * \brief デフォルトデストラクタ
-          */
-         ~Texture() = default;
          /**
           * \brief  ファイル名の取得
           * \return 画像ファイル名
           */
-         inline std::string_view textureName() const { return _textureName; }
+         inline std::string_view fileName() const { return _fileName; }
          /**
           * \brief  DxLib::LoadDivGraphに必要な情報を返す
           * \return 画像の総分割数,画像の横分割数,画像の縦分割数,分割された画像一つの横サイズ,分割された画像一つの縦サイズ
@@ -55,7 +51,7 @@ namespace AppFrame {
          inline std::tuple<int, int, int, int, int> GetDivParams() const { return { _allNum, _xNum,_yNum, _xSize, _ySize }; }
 
       private:
-         std::string _textureName{ "" };//!< ファイル名
+         std::string _fileName{ "" };   //!< ファイル名
          int _allNum{ 0 };              //!< 画像の総分割数
          int _xNum{ 0 };                //!< 画像の横分割数
          int _yNum{ 0 };                //!< 画像の縦分割数

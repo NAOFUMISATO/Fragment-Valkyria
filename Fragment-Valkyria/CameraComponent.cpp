@@ -8,13 +8,14 @@
  *********************************************************************/
 #include "CameraComponent.h"
 #include "GameMain.h"
-using namespace FragmentValkyria::Camera;
 
 namespace {
     const double CenterHeight = 60.0;
     const double SpringK = 1.0;
     const double DivideT = 10.0;
 }
+
+using namespace FragmentValkyria::Camera;
 
 CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }

@@ -7,6 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include <string_view>
+#include "Vector4.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -38,12 +39,12 @@ namespace AppFrame {
           * \brief 任意の文字列から音源を指定し、バックグラウンド再生を行う
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
           */
-         void Play(std::string_view key);
+         void Play(std::string_view key, Math::Vector4 pos = {0,0,0});
          /**
           * \brief 任意の文字列から音源を指定し、ループ再生を行う
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
           */
-         void PlayLoop(std::string_view key);
+         void PlayLoop(std::string_view key, Math::Vector4 pos = { 0,0,0 });
          /**
           * \brief 音量の変更を行う
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
@@ -61,7 +62,7 @@ namespace AppFrame {
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
           * \param playType 再生の種別
           */
-         void Play(std::string_view key, int playType);
+         void Play(std::string_view key, int playType,Math::Vector4 pos);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照

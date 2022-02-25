@@ -4,73 +4,97 @@
 			"keyname": "PoorBattle",
 			"filename": "PoorBattle.mp3",
 			"isload": false,
-			"volume": 50
+			"volume": 50,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossBattle",
 			"filename": "BossBattle.mp3",
 			"isload": false,
-			"volume": 50
+			"volume": 50,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "PlayerDamage",
 			"filename": "PlayerDamage.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 255,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "PlayerRightFootStep",
 			"filename": "PlayerRightFootStep.wav",
 			"isload": true,
-			"volume": 100
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "PlayerLeftFootStep",
 			"filename": "PlayerLeftFootStep.wav",
 			"isload": true,
-			"volume": 100
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "PlayerShoot",
 			"filename": "PlayerShoot.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 255,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "PlayerShootReady",
 			"filename": "PlayerShootReady.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 255,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossFootStep",
 			"filename": "BossFootStep.wav",
 			"isload": true,
-			"volume": 100
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossGatling",
 			"filename": "BossGatling.wav",
 			"isload": true,
-			"volume": 100
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossStan",
 			"filename": "BossStan.wav",
 			"isload": true,
-			"volume": 255
+			"volume": 255,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossBeam",
 			"filename": "BossBeam.wav",
 			"isload": true,
-			"volume": 50
+			"volume": 50,
+			"is3Dsound":false,
+         	"radius":0.0
 		},
 		{
 			"keyname": "BossCharge",
 			"filename": "BossCharge.wav",
 			"isload": true,
-			"volume": 50
+			"volume": 50,
+			"is3Dsound":false,
+         	"radius":0.0
 		}
 	]
 }

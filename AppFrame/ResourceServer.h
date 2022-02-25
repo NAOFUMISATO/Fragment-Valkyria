@@ -12,6 +12,7 @@
 #include <utility>
 #include <tuple>
 #include "Texture.h"
+#include "SoundData.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -113,6 +114,7 @@ namespace AppFrame {
           */
          virtual int GetModelAnimIndex(std::string_view key, std::string_view animName);
 
+
          /*----------音源関係----------*/
 
 
@@ -123,15 +125,15 @@ namespace AppFrame {
          /**
           * \brief 音ファイルの読み込み
           * \param key キーとなる任意の文字列
-          * \param filename_isLoad ファイル名と事前読み込み有無のペア
+          * \param soundDataAndIsLoad 音源データと事前読み込み有無のペア
           */
-         virtual void LoadSound(std::string_view key, std::tuple<std::string, bool, int> soundInfo);
+         virtual void LoadSound(std::string_view key, std::pair<SoundData, bool> soundDataAndIsLoad);
          /**
           * \brief 音ファイル情報の取得
           * \param key キーとなる任意の文字列
-          * \return 音ファイル名, ハンドル
+          * \return 音源データとハンドルのペア
           */
-         virtual std::tuple<std::string, int, int> GetSoundInfo(std::string_view key);
+         virtual std::pair<SoundData, int> GetSoundInfo(std::string_view key);
 
 
          /*----------エフェクト関係----------*/
@@ -155,12 +157,14 @@ namespace AppFrame {
          virtual int GetEffectHandle(std::string_view key);
 
       private:
-         Game::GameBase& _gameBase;                                                        //!< ゲームベースの参照
-         std::unordered_map<std::string, std::pair<Texture, std::vector<int>>> _textures;  //!< 任意の文字列をキーにしてDivGraphと画像ハンドルのペアを管理
-         std::unordered_map<std::string, std::pair<std::vector<int>,
-            std::unordered_map<std::string, int>>> _models;                                //!< 任意の文字列をキーにしてハンドルとアニメマップのペアを管理
-         std::unordered_map<std::string, std::tuple<std::string, int, int>> _sounds;       //!< 任意の文字列をキーにして音ファイル名とハンドルと初期音量を管理
-         std::unordered_map<std::string, int> _effects;                                    //!< 任意の文字列をキーにしてエフェクトハンドルを管理
+         Game::GameBase& _gameBase;                                //!< ゲームベースの参照
+         std::unordered_map<std::string, 
+            std::pair<Texture, std::vector<int>>> _textures;       //!< 任意の文字列をキーにして画像データクラスと画像ハンドルのペアを管理
+         std::unordered_map<std::string,std::pair<std::vector<int>,
+            std::unordered_map<std::string, int>>> _models;        //!< 任意の文字列をキーにしてハンドルとアニメマップのペアを管理
+         std::unordered_map<std::string, 
+            std::pair<SoundData,int>> _sounds;                     //!< 任意の文字列をキーにして音源データとハンドルを管理
+         std::unordered_map<std::string, int> _effects;            //!< 任意の文字列をキーにしてエフェクトハンドルを管理
       };
    }
 }

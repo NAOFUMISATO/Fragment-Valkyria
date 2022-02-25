@@ -254,6 +254,9 @@
     <ClInclude Include="Triangle.h">
       <Filter>ヘッダー ファイル\Data</Filter>
     </ClInclude>
+    <ClInclude Include="SoundData.h">
+      <Filter>ヘッダー ファイル\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

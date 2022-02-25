@@ -179,6 +179,7 @@
     <ClInclude Include="LoadResourceJson.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="ResourceServer.h" />
+    <ClInclude Include="SoundData.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundComponent.h" />
