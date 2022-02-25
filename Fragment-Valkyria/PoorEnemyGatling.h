@@ -8,9 +8,9 @@
  *********************************************************************/
 #include "PoorEnemyBase.h"
 namespace FragmentValkyria {
-	namespace Enemy {
+   namespace Enemy {
 
-		class PoorEnemyGatling : public PoorEnemyBase {
+      class PoorEnemyGatling : public PoorEnemyBase {
             using Vector4 = AppFrame::Math::Vector4;
             using InputManager = AppFrame::Input::InputManager;
         public:
@@ -47,7 +47,7 @@ namespace FragmentValkyria {
                PoorEnemyGatling& _owner;
                int _gatlingCnt{ 5 };
             };
-		};
-	}
+      };
+   }
 
 }

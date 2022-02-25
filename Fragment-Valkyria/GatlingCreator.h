@@ -10,19 +10,19 @@
 
 namespace FragmentValkyria {
 
-	namespace Create {
+   namespace Create {
 
-		class GatlingCreator : public CreatorBase {
+      class GatlingCreator : public CreatorBase {
          public:
-			 GatlingCreator(Game::GameMain& gameMain);
-		private:
-			/**
-		    * \brief プレイヤーの位置、アニメーション、状態の登録を行う
-		    * \param game ゲーム本体クラスの参照
-		    * \return プレイヤーのインスタンス
-		    */
-			virtual std::unique_ptr<Object::ObjectBase> Create() override;
+          GatlingCreator(Game::GameMain& gameMain);
+      private:
+         /**
+          * \brief プレイヤーの位置、アニメーション、状態の登録を行う
+          * \param game ゲーム本体クラスの参照
+          * \return プレイヤーのインスタンス
+          */
+         virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
-		};
-	}
+      };
+   }
 }

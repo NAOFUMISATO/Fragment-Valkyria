@@ -1,10 +1,10 @@
 {
-	"title": [
-		{
-			"keyname": "TitleBgm",
-			"filename": "sublight.wav",
-			"isload": true,
-			"volume": 20
-		}
-	]
+   "title": [
+      {
+         "keyname": "TitleBgm",
+         "filename": "sublight.wav",
+         "isload": true,
+         "volume": 20
+      }
+   ]
 }

@@ -20,23 +20,23 @@ BulletCreator::BulletCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain }
 }
 
 std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
-	auto bullet = std::make_unique<Player::Bullet>(_gameMain);
-	for (auto&& object : _gameMain.objServer().runObjects()) {
+   auto bullet = std::make_unique<Player::Bullet>(_gameMain);
+   for (auto&& object : _gameMain.objServer().runObjects()) {
 
-		if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
-			continue;
-		}
-		/*auto& ply = dynamic_cast<Player::Player&>(*object);*/
-		auto handle = object->modelAnimeComponent().modelHandle();
-		auto rightHandFrame = object->modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
-		auto rightHandPos = MV1GetFramePosition(handle, rightHandFrame);
-		bullet->position(AppFrame::Math::ToMath(rightHandPos));
-	}
-	bullet->Init();
+      if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
+         continue;
+      }
+      /*auto& ply = dynamic_cast<Player::Player&>(*object);*/
+      auto handle = object->modelAnimeComponent().modelHandle();
+      auto rightHandFrame = object->modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
+      auto rightHandPos = MV1GetFramePosition(handle, rightHandFrame);
+      bullet->position(AppFrame::Math::ToMath(rightHandPos));
+   }
+   bullet->Init();
 
-	auto state = std::make_unique<AppFrame::State::StateServer>("Shoot", std::make_shared<Player::Bullet::StateShoot>(*bullet));
-	state->Register("Die", std::make_shared<Player::Bullet::StateDie>(*bullet));
-	bullet->stateServer(std::move(state));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Shoot", std::make_shared<Player::Bullet::StateShoot>(*bullet));
+   state->Register("Die", std::make_shared<Player::Bullet::StateDie>(*bullet));
+   bullet->stateServer(std::move(state));
 
-	return std::move(bullet);
+   return std::move(bullet);
 }

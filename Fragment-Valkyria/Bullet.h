@@ -11,17 +11,17 @@
 
 namespace FragmentValkyria {
 
-	namespace Player {
+   namespace Player {
 
-		class Bullet : public Object::ObjectBase {
+      class Bullet : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
             using InputManager = AppFrame::Input::InputManager;
-		public:
-			Bullet(Game::GameMain& gameMain);
+      public:
+         Bullet(Game::GameMain& gameMain);
 
-			virtual ~Bullet() override = default;
+         virtual ~Bullet() override = default;
 
-			ObjectType GetObjType() const override { return ObjectType::Bullet; };
+         ObjectType GetObjType() const override { return ObjectType::Bullet; };
 
             /**
              * \brief èâä˙âªèàóù
@@ -41,7 +41,7 @@ namespace FragmentValkyria {
              */
             void Draw() override;
 
-		private:
+      private:
             void Move();
 
             void HitCheckFromLargeEnemy();
@@ -126,7 +126,7 @@ namespace FragmentValkyria {
                 void Update() override;
             };
 
-		};
+      };
 
-	}
+   }
 }

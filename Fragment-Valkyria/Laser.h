@@ -10,40 +10,40 @@
 
 namespace FragmentValkyria {
 
-	namespace Enemy {
+   namespace Enemy {
 
-		class Laser : public Object::ObjectBase {
+      class Laser : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
-		public:
-			Laser(Game::GameMain& gameMain);
+      public:
+         Laser(Game::GameMain& gameMain);
 
-			virtual ~Laser() override = default;
-			/**
-			* \brief オブジェクトの種類を返す
-			* \return レーザー
-			*/
-			ObjectType GetObjType() const override { return ObjectType::Laser; };
-			/**
-		    * \brief 初期化処理
-		    */
-			virtual void Init() override;
-			/**
-			* \brief 更新処理
-			*/
-			virtual void Update() override;
-			/**
-			* \brief 描画処理
-			*/
-			void Draw() override;
+         virtual ~Laser() override = default;
+         /**
+         * \brief オブジェクトの種類を返す
+         * \return レーザー
+         */
+         ObjectType GetObjType() const override { return ObjectType::Laser; };
+         /**
+          * \brief 初期化処理
+          */
+         virtual void Init() override;
+         /**
+         * \brief 更新処理
+         */
+         virtual void Update() override;
+         /**
+         * \brief 描画処理
+         */
+         void Draw() override;
 
             void end(Vector4 endPos) { _end = endPos; }
             inline Vector4 end() { return _end; }
 
-		private:
+      private:
 
             Vector4 _end{ Vector4(0.0, 0.0, 0.0) };
             int _stateCnt{ 0 };
-		public:
+      public:
             /**
             * \class レーザーの状態の基底クラス
             * \brief 各レーザーの状態はこれを派生して定義する
@@ -85,6 +85,6 @@ namespace FragmentValkyria {
                  */
                 void Update() override;
             };
-		};
-	}
+      };
+   }
 }

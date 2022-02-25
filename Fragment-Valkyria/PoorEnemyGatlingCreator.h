@@ -11,18 +11,18 @@
 
 namespace FragmentValkyria {
 
-	namespace Create {
+   namespace Create {
 
-		class PoorEnemyGatlingCreator : public CreatorBase
-		{
-		public:
-			PoorEnemyGatlingCreator(Game::GameMain& gameMain);
+      class PoorEnemyGatlingCreator : public CreatorBase
+      {
+      public:
+         PoorEnemyGatlingCreator(Game::GameMain& gameMain);
 
-		private:
+      private:
 
-			virtual std::unique_ptr<Object::ObjectBase> Create() override;
+         virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
-		};
+      };
 
-	}
+   }
 }

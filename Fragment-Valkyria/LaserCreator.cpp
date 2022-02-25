@@ -22,31 +22,31 @@ LaserCreator::LaserCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
 
 std::unique_ptr<Object::ObjectBase> LaserCreator::Create()
 {
-	auto laser = std::make_unique<Enemy::Laser>(_gameMain);
-	for (auto&& objects : _gameMain.objServer().runObjects()) {
-		
-		if (objects->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
-			continue;
-		}
-		auto handle = objects->modelAnimeComponent().modelHandle();
-		auto laserFrame = objects->modelAnimeComponent().FindFrameChild("root", "gatling3");
-		auto laserPos = MV1GetFramePosition(handle, laserFrame);
-		auto startPos = laserPos;
+   auto laser = std::make_unique<Enemy::Laser>(_gameMain);
+   for (auto&& objects : _gameMain.objServer().runObjects()) {
+      
+      if (objects->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
+         continue;
+      }
+      auto handle = objects->modelAnimeComponent().modelHandle();
+      auto laserFrame = objects->modelAnimeComponent().FindFrameChild("root", "gatling3");
+      auto laserPos = MV1GetFramePosition(handle, laserFrame);
+      auto startPos = laserPos;
 
-		laser->position(AppFrame::Math::ToMath(startPos));
+      laser->position(AppFrame::Math::ToMath(startPos));
 
-		break;
-	}
+      break;
+   }
 
-	auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::Laser::StateIdle>(*laser));
-	laser->stateServer(std::move(state));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::Laser::StateIdle>(*laser));
+   laser->stateServer(std::move(state));
 
-	auto [laserX, laserY, laserZ] = laser->position().GetVec3();
+   auto [laserX, laserY, laserZ] = laser->position().GetVec3();
 
-	auto laserDistance = _gameMain.objServer().GetVecData("LaserDirectionPos") - Vector4(laserX, 0.0, laserZ);
-	laserDistance.Normalized();
-	auto endPos = laser->position() + laserDistance * 10000 + Vector4(0.0, laserY, 0.0);
-	laser->end(endPos);
+   auto laserDistance = _gameMain.objServer().GetVecData("LaserDirectionPos") - Vector4(laserX, 0.0, laserZ);
+   laserDistance.Normalized();
+   auto endPos = laser->position() + laserDistance * 10000 + Vector4(0.0, laserY, 0.0);
+   laser->end(endPos);
 
-	return std::move(laser);
+   return std::move(laser);
 }

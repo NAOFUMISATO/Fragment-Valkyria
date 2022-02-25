@@ -13,8 +13,8 @@
 using namespace FragmentValkyria::Player;
 
 namespace {
-	constexpr double Radius = 20.0;
-	constexpr double Speed = 50.0;
+   constexpr double Radius = 20.0;
+   constexpr double Speed = 50.0;
 }
 
 Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -22,8 +22,8 @@ Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
 void Bullet::Init() {
-	_moved = GetObjServer().GetVecData("CamTarget") - _position;
-	_moved.Normalized();
+   _moved = GetObjServer().GetVecData("CamTarget") - _position;
+   _moved.Normalized();
 }
 
 void Bullet::Input(InputManager& input) {
@@ -31,52 +31,52 @@ void Bullet::Input(InputManager& input) {
 }
 
 void Bullet::Update() {
-	// 状態の更新
-	_stateServer->Update();
-	// ワールド行列の更新
-	ComputeWorldTransform();
-	//// モデルの更新
-	//_modelAnimeComponent->Update();
+   // 状態の更新
+   _stateServer->Update();
+   // ワールド行列の更新
+   ComputeWorldTransform();
+   //// モデルの更新
+   //_modelAnimeComponent->Update();
 
 }
 
 void Bullet::Draw() {
-	_stateServer->Draw();
+   _stateServer->Draw();
 }
 
 void Bullet::Move() {
-	_position = _position + _moved * Speed;
+   _position = _position + _moved * Speed;
 
 }
 
 void Bullet::HitCheckFromLargeEnemy() {
-	auto report = _collisionComponent->report();
-	if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
-		/*SetDead();*/
-		_stateServer->GoToState("Die");
-	}
+   auto report = _collisionComponent->report();
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+      /*SetDead();*/
+      _stateServer->GoToState("Die");
+   }
 }
 
 void Bullet::HitCheckFromPoorEnemyGatling() {
-	auto report = _collisionComponent->report();
-	if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
-		SetDead();
-		_stateServer->GoToState("Die");
-	}
+   auto report = _collisionComponent->report();
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+      SetDead();
+      _stateServer->GoToState("Die");
+   }
 }
 
 void Bullet::OutCheckFromStage() {
-	auto report = _collisionComponent->report();
-	if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
-		SetDead();
-		_stateServer->GoToState("Die");
-	}
+   auto report = _collisionComponent->report();
+   if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
+      SetDead();
+      _stateServer->GoToState("Die");
+   }
 }
 
 void Bullet::StateBase::Draw() {
-	auto pos = AppFrame::Math::ToDX(_owner._position);
-	auto radius = static_cast<float>(Radius);
-	DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), TRUE);
+   auto pos = AppFrame::Math::ToDX(_owner._position);
+   auto radius = static_cast<float>(Radius);
+   DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), TRUE);
 }
 
 void Bullet::StateShoot::Enter() {
@@ -88,13 +88,13 @@ void Bullet::StateShoot::Input(InputManager& input) {
 }
 
 void Bullet::StateShoot::Update() {
-	_owner.Move();
-	_owner._collisionComponent->LargeEnemyFromBullet();
-	_owner._collisionComponent->OutStage();
+   _owner.Move();
+   _owner._collisionComponent->LargeEnemyFromBullet();
+   _owner._collisionComponent->OutStage();
 
-	_owner.HitCheckFromLargeEnemy();
-	_owner.HitCheckFromPoorEnemyGatling();
-	_owner.OutCheckFromStage();
+   _owner.HitCheckFromLargeEnemy();
+   _owner.HitCheckFromPoorEnemyGatling();
+   _owner.OutCheckFromStage();
 }
 
 void Bullet::StateDie::Enter() {
@@ -106,7 +106,7 @@ void Bullet::StateDie::Input(InputManager& input) {
 }
 
 void Bullet::StateDie::Update() {
-	_owner.SetDead();
+   _owner.SetDead();
 }
 
 

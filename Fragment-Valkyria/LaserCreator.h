@@ -11,21 +11,21 @@
 
 namespace FragmentValkyria {
 
-	namespace Create {
+   namespace Create {
 
-		class LaserCreator : public CreatorBase
-		{
-			using Vector4 = AppFrame::Math::Vector4;
-		public:
-			LaserCreator(Game::GameMain& gameMain);
-		private:
-			/**
-			* \brief レーザーsの位置、アニメーション、状態の登録を行う
-			* \param game ゲーム本体クラスの参照
-			* \return レーザーのインスタンス
-			*/
-			virtual std::unique_ptr<Object::ObjectBase> Create() override;
+      class LaserCreator : public CreatorBase
+      {
+         using Vector4 = AppFrame::Math::Vector4;
+      public:
+         LaserCreator(Game::GameMain& gameMain);
+      private:
+         /**
+         * \brief レーザーsの位置、アニメーション、状態の登録を行う
+         * \param game ゲーム本体クラスの参照
+         * \return レーザーのインスタンス
+         */
+         virtual std::unique_ptr<Object::ObjectBase> Create() override;
 
-		};
-	}
+      };
+   }
 }

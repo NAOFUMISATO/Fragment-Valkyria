@@ -11,15 +11,15 @@
 
 namespace FragmentValkyria {
 
-	namespace Enemy {
+   namespace Enemy {
 
-		class Gatling : public Object::ObjectBase {
+      class Gatling : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
             using InputManager = AppFrame::Input::InputManager;
-		public:
-			Gatling(Game::GameMain& gameMain);
+      public:
+         Gatling(Game::GameMain& gameMain);
 
-			virtual ~Gatling() override = default;
+         virtual ~Gatling() override = default;
             /**
             * \brief オブジェクトの種類を返す
             * \return プレイヤー
@@ -48,7 +48,7 @@ namespace FragmentValkyria {
             // */
             //void moved(Vector4& moved) { _moved = moved; }
 
-		private:
+      private:
             void Move();
             void HitCheckFromObjectModel();
             void HitCheckFromPlayer();
@@ -58,7 +58,7 @@ namespace FragmentValkyria {
             Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
             Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };
 
-		public:
+      public:
             /**
             * \class ガトリングの状態の基底クラス
             * \brief 各ガトリングの状態はこれを派生して定義する
@@ -136,6 +136,6 @@ namespace FragmentValkyria {
                 void Draw() override;
             };
 
-		};
-	}
+      };
+   }
 }

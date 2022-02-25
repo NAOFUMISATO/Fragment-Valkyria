@@ -10,19 +10,19 @@
 
 namespace FragmentValkyria {
 
-	namespace Create {
+   namespace Create {
 
-		class BulletCreator : public CreatorBase {
-		public:
-			BulletCreator(Game::GameMain& gameMain);
+      class BulletCreator : public CreatorBase {
+      public:
+         BulletCreator(Game::GameMain& gameMain);
 
-		private:
-			/**
-		    * \brief 遠隔弱攻撃の位置、アニメーション、状態の登録を行う
-		    * \param game ゲーム本体クラスの参照
-		    * \return 遠隔弱攻撃のインスタンス
-		    */
-			virtual std::unique_ptr<Object::ObjectBase> Create() override;
-		};
-	}
+      private:
+         /**
+          * \brief 遠隔弱攻撃の位置、アニメーション、状態の登録を行う
+          * \param game ゲーム本体クラスの参照
+          * \return 遠隔弱攻撃のインスタンス
+          */
+         virtual std::unique_ptr<Object::ObjectBase> Create() override;
+      };
+   }
 }

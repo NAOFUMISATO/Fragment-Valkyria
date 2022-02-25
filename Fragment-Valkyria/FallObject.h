@@ -14,29 +14,29 @@ namespace FragmentValkyria {
     /**
      * \brief 敵関係
      */
-	namespace Enemy {
+   namespace Enemy {
         /**
          * \class 落下オブジェクトクラス
          * \brief 落下オブジェクトクラスを管理する
          */
-		class FallObject : public Object::ObjectBase {
+      class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;
             using Vector4 = AppFrame::Math::Vector4;
-		public:
+      public:
             /**
              * \brief コンストラクタ
              * \param gameMain ゲーム本体の参照
              */
-			FallObject(Game::GameMain& gameMain);
+         FallObject(Game::GameMain& gameMain);
             /**
              * \brief デフォルトデストラクタ
              */
-			virtual ~FallObject() override = default;
-			/**
-		    * \brief オブジェクトの種類を返す
-		    * \return 落下オブジェクト
-		    */
-			ObjectType GetObjType() const override { return ObjectType::FallObject; };
+         virtual ~FallObject() override = default;
+         /**
+          * \brief オブジェクトの種類を返す
+          * \return 落下オブジェクト
+          */
+         ObjectType GetObjType() const override { return ObjectType::FallObject; };
             /**
             * \brief 初期化処理
             */
@@ -269,6 +269,6 @@ namespace FragmentValkyria {
                  */
                 void Update() override;
             };
-		};
-	}
+      };
+   }
 }

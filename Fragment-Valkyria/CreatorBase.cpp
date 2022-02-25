@@ -8,5 +8,5 @@ CreatorBase::CreatorBase(Game::GameMain& gameMain) :_gameMain{gameMain} {
 }
 
 AppFrame::Resource::LoadResourceJson& CreatorBase::GetLoadJson() const {
-	return _gameMain.loadresJson();
+   return _gameMain.loadresJson();
 }
