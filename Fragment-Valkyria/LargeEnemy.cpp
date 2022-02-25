@@ -39,6 +39,7 @@ void LargeEnemy::Init() {
    _actionList.emplace_back("Gatling");
    _actionList.emplace_back("Move");
    _actionList.emplace_back("Laser");
+   _actionList.emplace_back("FanGatling");
    _hp = 1000.0;
 }
 
@@ -55,6 +56,7 @@ void LargeEnemy::Update() {
    ComputeWorldTransform();
    // モデルの更新
    _modelAnimeComponent->Update();
+   GetObjServer().RegistVector("LargeEnemyPos", _position);
    GetObjServer().RegistDouble("BossHP", _hp);
 }
 
@@ -68,8 +70,8 @@ void LargeEnemy::CreateGatling() {
    auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
    //ガトリングを生成する座標を設定
    GetObjServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
-   auto plyPos = GetObjServer().GetVecData("PlayerPos");
-   auto gatlingDirection = plyPos - AppFrame::Math::ToMath(gatlingPos);
+   /*auto plyPos = GetObjServer().GetVecData("PlayerPos");*/
+   auto gatlingDirection = _position + _rotateDir * 100.0/*plyPos*/ - AppFrame::Math::ToMath(gatlingPos);
    GetObjServer().RegistVector("GatlingMoveDirection", gatlingDirection);
    auto gatling = gameMain().objFactory().Create("Gatling");
    GetObjServer().Add(std::move(gatling));
@@ -225,8 +227,15 @@ void LargeEnemy::AugularRotate(bool& rotating) {
 }
 
 void LargeEnemy::AreaRotate(bool& rotating) {
-   // モデルがデフォルトでZ座標のマイナス方向を向いているので反転させておく
+   // モデルがデフォルトでZ座標のマイナス方向を向いているのでフォワードベクトルを反転させておく
    auto forward = GetForward() * -1.0;
+   _rotateDir.Normalized();
+   if (forward.Dot(_rotateDir) <= -0.9) {
+      Matrix44 dirRotate;
+      dirRotate.RotateY(3.0, true);
+      _rotateDir = _rotateDir * dirRotate;
+    }
+   _rotateDir = _rotateDir * 50.0;
    auto area = forward.Cross(_rotateDir);
    auto rotateValue = 0.5 * area.GetY();
    if (rotateValue <= 0.0 && rotateValue >= -0.1 || rotateValue >= 0.0 && rotateValue <= 0.1) {
@@ -314,15 +323,12 @@ void LargeEnemy::StateFallObject::Update() {
 void LargeEnemy::StateGatling::Enter() {
    _owner._stateCnt = 0;
    _owner._gatlingCnt = 10;
-   _owner._gatlingFlag = true;
    _owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
 
 void LargeEnemy::StateGatling::Update() {
    if (_owner._stateCnt % GatlingFrame == 0 && _owner._attack == false && _owner._stateCnt >= 100) {
       _owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
-      _owner._rotateDir.Normalized();
-      _owner._rotateDir = _owner._rotateDir * 50.0;
       _owner._attack = true;
       _owner._rotating = true;
       ++_owner._stateCnt;
@@ -459,12 +465,11 @@ void LargeEnemy::StateMove::FootStepSound() {
 }
 
 void LargeEnemy::StateLaser::Enter() {
-   _owner.SetLaserPosition();
-   _owner._rotateDir = _owner._gameMain.objServer().GetVecData("LaserDirectionPos") - _owner._position;
    _owner._rotateDir.Normalized();
    _owner._rotateDir = _owner._rotateDir * 5.0;
    _owner._stateCnt = 0;
    _owner._rotating = true;
+   _owner._attack = false;
    _owner._modelAnimeComponent->ChangeAnime("beem", true);
    _createLaser = false;
    _owner.GetSoundComponent().Play("BossCharge");
@@ -472,18 +477,24 @@ void LargeEnemy::StateLaser::Enter() {
 
 void LargeEnemy::StateLaser::Update() {
    if (_owner._stateCnt >= 60 * 3 && !_createLaser) {
-      _owner.AreaRotate(_owner._rotating);
-      if (!_owner._rotating) {
-         _owner.CreateLaser();
-         _owner.GetSoundComponent().Play("BossBeam");
-         _createLaser = true;
-      }
+      _owner.SetLaserPosition();
+      _owner._rotateDir = _owner._gameMain.objServer().GetVecData("LaserDirectionPos") - _owner._position;
+      _owner._attack = true;
+      _createLaser = true;
    }
    else if (_owner._stateCnt >= 60 * 6) {
       _owner._fallObjectflag = false;
       _owner._moving = false;
-      _owner._gatlingFlag = false;
       _owner._stateServer->GoToState("Idle");
+   }
+
+   if (_owner._attack) {
+      _owner.AreaRotate(_owner._rotating);
+      if (!_owner._rotating) {
+         _owner.CreateLaser();
+         _owner.GetSoundComponent().Play("BossBeam");
+         _owner._attack = false;
+      }
    }
 
    ++_owner._stateCnt;
@@ -491,9 +502,42 @@ void LargeEnemy::StateLaser::Update() {
 }
 
 void LargeEnemy::StateFanGatling::Enter() {
-
+   _owner._stateCnt = 0;
+   _owner._gatlingCnt = 10;
+   _owner._fanAngle = -45.0;
+   _owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   _owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
 
 void LargeEnemy::StateFanGatling::Update() {
 
+   if (_owner._stateCnt % GatlingFrame == 0 && _owner._attack == false && _owner._stateCnt >= 100) {
+      Matrix44 dirRotate;
+      dirRotate.RotateY(_owner._fanAngle, true);
+      _owner._rotateDir = _owner._rotateDir * dirRotate;
+      _owner._attack = true;
+      _owner._rotating = true;
+      ++_owner._stateCnt;
+   }
+
+   if (_owner._attack) {
+      _owner.AreaRotate(_owner._rotating);
+      if (!_owner._rotating) {
+         _owner.CreateGatling();
+         --_owner._gatlingCnt;
+         _owner._fanAngle = 10.0;
+         _owner.GetSoundComponent().Play("BossGatling");
+         _owner._attack = false;
+      }
+   }
+   else {
+      ++_owner._stateCnt;
+   }
+
+   if (_owner._gatlingCnt <= 0) {
+      _owner._stateServer->GoToState("Idle");
+   }
+
+   _owner.HitCheckFromFallObject();
+   _owner.HitCheckFromBullet();
 }

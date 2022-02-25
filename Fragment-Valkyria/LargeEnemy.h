@@ -114,6 +114,7 @@ namespace FragmentValkyria {
             bool _endRotating{ true };
             bool _rotating{ false };
             bool _attack{ false };
+            double _fanAngle{ 0.0 };
             double _rotateDot{ 0.0 };
             double _addRotate{ 1.0 };
             double _hp{ 100.0 };
