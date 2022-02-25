@@ -8,24 +8,10 @@ namespace FragmentValkyria {
       public:
          PoorEnemyMelee(Game::GameMain& gameMain);
          void Init()override;
-
+      
+      private:
+         void Rush(const Vector4& moved);
       public:
-         class StateIdle : public PoorEnemyBase::StateIdle {
-         public:
-            StateIdle(PoorEnemyMelee& owner) : PoorEnemyBase::StateIdle{ owner }, _owner{ owner } {};
-            /**
-             * \brief “üŒûˆ—
-             */
-            void Enter() override;
-            /**
-             * \brief XVˆ—
-             */
-            void Update() override;
-
-         private:
-            PoorEnemyMelee& _owner;
-         };
-
          class StateRush : public StateBase {
          public:
 

@@ -24,29 +24,6 @@ namespace FragmentValkyria {
 
       public:
             /**
-            * \class 待機状態クラス
-            * \brief 待機状態の処理を回す
-            */
-            class StateIdle : public PoorEnemyBase::StateIdle{
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner ガトリング攻撃をしてくる雑魚敵の参照
-                 */
-               StateIdle(PoorEnemyGatling& owner) : PoorEnemyBase::StateIdle{ owner },_owner{ owner }{};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-
-            private:
-               PoorEnemyGatling& _owner;
-            };
-            /**
             * \class 移動状態クラス
             * \brief 移動状態の処理を回す
             */

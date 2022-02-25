@@ -28,6 +28,7 @@ void PoorEnemyBase::Init() {
 	_collNum = _modelAnimeComponent->FindFrame("Spider");
 	// フレーム1をナビメッシュとして使用
 	MV1SetupCollInfo(modelHandle, _collNum, 1, 1, 1);
+	_actionList.emplace_back("SideStep");
 }
 
 void PoorEnemyBase::Update() {
@@ -105,6 +106,15 @@ void PoorEnemyBase::StateIdle::Enter() {
 
 void PoorEnemyBase::StateIdle::Update() {
 	_owner.Rotate();
+	// 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
+	if (_owner._stateCnt >= 60 * 5) {
+		if (_owner._action.empty()) {
+			_owner._action = _owner._actionList;
+		}
+		auto random = AppFrame::Math::Utility::GetRandom(0, static_cast<int>(_owner._action.size()) - 1);
+		_owner._stateServer->GoToState(_owner._action[random]);
+		_owner._action.erase(_owner._action.begin() + random);
+	}
 	++_owner._stateCnt;
 }
 

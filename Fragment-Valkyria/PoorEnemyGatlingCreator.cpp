@@ -28,6 +28,7 @@ std::unique_ptr<Object::ObjectBase> PoorEnemyGatlingCreator::Create() {
 	auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared <Enemy::PoorEnemyGatling::StateFall>(*poorEnemyGatling));
 	state->Register("Idle", std::make_shared<Enemy::PoorEnemyGatling::StateIdle>(*poorEnemyGatling));
 	state->Register("Gatling", std::make_shared<Enemy::PoorEnemyGatling::StateGatling>(*poorEnemyGatling));
+	state->Register("SideStep", std::make_shared<Enemy::PoorEnemyGatling::StateSideStep>(*poorEnemyGatling));
 	state->Register("Die", std::make_shared<Enemy::PoorEnemyGatling::StateDie>(*poorEnemyGatling));
 	poorEnemyGatling->stateServer(std::move(state));
 

@@ -29,10 +29,7 @@ PoorEnemyGatling::PoorEnemyGatling(Game::GameMain& gameMain) : PoorEnemyBase{ ga
 
 void PoorEnemyGatling::Init() {
 	PoorEnemyBase::Init();
-	_actionList.emplace_back("FallObject");
 	_actionList.emplace_back("Gatling");
-	_actionList.emplace_back("Move");
-	_actionList.emplace_back("Laser");
 }
 
 void PoorEnemyGatling::CreateGatling() {
@@ -43,17 +40,6 @@ void PoorEnemyGatling::CreateGatling() {
 	_gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
 	auto gatling = _gameMain.objFactory().Create("Gatling");
 	gameMain().objServer().Add(std::move(gatling));
-}
-
-void PoorEnemyGatling::StateIdle::Enter() {
-	PoorEnemyBase::StateIdle::Enter();
-}
-
-void PoorEnemyGatling::StateIdle::Update() {
-	if (_owner._stateCnt >= 60 * 7) {
-		_owner._stateServer->GoToState("Gatling");
-	}
-	PoorEnemyBase::StateIdle::Update();
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {

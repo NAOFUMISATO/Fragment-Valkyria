@@ -413,11 +413,11 @@
     <ClCompile Include="PoorEnemyBase.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="PoorEnemyMelee.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="PoorEnemyMeleeCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="PoorEnemyMelee.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

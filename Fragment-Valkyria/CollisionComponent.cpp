@@ -638,6 +638,35 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 	}
 }
 
+AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
+	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
+			// プレイヤーが死亡モーションならば返す
+			auto& player = dynamic_cast<Player::Player&>(*object);
+			if (player.isDeadMotion()) {
+				return pos;
+			};
+		}
+	}
+	auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+	auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
+	auto stageComponent = modeIngame->GetStage().stageComponent();
+
+	auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
+
+	auto newPos = pos + moved;
+	auto start = newPos + Vector4(0.0, 50.0, 0.0);
+	auto end = newPos + Vector4(0.0, -10000.0, 0.0);
+	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
+	if (result.HitFlag) {
+		newPos = AppFrame::Math::ToMath(result.HitPosition);
+		return newPos;
+	}
+	else {
+		return pos;
+	}
+}
+
 void CollisionComponent::OutStage() {
 	for (auto&& object : _owner.gameMain().objServer().runObjects()) {
 		if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
@@ -663,7 +692,7 @@ void CollisionComponent::OutStage() {
 
 	auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
 
-	if (result.HitFlag == 0) {
+	if (!result.HitFlag) {
 		_owner.collisionComponent().report().id(ReportId::OutStage);
 		return;
 	}
