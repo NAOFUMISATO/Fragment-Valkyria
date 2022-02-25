@@ -29,7 +29,7 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create()
          continue;
       }
       auto handle = objects->modelAnimeComponent().modelHandle();
-      auto laserFrame = objects->modelAnimeComponent().FindFrameChild("root", "gatling3");
+      auto laserFrame = objects->modelAnimeComponent().FindFrame("pasted__laser_collision");
       auto laserPos = MV1GetFramePosition(handle, laserFrame);
       auto startPos = laserPos;
 
@@ -41,11 +41,11 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create()
    auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::Laser::StateIdle>(*laser));
    laser->stateServer(std::move(state));
 
-   auto [laserX, laserY, laserZ] = laser->position().GetVec3();
+   auto laegeEnemyPos = _gameMain.objServer().GetVecData("LargeEnemyPos");
 
-   auto laserDistance = _gameMain.objServer().GetVecData("LaserDirectionPos") - Vector4(laserX, 0.0, laserZ);
-   laserDistance.Normalized();
-   auto endPos = laser->position() + laserDistance * 10000 + Vector4(0.0, laserY, 0.0);
+   auto laserDirection = _gameMain.objServer().GetVecData("LaserDirectionPos") - laegeEnemyPos/*Vector4(laserX, 0.0, laserZ)*/;
+   laserDirection.Normalized();
+   auto endPos = laegeEnemyPos + laserDirection * 10000 + Vector4(0.0, laser->position().GetY(), 0.0);
    laser->end(endPos);
 
    return std::move(laser);

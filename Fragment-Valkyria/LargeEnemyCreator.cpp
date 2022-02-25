@@ -40,6 +40,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    state->Register("Move", std::make_shared<Enemy::LargeEnemy::StateMove>(*largeEnemy));
    state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
    state->Register("Laser", std::make_shared<Enemy::LargeEnemy::StateLaser>(*largeEnemy));
+   state->Register("FanGatling", std::make_shared<Enemy::LargeEnemy::StateFanGatling>(*largeEnemy));
    largeEnemy->stateServer(std::move(state));
 
    for (auto&& object : _gameMain.objServer().runObjects()) {

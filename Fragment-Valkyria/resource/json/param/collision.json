@@ -9,7 +9,7 @@
 			"fallobject_capsule_pos1": 30.0,
 			"fallobject_capsule_pos2": 60.0,
 			"fallobject_radius": 50.0,
-			"laser_radius": 150.0
+			"laser_radius": 500.0
 		}
 	],
 	"collision_vec": [
