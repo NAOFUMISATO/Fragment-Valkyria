@@ -46,6 +46,10 @@ namespace FragmentValkyria {
           * \return ステージ
           */
          ObjectType GetObjType() const override { return ObjectType::Stage; }
+         /**
+          * \brief ステージ描画一括管理クラスの参照を取得
+          * \return ステージ描画一括管理クラスの参照
+          */
          StageModelComponent& stageComponent() { return *_stageComponent; }
 
       private:

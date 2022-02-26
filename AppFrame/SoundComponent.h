@@ -28,9 +28,9 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param appBase アプリケーションの基底クラスの参照
+          * \param gameBase アプリケーションの基底クラスの参照
           */
-         SoundComponent(Game::GameBase& appBase) :_gameBase{ appBase } {};
+         SoundComponent(Game::GameBase& gameBase) :_gameBase{ gameBase } {};
          /**
           * \brief デストラクタ
           */
@@ -38,11 +38,13 @@ namespace AppFrame {
          /**
           * \brief 任意の文字列から音源を指定し、バックグラウンド再生を行う
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
+          * \param pos 3Dサウンドの場合に再生する位置
           */
          void Play(std::string_view key, Math::Vector4 pos = {0,0,0});
          /**
           * \brief 任意の文字列から音源を指定し、ループ再生を行う
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
+          * \param pos 3Dサウンドの場合に再生する位置
           */
          void PlayLoop(std::string_view key, Math::Vector4 pos = { 0,0,0 });
          /**
@@ -56,13 +58,15 @@ namespace AppFrame {
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
           */
          void Stop(std::string_view key);
+
       protected:
          /**
           * \brief 音量の変更を行った後、プレイタイプを指定し再生する
           * \param key ResourceServerで登録済みの音源を関連付けた任意の文字列
           * \param playType 再生の種別
+          * \param pos 3Dサウンドの場合に再生する位置
           */
-         void Play(std::string_view key, int playType,Math::Vector4 pos);
+         void Play(std::string_view key, int playType, Math::Vector4 pos);
 
       private:
          Game::GameBase& _gameBase;   //!< ゲームベースの参照

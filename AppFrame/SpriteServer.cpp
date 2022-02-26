@@ -40,7 +40,7 @@ namespace AppFrame {
       /// 更新
       void SpriteServer::Update() {
          _updating = true;
-         // _runObjectsに登録されているActive状態のスプライトの更新処理を回す
+         // _runSpritesに登録されているActive状態のスプライトの更新処理を回す
          for (auto&& spr : _runSprites) {
             if (spr->IsActive()) {
                spr->Update();
