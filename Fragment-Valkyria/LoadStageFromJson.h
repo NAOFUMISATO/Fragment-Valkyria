@@ -60,8 +60,9 @@ namespace FragmentValkyria{
          std::vector<std::pair<int ,StageData>> GetStageModels(std::string_view key);
 
       private:
-         Game::GameMain& _gameMain;   //!< ゲームの参照
-         std::unordered_map<std::string, std::vector<std::pair<int,StageData>>> _stageModelsMap;   //!< 各ステージ情報の連想配列
+         Game::GameMain& _gameMain;                                   //!< ゲームの参照
+         std::unordered_map<std::string, 
+            std::vector<std::pair<int,StageData>>> _stageModelsMap;   //!< 各ステージ情報の連想配列
       };
    }
 }

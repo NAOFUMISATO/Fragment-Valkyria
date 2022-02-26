@@ -319,9 +319,6 @@ namespace AppFrame {
             auto fileName = soundData.fileName();
             SetCreate3DSoundFlag(is3Dsound);
             handle = LoadSoundMem(fileName.data());
-            if (is3Dsound) {
-               Set3DRadiusSoundMem(radius, handle);
-            }
          }
          // キーとデータをmapに登録
          _sounds.emplace(key, std::make_pair(soundData, handle));
