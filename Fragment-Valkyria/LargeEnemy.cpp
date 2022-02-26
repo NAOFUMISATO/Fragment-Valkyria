@@ -125,7 +125,7 @@ void LargeEnemy::CreateFallObject() {
    auto rightMoveVec = MoveVec * rightTransMatrix;
    auto leftMoveVec = MoveVec * leftTransMatrix;
 
-   auto distance = LargeEnemyToPlyDistance - 1000.0;
+   auto distance = LargeEnemyToPlyDistance - 800.0;
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
 
    std::array<Vector4, 3> startPosition = {
