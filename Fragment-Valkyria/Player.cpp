@@ -45,16 +45,12 @@ Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 }
 
 void Player::Init(){
-    // ベクトルを90度回転させるマトリクスの作成
-    _rightRotation.RotateY(90.0, true);
-    // ベクトルを-90度回転させるマトリクスの作成
-    _leftRotation.RotateY(-90.0, true);
-    // ベクトルを180度回転させるマトリクスの作成
-    _backRotation.RotateY(180.0, true);
-    _isAim = false;        // エイム中かのフラグをfalse
-    _isDeadMotion = false; // 死亡モーション中かのフラグをfalse
-
-    _rotateDir = GetForward() * RotateRate;
+    _rightRotation.RotateY(90.0, true);     // ベクトルを90度回転させるマトリクスの作成
+    _leftRotation.RotateY(-90.0, true);     // ベクトルを-90度回転させるマトリクスの作成
+    _backRotation.RotateY(180.0, true);     // ベクトルを180度回転させるマトリクスの作成
+    _isAim = false;                         // エイム中かのフラグをfalse
+    _isDeadMotion = false;                  // 死亡モーション中かのフラグをfalse
+    _rotateDir = GetForward() * RotateRate; // 回転で向かせたい方向に最初に向いている方向を設定
 }
 
 void Player::Input(InputManager& input) {
@@ -71,19 +67,24 @@ void Player::Update() {
    ComputeWorldTransform();
    // モデルの更新
    _modelAnimeComponent->Update();
-   // カメラの更新
+   // カメラにプレイヤーの位置を設定
    _cameraComponent->SetPlyPos(_position);
+   // カメラの更新
    _cameraComponent->Update();
    // オブジェクトサーバーに位置を通知
    GetObjServer().RegistVector("PlayerPos", _position);
+   // オブジェクトサーバーに回転を通知
    GetObjServer().RegistVector("PlayerRot", _rotation);
+   // オブジェクトサーバーにフォワードベクトルを通知
    GetObjServer().RegistVector("PlayerFor",GetForward());
-
+   // モデルのハンドルの取得
    auto handle = modelAnimeComponent().modelHandle();
    auto headFrame = modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_Head");
    auto headPos = MV1GetFramePosition(handle, headFrame);
    GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
+   // オブジェクトサーバーにカメラの注視点を通知
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
+   // オブジェクトサーバーにカメラの位置を通知
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
    GetObjServer().RegistDouble("PlayerHP",_hp);
    GetObjServer().RegistDouble("PlayerBulletStock",static_cast<double>(_bulletStock));
@@ -91,12 +92,12 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-    // 各状態の描画処理
+   // 各状態の描画処理を回す
    _stateServer->Draw();
 }
 
 void Player::ComputeWorldTransform() {
-    // ワールド行列の作成
+   // ワールド行列の作成
    auto [sx, sy, sz] = _scale.GetVec3();
    auto [rx, ry, rz] = _rotation.GetVec3();
    auto [px, py, pz] = _position.GetVec3();
@@ -135,11 +136,14 @@ void Player::ShootRotate() {
 }
 
 void Player::Rotate() {
-    auto forward = GetForward();
-    forward = forward * RotateRate;
-    auto rotateVec = forward.Cross(_rotateDir);
-    auto rotateValue = 0.5 * rotateVec.GetY();
-    _rotation.Add(Vector4(0.0, rotateValue, 0.0));
+   // フォワードベクトルの取得
+   auto forward = GetForward();
+   forward = forward * RotateRate;
+   // フォワードベクトルと向かせたい方向のベクトルからなる三角形の面積の取得
+   auto rotateVec = forward.Cross(_rotateDir);
+   auto rotateValue = 0.5 * rotateVec.GetY();
+   // 面積の値分回転させる(計算の順番をフォワードベクトルから向かせたい方向のベクトルにすることで計算結果の符号をそのまま利用することで最短距離の回転を行う)
+   _rotation.Add(Vector4(0.0, rotateValue, 0.0));
 }
 
 void Player::HitCheckFromFallObjectRange() {
@@ -147,8 +151,8 @@ void Player::HitCheckFromFallObjectRange() {
     auto report = _collisionComponent->report();
     // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromObjectRange) {
-        // 当たり判定結果がオブジェクトを持ち上げられる範囲にいるとなっていたら射撃準備状態へ
-        _stateServer->PushBack("ShootReady");
+        // 当たり判定結果がオブジェクトを持ち上げられる範囲にいるとなっていたらオブジェクト射撃準備状態へ
+        _stateServer->GoToState("ShootReady");
         // カメラのズームをさせる
         _cameraComponent->SetZoom(true);
     }
@@ -162,14 +166,6 @@ void Player::HitCheckFromIdleFallObject() {
         // 待機状態の落下オブジェクトとあたっていたら
         // 当たったポリゴンの法線を取得
         auto normal = _collisionComponent->hitPos();
-
-        //// 移動量のベクトルの取得
-        //auto moveVec = _moved * MoveSpeed;
-        //// 移動量のベクトルと法線の外積をとる
-        //auto slideVec = moveVec.Cross(normal);
-        //// 法線と移動量のベクトルと法線の外積の結果との外積の結果からスライドさせるべき方向のベクトルを取得
-        //slideVec = normal.Cross(slideVec);
-   
         // 法線に移動の速さをかけたベクトル分位置をずらす
         _position = _position + normal * MoveSpeed;
         // 当たり判定の結果を当たっていないと設定
@@ -190,6 +186,7 @@ void Player::HitCheckFromGatling() {
         // 高さがあるので高さをなくす
         auto [x, y, z] = knockBackVec.GetVec3();
         auto knockBackDelta = Vector4(x, 0.0, z);
+        // 単位化する
         knockBackDelta.Normalized();
         // ノックバック量の設定
         _knockBack = knockBackDelta * 10.0;
@@ -227,19 +224,23 @@ void Player::HitCheckFromFallObject() {
             mat.RotateY(rotateY, true);
             // モデルが向いている方向の反対方向のベクトル生成
             Vector4 vec = Vector4(0.0, 0.0, -1.0);
+            // 単位化をする
             vec.Normalized();
+            // ノックバックの向きのベクトルを設定
             auto knockBackDelta = vec * mat;
             // ノックバック量のベクトルを設定
             _knockBack = knockBackDelta * 10.0;
         }
         else {
             // 落下オブジェクトが真上にない場合
-            // ノックバック量のベクトルを設定
+            // ノックバックさせる向きの取得
             auto knockBackVec = _position - hitPos;
             // 高さをなくす
             auto [x, y, z] = knockBackVec.GetVec3();
             auto knockBackDelta = Vector4(x, 0.0, z);
+            // 単位化する
             knockBackDelta.Normalized();
+            // ノックバック量のベクトルを設定
             _knockBack = knockBackDelta * 10.0;
         }
         // ダメージ量分ヒットポイントを減らす
@@ -263,12 +264,14 @@ void Player::HitCheckFromLaser() {
         // レーザーと当たっていたら
         // レーザーの位置を取得
         auto hitPos = _collisionComponent->hitPos();
-        // ノックバック量のベクトルを設定
+        // ノックバックさせる向きの取得
         auto knockBackVec = _position - hitPos;
         // 高さをなくす
         auto [x, y, z] = knockBackVec.GetVec3();
         auto knockBackDelta = Vector4(x, 0.0, z);
+        // 単位化する
         knockBackDelta.Normalized();
+        // ノックバック量のベクトルを設定
         _knockBack = knockBackDelta * 20.0;
         // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
@@ -291,9 +294,11 @@ void Player::HitCheckFromLargeEnemy() {
         // ラージエネミーと当たっていたら
         // ラージエネミーの位置を取得
         auto hitPos = _collisionComponent->hitPos();
-        // ノックバック量のベクトルを設定
+        // ノックバックさせる向きの取得
         auto knockBackVec = _position - hitPos;
+        // 単位化する
         knockBackVec.Normalized();
+        // ノックバック量のベクトルを設定
         _knockBack = knockBackVec * 10.0;
         // ダメージ量分ヒットポイントを減らす
         _hp -= _collisionComponent->damage();
@@ -314,9 +319,11 @@ void Player::HitCheckFromPoorEnemy() {
       // 雑魚敵と当たっていたら
       // 雑魚敵の位置を取得
       auto hitPos = _collisionComponent->hitPos();
-      // ノックバック量のベクトルを設定
+      // ノックバックさせる向きの取得
       auto knockBackVec = _position - hitPos;
+      // 単位化する
       knockBackVec.Normalized();
+      // ノックバック量のベクトルを設定
       _knockBack = knockBackVec * 10.0;
       // ダメージ量分ヒットポイントを減らす
       _hp -= _collisionComponent->damage();
@@ -336,336 +343,396 @@ void Player::WeakAttack() {
 }
 
 void Player::StateBase::Draw() {
+   // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
+   // 無敵時間中か確認
    if (_owner._invincibleCnt > 0) {
+      // 無敵時間中だったらモデルを透明に近くする
        MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 0.1f);
    }
    else {
+      // 無敵時間中じゃなかったらモデルを不透明にする
        MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 1.0f);
    }
 #ifdef _DEBUG
+   // プレイヤーのカプセルの一つ目の座標の設定
    auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
+   // プレイヤーのカプセルの二つ目の座標の設定
    auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
+   // プレイヤーのカプセルの半径の設定
    auto radian = static_cast<float>(CapsuleRadius);
-
+   // プレイヤーのステージとの判定用の線分の始点の設定
    auto start = _owner._position + Vector4(0.0, 50.0, 0.0);
+   // プレイヤーのステージとの判定用の線分の終点の設定
    auto end = _owner._position + Vector4(0.0, -10000.0, 0.0);
-  
+  // プレイヤーのカプセルの描画
    DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
+   // プレイヤーのステージとの判定用の線分の描画
    DrawLine3D(AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end), AppFrame::Math::Utility::GetColorCode(0, 255, 255));
 #endif
-
 }
-/// 待機
+
 void Player::StateIdle::Enter() {
-   /*_owner._forwardSpeed = 0.0;*/
+   // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("stay", true, IdleAnimeSpeed);
 }
-void Player::StateIdle::Input(InputManager& input) {
 
-   if (input.GetKeyboard().SpaceClick()) {
-      _owner._stateServer->PushBack("Attack");
-   }
-   //左スティックが動いていたら走り状態へ
+void Player::StateIdle::Input(InputManager& input) {
+   // 左スティックが動いていたら状態のリストに走り状態を追加する
    if (input.GetXJoypad().LeftStickX() >= 3000) {
-       _owner._stateServer->PushBack("Run");
+      _owner._stateServer->PushBack("Run");
    }
    if (input.GetXJoypad().LeftStickX() <= -3000) {
-       _owner._stateServer->PushBack("Run");
+      _owner._stateServer->PushBack("Run");
    }
    if (input.GetXJoypad().LeftStickY() >= 3000) {
-       _owner._stateServer->PushBack("Run");
+      _owner._stateServer->PushBack("Run");
    }
    if (input.GetXJoypad().LeftStickY() <= -3000) {
-       _owner._stateServer->PushBack("Run");
+      _owner._stateServer->PushBack("Run");
    }
-
+   // 左トリガーが押されているか確認
    if (input.GetXJoypad().LeftTrigger() >= 20) {
-       _owner.HitCheckFromFallObjectRange();
+      // 左トリガーが押されていたらオブジェクトを持ち上げる範囲にいるか確認
+      _owner.HitCheckFromFallObjectRange();
    }
+   // 左トリガーが押されていないときにLBボタンが押されているか確認
    else if (input.GetXJoypad().LBClick()) {
-       _owner._stateServer->PushBack("WeakShootReady");
-       _owner._cameraComponent->SetZoom(true);
+      // 左トリガーが押されていないときにLBボタンが押されていたら遠隔弱攻撃射撃準備状態へ
+      _owner._stateServer->GoToState("WeakShootReady");
+      // カメラのズームをさせる
+      _owner._cameraComponent->SetZoom(true);
    }
+   // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
-       _owner._stateServer->GoToState("Reload");
+      _owner._stateServer->GoToState("Reload");
    }
+   // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
    if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
-       --_owner._portionStock;
-       _owner._stateServer->GoToState("Recovery");
+      // ポーションの数を一つ減らす
+      --_owner._portionStock;
+      _owner._stateServer->GoToState("Recovery");
    }
-}
-void Player::StateIdle::Update() {
-    _owner.Rotate();
-    _owner._collisionComponent->ObjectRangeFromPlayer();
-    _owner.HitCheckFromIdleFallObject();
-    
-    _owner._collisionComponent->GatlingFromPlayer();
-    _owner._collisionComponent->PlayerFromLaser();
-    _owner.HitCheckFromLargeEnemy();
-    _owner.HitCheckFromPoorEnemy();
-    _owner.HitCheckFromFallObject();
-    _owner.HitCheckFromGatling();
-    _owner.HitCheckFromLaser();
-    
-    //無敵時間更新
-    --_owner._invincibleCnt;
 }
 
-/// 走り
+void Player::StateIdle::Update() {
+   // 回転処理
+   _owner.Rotate();
+   // コリジョンコンポーネントでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
+   _owner._collisionComponent->ObjectRangeFromPlayer();
+   // 待機状態の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromIdleFallObject();
+   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
+   // 無敵時間更新
+   --_owner._invincibleCnt;
+}
+
 void Player::StateRun::Enter() {
+   // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("run", true, RunAnimeSpeed);
    auto count = _owner.gameMain().modeServer().frameCount();
    _footCnt = count;
 }
 void Player::StateRun::Input(InputManager& input) {
-    // 待機状態の落下オブジェクトと当たっているか確認
-    _owner.HitCheckFromIdleFallObject();
-    // 移動しているかのフラグを作成して初期ではしていないと設定
-    auto moved = false;
-    // カメラから注視点への方向単位ベクトルをもとめる
-    auto camForward = _owner._cameraComponent->GetForward();
-    auto [x, y, z] = camForward.GetVec3();
-    // 高さをなくす
-    _owner._direction = Vector4(x, 0.0, z);
-    // 移動量のベクトルを初期化
-    _owner._moved = Vector4();
-   if (input.GetKeyboard().SpaceClick()) {
-      _owner._stateServer->PushBack("Attack");
-      return;
-   }
-   
+   // 待機状態の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromIdleFallObject();
+   // 移動しているかのフラグを作成して初期ではしていないと設定
+   auto moved = false;
+   // カメラから注視点への方向単位ベクトルをもとめる
+   auto camForward = _owner._cameraComponent->GetForward();
+   auto [x, y, z] = camForward.GetVec3();
+   // 高さをなくす
+   _owner._direction = Vector4(x, 0.0, z);
+   // 移動量のベクトルを初期化
+   _owner._moved = Vector4();
+   // 左スティックが右に動いているか確認
    if (input.GetXJoypad().LeftStickX() >= 3000) {
-       _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
-       moved = true;
+      // 左スティックが右に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
    }
+   // 左スティックが左に動いているか確認
    if (input.GetXJoypad().LeftStickX() <= -3000) {
-       _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
-       moved = true;
+      // 左スティックが左に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
    }
+   // 左スティックが上に動いているか確認
    if (input.GetXJoypad().LeftStickY() >= 3000) {
-       _owner._moved = _owner._moved + _owner._direction;
-       moved = true;
+      // 左スティックが上に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+      _owner._moved = _owner._moved + _owner._direction;
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
    }
+   // 左スティックが下に動いているか確認
    if (input.GetXJoypad().LeftStickY() <= -3000) {
-       _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
-       moved = true;
+      // 左スティックが下に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
    }
+   // 左トリガーが押されているか確認
    if (input.GetXJoypad().LeftTrigger() >= 20) {
-       _owner.HitCheckFromFallObjectRange();
+      // 左トリガーが押されていたらオブジェクトを持ち上げる範囲にいるか確認
+      _owner.HitCheckFromFallObjectRange();
    }
+   // 左トリガーが押されていないときにLBボタンが押されているか確認
    else if (input.GetXJoypad().LBClick()) {
-       _owner._stateServer->PushBack("WeakShootReady");
-       _owner._cameraComponent->SetZoom(true);
+      // 左トリガーが押されていないときにLBボタンが押されていたら遠隔弱攻撃射撃準備状態へ
+      _owner._stateServer->PushBack("WeakShootReady");
+      // カメラのズームをさせる
+      _owner._cameraComponent->SetZoom(true);
    }
+   // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
    if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
-       _owner._stateServer->GoToState("Reload");
+      _owner._stateServer->GoToState("Reload");
    }
+   // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
    if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
-       --_owner._portionStock;
-       _owner._stateServer->GoToState("Recovery");
+      // ポーションの数を一つ減らす
+      --_owner._portionStock;
+      _owner._stateServer->GoToState("Recovery");
    }
+   // 移動しているかのフラグが移動していないとなっているか確認
    if (!moved) {
-       _owner._stateServer->PopBack();
-   } 
+      // 移動していないとなっていたらこの状態を状態のリストから除外する
+      _owner._stateServer->PopBack();
+   }
+   // 移動している場合
    else {
-       _owner._moved.Normalized();
-       if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
-           Matrix44 mat;
-           mat.RotateY(1.0, true);
-           _owner._rotateDir = _owner._moved * mat * 20.0;
-       }
-       else {
-           _owner._rotateDir = _owner._moved * RotateRate;
-       }
-       _owner._moved = _owner._moved * MoveSpeed;
+      // 移動量のベクトルを単位化する
+      _owner._moved.Normalized();
+      // 移動する方向が現在向いている方向と比べて真逆に近いか確認
+      if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
+         // 移動する方向が現在向いている方向と比べて真逆に近い場合
+         // 1度回転させるマトリクスを作成
+         Matrix44 mat;
+         mat.RotateY(1.0, true);
+         // 向かせたい方向のベクトルを移動方向のベクトルを1度回転させて既定の真逆のときの大きさを掛けて設定
+         _owner._rotateDir = _owner._moved * mat * 20.0;
+      }
+      // 真逆に近くない場合
+      else {
+         // 向かせたい方向のベクトルを移動方向のベクトルを回転を求めるときの既定の大きさを掛けて設定
+         _owner._rotateDir = _owner._moved * RotateRate;
+      }
+      // 移動量のベクトルを設定
+      _owner._moved = _owner._moved * MoveSpeed;
    }
 }
+
 void Player::StateRun::Update() {
    FootStepSound();
+   // 移動処理
    _owner.Move(_owner._moved);
+   // 回転処理
    _owner.Rotate();
+   // コリジョンコンポーネントでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
    _owner._collisionComponent->ObjectRangeFromPlayer();
+   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
+   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
    _owner._collisionComponent->PlayerFromLaser();
+   // 落下中の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromFallObject();
+   // ラージエネミーと当たっているか確認
    _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
    _owner.HitCheckFromPoorEnemy();
+   // ガトリングと当たっているか確認
    _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
-
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
 
-/// 攻撃
-void Player::StateAttack::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop",false, ShootAnimeSpeed);
-}
-void Player::StateAttack::Update() {
-   auto cnt = _owner._modelAnimeComponent->repeatedCount();
-   if (cnt > 0) {
-      _owner._stateServer->PopBack();
-      return;
-   }
-   auto playTime = _owner._modelAnimeComponent->playTime();
-   if (playTime < 3.5f || playTime > 20.f) {
-      return;
-   }
-}
-void Player::StateAttack::Draw() {
-   _owner._modelAnimeComponent->Draw();
-}
-
 void Player::StateShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_loop", true, ShootReadyAnimeSpeed);
-    _owner.GetSoundComponent().Play("PlayerShootReady");
-    _owner._isAim = true;
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_loop", true, ShootReadyAnimeSpeed);
+   // 鳴らすサウンドの設定
+   _owner.GetSoundComponent().Play("PlayerShootReady");
+   // エイム中と設定
+   _owner._isAim = true;
 }
 
 void Player::StateShootReady::Input(InputManager& input) {
-    if (input.GetXJoypad().RBClick()) {
-       _owner.GetSoundComponent().Play("PlayerShoot");
-       _owner._modelAnimeComponent->ChangeAnime("H_attack_attack", false, ShootAnimeSpeed);
-        _owner._stateServer->PopBack();
-        _owner._cameraComponent->SetZoom(false);
-    }
+   // RBボタンが押されたら待機状態へ
+   if (input.GetXJoypad().RBClick()) {
+      // 鳴らすサウンドの設定
+      _owner.GetSoundComponent().Play("PlayerShoot");
+      // モデルのアニメーションの設定
+      _owner._modelAnimeComponent->ChangeAnime("H_attack_attack", false, ShootAnimeSpeed);
+      _owner._stateServer->GoToState("Idle");
+      // カメラのズームをしないと設定
+      _owner._cameraComponent->SetZoom(false);
+   }
 }
 
 void Player::StateShootReady::Update() {
-    _owner.ShootRotate();
-   
-    _owner._collisionComponent->GatlingFromPlayer();
-    _owner._collisionComponent->PlayerFromLaser();
-    _owner.HitCheckFromLargeEnemy();
-    _owner.HitCheckFromPoorEnemy();
-    _owner.HitCheckFromFallObject();
-    _owner.HitCheckFromGatling();
-    _owner.HitCheckFromLaser();
-
-    // 無敵時間更新
-    --_owner._invincibleCnt;
-   
-}
-
-void Player::StateShootReady::Draw() {
-   _owner._modelAnimeComponent->Draw();
+   // 射撃状態の回転処理
+   _owner.ShootRotate();
+   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
+   // 無敵時間更新
+   --_owner._invincibleCnt;
 }
 
 void Player::StateShootReady::Exit() {
+   // エイム中じゃないと設定
    _owner._isAim = false;
 }
 
 void Player::StateKnockBack::Enter() {
-   _owner.modelAnimeComponent().ChangeAnime("damaged", false,1.2);
-    _owner._freezeTime = 30;
-
-}
-
-void Player::StateKnockBack::Input(InputManager& input) {
-
+   // モデルのアニメーションの設定
+   _owner.modelAnimeComponent().ChangeAnime("damaged", false, 1.2);
+   // ノックバックする時間の設定
+   _owner._freezeTime = 30;
 }
 
 void Player::StateKnockBack::Update() {
-    if (_owner._freezeTime > 0) {
-        _owner.Move(_owner._knockBack);
-        auto [x, y, z] = _owner._knockBack.GetVec3();
-        auto radius = std::atan2(-x, -z);
-        _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
-
-        --_owner._freezeTime;
-        return;
-    }
-    if (_owner._hp <= 0) {
-        _owner._stateServer->GoToState("Die");
-    }
-    else {
-        _owner._invincibleCnt = 60 * 2;
-        _owner.collisionComponent().knockBack(false);
-        _owner.collisionComponent().report().id(Collision::CollisionComponent::ReportId::None);
-        _owner._stateServer->GoToState("Idle");
-    }
-}
-
-void Player::StateKnockBack::Draw() {
-    _owner._modelAnimeComponent->Draw();
+   // ノックバックする時間中か確認
+   if (_owner._freezeTime > 0) {
+      // ノックバック処理
+      _owner.Move(_owner._knockBack);
+      // ノックバックの向きの反対の向きへの角度を取得し、向きに設定する
+      auto [x, y, z] = _owner._knockBack.GetVec3();
+      auto radius = std::atan2(-x, -z);
+      _owner._rotation.SetY(AppFrame::Math::Utility::RadianToDegree(radius));
+      // ノックバック時間の更新
+      --_owner._freezeTime;
+      return;
+   }
+   // ヒットポイントが0以下だった場合死亡状態へ
+   if (_owner._hp <= 0) {
+      _owner._stateServer->GoToState("Die");
+   }
+   // ヒットポイントが0以下じゃなかった場合
+   else {
+      // 無敵時間の設定
+      _owner._invincibleCnt = 60 * 2;
+      // ノックバックしていないと設定
+      _owner.collisionComponent().knockBack(false);
+      // 当たり判定の結果を当たっていないと設定
+      _owner.collisionComponent().report().id(Collision::CollisionComponent::ReportId::None);
+      // 待機状態へ
+      _owner._stateServer->GoToState("Idle");
+   }
 }
 
 void Player::StateDie::Enter() {
-    _owner.modelAnimeComponent().ChangeAnime("dawn", false);
-    _timeOver = 60 * 2;
-    _owner._isDeadMotion = true;
-}
-
-void Player::StateDie::Input(InputManager& input) {
-
+   // モデルのアニメーションの設定
+   _owner.modelAnimeComponent().ChangeAnime("dawn", false);
+   // 死亡状態になってからゲームオーバーまでのフレーム数を設定
+   _timeOver = 60 * 2;
+   // 死亡モーション中と設定
+   _owner._isDeadMotion = true;
 }
 
 void Player::StateDie::Update() {
-    if (_timeOver > 0) {
-        --_timeOver;
-    }
-    else {
-        _owner.gameMain().modeServer().PushBack("MissionFailed");
-    }
-}
-
-void Player::StateDie::Draw() {
-    _owner._modelAnimeComponent->Draw();
+   // ゲームオーバーまでのフレーム数が残っていたら減らす
+   if (_timeOver > 0) {
+      --_timeOver;
+   }
+   // ゲームオーバーまでのフレーム数がたった場合
+   else {
+      // モードサーバーにゲームオーバーモードを挿入
+      _owner.gameMain().modeServer().PushBack("MissionFailed");
+   }
 }
 
 void Player::StateWeakShootReady::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
-    _owner.GetSoundComponent().Play("PlayerShootReady");
-    _coolTime = 0;
-    _owner._isAim = true;
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
+   // 鳴らすサウンドの設定
+   _owner.GetSoundComponent().Play("PlayerShootReady");
+   // 遠隔弱攻撃のクールタイムを0に設定
+   _coolTime = 0;
+   // エイム中と設定
+   _owner._isAim = true;
 }
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
-    if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
-        _owner.WeakAttack();
-        _owner._modelAnimeComponent->ChangeAnime("L_attack_attack", false, ShootAnimeSpeed);
-        _owner.GetSoundComponent().Play("PlayerShoot");
-        --_owner._bulletStock;
-        _coolTime = 60 * 1;
-
-    }
-    if (input.GetXJoypad().LBClick()) {
-        _owner._stateServer->PopBack();
-        _owner._cameraComponent->SetZoom(false);
-    }
+   // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があるか確認
+   if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
+      // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があった場合
+      // 遠隔弱攻撃処理
+      _owner.WeakAttack();
+      // モデルのアニメーションの設定
+      _owner._modelAnimeComponent->ChangeAnime("L_attack_attack", false, ShootAnimeSpeed);
+      // 鳴らすサウンドの設定
+      _owner.GetSoundComponent().Play("PlayerShoot");
+      // 遠隔弱攻撃の残り弾数を減らす
+      --_owner._bulletStock;
+      // クールタイムの設定
+      _coolTime = 60 * 1;
+   }
+   // LBボタンが押されたら待機状態へ
+   if (input.GetXJoypad().LBClick()) {
+      _owner._stateServer->GoToState("Idle");
+      // カメラのズームをしないと設定
+      _owner._cameraComponent->SetZoom(false);
+   }
 }
 
 void Player::StateWeakShootReady::Update() {
-    _owner.ShootRotate();
-
-    --_coolTime;
-    // 無敵時間更新
-    --_owner._invincibleCnt;
+   // 射撃状態の回転処理
+   _owner.ShootRotate();
+   // クールタイムの更新
+   --_coolTime;
+   // 無敵時間更新
+   --_owner._invincibleCnt;
 }
 
 void Player::StateWeakShootReady::Exit() {
+   // エイム中じゃないと設定
    _owner._isAim = false;
 }
 
 void Player::StateReload::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("stealth_sit", true,0.8);
-    _reloadCnt = 0;
-}
-
-void Player::StateReload::Input(InputManager& input) {
-
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("stealth_sit", true, 0.8);
+   // リロード状態のカウントを0に設定
+   _reloadCnt = 0;
 }
 
 void Player::StateReload::Update() {
-    if (_reloadCnt > 60 * 2) {
-        _owner._bulletStock = 5;
-        _owner._stateServer->GoToState("Idle");
-    }
-    ++_reloadCnt;
-
-    // 無敵時間更新
-    --_owner._invincibleCnt;
+   // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
+   if (_reloadCnt > 60 * 2) {
+      _owner._bulletStock = 5;
+      _owner._stateServer->GoToState("Idle");
+   }
+   // リロード状態のカウントの更新
+   ++_reloadCnt;
+   // 無敵時間更新
+   --_owner._invincibleCnt;
 }
 
 void Player::StateRun::FootStepSound() {
@@ -702,22 +769,29 @@ void Player::StateRun::FootStepSound() {
 }
 
 void Player::StateRecovery::Enter() {
-    _owner._modelAnimeComponent->ChangeAnime("heal", false);
-    _recoveryCnt = 0;
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("heal", false);
+   // 回復状態のカウントを0に設定
+   _recoveryCnt = 0;
 }
 
 void Player::StateRecovery::Update() {
-    if (_recoveryCnt > 60 * 2) {
-        auto recovery = MaxHp * RecoveryRate;
-        _owner._hp += recovery;
-        if (_owner._hp >= 100.0) {
-            _owner._hp = 100.0;
-        }
-        _owner._stateServer->GoToState("Idle");
-    }
-
-    ++_recoveryCnt;
-
-    // 無敵時間更新
-    --_owner._invincibleCnt;
+   // 回復状態のカウントが既定の値よりも大きいか確認
+   if (_recoveryCnt > 60 * 2) {
+      // 回復状態のカウントが既定の値よりも大きい場合
+      // 回復量の設定
+      auto recovery = MaxHp * RecoveryRate;
+      // ヒットポイントを回復量分増やす
+      _owner._hp += recovery;
+      // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
+      if (_owner._hp >= MaxHp) {
+         _owner._hp = MaxHp;
+      }
+      // 待機状態へ
+      _owner._stateServer->GoToState("Idle");
+   }
+   // 回復状態のカウントの更新
+   ++_recoveryCnt;
+   // 無敵時間更新
+   --_owner._invincibleCnt;
 }

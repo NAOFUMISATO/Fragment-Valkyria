@@ -218,38 +218,17 @@ namespace FragmentValkyria {
             void Update() override;
 
          private:
+            /**
+             * \brief 
+             */
             void FootStepSound();
-            int _footCnt{ 0 };
+            int _footCnt{ 0 };                  //!< 
             bool _footRightStep{ false };       //!< 足音処理のフラグ
-            bool _footLeftStep{ false };       //!< 足音処理のフラグ
+            bool _footLeftStep{ false };        //!< 足音処理のフラグ
          };
          /**
-          * \class 攻撃状態クラス
-          * \brief 攻撃状態の処理を回す
-          */
-         class StateAttack : public StateBase {
-         public:
-            /**
-             * \brief コンストラクタ
-             * \param owner プレイヤーの参照
-             */
-            StateAttack(Player& owner) : StateBase{ owner } {};
-            /**
-             * \brief 入口処理
-             */
-            void Enter() override;
-            /**
-             * \brief 更新処理
-             */
-            void Update() override;
-            /**
-             * \brief 描画処理
-             */
-            void Draw() override;
-         };
-         /**
-          * \class 射撃準備状態クラス
-          * \brief 射撃準備状態の処理を回す
+          * \class オブジェクト射撃準備状態クラス
+          * \brief オブジェクト射撃準備状態の処理を回す
           */
          class StateShootReady : public StateBase
          {
@@ -273,10 +252,6 @@ namespace FragmentValkyria {
               */
              void Update() override;
              /**
-              * \brief 描画処理
-              */
-             void Draw() override;
-             /**
               * \brief 出口処理
               */
              void Exit()override;
@@ -298,18 +273,9 @@ namespace FragmentValkyria {
               */
              void Enter() override;
              /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-             void Input(InputManager& input) override;
-             /**
               * \brief 更新処理
               */
              void Update() override;
-             /**
-              * \brief 描画処理
-              */
-             void Draw() override;
          };
          /**
          * \class 死亡状態クラス
@@ -328,24 +294,15 @@ namespace FragmentValkyria {
               */
              void Enter() override;
              /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-             void Input(InputManager& input) override;
-             /**
               * \brief 更新処理
               */
              void Update() override;
-             /**
-              * \brief 描画処理
-              */
-             void Draw() override;
          private:
-             int _timeOver{ 0 };
+             int _timeOver{ 0 };    //!< 死亡状態になってからゲームオーバーまでのフレーム数
          };
          /**
-          * \class 射撃準備状態クラス
-          * \brief 射撃準備状態の処理を回す
+          * \class 遠隔弱攻撃射撃準備状態クラス
+          * \brief 遠隔弱攻撃射撃準備状態の処理を回す
           */
          class StateWeakShootReady : public StateBase
          {
@@ -374,8 +331,7 @@ namespace FragmentValkyria {
              void Exit()override;
 
          private:
-             int _coolTime{ 0 };
-
+             int _coolTime{ 0 };    //!< 遠隔弱攻撃のクールタイム
          };
          /**
           * \class 装填状態クラス
@@ -394,17 +350,12 @@ namespace FragmentValkyria {
               */
              void Enter() override;
              /**
-              * \brief 入力処理
-              * \param input 入力一括管理クラスの参照
-              */
-             void Input(InputManager& input) override;
-             /**
               * \brief 更新処理
               */
              void Update() override;
 
          private:
-             int _reloadCnt{ 0 };
+             int _reloadCnt{ 0 };      //!< リロード状態のカウント
          };
          /**
           * \class 回復状態クラス
@@ -428,7 +379,7 @@ namespace FragmentValkyria {
             void Update() override;
 
          private:
-            int _recoveryCnt{ 0 };
+            int _recoveryCnt{ 0 };    //!< 回復状態のカウント
          };
       };
    }
