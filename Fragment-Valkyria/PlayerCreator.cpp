@@ -31,6 +31,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    camera->SetPosition({ 0, 120, -500 });
    // カメラの注視点の設定
    camera->SetTarget({ 500, 150, 1500 });
+   // カメラの初期化処理
+   camera->Init();
 
    // カメラの状態一括管理クラスの生成
    auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));

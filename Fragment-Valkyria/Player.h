@@ -328,7 +328,7 @@ namespace FragmentValkyria {
              /**
               * \brief 出口処理
               */
-             void Exit()override;
+             void Exit() override;
 
          private:
              int _coolTime{ 0 };    //!< 遠隔弱攻撃のクールタイム
