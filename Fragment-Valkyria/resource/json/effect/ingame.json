@@ -1,18 +1,73 @@
 {
 	"ingame": [
 		{
-			"keyname": "Shot",
-			"filename": "test.efkefc",
+			"keyname": "WeakBullet",
+			"filename": "WeakBullet.efkefc",
 			"scale": 10.0
 		},
 		{
-			"keyname": "ObjFall",
+			"keyname": "ObjectFall",
 			"filename": "ObjectFall.efkefc",
 			"scale": 35.0
 		},
 		{
-			"keyname": "Run",
-			"filename": "Run.efkefc",
+			"keyname": "ObjectUp",
+			"filename": "ObjectUp.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "PreliminaryLight",
+			"filename": "PreliminaryLight.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "PoorCrash",
+			"filename": "PoorCrash.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "Heal",
+			"filename": "Heal.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "Heal",
+			"filename": "Heal.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "GatlingMuzzleFlash",
+			"filename": "GatlingMuzzleFlash.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "GatlingBullet",
+			"filename": "GatlingBullet.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "BossWalk",
+			"filename": "BossWalk.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "BossStan",
+			"filename": "BossStan.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "BossDieAfter",
+			"filename": "BossDieAfter.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "BossCharge",
+			"filename": "BossCharge.efkefc",
+			"scale": 10.0
+		},
+		{
+			"keyname": "BossBeam",
+			"filename": "BossBeam.efkefc",
 			"scale": 10.0
 		}
 	]

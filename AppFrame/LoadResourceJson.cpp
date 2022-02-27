@@ -180,13 +180,13 @@ namespace AppFrame {
          reading.close();
          // トップレベルの配列のキーを、引数から指定し取り出す
          auto effectArray = value[jsonName.generic_string()];
-         // エフェクトを格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto effectDirectory = _gameBase.pathServer().GetCurrentPath("Effect") / jsonName;
          // トップレベルの配列を全て回し、格納しているエフェクト情報を全て取り出す
          for (auto& effectData : effectArray) {
             const auto keyName = effectData["keyname"];    // キー
             const auto fileName = effectData["filename"];  // ファイル名
             const auto scale = effectData["scale"];        // 初期拡大率
+            // エフェクトを格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
+            auto effectDirectory = _gameBase.pathServer().GetCurrentPath("Effect") / keyName;
             // ファイルへのパスを形成
             const auto effectPath = (effectDirectory / fileName).generic_string();
             // 取り出したキー及びエフェクトへのファイルパスと初期拡大率のpair型をResourceServerに登録する
