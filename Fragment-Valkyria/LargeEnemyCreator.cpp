@@ -13,6 +13,7 @@
 #include "ModelAnimeComponent.h"
 #include "ObjectBase.h"
 #include "ObjectServer.h"
+#include "SpriteServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;

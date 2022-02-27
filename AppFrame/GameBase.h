@@ -141,11 +141,6 @@ namespace AppFrame {
           */
          inline Texture::TextureComponent& texComponent() const { return *_texComponent; }
          /**
-          * \brief スプライトサーバーの参照を取得
-          * \return スプライトサーバーのポインタ
-          */
-         inline Sprite::SpriteServer& sprServer() const { return *_sprServer; }
-         /**
           * \brief ウィンドウモードに設定するか
           * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
           */
@@ -172,7 +167,6 @@ namespace AppFrame {
          std::unique_ptr<Resource::LoadResourceJson> _loadresJson; //!< jsonファイル管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;         //!< エフェクトの一括管理クラス
          std::unique_ptr<Texture::TextureComponent> _texComponent; //!< 画像の簡易描画クラス
-         std::unique_ptr<Sprite::SpriteServer> _sprServer;         //!< スプライトの一括管理クラス
       };
    }
 }

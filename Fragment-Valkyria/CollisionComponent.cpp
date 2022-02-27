@@ -594,7 +594,7 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
     
-   auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
+   auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
 
    auto newPos = pos + moved;
    auto start = newPos + Vector4(0.0, 50.0, 0.0);
@@ -623,7 +623,7 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
 
-   auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_boss_c");
+   auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_boss_c");
 
    auto newPos = pos + moved;
    auto start = newPos + Vector4(0.0, 50.0, 0.0);
@@ -652,7 +652,7 @@ AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& p
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
 
-   auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
+   auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
 
    auto newPos = pos + moved;
    auto start = newPos + Vector4(0.0, 50.0, 0.0);
@@ -681,7 +681,7 @@ void CollisionComponent::OutStage() {
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 
-   auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_object_c");
+   auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_object_c");
    // ˆÊ’u‚Ìæ“¾
    auto position = _owner.position();
    // ü•ª‚Ìì¬
@@ -713,7 +713,7 @@ bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 
-   auto [handle, collision] = stageComponent.GetHandleAndCollNum("stage_character_c");
+   auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
    // ˆÊ’u‚Ìæ“¾
    auto [x, y, z] = pos.GetVec3();
    // ü•ª‚Ìì¬

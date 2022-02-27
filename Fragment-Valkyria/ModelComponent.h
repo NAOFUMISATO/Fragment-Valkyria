@@ -86,15 +86,66 @@ namespace FragmentValkyria {
           */
          inline int modelHandle() { return _modelHandle; }
          /**
+          * \brief モデルの拡散反射光色の設定
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetDifColor(int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの鏡面反射光色の設定
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetSpcColor(int index, float red, float green, float blue, float alpha);
+         /**
           * \brief モデルの自己発光色の設定
           * \param index 設定するモデルのマテリアル番号
-          * \param r 赤
-          * \param g 緑
-          * \param b 青
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
           */
-         void SetEmiColor(int index, float r, float g, float b);
+         void SetEmiColor(int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの環境光色の設定
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetAmbColor(int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの鏡面反射光の強さの設定
+          * \param index 設定するモデルのマテリアル番号
+          * \param power 設定する強さ
+          */
+         void SetSpcPower(int index, float power);
+         /**
+          * \brief モデルのブレンドモードを加算モードに設定
+          * \param index 設定するモデルのマテリアル番号
+          */
+         void SetBlendModeAdd(int index);
+         /**
+          * \brief モデルのブレンドモード設定を解除する
+          * \param index 解除するモデルのマテリアル番号
+          */
+         void SetBlendModeReset(int index);
+         /**
+          * \brief モデルのブレンドモードのパラメーターを設定する
+          * \param index 設定するモデルのマテリアル番号
+          * \param param 設定するパラメーター
+          */
+         void SetBlendParam(int index,int param);
          /**
           * \brief ライティングフラグをfalseにする
+          * 
           */
          inline void LightingOFF() { _isLighting = false; }
          /**
@@ -114,6 +165,19 @@ namespace FragmentValkyria {
           * \return フレーム番号
           */
          int FindFrameChild(std::string_view frameName, std::string_view childName);
+         /**
+          * \brief モデルから指定名のフレームの位置を取得する
+          * \param frameName フレーム名
+          * \return 指定名のフレームの位置
+          */
+         Vector4 GetFramePosion(std::string_view frameName);
+         /**
+          * \brief モデルの指定名のフレームから指定名の子フレームの位置を取得する
+          * \param frameName フレーム名
+          * \param childName 子フレーム名
+          * \return 指定名の子フレームの位置
+          */
+         Vector4 GetFrameChildPosion(std::string_view frameName, std::string_view childName);
 
       protected:
          Object::ObjectBase& _owner;   //!< オブジェクトの基底クラスの参照

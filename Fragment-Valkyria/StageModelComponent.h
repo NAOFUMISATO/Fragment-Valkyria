@@ -63,13 +63,57 @@ namespace FragmentValkyria {
           */
          inline std::vector<int> modelHandles() { return _modelHandles; }
          /**
-          * \brief モデルの自己発光色の設定
+          * \brief モデルの拡散反射光色の設定
+          * \param key ステージ情報の連想配列に関連付けた文字列
+          * \param fileName 指定のステージ情報のファイル名
           * \param index 設定するモデルのマテリアル番号
-          * \param r 赤
-          * \param g 緑
-          * \param b 青
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
           */
-         void SetEmiColor(int index, float r, float g, float b);
+         void SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの鏡面反射光色の設定
+          * \param key ステージ情報の連想配列に関連付けた文字列
+          * \param fileName 指定のステージ情報のファイル名
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの自己発光色の設定
+          * \param key ステージ情報の連想配列に関連付けた文字列
+          * \param fileName 指定のステージ情報のファイル名
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetEmiColor(std::string_view key,std::string_view fileName,int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief モデルの環境光色の設定
+          * \param key ステージ情報の連想配列に関連付けた文字列
+          * \param fileName 指定のステージ情報のファイル名
+          * \param index 設定するモデルのマテリアル番号
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          * \param alpha 透明度
+          */
+         void SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         /**
+          * \brief 鏡面反射光の強さを設定
+          * \param key ステージ情報の連想配列に関連付けた文字列
+          * \param fileName 指定のステージ情報のファイル名
+          * \param index 設定するモデルのマテリアル番号
+          * \param power 鏡面反射光の強さ
+          */
+         void SetSpcPower(std::string_view key, std::string_view fileName, int index, float power);
          /**
           * \brief ライティングフラグをfalseにする
           */
@@ -79,11 +123,11 @@ namespace FragmentValkyria {
           */
          inline void PixelLightingON() { _isPixelLighting = true; }
          /**
-          * \brief ステージパーツのモデルハンドルの動的配列から指定のコリジョンフレームがあるモデルハンドルとコリジョン番号を返す
-          * \param collName コリジョンフレーム名
-          * \return モデルハンドルとコリジョン番号
+          * \brief ステージパーツのモデルハンドルの動的配列から指定のフレームがあるモデルハンドルとフレーム番号を返す
+          * \param frameName フレーム名
+          * \return モデルハンドルとフレーム番号
           */
-         std::pair<int, int> GetHandleAndCollNum(std::string_view collName);
+         std::pair<int, int> GetHandleAndFrameNum(std::string_view frameName);
 
       protected:
          /**
@@ -111,10 +155,10 @@ namespace FragmentValkyria {
           */
          void SetMatrix(int handle, Matrix44& world);
 
-         Object::ObjectBase& _owner;                 //!< オブジェクトベースの参照
-         std::vector<int> _modelHandles{ -1 };       //!< モデルハンドル
-         bool _isLighting{ true };                   //!< ライティングを行うかのフラグ
-         bool _isPixelLighting{ false };             //!< ピクセルライティングを行うかのフラグ
+         Object::ObjectBase& _owner;            //!< オブジェクトベースの参照
+         std::vector<int> _modelHandles{ -1 };  //!< モデルハンドル
+         bool _isLighting{ true };              //!< ライティングを行うかのフラグ
+         bool _isPixelLighting{ false };        //!< ピクセルライティングを行うかのフラグ
       };
    }
 }

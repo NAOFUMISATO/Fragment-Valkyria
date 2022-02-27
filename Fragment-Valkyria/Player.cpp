@@ -80,9 +80,8 @@ void Player::Update() {
    GetObjServer().RegistVector("PlayerFor",GetForward());
 
    auto handle = modelAnimeComponent().modelHandle();
-   auto headFrame = modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_Head");
-   auto headPos = MV1GetFramePosition(handle, headFrame);
-   GetObjServer().RegistVector("PlayerHeadPos", AppFrame::Math::ToMath(headPos));
+   auto headFramePos = modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Head");
+   GetObjServer().RegistVector("PlayerHeadPos", headFramePos);
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
    GetObjServer().RegistDouble("PlayerHP",_hp);
@@ -671,13 +670,10 @@ void Player::StateReload::Update() {
 void Player::StateRun::FootStepSound() {
    auto count = _owner.gameMain().modeServer().frameCount();
    if (count - _footCnt >= FootStepStart) {
-      auto handle = _owner.modelAnimeComponent().modelHandle();
-      auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_RightToeBase");
-      auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_LeftToeBase");
-      auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
-      auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
-      auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
-      auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
+      auto rightFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_RightToeBase");
+      auto leftFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_LeftToeBase");
+      auto rightFootY = rightFootFramePos.GetY();
+      auto leftFootY = leftFootFramePos.GetY();
       if (rightFootY >= FootStepHeight) {
          _footRightStep = true;
       }

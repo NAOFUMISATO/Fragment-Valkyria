@@ -37,25 +37,80 @@ void StageModelComponent::Draw() {
 
 void StageModelComponent::SetModels(std::string_view key) {
    auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
-   for (auto stageModel : stageModels) {
+   for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
-      auto [position,rotation,scale] = stageData.GetStageParams();
+      auto [position, rotation, scale] = stageData.GetStageParams();
       SetPosition(handle, position);
-      SetRotation(handle,rotation);
+      SetRotation(handle, rotation);
       SetScale(handle, scale);
       _modelHandles.emplace_back(handle);
    }
 }
 
-std::pair<int, int> StageModelComponent::GetHandleAndCollNum(std::string_view collName) {
-   for (int i = 0; i < _modelHandles.size(); i++) {
-      auto handle = _modelHandles[i];
-      auto collNum = MV1SearchFrame(handle, collName.data());
-      if (collNum >= 0) {
-        return std::make_pair(handle, collNum);
+void StageModelComponent::SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   for (auto& stageModel : stageModels) {
+      auto [handle, stageData] = stageModel;
+      auto stageName = stageData.fileName();
+      if (fileName == stageName) {
+         MV1SetMaterialDifColor(handle, index, GetColorF(red, green, blue, alpha));
       }
    }
-   return std::make_pair(0,0);
+}
+
+void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   for (auto& stageModel : stageModels) {
+      auto [handle, stageData] = stageModel;
+      auto stageName = stageData.fileName();
+      if (fileName == stageName) {
+         MV1SetMaterialSpcColor(handle, index, GetColorF(red, green, blue, alpha));
+      }
+   }
+}
+
+void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   for (auto& stageModel : stageModels) {
+      auto [handle, stageData] = stageModel;
+      auto stageName = stageData.fileName();
+      if (fileName == stageName) {
+         MV1SetMaterialEmiColor(handle, index, GetColorF(red, green, blue, alpha));
+      }
+   }
+}
+
+void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   for (auto& stageModel : stageModels) {
+      auto [handle, stageData] = stageModel;
+      auto stageName = stageData.fileName();
+      if (fileName == stageName) {
+         MV1SetMaterialAmbColor(handle, index, GetColorF(red, green, blue, alpha));
+      }
+   }
+}
+
+void StageModelComponent::SetSpcPower(std::string_view key, std::string_view fileName, int index, float power) {
+   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   for (auto& stageModel : stageModels) {
+      auto [handle, stageData] = stageModel;
+      auto stageName = stageData.fileName();
+      if (fileName == stageName) {
+         MV1SetMaterialSpcPower(handle, index, power);
+      }
+   }
+}
+
+std::pair<int, int> StageModelComponent::GetHandleAndFrameNum(std::string_view frameName) {
+   for (int i = 0; i < _modelHandles.size(); i++) {
+      auto handle = _modelHandles[i];
+      auto frameNum = MV1SearchFrame(handle, frameName.data());
+      if (frameNum >= 0) {
+         return std::make_pair(handle, frameNum);
+      }
+   }
+   return std::make_pair(0, 0);
 }
 
 void StageModelComponent::SetPosition(int handle, Vector4 position) {
@@ -72,10 +127,4 @@ void StageModelComponent::SetScale(int handle, Vector4  scale) {
 
 void StageModelComponent::SetMatrix(int handle, Matrix44& world) {
    MV1SetMatrix(handle, AppFrame::Math::ToDX(world));
-}
-
-void StageModelComponent::SetEmiColor(int index, float r, float g, float b) {
-   for (auto& modelHandle : _modelHandles) {
-      MV1SetMaterialEmiColor(modelHandle, index, GetColorF(r, g, b, 0.f));
-   }
 }

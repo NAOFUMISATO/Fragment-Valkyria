@@ -18,9 +18,9 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
    _stageComponent->SetModels("Stage");
    _stageComponent->PixelLightingON();
 
-   auto [charaCollHandle, charaCollNum] = _stageComponent->GetHandleAndCollNum("stage_character_c");
-   auto [bossCollHandle, bossCollNum] = _stageComponent->GetHandleAndCollNum("stage_boss_c");
-   auto [objCollHandle, objCollNum] = _stageComponent->GetHandleAndCollNum("stage_object_c");
+   auto [charaCollHandle, charaCollNum] = _stageComponent->GetHandleAndFrameNum("stage_character_c");
+   auto [bossCollHandle, bossCollNum] = _stageComponent->GetHandleAndFrameNum("stage_boss_c");
+   auto [objCollHandle, objCollNum] = _stageComponent->GetHandleAndFrameNum("stage_object_c");
 
    // プレイヤーのコリジョンフレームをナビメッシュとして使用
    MV1SetupCollInfo(charaCollHandle, charaCollNum, 8, 1, 8);

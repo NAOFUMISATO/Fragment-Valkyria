@@ -65,13 +65,10 @@ void LargeEnemy::Draw() {
 }
 
 void LargeEnemy::CreateGatling() {
-   auto handle = modelAnimeComponent().modelHandle();
-   auto gatlingFrame = modelAnimeComponent().FindFrameChild("root", "gatling3");
-   auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
+   auto gatlingFramePos = modelAnimeComponent().GetFrameChildPosion("root", "gatling3");
    //ƒKƒgƒŠƒ“ƒO‚ð¶¬‚·‚éÀ•W‚ðÝ’è
-   GetObjServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
-   /*auto plyPos = GetObjServer().GetVecData("PlayerPos");*/
-   auto gatlingDirection = _position + _rotateDir * 100.0/*plyPos*/ - AppFrame::Math::ToMath(gatlingPos);
+   GetObjServer().RegistVector("GatlingPos", gatlingFramePos);
+   auto gatlingDirection = _position + _rotateDir * 100.0- gatlingFramePos;
    GetObjServer().RegistVector("GatlingMoveDirection", gatlingDirection);
    auto gatling = gameMain().objFactory().Create("Gatling");
    GetObjServer().Add(std::move(gatling));
@@ -438,12 +435,10 @@ void LargeEnemy::StateMove::Update() {
 void LargeEnemy::StateMove::FootStepSound() {
    auto count = _owner.gameMain().modeServer().frameCount();
    auto handle = _owner.modelAnimeComponent().modelHandle();
-   auto rightFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_right_hand");
-   auto leftFootFrame = _owner.modelAnimeComponent().FindFrameChild("root", "front_left_hand");
-   auto rightFootPos = MV1GetFramePosition(handle, rightFootFrame);
-   auto leftFootPos = MV1GetFramePosition(handle, leftFootFrame);
-   auto rightFootY = AppFrame::Math::ToMath(rightFootPos).GetY();
-   auto leftFootY = AppFrame::Math::ToMath(leftFootPos).GetY();
+   auto rightFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_right_hand");
+   auto leftFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_left_hand");
+   auto rightFootY = rightFootFramePos.GetY();
+   auto leftFootY = leftFootFramePos.GetY();
    if (rightFootY >= 40.0) {
       _footRightStep = true;
    }

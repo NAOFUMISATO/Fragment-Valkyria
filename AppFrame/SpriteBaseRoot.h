@@ -41,98 +41,21 @@ namespace AppFrame {
          using StateServer = State::StateServer;
       public:
          
-         enum class SpriteState {
-            Active,       //!< 生存
-            Paused,       //!< 停止
-            Dead          //!< 死亡
-         };
+         
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体の参照
           */
          SpriteBaseRoot(Game::GameBase& gameBase);
-         /**
-          * \brief デフォルトデストラクタ
-          */
-         virtual ~SpriteBaseRoot()=default;
-         /**
-          * \brief 初期化処理
-          */
-         virtual void Init() {};
-         /**
-          * \brief 入力処理
-          * \param input 入力一括管理クラスの参照
-          */
-         virtual void Input(Input::InputManager& input) {};
-         /**
-          * \brief 更新処理
-          */
-         virtual void Update() {};
-         /**
-          * \brief 描画処理
-          */
-         virtual void Draw();
+         
 
-         /**
-          * \brief 死亡しているかの判定
-          * \return 死亡していればtrue、でなければfalseを返す
-          */
-         inline bool IsDead() { return (_sprState == SpriteState::Dead); }
-         /**
-          * \brief 生存しているかの判定
-          * \return 生存していればtrue、でなければfalseを返す
-          */
-         inline bool IsActive() { return (_sprState == SpriteState::Active); }
-         /**
-          * \brief 状態を死亡状態に設定
-          */
-         inline void SetDead() { _sprState = SpriteState::Dead; }
+         
          /**
           * \brief ゲームベースの参照の取得
           * \return ゲームベースの参照
           */
          inline Game::GameBase& gameBase() const { return _gameBase; }
-         /**
-          * \brief 位置の設定
-          * \param objPosition 位置
-          */
-         inline void position(const Vector4& objPosition) { _position = objPosition; }
-         /**
-          * \brief 位置の取得
-          * \return 位置
-          */
-         inline Vector4 position() const { return _position; }
          
-         /**
-          * \brief 状態一括管理クラスの設定
-          * \param state 各状態クラスのインスタンス
-          */
-         void stateServer(std::unique_ptr<StateServer> state);
-         /**
-          * \brief 状態一括管理クラスの取得
-          * \return 状態管理クラス
-          */
-         inline StateServer& stateServer() const { return *_stateServer; }
-         /**
-          * \brief スプライトサーバーの参照をゲームベースクラス経由で取得
-          * \return スプライトサーバーの参照
-          */
-         SpriteServer& GetSprServer() const;
-         /**
-          * \brief jsonファイル管理クラスの参照をゲーム本体経由で取得
-          * \return jsonファイル管理クラスの参照
-          */
-         AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
-         /**
-          * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
-          * \return 画像簡易描画クラスの参照
-          */
-         Texture::TextureComponent& GetTexComponent() const;
-         /**
-          * \brief リソースサーバーの参照をゲームベース経由で取得
-          * \return リソースサーバーの参照
-          */
-         Resource::ResourceServer& GetResServer() const;
 
       protected:
          /**

@@ -13,6 +13,7 @@
 #include "ObjectFactory.h"
 #include "LoadStageFromJson.h"
 #include "ObjectServer.h"
+#include "SpriteServer.h"
 #include "ModeClearResult.h"
 #include "ModeGameOver.h"
 #include "ModeMissionFailed.h"
@@ -51,6 +52,8 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _objFactory = std::make_unique<Create::ObjectFactory>(*this);
 
    _objServer = std::make_unique<Object::ObjectServer>();
+
+   _sprServer = std::make_unique <Sprite::SpriteServer>();
 
    _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
 

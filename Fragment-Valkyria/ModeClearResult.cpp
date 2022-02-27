@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ModeClearResult.h"
 #include "ClearTime.h"
+#include "SpriteServer.h"
 
 using namespace FragmentValkyria::Mode;
 

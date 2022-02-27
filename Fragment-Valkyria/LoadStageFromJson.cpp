@@ -37,18 +37,18 @@ void LoadStageFromJson::LoadStageModel(std::string_view key, StageData& stageDat
    if (_stageModelsMap.contains(key.data())) {
       for (auto& stagemodel : _stageModelsMap[key.data()]) {
          auto [originalHandle, Data] = stagemodel;
-         if (stageData.stageName() == Data.stageName()) {
+         if (stageData.fileName() == Data.fileName()) {
             auto copyHandle = MV1DuplicateModel(originalHandle);
             _stageModelsMap[key.data()].emplace_back(copyHandle, stageData);
             return;
          }
       }
-      auto filename = stageData.stageName().data();
+      auto filename = stageData.fileName().data();
       auto handle = MV1LoadModel(filename);
       _stageModelsMap[key.data()].emplace_back(handle, stageData);
    }
    else {
-      auto filename = stageData.stageName().data();
+      auto filename = stageData.fileName().data();
       auto handle = MV1LoadModel(filename);
       std::vector<std::pair<int, StageData>> stageDatas;
       stageDatas.emplace_back(handle, stageData);

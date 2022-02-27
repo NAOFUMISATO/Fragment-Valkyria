@@ -29,8 +29,6 @@
 #include "Singleton.h"
 #include "LoadParamJson.h"
 #include "TextureComponent.h"
-#include "SpriteBaseRoot.h"
-#include "SpriteServer.h"
 #include "Rect.h"
 #include "Color.h"
 #include "Triangle.h"

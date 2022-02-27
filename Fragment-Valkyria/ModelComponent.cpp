@@ -55,8 +55,36 @@ void ModelComponent::SetMatrix(Matrix44& world) {
    MV1SetMatrix(_modelHandle, AppFrame::Math::ToDX(world));
 }
 
-void ModelComponent::SetEmiColor(int index, float r, float g, float b) {
-   MV1SetMaterialEmiColor(_modelHandle, index, GetColorF(r, g, b, 0.f));
+void ModelComponent::SetDifColor(int index, float red, float green, float blue, float alpha) {
+   MV1SetMaterialDifColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+}
+
+void ModelComponent::SetSpcColor(int index, float red, float green, float blue, float alpha) {
+   MV1SetMaterialSpcColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+}
+
+void ModelComponent::SetEmiColor(int index, float red, float green, float blue, float alpha) {
+   MV1SetMaterialEmiColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+}
+
+void ModelComponent::SetAmbColor(int index, float red, float green, float blue, float alpha) {
+   MV1SetMaterialAmbColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+}
+
+void ModelComponent::SetSpcPower(int index, float power) {
+   MV1SetMaterialSpcPower(_modelHandle, index, power);
+}
+
+void ModelComponent::SetBlendModeAdd(int index) {
+   MV1SetMaterialDrawBlendMode(_modelHandle, index, DX_BLENDMODE_ADD);
+}
+
+void ModelComponent::SetBlendModeReset(int index) {
+   MV1SetMaterialDrawBlendMode(_modelHandle, index, DX_BLENDMODE_NOBLEND);
+}
+
+void ModelComponent::SetBlendParam(int index,int param) {
+   MV1SetMaterialDrawBlendParam(_modelHandle, index, param);
 }
 
 int ModelComponent::FindFrame(std::string_view frameName) {
@@ -91,3 +119,36 @@ int ModelComponent::FindFrameChild(std::string_view frameName,std::string_view c
    return child;
 }
 
+AppFrame::Math::Vector4 ModelComponent::GetFramePosion(std::string_view frameName) {
+   auto frame = MV1SearchFrame(_modelHandle, frameName.data());
+#ifdef _DEBUG
+   try {
+      if (frame < 0) {
+         std::string message = frameName.data();
+         throw std::logic_error("----------フレーム位置を取得しようとしたところ、指定フレーム名「" + message + "」に一致するフレームは存在しませんでした。----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
+   auto pos = MV1GetFramePosition(_modelHandle, frame);
+   return AppFrame::Math::ToMath(pos);
+}
+
+AppFrame::Math::Vector4 ModelComponent::GetFrameChildPosion(std::string_view frameName, std::string_view childName) {
+   auto child = MV1SearchFrameChild(_modelHandle, FindFrame(frameName.data()), childName.data());
+#ifdef _DEBUG
+   try {
+      if (child < 0) {
+         std::string message = childName.data();
+         throw std::logic_error("----------子フレーム位置を取得しようとしたところ、指定の子フレーム名「" + message + "」に一致する子フレームは存在しませんでした。----------\n");
+      }
+   }
+   catch (std::logic_error& error) {
+      OutputDebugString(error.what());
+   }
+#endif
+   auto pos = MV1GetFramePosition(_modelHandle, child);
+   return AppFrame::Math::ToMath(pos);
+}

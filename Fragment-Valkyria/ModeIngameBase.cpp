@@ -15,6 +15,7 @@
 #include "ModelAnimeComponent.h"
 #include "LightAndShadow.h"
 #include "SpriteBase.h"
+#include "SpriteServer.h"
 #include "Stage.h"
 
 using namespace FragmentValkyria::Mode;

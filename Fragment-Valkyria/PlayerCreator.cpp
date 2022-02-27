@@ -16,6 +16,7 @@
 #include "RemainingBullet.h"
 #include "RemainingPortion.h"
 #include "Reticle.h"
+#include "SpriteServer.h"
 
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;

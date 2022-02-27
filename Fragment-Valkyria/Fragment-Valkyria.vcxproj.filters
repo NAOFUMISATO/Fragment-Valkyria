@@ -129,9 +129,6 @@
     <ClInclude Include="StageCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
-    <ClInclude Include="ModelComponent.h">
-      <Filter>ヘッダー ファイル\Model</Filter>
-    </ClInclude>
     <ClInclude Include="ModelAnimeComponent.h">
       <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
@@ -260,6 +257,12 @@
     </ClInclude>
     <ClInclude Include="PoorEnemyMeleeCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteServer.h">
+      <Filter>ヘッダー ファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelComponent.h">
+      <Filter>ヘッダー ファイル\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="PoorEnemyMelee.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteServer.cpp">
+      <Filter>ソース ファイル\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -32,21 +32,17 @@ namespace FragmentValkyria {
           * \param scale 拡大率
           */
          StageData(std::string_view fileName, Vector4 position, Vector4 rotation, Vector4 scale) :
-            _stageName(fileName), _position(position), _rotation(rotation), _scale(scale) {
+            _fileName(fileName), _position(position), _rotation(rotation), _scale(scale) {
          };
          /**
           * \brief コンストラクタ
           */
          StageData() {};
          /**
-          * \brief デフォルトデストラクタ
+          * \brief ファイル名の取得
+          * \return ファイル名
           */
-         ~StageData() = default;
-         /**
-          * \brief ステージ名の取得
-          * \return ステージ名
-          */
-         std::string_view stageName() const { return _stageName; }
+         std::string_view fileName() const { return _fileName; }
          /**
           * \brief ステージ情報の取得
           * \return 位置、回転角、拡大率のTuple型
@@ -54,7 +50,7 @@ namespace FragmentValkyria {
          std::tuple<Vector4, Vector4, Vector4> GetStageParams() const { return { _position,_rotation,_scale }; }
 
       private:
-         std::string _stageName;   //!< ステージ名
+         std::string _fileName;    //!< ファイル名
          Vector4 _position;        //!< 位置
          Vector4 _rotation;        //!< 回転角
          Vector4 _scale;           //!< 拡大率

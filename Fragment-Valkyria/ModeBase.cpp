@@ -9,6 +9,7 @@
 #include "ModeBase.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "SpriteServer.h"
 
 using namespace FragmentValkyria::Mode;
 
@@ -17,4 +18,8 @@ ModeBase::ModeBase(Game::GameMain& gameMain) : ModeBaseRoot{ gameMain }, _gameMa
 
 FragmentValkyria::Object::ObjectServer& ModeBase::GetObjServer() const {
    return _gameMain.objServer();
+}
+
+FragmentValkyria::Sprite::SpriteServer& ModeBase::GetSprServer() const {
+   return _gameMain.sprServer();
 }

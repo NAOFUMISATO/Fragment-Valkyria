@@ -18,6 +18,9 @@ namespace FragmentValkyria {
    namespace Object {
       class ObjectServer;
    }
+   namespace Sprite {
+      class SpriteServer;
+   }
    /**
     * \brief モード関係
     */
@@ -34,6 +37,7 @@ namespace FragmentValkyria {
           * \return オブジェクト一括管理クラスの参照
           */
          Object::ObjectServer& GetObjServer() const;
+         Sprite::SpriteServer& GetSprServer() const;
 
       protected:
          Game::GameMain& _gameMain; //!< ゲームクラスの参照

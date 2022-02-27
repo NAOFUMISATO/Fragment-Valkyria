@@ -26,11 +26,8 @@ std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
       }
-      /*auto& ply = dynamic_cast<Player::Player&>(*object);*/
-      auto handle = object->modelAnimeComponent().modelHandle();
-      auto rightHandFrame = object->modelAnimeComponent().FindFrameChild("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
-      auto rightHandPos = MV1GetFramePosition(handle, rightHandFrame);
-      bullet->position(AppFrame::Math::ToMath(rightHandPos));
+      auto rightHandFramePos = object->modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
+      bullet->position(rightHandFramePos);
    }
    bullet->Init();
 
