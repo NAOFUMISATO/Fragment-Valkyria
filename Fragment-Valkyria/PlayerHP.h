@@ -49,6 +49,7 @@ namespace FragmentValkyria {
       private:
          /**
           * \brief HPバー振動の処理
+          * \param count ゲームのフレームカウント
           */
          void BarShake(unsigned int count);
          double _hp{ 100.0 };                          //!< ボスHP

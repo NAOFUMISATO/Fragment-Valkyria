@@ -219,19 +219,18 @@ namespace FragmentValkyria {
 
          private:
             /**
-             * \brief 
+             * \brief 足音処理
              */
             void FootStepSound();
-            int _footCnt{ 0 };                  //!< 
-            bool _footRightStep{ false };       //!< 足音処理のフラグ
-            bool _footLeftStep{ false };        //!< 足音処理のフラグ
+            int _footCnt{ 0 };                  //!< 足音が鳴り出すフレームの保存用
+            bool _footRightStep{ false };       //!< 右足音処理のフラグ
+            bool _footLeftStep{ false };        //!< 左足音処理のフラグ
          };
          /**
           * \class オブジェクト射撃準備状態クラス
           * \brief オブジェクト射撃準備状態の処理を回す
           */
-         class StateShootReady : public StateBase
-         {
+         class StateShootReady : public StateBase {
          public:
              /**
               * \brief コンストラクタ
@@ -304,8 +303,7 @@ namespace FragmentValkyria {
           * \class 遠隔弱攻撃射撃準備状態クラス
           * \brief 遠隔弱攻撃射撃準備状態の処理を回す
           */
-         class StateWeakShootReady : public StateBase
-         {
+         class StateWeakShootReady : public StateBase {
          public:
              /**
               * \brief コンストラクタ
@@ -337,8 +335,7 @@ namespace FragmentValkyria {
           * \class 装填状態クラス
           * \brief 装填状態の処理を回す
           */
-         class StateReload : public StateBase
-         {
+         class StateReload : public StateBase {
          public:
              /**
               * \brief コンストラクタ
@@ -361,8 +358,7 @@ namespace FragmentValkyria {
           * \class 回復状態クラス
           * \brief 回復状態の処理を回す
           */
-         class StateRecovery : public StateBase
-         {
+         class StateRecovery : public StateBase {
          public:
             /**
              * \brief コンストラクタ

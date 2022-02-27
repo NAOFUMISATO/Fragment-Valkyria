@@ -23,10 +23,11 @@ namespace {
    const int GatlingFrame = paramMap["gatling_frame"];
 
    constexpr auto MaxNum = 6;
+   constexpr auto FootStepHeight = 40.0;                   //!< 走り状態時の足音発生高さ
 }
 
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-   
+
 }
 
 void LargeEnemy::Init() {
@@ -433,28 +434,34 @@ void LargeEnemy::StateMove::Update() {
 }
 
 void LargeEnemy::StateMove::FootStepSound() {
+   // フレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
-   auto handle = _owner.modelAnimeComponent().modelHandle();
+   // ボスの両前足の接地部分のフレームを取得
    auto rightFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_right_hand");
    auto leftFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_left_hand");
+   // ボスの両前足の接地部分のフレームの高さを取得
    auto rightFootY = rightFootFramePos.GetY();
    auto leftFootY = leftFootFramePos.GetY();
-   if (rightFootY >= 40.0) {
-      _footRightStep = true;
+   // 右前足の接地部分フレームは一定以上高さか
+   if (rightFootY >= FootStepHeight) {
+      _footRightStep = true;    // 足音が鳴るフラグをtrue
    }
    else {
+      // 右足音が鳴るフラグをtrueか
       if (_footRightStep) {
-         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);
-         _footRightStep = false;
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
+         _footRightStep = false;                                              // 足音が鳴るフラグをfalse
       }
    }
-   if (leftFootY >= 40.0) {
-      _footLeftStep = true;
+   // 左前足の接地部分フレームは一定以上高さか
+   if (leftFootY >= FootStepHeight) {
+      _footLeftStep = true;    // 足音が鳴るフラグをtrue
    }
    else {
+      // 左足音が鳴るフラグをtrueか
       if (_footLeftStep) {
-         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);
-         _footLeftStep = false;
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
+         _footLeftStep = false;                                               // 足音が鳴るフラグをfalse
       }
    }
 }

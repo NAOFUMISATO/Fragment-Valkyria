@@ -732,30 +732,37 @@ void Player::StateReload::Update() {
 }
 
 void Player::StateRun::FootStepSound() {
+   // フレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
+   // カウントが一定以上経過しているか
    if (count - _footCnt >= FootStepStart) {
+      // プレイヤーの両踵フレームの取得
       auto rightFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_RightToeBase");
       auto leftFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_LeftToeBase");
+      // プレイヤーの両踵フレームの高さを取得
       auto rightFootY = rightFootFramePos.GetY();
       auto leftFootY = leftFootFramePos.GetY();
+      // プレイヤーの右踵フレームは一定以上の高さか
       if (rightFootY >= FootStepHeight) {
-         _footRightStep = true;
+         _footRightStep = true;    // 足音が鳴るフラグをtrue
       }
       else {
+         // 右足音が鳴るフラグがtrueか
          if (_footRightStep) {
-            auto& soundServer = _owner.GetSoundComponent();
-            soundServer.Play("PlayerRightFootStep");
-            _footRightStep = false;
+            _owner.GetSoundComponent().Play("PlayerRightFootStep");  // 足音の再生
+            _footRightStep = false;                                  // 足音が鳴るフラグをfalse
          }
       }
+      // プレイヤーの左踵フレームは一定以上の高さか
       if (leftFootY >= FootStepHeight) {
-         _footLeftStep = true;
+         _footLeftStep = true;    // 足音が鳴るフラグをtrue
       }
       else {
+         // 左足音が鳴るフラグがtrueか
          if (_footLeftStep) {
             auto& soundServer = _owner.GetSoundComponent();
-            soundServer.Play("PlayerLeftFootStep");
-            _footLeftStep = false;
+            soundServer.Play("PlayerLeftFootStep");  // 足音の再生
+            _footLeftStep = false;                   // 足音が鳴るフラグをfalse
          }
       }
    }
