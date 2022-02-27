@@ -78,23 +78,23 @@ void CollisionComponent::ObjectRangeFromPlayer() {
 }
 
 void CollisionComponent::PlayerFromObjectRange() {
-   //落下するオブジェクトの位置を取得
+   // 落下するオブジェクトの位置を取得
    auto objectPos = _owner.position();
-   //落下するオブジェクトを持ち上げられる範囲の球の半径
+   // 落下するオブジェクトを持ち上げられる範囲の球の半径
    auto objectRadian = FallObjectRange;
-   //自前の球を定義
+   // 自前の球を定義
    AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //当たり判定の結果がプレイヤーと当たっているか確認
+      // 当たり判定の結果がプレイヤーと当たっているか確認
       if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
-         //オブジェクトサーバーの各オブジェクトを取得
+         // オブジェクトサーバーの各オブジェクトを取得
          for (auto&& plyObject : _owner.GetObjServer().runObjects()) {
-            //プレイヤーじゃなければ何もしない
+            // プレイヤーじゃなければ何もしない
             if (plyObject->GetObjType() != Object::ObjectBase::ObjectType::Player) {
                continue;
             }
-            //他のオブジェクトに当たっていた場合は終了する
+            // 他のオブジェクトに当たっていた場合は終了する
             if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
                break;
             }
@@ -110,16 +110,16 @@ void CollisionComponent::PlayerFromObjectRange() {
             if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
                break;
             }
-            //プレイヤーが他のオブジェクトと当たっていなかったら落下するオブジェクトを持ち上げられる球の範囲にいると設定
+            // プレイヤーが他のオブジェクトと当たっていなかったら落下するオブジェクトを持ち上げられる球の範囲にいると設定
             plyObject->collisionComponent().report().id(ReportId::HitFromObjectRange);
          }
          break;
       }
-      //プレイヤーじゃなければ何もしない
+      // プレイヤーじゃなければ何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
       }
-      //他のオブジェクトに当たっていた場合は終了する
+      // 他のオブジェクトに当たっていた場合は終了する
       if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
          break;
       }
@@ -135,68 +135,68 @@ void CollisionComponent::PlayerFromObjectRange() {
       if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
          break;
       }
-      //プレイヤーの位置取得
+      // プレイヤーの位置取得
       auto plyPoint = object->position();
-      //球と点の当たり判定をとる
+      // 球と点の当たり判定をとる
       if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
-         //当たっていたらプレイヤーの当たり判定の結果にオブジェクトを持ち上げられる範囲にいると設定
+         // 当たっていたらプレイヤーの当たり判定の結果にオブジェクトを持ち上げられる範囲にいると設定
          object->collisionComponent().report().id(ReportId::HitFromObjectRange);
       } 
       else {
-         //当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
+         // 当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
          object->collisionComponent().report().id(ReportId::None);
       }
    }
 }
 
 void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
-   //落下するオブジェクトのモデルのハンドル取得
+   // 落下するオブジェクトのモデルのハンドル取得
    auto objectModel = _owner.modelAnimeComponent().modelHandle();
-   //モデルのコリジョンのフレーム番号取得
+   // モデルのコリジョンのフレーム番号取得
    auto collision = MV1SearchFrame(objectModel, "drum_green_c");
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //プレイヤーじゃなかったら何もしない
+      // プレイヤーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
       }
-      //当たり判定の結果が待機状態の落下するオブジェクトと当たっている場合何もしない
+      // 当たり判定の結果が待機状態の落下するオブジェクトと当たっている場合何もしない
       if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
          continue;
       }
-      //プレイヤーの参照型の取得
+      // プレイヤーの参照型の取得
       auto& player = dynamic_cast<Player::Player&>(*object);
-      //無敵時間の取得
+      // 無敵時間の取得
       auto invincibleCnt = player.invincibleCnt();
       // プレイヤー側のカプセルを設定
       auto plyPos = object->position();
-      //カプセルの一つ目の位置
+      // カプセルの一つ目の位置
       auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, PlayerCapsulePos1, 0.0);
-      //カプセルの二つ目の位置
+      // カプセルの二つ目の位置
       plyPos.Add(0.0, PlayerCapsulePos2, 0.0);
-      //カプセルの半径
+      // カプセルの半径
       auto radian = static_cast<float>(PlayerRadius);
-      //カプセルとモデルの当たり判定をとる
+      // カプセルとモデルの当たり判定をとる
       auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
-      //当たり判定の結果が当たっているか確認
+      // 当たり判定の結果が当たっているか確認
       if (result.HitNum > 0) {
-         //当たっていた場合落下か確認
+         // 当たっていた場合落下か確認
          if (fall) {
-            //落下中だった場合無敵時間だったら終了
+            // 落下中だった場合無敵時間だったら終了
             if (invincibleCnt > 0) {
                return;
             }
-            //無敵時間じゃない場合当たった位置に落下するオブジェクトの位置を設定
+            // 無敵時間じゃない場合当たった位置に落下するオブジェクトの位置を設定
             object->collisionComponent().hitPos(_owner.position());
-            //プレイヤーの当たり判定の結果に落下するオブジェクトのモデルと当たったと設定
+            // プレイヤーの当たり判定の結果に落下するオブジェクトのモデルと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromFallObject);
-            //ダメージを20.0に設定
+            // ダメージを20.0に設定
             object->collisionComponent().damage(20.0);
          }
          else {
-            //落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
+            // 落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
             object->collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
-            //プレイヤーの当たり判定の結果に待機状態の落下するオブジェクトと当たったと設定
+            // プレイヤーの当たり判定の結果に待機状態の落下するオブジェクトと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
          }
       }
@@ -204,24 +204,24 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 }
 
 void CollisionComponent::GatlingFromObjectModel() {
-   //落下するオブジェクトのモデルのハンドルの取得
+   // 落下するオブジェクトのモデルのハンドルの取得
    auto objectModel = _owner.modelAnimeComponent().modelHandle();
-   //モデルのコリジョンのフレーム番号取得
+   // モデルのコリジョンのフレーム番号取得
    auto collision = MV1SearchFrame(objectModel, "drum_green_c");
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //ガトリングじゃなかったら何もしない
+      // ガトリングじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
          continue;
       }
       // ガトリング側の球を設定
       auto gatlingPos = object->position();
       auto radian = static_cast<float>(GatlingRadius);
-      //球とモデルの当たり判定の結果を取得
+      // 球とモデルの当たり判定の結果を取得
       auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
-      //当たり判定の結果が当たっているか確認
+      // 当たり判定の結果が当たっているか確認
       if (result.HitNum > 0) {
-         //ガトリングの当たり判定結果に待機状態の落下するオブジェクトと当たったと設定
+         // ガトリングの当たり判定結果に待機状態の落下するオブジェクトと当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
       }
    }

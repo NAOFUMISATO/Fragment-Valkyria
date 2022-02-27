@@ -19,8 +19,7 @@ namespace FragmentValkyria {
        * \class ラージエネミークラス
        * \brief ラージエネミークラスを管理する
        */
-      class LargeEnemy : public Object::ObjectBase
-      {
+      class LargeEnemy : public Object::ObjectBase {
          using Vector4 = AppFrame::Math::Vector4;
          using Matrix44 = AppFrame::Math::Matrix44;
          using InputManager = AppFrame::Input::InputManager;
@@ -75,7 +74,7 @@ namespace FragmentValkyria {
           */
          void CreateFallObject();
          /**
-          * \brief レーザーを打つ場所を決める
+          * \brief レーザーを打つ位置を設定
           */
          void SetLaserPosition();
          /**
@@ -92,7 +91,11 @@ namespace FragmentValkyria {
           */
          void Move(const Vector4& moved);
          /**
-          * \brief 回転処理
+          * \brief 各行動への移動処理
+          */
+         void Action();
+         /**
+          * \brief 角速度による回転処理
           * \param rotating 回転するか
           */
          void AugularRotate(bool& rotating);
@@ -104,36 +107,30 @@ namespace FragmentValkyria {
           * \brief 回転の角速度の設定
           */
          void SetAddRotate();
-         int _stateCnt{ 0 };              //!< 各状態に入ってからの進捗
-         int _gatlingCnt{ 0 };            //!< ガトリングの弾を打つ回数
-         int _collision{ 0 };             //!< モデルのコリジョンフレーム番号
-         int _freezeTime{ 0 };            //!< 死亡してからゲームクリアまでのフレーム数
-         bool _fallObjectflag{ false };   //!< 落下オブジェクトを
-         bool _gatlingFlag{ false };
-         bool _moving{ false };
-         bool _firstRotating{ true };
-         bool _endRotating{ true };
-         bool _rotating{ false };
-         bool _attack{ false };
-         double _fanAngle{ 0.0 };
-         double _rotateDot{ 0.0 };
-         double _addRotate{ 1.0 };
-         double _hp{ 100.0 };
-         int _createNum{ 0 };
 
-         Vector4 _moved{ 0.0, 0.0, 0.0 }; //!< 移動量のベクトル
-         Vector4 _rotateDir{ 0.0, 0.0, 0.0 }; //!< 回転の向きのベクトル
-
-         std::vector<std::pair<double, Vector4>> _objectDistance;
-         std::vector<std::string> _actionList;
-         std::vector<std::string> _action;
+         int _gatlingCnt{ 0 };                                      //!< ガトリングの弾を打つ回数
+         int _collision{ 0 };                                       //!< モデルのコリジョンフレーム番号
+         int _freezeTime{ 0 };                                      //!< 死亡してからゲームクリアまでのフレーム数
+         bool _firstRotating{ true };                               //!< 移動中最初に移動方向に回転するか
+         bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
+         bool _rotating{ false };                                   //!< 回転処理をするか
+         bool _attack{ false };                                     //!< 攻撃をしているか
+         double _fanAngle{ 0.0 };                                   //!< 扇状ガトリング攻撃をするときの向きを取得するときベクトルを回転させる角度
+         double _rotateDot{ 0.0 };                                  //!< 向かせたい方向のベクトルとフォワードベクトルを90度回転させたベクトルの内積の結果
+         double _addRotate{ 0.0 };                                  //!< 角速度
+         double _hp{ 0.0 };                                         //!< ヒットポイント
+         int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
+         Vector4 _moved{ 0.0, 0.0, 0.0 };                           //!< 移動量のベクトル
+         Vector4 _rotateDir{ 0.0, 0.0, 0.0 };                       //!< 回転の向きのベクトル
+         std::vector<std::pair<double, Vector4>> _objectDistance;   //!< 各落下オブジェクトからプレイヤーへの距離の2乗と各落下オブジェクトの位置のペアの動的配列
+         std::vector<std::string> _actionList;                      //!< 各行動状態への文字列の動的配列
+         std::vector<std::string> _action;                          //!< 行動させる範囲を制限した行動状態への文字列の動的配列
       public:
          /**
          * \class ラージエネミーの状態の基底クラス
          * \brief 各ラージエネミーの状態はこれを派生して定義する
          */
-         class StateBase : public AppFrame::State::StateBaseRoot
-         {
+         class StateBase : public AppFrame::State::StateBaseRoot {
          public:
             /**
              * \brief コンストラクタ
@@ -147,13 +144,13 @@ namespace FragmentValkyria {
 
          protected:
             LargeEnemy& _owner;   //!< ラージエネミーの参照
+            int _stateCnt{ 0 };   //!< 各状態へ入った時のフレームカウント保存用
          };
          /**
          * \class 待機状態クラス
          * \brief 待機状態の処理を回す
          */
-         class StateIdle : public StateBase
-         {
+         class StateIdle : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -165,21 +162,15 @@ namespace FragmentValkyria {
              */
             void Enter() override;
             /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
-            /**
              * \brief 更新処理
              */
             void Update() override;
          };
          /**
          * \class オブジェクト落下状態クラス
-         * \brief オブジェクト落下の処理を回す
+         * \brief オブジェクト落下状態の処理を回す
          */
-         class StateFallObject : public StateBase
-         {
+         class StateFallObject : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -191,11 +182,6 @@ namespace FragmentValkyria {
              */
             void Enter() override;
             /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
-            /**
              * \brief 更新処理
              */
             void Update() override;
@@ -204,8 +190,7 @@ namespace FragmentValkyria {
          * \class ガトリング攻撃状態クラス
          * \brief ガトリング攻撃状態の処理を回す
          */
-         class StateGatling : public StateBase
-         {
+         class StateGatling : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -220,13 +205,14 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+         private:
+            int _gatlingFrameCnt{ 0 };      //!< ガトリング攻撃をするための回転していない時に経過させるフレームカウント
          };
          /**
          * \class 扇状ガトリング攻撃状態クラス
          * \brief 扇状ガトリング攻撃状態の処理を回す
          */
-         class StateFanGatling : public StateBase
-         {
+         class StateFanGatling : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -241,13 +227,14 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+         private:
+            int _fanGatlingFrameCnt{ 0 };   //!< 扇状ガトリング攻撃をするための回転をしていない時に経過させるフレームカウント
          };
          /**
          * \class 死状態クラス
          * \brief 死亡状態の処理を回す
          */
-         class StateDie : public StateBase
-         {
+         class StateDie : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -267,8 +254,7 @@ namespace FragmentValkyria {
          * \class 移動状態クラス
          * \brief 移動状態の処理を回す
          */
-         class StateMove : public StateBase
-         {
+         class StateMove : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -287,16 +273,15 @@ namespace FragmentValkyria {
          private:
             void FootStepSound();
             bool _footRightStep{ false };       //!< 足音処理のフラグ
-            bool _footLeftStep{ false };       //!< 足音処理のフラグ
-            int _footCnt{ 0 };
-            bool _endGetplyPos{ true };
+            bool _footLeftStep{ false };        //!< 足音処理のフラグ
+            int _footCnt{ 0 };                  //!< 
+            bool _endGetplyPos{ true };         //!< 移動後にプレイヤーへの向きのベクトルを取得するか
          };
          /**
          * \class レーザー攻撃状態クラス
          * \brief レーザー攻撃状態の処理を回す
          */
-         class StateLaser : public StateBase
-         {
+         class StateLaser : public StateBase {
          public:
             /**
              * \brief コンストラクタ
@@ -312,7 +297,7 @@ namespace FragmentValkyria {
              */
             void Update() override;
          private:
-            bool _createLaser{ false };   //!< レーザーを生成したか
+            bool _createLaser{ false };       //!< レーザーを生成するか
          };
       };
    }
