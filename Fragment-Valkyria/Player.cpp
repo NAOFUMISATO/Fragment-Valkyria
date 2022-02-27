@@ -82,8 +82,11 @@ void Player::Update() {
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
    // オブジェクトサーバーにカメラの位置を通知
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
+   // オブジェクトサーバーにヒットポイントを通知
    GetObjServer().RegistDouble("PlayerHP",_hp);
+   // オブジェクトサーバーに遠隔弱攻撃の残り弾数を通知
    GetObjServer().RegistDouble("PlayerBulletStock",static_cast<double>(_bulletStock));
+   // オブジェクトサーバーにポーションの数を通知
    GetObjServer().RegistDouble("PlayerPortionStock", static_cast<double>(_portionStock));
 }
 
@@ -116,7 +119,7 @@ void Player::Move(const Vector4& moved) {
     position = _collisionComponent->PlayerCheckStage(position, Vector4(x, y, 0.0));
     // z成分の移動後の位置を取得
     position = _collisionComponent->PlayerCheckStage(position, Vector4(0.0, y, z));
-    // xとzの移動後の成分を位置に設定する
+    // 位置にxとzの成分の移動後の位置を設定する
     _position = position;
 }
 
@@ -159,7 +162,7 @@ void Player::HitCheckFromIdleFallObject() {
     auto report = _collisionComponent->report();
     // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
-        // 待機状態の落下オブジェクトとあたっていたら
+        // 待機状態の落下オブジェクトと当たっていたら
         // 当たったポリゴンの法線を取得
         auto normal = _collisionComponent->hitPos();
         // 法線に移動の速さをかけたベクトル分位置をずらす
@@ -414,13 +417,13 @@ void Player::StateIdle::Input(InputManager& input) {
 void Player::StateIdle::Update() {
    // 回転処理
    _owner.Rotate();
-   // コリジョンコンポーネントでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
+   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
    _owner._collisionComponent->ObjectRangeFromPlayer();
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject();
-   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
-   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
    _owner._collisionComponent->PlayerFromLaser();
    // ラージエネミーと当たっているか確認
    _owner.HitCheckFromLargeEnemy();
@@ -439,7 +442,9 @@ void Player::StateIdle::Update() {
 void Player::StateRun::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("run", true, RunAnimeSpeed);
+   // ゲームのフレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
+   // この状態へ入った時のゲームのフレームカウントの
    _footCnt = count;
 }
 void Player::StateRun::Input(InputManager& input) {
@@ -538,11 +543,11 @@ void Player::StateRun::Update() {
    _owner.Move(_owner._moved);
    // 回転処理
    _owner.Rotate();
-   // コリジョンコンポーネントでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
+   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
    _owner._collisionComponent->ObjectRangeFromPlayer();
-   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
-   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
    _owner._collisionComponent->PlayerFromLaser();
    // 落下中の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromFallObject();
@@ -583,9 +588,9 @@ void Player::StateShootReady::Input(InputManager& input) {
 void Player::StateShootReady::Update() {
    // 射撃状態の回転処理
    _owner.ShootRotate();
-   // コリジョンコンポーネントでプレイヤーがガトリングと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
-   // コリジョンコンポーネントでプレイヤーがレーザーと当たっているか確認
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
    _owner._collisionComponent->PlayerFromLaser();
    // ラージエネミーと当たっているか確認
    _owner.HitCheckFromLargeEnemy();
