@@ -3,7 +3,7 @@
  * \file   PlayerCreator.h
  * \brief  プレイヤーの生成管理クラス
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, AHMD2000
  * \date   December 2021
  *********************************************************************/
 #include "CreatorBase.h"
@@ -21,8 +21,11 @@ namespace FragmentValkyria {
        */
       class PlayerCreator : public CreatorBase {
       public:
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体の参照
+          */
           PlayerCreator(Game::GameMain& gameMain);
-
       private:
          /**
           * \brief プレイヤーの位置、アニメーション、状態の登録を行う
