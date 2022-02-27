@@ -28,6 +28,7 @@ namespace FragmentValkyria {
     * \brief オブジェクト関係
     */
    namespace Object {
+      // 二重インクルード防止
       class ObjectServer;
       /**
        * \class オブジェクトの基底クラス
@@ -51,18 +52,17 @@ namespace FragmentValkyria {
           * \brief オブジェクトの種別列挙
           */
          enum class ObjectType {
-            Object = 0,       //!< オブジェクト
-            Player,           //!< プレイヤー
-            Enemy,            //!< 敵
-            Stage,            //!< ステージ
-            LargeEnemy,       
-            PoorEnemy,
-            FallObject,
-            Gatling,
-            Bullet,
-            Laser
+            Object = 0,    //!< オブジェクト
+            Player,        //!< プレイヤー
+            Enemy,         //!< 敵
+            Stage,         //!< ステージ
+            LargeEnemy,    //!< ボス敵
+            PoorEnemy,     //!< 雑魚敵
+            FallObject,    //!< 降ってくるオブジェクト
+            Gatling,       //!< ガトリング弾
+            Bullet,        //!< 弱攻撃弾
+            Laser          //!< レーザー
          };
-
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体の参照
@@ -120,7 +120,7 @@ namespace FragmentValkyria {
          inline Matrix44& worldTransform() { return _worldTransform; }
          /**
           * \brief オブジェクトの向きの取得
-          * \return オブジェクトの回転ベクトル
+          * \return オブジェクトの前方ベクトル
           */
          Vector4 GetForward() const {
             auto vec = Vector4{ 0,0,1 };
@@ -155,10 +155,16 @@ namespace FragmentValkyria {
           * \return カメラ管理クラス
           */
          const std::shared_ptr<Camera::CameraComponent>& cameraComponent() const { return _cameraComponent; }
-         
+         /**
+          * \brief 衝突判定管理クラスの参照の取得
+          * \return 衝突判定管理クラスの参照
+          */
          Collision::CollisionComponent& collisionComponent() { return *_collisionComponent; }
-
-         void  collisionComponent(std::shared_ptr<Collision::CollisionComponent> collision) { _collisionComponent = collision; }
+         /**
+          * \brief 衝突判定管理クラスの設定
+          * \return 衝突判定管理クラス
+          */
+         void collisionComponent(std::shared_ptr<Collision::CollisionComponent> collision) { _collisionComponent = collision; }
          /**
           * \brief オブジェクト位置の設定
           * \param pos オブジェクト位置
@@ -245,8 +251,8 @@ namespace FragmentValkyria {
          Vector4 _scale{ 1,1,1 };                                            //!< 拡大率
          Game::GameMain& _gameMain;                                          //!< ゲーム本体クラスの参照
          std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent;   //!< モデルのアニメーション管理クラスのポインタ
-         std::shared_ptr<Camera::CameraComponent> _cameraComponent;          //!< カメラ管理クラスのポインタ
-         std::shared_ptr<Collision::CollisionComponent> _collisionComponent; //!< 
+         std::shared_ptr<Camera::CameraComponent> _cameraComponent;          //!< カメラ管理クラスのシェアードポインタ
+         std::shared_ptr<Collision::CollisionComponent> _collisionComponent; //!< 衝突判定管理クラスのシェアードポインタ
       };
    }
 }

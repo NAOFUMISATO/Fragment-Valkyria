@@ -83,7 +83,7 @@ namespace AppFrame {
           * \brief ゲームのフレームを取得
           * \return ゲームのフレーム
           */
-         unsigned int frameCount() { return _frameCount; }
+         unsigned int frameCount() const { return _frameCount; }
          std::shared_ptr<ModeBaseRoot > GetNowMode();
       private:
          /**

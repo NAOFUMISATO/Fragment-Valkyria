@@ -1,6 +1,15 @@
 #pragma once
+/*****************************************************************//**
+ * \file   ObjectServer.h
+ * \brief  オブジェクトの一括管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "ObjectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
    /**
     * \brief オブジェクト関係
@@ -32,13 +41,13 @@ namespace FragmentValkyria {
           */
          void Render();
          /**
-          * \brief 動的配列の解放
+          * \brief 全ての動的配列の解放
           */
          void Clear();
          /**
           * \brief オブジェクトのVector4データをレジストリに登録する
           * \param key Vector4データに関連付ける任意の文字列
-          * \param vec 登録するVector4データ
+          * \param vecData 登録するVector4データ
           */
          void RegistVector(std::string_view key, Vector4 vecData);
          /**

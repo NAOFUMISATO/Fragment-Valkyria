@@ -7,23 +7,17 @@
  * \date   January 2022
  *********************************************************************/
 #include "Laser.h"
-
-using namespace FragmentValkyria::Enemy;
+#include "GameMain.h"
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("laser",
       { "radius" });
-
    const double Radius = paramMap["radius"];
 }
 
+using namespace FragmentValkyria::Enemy;
+
 Laser::Laser(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
-
-
-}
-
-void Laser::Init() {
-
 }
 
 void Laser::Update() {
@@ -31,26 +25,26 @@ void Laser::Update() {
 }
 
 void Laser::Draw() {
-   /*auto [x, y, z] = _position.GetVec3();
-   auto firstPos = Vector4(x, 0.0, y);*/
-   auto firstPos = AppFrame::Math::ToDX(_position);
-   auto secondPos = AppFrame::Math::ToDX(_end);
-   auto radius = static_cast<float>(Radius);
-   DrawCapsule3D(firstPos, secondPos, radius, 5, AppFrame::Math::Utility::GetColorCode(255, 255, 0), AppFrame::Math::Utility::GetColorCode(255, 255, 255), TRUE);
+   _stateServer->Draw();
 }
 
 void Laser::StateBase::Draw() {
-
+   auto firstPos = AppFrame::Math::ToDX(_owner._position);
+   auto secondPos = AppFrame::Math::ToDX(_owner._end);
+   auto radius = static_cast<float>(Radius);
+   DrawCapsule3D(firstPos, secondPos, radius, 5, 
+      AppFrame::Math::Utility::GetColorCode(255, 255, 0), 
+      AppFrame::Math::Utility::GetColorCode(255, 255, 255), TRUE);
 }
 
-void Laser::StateIdle::Enter() {
-   _owner._stateCnt = 0;
+void Laser::StateIrradiation::Enter() {
+   // フレームカウントの取得
+   _stateCnt = _owner.gameMain().modeServer().frameCount();
 }
 
-void Laser::StateIdle::Update() {
-   if (_owner._stateCnt >= 60 * 3) {
+void Laser::StateIrradiation::Update() {
+   auto count = _owner.gameMain().modeServer().frameCount();
+   if (count-_stateCnt >= 60 * 3) {
       _owner.SetDead();
    }
-
-   ++_owner._stateCnt;
 }

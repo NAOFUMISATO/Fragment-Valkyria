@@ -32,14 +32,6 @@ namespace FragmentValkyria {
          using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
-          * \brief インゲーム種別の取得
-          */
-         enum class InGameType {
-            Boss,   //!< モードボス戦
-            Poor    //!< モード雑魚戦
-         };
-
-         /**
           * \brief コンストラクタ
           * \param game ゲーム本体の参照
           */
@@ -65,29 +57,29 @@ namespace FragmentValkyria {
           * \brief 出口処理
           */
          void Exit() override;
-
-         /**
-          * \brief インゲーム種別の取得
-          * \return 派生先で定義
-          */
-         virtual InGameType GetInGameType() const = 0;
          /**
           * \brief オブジェクト生成一括管理クラスの参照をゲームメイン経由で取得
           * \return オブジェクト生成一括管理クラスの参照
           */
          Create::ObjectFactory& GetObjFactory() const;
-
+         /**
+          * \brief ステージの参照の取得
+          * \return ステージの参照
+          */
          inline Stage::Stage& GetStage() { return *_stage; }
 
       protected:
-         std::unique_ptr<Stage::Stage> _stage;
-         std::unique_ptr<Lighting::LightAndShadow> _lighting;
+         std::unique_ptr<Stage::Stage> _stage;                 //!< ステージクラスのユニークポインタ
+         std::unique_ptr<Lighting::LightAndShadow> _lighting;  //!< ライティングクラスのユニークポインタ
 #ifdef _DEBUG
+         /**
+          * \brief デバッグ描画処理
+          */
          void DebugDraw();
-         short _padLeftX{ 0 };
-         short _padLeftY{ 0 };
-         short _padRightX{ 0 };
-         short _padRightY{ 0 };
+         short _padLeftX{ 0 };   //!< 左スティックX軸入力量
+         short _padLeftY{ 0 };   //!< 左スティックY軸入力量
+         short _padRightX{ 0 };  //!< 右スティックX軸入力量
+         short _padRightY{ 0 };  //!< 右スティックY軸入力量
 #endif
       };
    }

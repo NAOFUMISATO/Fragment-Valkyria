@@ -15,7 +15,7 @@ namespace {
    const unsigned char BackColorGreen = paramMap["backcolor_green"];   //!< 背面バーの初期カラー緑値
    const unsigned char BackColorBlue = paramMap["backcolor_blue"];     //!< 背面バーの初期カラー青値
    const double RedBarSpeed = paramMap["redbar_speed"];                //!< 背面バーの減少速度
-   const double MaxHp = paramMap["max_hp"];                             //!< ボス最大HP
+   const double MaxHp = paramMap["max_hp"];                            //!< ボス最大HP
    // jsonファイルからVector4の値を取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("bossui", { "hp_pos" });
    const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
@@ -35,6 +35,7 @@ LargeEnemyHP::LargeEnemyHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMa
 
 void LargeEnemyHP::Init() {
    // 画像ハンドルをResourceServerから取得する
+   _hp = 1000.0;
    _grHandle = GetResServer().GetTexture("BossHP");
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
    _oldFrontHP = OffSetRight;                                      // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化

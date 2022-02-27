@@ -112,7 +112,7 @@ namespace FragmentValkyria {
             Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };  //!< 浮く状態に入った時の位置ベクトル
             Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
             std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
-            std::vector<int> _fallPointHandles{ -1 };
+            std::vector<int> _fallPointHandles{ -1 };          //!< 落下地点ビルボード画像ハンドル
 
         public:
             /**

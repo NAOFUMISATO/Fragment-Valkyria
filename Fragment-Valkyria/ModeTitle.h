@@ -80,7 +80,6 @@ namespace FragmentValkyria {
              * \brief 描画処理
              */
             void Draw() override;
-
          protected:
             ModeTitle& _owner;   //!< モードタイトルの参照
          };
@@ -109,7 +108,6 @@ namespace FragmentValkyria {
              * \brief 出口処理
              */
             void Exit()override;
-
          };
 
          /**
@@ -132,7 +130,6 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
-
          };
 
          /**
@@ -155,7 +152,6 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
-
          };
 
          /**
@@ -178,7 +174,6 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
-
          };
       };
    }

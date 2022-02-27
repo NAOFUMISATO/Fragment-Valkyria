@@ -62,7 +62,7 @@ namespace FragmentValkyria {
           * \brief プレイヤーのオブジェクト発射攻撃に当たった場合の処理
           */
          void HitCheckFromFallObject();
-         
+
          int _stateCnt{ 0 };                    //!< 状態遷移時に使用するフレーム保存用
          int _collNum{ 0 };                     //!< コリジョン番号保存用
          double _hp{ 20.0 };                    //!< 体力
@@ -89,6 +89,7 @@ namespace FragmentValkyria {
          protected:
             PoorEnemyBase& _owner;   //!< 雑魚敵基底クラスの参照
          };
+
          /**
           * \class 待機状態クラス
           * \brief 待機状態の処理を回す
@@ -109,6 +110,7 @@ namespace FragmentValkyria {
              */
             void Update() override;
          };
+
          /**
           * \class サイドステップ状態クラス
           * \brief サイドステップ状態の処理を回す
@@ -134,9 +136,11 @@ namespace FragmentValkyria {
              * \brief サイドステップを行う空間があるかチェックする
              */
             void SideStepDecide();
+
             Vector4 _moveOnDir{ 0,0,0 };   //!< ステップ方向に正規化したベクトルの保存用
             Vector4 _moveOnPos{ 0,0,0 };   //!< ステップ後の最終位置ベクトル保存用
          };
+
          /**
           * \class 落下状態クラス
           * \brief 落下状態の処理を回す
@@ -157,6 +161,7 @@ namespace FragmentValkyria {
              */
             void Update() override;
          };
+
          /**
           * \class 死亡状態クラス
           * \brief 死亡状態の処理を回す
@@ -176,6 +181,7 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+
          private:
             int _timeOver{ 0 };     //!< 死亡モーション後から消滅するまでの猶予フレーム
          };

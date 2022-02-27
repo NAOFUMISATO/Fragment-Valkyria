@@ -1,55 +1,65 @@
 #pragma once
 /*****************************************************************//**
  * \file   Laser.h
- * \brief  レーザーの処理を回すクラス
+ * \brief  レーザークラス
  * 
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
-
+   /**
+    * \brief 敵関係
+    */
    namespace Enemy {
-
+      /**
+       * \class レーザークラス
+       * \brief ボスが放つレーザーの処理を回す
+       */
       class Laser : public Object::ObjectBase {
             using Vector4 = AppFrame::Math::Vector4;
       public:
-         Laser(Game::GameMain& gameMain);
-
-         virtual ~Laser() override = default;
          /**
-         * \brief オブジェクトの種類を返す
-         * \return レーザー
-         */
-         ObjectType GetObjType() const override { return ObjectType::Laser; };
-         /**
-          * \brief 初期化処理
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体クラスの参照
           */
-         virtual void Init() override;
+         Laser(Game::GameMain& gameMain);
          /**
          * \brief 更新処理
          */
-         virtual void Update() override;
+         void Update() override;
          /**
          * \brief 描画処理
          */
          void Draw() override;
-
-            void end(Vector4 endPos) { _end = endPos; }
-            inline Vector4 end() { return _end; }
+         /**
+          * \brief オブジェクトの種類を返す
+          * \return レーザー
+          */
+         ObjectType GetObjType() const override { return ObjectType::Laser; }
+         /**
+          * \brief レーザーの終点を設定
+          * \param endPos 設定する終点座標
+          */
+         void end(Vector4 endPos) { _end = endPos; }
+         /**
+          * \brief レーザーの終点座標を取得
+          * \return レーザーの終点座標
+          */
+         inline Vector4 end() { return _end; }
 
       private:
+         Vector4 _end{ Vector4(0.0, 0.0, 0.0) };  //!< レーザー終点座標
 
-            Vector4 _end{ Vector4(0.0, 0.0, 0.0) };
-            int _stateCnt{ 0 };
       public:
             /**
             * \class レーザーの状態の基底クラス
             * \brief 各レーザーの状態はこれを派生して定義する
             */
-            class StateBase : public AppFrame::State::StateBaseRoot
-            {
+            class StateBase : public AppFrame::State::StateBaseRoot {
             public:
                 /**
                  * \brief コンストラクタ
@@ -64,18 +74,18 @@ namespace FragmentValkyria {
             protected:
                 Laser& _owner;   //!< レーザーの参照
             };
+
             /**
-             * \class 待機状態クラス
-             * \brief 待機状態の処理を回す
+             * \class 照射状態クラス
+             * \brief 照射状態の処理を回す
              */
-            class StateIdle : public StateBase
-            {
+            class StateIrradiation : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
                  * \param owner レーザーの参照
                  */
-                StateIdle(Laser& owner) : StateBase{ owner } {};
+                StateIrradiation(Laser& owner) : StateBase{ owner } {};
                 /**
                  * \brief 入口処理
                  */
@@ -84,6 +94,9 @@ namespace FragmentValkyria {
                  * \brief 更新処理
                  */
                 void Update() override;
+
+            private:
+               int _stateCnt{ 0 };
             };
       };
    }

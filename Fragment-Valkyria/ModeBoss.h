@@ -47,12 +47,6 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render() override;
-
-         /**
-          * \brief インゲーム種別の取得
-          * \return モードボス
-          */
-         virtual InGameType GetInGameType()const { return InGameType::Boss; }
       };
    }
 }

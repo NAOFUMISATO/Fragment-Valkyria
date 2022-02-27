@@ -38,7 +38,7 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create()
       break;
    }
 
-   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::Laser::StateIdle>(*laser));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::Laser::StateIrradiation>(*laser));
    laser->stateServer(std::move(state));
 
    auto laegeEnemyPos = _gameMain.objServer().GetVecData("LargeEnemyPos");

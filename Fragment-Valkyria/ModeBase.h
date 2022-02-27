@@ -25,6 +25,10 @@ namespace FragmentValkyria {
     * \brief モード関係
     */
    namespace Mode {
+      /**
+       * \class 各モードの基底クラス
+       * \brief 各モードはこのクラスを派生して定義する
+       */
       class ModeBase : public AppFrame::Mode::ModeBaseRoot {
       public:
          /**
@@ -37,6 +41,10 @@ namespace FragmentValkyria {
           * \return オブジェクト一括管理クラスの参照
           */
          Object::ObjectServer& GetObjServer() const;
+         /**
+          * \brief スプライト一括管理クラスの参照をゲームベース経由で取得
+          * \return スプライト一括管理クラスの参照
+          */
          Sprite::SpriteServer& GetSprServer() const;
 
       protected:

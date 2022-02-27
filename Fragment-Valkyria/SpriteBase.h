@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   SpriteBase.h
+ * \brief  スプライトの基底クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   February 2022
+ *********************************************************************/
 #include "AppFrame.h"
  /**
   * \brief プロジェクト名
@@ -8,18 +15,32 @@ namespace FragmentValkyria {
    namespace Game {
       class GameMain;
    }
+   /**
+    * \brief スプライト関係
+    */
    namespace Sprite {
+      // 二重インクルード防止
       class SpriteServer;
+      /**
+       * \class スプライトの基底クラス
+       * \brief 各スプライトはこのクラスを派生して定義する
+       */
       class SpriteBase {
          using Vector4 = AppFrame::Math::Vector4;
          using Matrix44 = AppFrame::Math::Matrix44;
          using StateServer = AppFrame::State::StateServer;
       public:
+         /**
+          * \brief スプライトの状態列挙
+          */
          enum class SpriteState {
             Active,       //!< 生存
             Paused,       //!< 停止
             Dead          //!< 死亡
          };
+         /**
+          * \brief スプライトの種別列挙
+          */
          enum class SpriteType {
             Sprite = 0,   //!< スプライト
          };

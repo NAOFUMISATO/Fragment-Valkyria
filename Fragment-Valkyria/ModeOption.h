@@ -173,7 +173,6 @@ namespace FragmentValkyria {
              * \param input “ü—ÍˆêŠ‡ŠÇ—ƒNƒ‰ƒX‚ÌQÆ
              */
             void Input(InputManager& input) override;
-
          };
       };
    }

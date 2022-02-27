@@ -53,7 +53,7 @@ namespace FragmentValkyria {
          std::vector<std::unique_ptr<SpriteBase>>& runSprites() { return _runSprites; };
 
       private:
-         bool _updating{ false };                                      //!< 更新しているかのフラグ
+         bool _updating{ false };                                  //!< 更新しているかのフラグ
          std::vector<std::unique_ptr<SpriteBase>> _runSprites;     //!< スプライトを登録する動的配列
          std::vector<std::unique_ptr<SpriteBase>> _pendingSprites; //!< スプライトの登録を保留する動的配列
       };

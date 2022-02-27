@@ -1,26 +1,45 @@
 #pragma once
 /*****************************************************************//**
  * \file   PoorEnemyGatling.h
- * \brief  ガトリング攻撃をしてくる雑魚敵の処理を回すクラス
+ * \brief  遠隔攻撃タイプの雑魚敵クラス
  * 
- * \author AHMD2000
+ * \author AHMD2000,NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
 #include "PoorEnemyBase.h"
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief 敵関係
+    */
    namespace Enemy {
-
+      /**
+       * \class 遠隔攻撃タイプの雑魚敵クラス
+       * \brief 遠隔攻撃タイプの雑魚敵の処理を回す
+       */
       class PoorEnemyGatling : public PoorEnemyBase {
             using Vector4 = AppFrame::Math::Vector4;
             using InputManager = AppFrame::Input::InputManager;
         public:
+           /**
+            * \brief コンストラクタ
+            * \param gameMain ゲーム本体クラスの参照
+            */
             PoorEnemyGatling(Game::GameMain& gameMain);
+            /**
+             * \brief 初期化処理
+             */
             void Init()override;
+
         private:
+           /**
+            * \brief ガトリング弾の生成処理
+            */
             void CreateGatling();
 
-            Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };
-            Vector4 _gatlingMoveDirection{ Vector4(0.0, 0.0, 0.0) };
+            Vector4 _gatlingMoveDirection{ Vector4(0.0, 0.0, 0.0) }; //!< ガトリング弾を放つ正規化ベクトル
 
       public:
             /**
@@ -44,8 +63,8 @@ namespace FragmentValkyria {
                 void Update() override;
 
             private:
-               PoorEnemyGatling& _owner;
-               int _gatlingCnt{ 5 };
+               PoorEnemyGatling& _owner;  //!< 遠隔攻撃タイプの雑魚敵クラスの参照
+               int _gatlingCnt{ 5 };      //!< フレームカウント保存用
             };
       };
    }

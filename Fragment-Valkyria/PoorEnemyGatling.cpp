@@ -33,10 +33,8 @@ void PoorEnemyGatling::Init() {
 }
 
 void PoorEnemyGatling::CreateGatling() {
-   auto handle = modelAnimeComponent().modelHandle();
-   auto gatlingFrame = modelAnimeComponent().FindFrame("Spider_Armature");
-   auto gatlingPos = MV1GetFramePosition(handle, gatlingFrame);
-   _gameMain.objServer().RegistVector("GatlingPos", AppFrame::Math::ToMath(gatlingPos));
+   auto gatlingFramePos = modelAnimeComponent().GetFramePosion("Spider_Armature");
+   _gameMain.objServer().RegistVector("GatlingPos", gatlingFramePos);
    _gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
    auto gatling = _gameMain.objFactory().Create("Gatling");
    gameMain().objServer().Add(std::move(gatling));
