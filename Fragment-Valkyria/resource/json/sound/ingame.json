@@ -61,16 +61,16 @@
 			"filename": "BossFootStep.wav",
 			"isload": true,
 			"volume": 100,
-			"is3Dsound":false,
-         	"radius":0.0
+			"is3Dsound":true,
+         	"radius":3000.0
 		},
 		{
 			"keyname": "BossGatling",
 			"filename": "BossGatling.wav",
 			"isload": true,
 			"volume": 100,
-			"is3Dsound":false,
-         	"radius":0.0
+			"is3Dsound":true,
+         	"radius":3000.0
 		},
 		{
 			"keyname": "BossStan",
@@ -85,16 +85,16 @@
 			"filename": "BossBeam.wav",
 			"isload": true,
 			"volume": 50,
-			"is3Dsound":false,
-         	"radius":0.0
+			"is3Dsound":true,
+         	"radius":3000.0
 		},
 		{
 			"keyname": "BossCharge",
 			"filename": "BossCharge.wav",
 			"isload": true,
 			"volume": 50,
-			"is3Dsound":false,
-         	"radius":0.0
+			"is3Dsound":true,
+         	"radius":3000.0
 		}
 	]
 }

@@ -336,7 +336,7 @@ void LargeEnemy::StateGatling::Update() {
       if (!_owner._rotating) {
          _owner.CreateGatling();
          --_owner._gatlingCnt;
-         _owner.GetSoundComponent().Play("BossGatling");
+         _owner.GetSoundComponent().Play("BossGatling", _owner._position);
          _owner._attack = false;
       }
    }
@@ -444,7 +444,7 @@ void LargeEnemy::StateMove::FootStepSound() {
    }
    else {
       if (_footRightStep) {
-         _owner.GetSoundComponent().Play("BossFootstep");
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);
          _footRightStep = false;
       }
    }
@@ -453,7 +453,7 @@ void LargeEnemy::StateMove::FootStepSound() {
    }
    else {
       if (_footLeftStep) {
-         _owner.GetSoundComponent().Play("BossFootStep");
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);
          _footLeftStep = false;
       }
    }
@@ -467,7 +467,7 @@ void LargeEnemy::StateLaser::Enter() {
    _owner._attack = false;
    _owner._modelAnimeComponent->ChangeAnime("beem", true);
    _createLaser = false;
-   _owner.GetSoundComponent().Play("BossCharge");
+   _owner.GetSoundComponent().Play("BossCharge",_owner._position);
 }
 
 void LargeEnemy::StateLaser::Update() {
@@ -487,7 +487,7 @@ void LargeEnemy::StateLaser::Update() {
       _owner.AreaRotate(_owner._rotating);
       if (!_owner._rotating) {
          _owner.CreateLaser();
-         _owner.GetSoundComponent().Play("BossBeam");
+         _owner.GetSoundComponent().Play("BossBeam", _owner._position);
          _owner._attack = false;
       }
    }
@@ -521,7 +521,7 @@ void LargeEnemy::StateFanGatling::Update() {
          _owner.CreateGatling();
          --_owner._gatlingCnt;
          _owner._fanAngle = 10.0;
-         _owner.GetSoundComponent().Play("BossGatling");
+         _owner.GetSoundComponent().Play("BossGatling",_owner._position);
          _owner._attack = false;
       }
    }
