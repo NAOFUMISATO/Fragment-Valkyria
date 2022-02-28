@@ -226,7 +226,7 @@ namespace AppFrame {
 
           auto [l1Point, l1Direction] = l1;
           auto [l2Point, l2Direction] = l2;
-          //2直線が平行だったら点と直線の最短距離を返す
+          // 2直線が平行だったら点と直線の最短距離を返す
           if (l1Direction.Cross(l2Direction).Lenght() == 0.0) {
               double length = PointLineDistance(l1Point, l2, p2, t2);
               p1 = l1Point;

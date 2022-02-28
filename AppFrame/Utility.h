@@ -17,19 +17,18 @@ namespace AppFrame {
     * \brief 算術関係
     */
    namespace Math {
-      static constexpr double DEGREES_180 = 180.0;    //!< 度数法180°
-      static constexpr double PI = std::numbers::pi;  //!< 円周率
+      static constexpr double DEGREES_180 = 180.0;                                                //!< 度数法180°
+      static constexpr double PI = std::numbers::pi;                                              //!< 円周率
       static constexpr double RADIAN_1 = std::numbers::pi / DEGREES_180;
 
       class Vector4;
 
-      using Plane = std::tuple<Vector4/*point*/, Vector4/*normal*/>;
-      using Sphere = std::tuple<Vector4/*position*/, double/*radian*/>;
-      using Line = std::tuple<Vector4/*位置*/, Vector4/*向き*/>;
-      using Segment = std::tuple<Vector4/*始点*/, Vector4/*終点へのベクトル*/>;
-      using Capsule = std::tuple<Vector4/*線分の始点*/, Vector4/*線分の終点*/, double/*半径*/>;
-      using Collision = std::tuple<bool, Vector4>;
-
+      using Plane = std::tuple<Vector4/*位置*/, Vector4/*法線*/>;                                 //!< 平面の定義
+      using Sphere = std::tuple<Vector4/*位置*/, double/*半径*/>;                                 //!< 球の定義
+      using Line = std::tuple<Vector4/*位置*/, Vector4/*向き*/>;                                  //!< 直線の定義
+      using Segment = std::tuple<Vector4/*始点*/, Vector4/*終点へのベクトル*/>;                   //!< 線分の定義
+      using Capsule = std::tuple<Vector4/*線分の始点*/, Vector4/*線分の終点*/, double/*半径*/>;   //!< カプセルの定義
+      using Collision = std::tuple</*当たり判定結果*/bool, /*交点の位置*/Vector4>;                //!< 当たり判定の結果用のタプル型の定義
       /**
       * \class 有用算術クラス
       * \brief 全て静的メンバで構成
@@ -89,28 +88,28 @@ namespace AppFrame {
           * \param lineStart 線分始点
           * \param lineEnd 線分終点
           * \param result 当たり判定及びどこが交差したか
-          * \return 当たり判定
+          * \return 当たり判定結果
           */
          static bool CollisionPlaneLine(const Plane& p, const Vector4& lineStart, const Vector4& lineEnd, Collision& result);
          /**
           * \brief 球と点の当たり判定
           * \param point 点
           * \param sphere 球
-          * \return 当たり判定
+          * \return 当たり判定結果
           */
          static bool CollisionSpherePoint(const Vector4& point, const Sphere& sphere);
          /**
           * \brief カプセルと球の当たり判定
           * \param capsule カプセル
           * \param sphere 球
-          * \return 当たり判定
+          * \return 当たり判定結果
           */
          static bool CollisionCapsuleSphere(const Capsule& capsule, const Sphere& sphere);
          /**
           * \brief カプセルとカプセルの当たり判定
           * \param capsule1 カプセル1
           * \param capsule2 カプセル2
-          * \return 当たり判定
+          * \return 当たり判定結果
           */
          static bool CollisionCapsuleCapsule(const Capsule& capsule1, const Capsule& capsule2);
          /**
@@ -140,25 +139,25 @@ namespace AppFrame {
           */
          static double PointSegmentDistance(const Vector4& point, const Segment& segment, Vector4& h, double& t);
          /**
-          * \brief 
-          * \param l1 
-          * \param l2 
-          * \param p1 
-          * \param p2 
-          * \param t1 
-          * \param t2 
-          * \return 
+          * \brief 直線と直線の最短距離を求める
+          * \param l1 一つ目の直線
+          * \param l2 二つ目の直線
+          * \param p1 一つ目の直線から二つ目の直線の最短距離への一つ目の直線の点の位置
+          * \param p2 二つ目の直線から一つ目の直線の最短距離への二つ目の直線の点の位置
+          * \param t1 一つ目の直線から二つ目の直線の最短距離への一つ目の直線の点への割合
+          * \param t2 二つ目の直線から一つ目の直線の最短距離への二つ目の直線の点への割合
+          * \return 直線と直線の最短距離
           */
          static double LineLineDistance(const Line& l1, const Line& l2, Vector4& p1, Vector4& p2, double& t1, double& t2);
          /**
-          * \brief 
-          * \param s1 
-          * \param s2 
-          * \param p1 
-          * \param p2 
-          * \param t1 
-          * \param t2 
-          * \return 
+          * \brief 線分と線分の最短距離を求める
+          * \param s1 一つ目の線分
+          * \param s2 二つ目の線分
+          * \param p1 一つ目の線分から二つ目の線分の最短距離への一つ目の線分の点の位置
+          * \param p2 二つ目の線分から一つ目の線分の最短距離への二つ目の線分の点の位置
+          * \param t1 一つ目の線分から二つ目の線分の最短距離への一つ目の線分の点への割合
+          * \param t2 二つ目の線分から一つ目の線分の最短距離への二つ目の線分の点への割合
+          * \return 線分と線分の最短距離
           */
          static double SegmentSegmentDistance(const Segment& s1, const Segment& s2, Vector4& p1, Vector4& p2, double& t1, double& t2);
         /**

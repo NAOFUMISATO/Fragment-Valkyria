@@ -10,24 +10,22 @@
 #include "CollisionComponent.h"
 #include "ObjectServer.h"
 
-using namespace FragmentValkyria::Player;
-
 namespace {
-   constexpr double Radius = 20.0;
-   constexpr double Speed = 50.0;
+   constexpr double Radius = 20.0;       //!< 球の半径
+   constexpr double Speed = 50.0;        //!< 移動の速さ
 }
+
+using namespace FragmentValkyria::Player;
 
 Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
 }
 
 void Bullet::Init() {
+   // カメラの注視点へのベクトルを取得
    _moved = GetObjServer().GetVecData("CamTarget") - _position;
+   // 単位化する
    _moved.Normalized();
-}
-
-void Bullet::Input(InputManager& input) {
-
 }
 
 void Bullet::Update() {
@@ -35,77 +33,77 @@ void Bullet::Update() {
    _stateServer->Update();
    // ワールド行列の更新
    ComputeWorldTransform();
-   //// モデルの更新
-   //_modelAnimeComponent->Update();
-
 }
 
 void Bullet::Draw() {
+   // 各状態の描画処理を回す
    _stateServer->Draw();
 }
 
 void Bullet::Move() {
+   // 位置の更新
    _position = _position + _moved * Speed;
-
 }
 
 void Bullet::HitCheckFromLargeEnemy() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
+   // 当たり判定結果がラージエネミーと当たっていたら死亡状態へ
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
-      /*SetDead();*/
+      // ここで死亡状態に設定することで弾が複数当たってしまうのを直せた
+      SetDead();
       _stateServer->GoToState("Die");
    }
 }
 
 void Bullet::HitCheckFromPoorEnemyGatling() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
+   // 当たり判定結果がガトリング攻撃をしてくる雑魚敵と当たっていたら死亡状態へ
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+      // ここで死亡状態に設定することで弾が複数当たってしまうのを直せた
       SetDead();
       _stateServer->GoToState("Die");
    }
 }
 
 void Bullet::OutCheckFromStage() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
+   // 当たり判定結果がステージ外の場合死亡状態へ
    if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
+      // ここで死亡状態に設定することで弾が複数当たってしまうのを直せた
       SetDead();
       _stateServer->GoToState("Die");
    }
 }
 
 void Bullet::StateBase::Draw() {
+   // 位置を自作のVector4クラスからDxLib::VECTOR構造体へ変換
    auto pos = AppFrame::Math::ToDX(_owner._position);
+   // 半径をfloat型にキャスト
    auto radius = static_cast<float>(Radius);
+   // DxLibによる球の描画
    DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), TRUE);
 }
 
-void Bullet::StateShoot::Enter() {
-
-}
-
-void Bullet::StateShoot::Input(InputManager& input) {
-
-}
-
 void Bullet::StateShoot::Update() {
+   // 移動処理
    _owner.Move();
+   // 当たり判定処理を行うクラスでラージエネミーと当たっているか確認
    _owner._collisionComponent->LargeEnemyFromBullet();
+   // 当たり判定処理を行うクラスでステージ外にいるか確認
    _owner._collisionComponent->OutStage();
-
+   // ラージエネミーと当たっているか確認
    _owner.HitCheckFromLargeEnemy();
+   // ガトリング攻撃をしてくる雑魚敵と当たっているか確認
    _owner.HitCheckFromPoorEnemyGatling();
+   // ステージ外にいるか確認
    _owner.OutCheckFromStage();
 }
 
-void Bullet::StateDie::Enter() {
-
-}
-
-void Bullet::StateDie::Input(InputManager& input) {
-
-}
-
 void Bullet::StateDie::Update() {
+   // 死亡状態に設定
    _owner.SetDead();
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
  * \file   Laser.h
- * \brief  レーザークラス
+ * \brief  レーザーの処理を回すクラス
  * 
  * \author AHMD2000
  * \date   January 2022
@@ -16,7 +16,7 @@ namespace FragmentValkyria {
     */
    namespace Enemy {
       /**
-       * \class レーザークラス
+       * \class レーザーの処理を回すクラス
        * \brief ボスが放つレーザーの処理を回す
        */
       class Laser : public Object::ObjectBase {
@@ -72,7 +72,7 @@ namespace FragmentValkyria {
                 virtual void Draw() override;
 
             protected:
-                Laser& _owner;   //!< レーザーの参照
+                Laser& _owner;        //!< レーザーの参照
                 int _stateCnt{ 0 };   //!< 各状態へ入った時のフレームカウント保存用
             };
             /**
