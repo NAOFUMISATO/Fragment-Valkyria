@@ -12,6 +12,7 @@
 #include "CameraComponent.h"
 #include "CollisionComponent.h"
 #include "ObjectServer.h"
+#include "EffectServer.h"
 
 using namespace FragmentValkyria::Object;
 
@@ -47,7 +48,7 @@ ObjectServer& ObjectBase::GetObjServer() const {
    return _gameMain.objServer();
 }
 
-AppFrame::Effect::EffectServer& ObjectBase::GetEfcServer() const {
+FragmentValkyria::Effect::EffectServer& ObjectBase::GetEfcServer() const {
    return _gameMain.efcServer();
 }
 

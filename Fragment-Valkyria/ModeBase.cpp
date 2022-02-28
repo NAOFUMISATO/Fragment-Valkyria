@@ -23,3 +23,7 @@ FragmentValkyria::Object::ObjectServer& ModeBase::GetObjServer() const {
 FragmentValkyria::Sprite::SpriteServer& ModeBase::GetSprServer() const {
    return _gameMain.sprServer();
 }
+
+FragmentValkyria::Effect::EffectServer& ModeBase::GetEfcServer() const {
+   return _gameMain.efcServer();
+}

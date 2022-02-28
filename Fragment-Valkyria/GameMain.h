@@ -27,6 +27,9 @@ namespace FragmentValkyria {
    namespace Stage {
       class LoadStageFromJson;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief ゲーム本体
     */
@@ -118,12 +121,18 @@ namespace FragmentValkyria {
           * \return スプライトサーバーの参照
           */
          inline Sprite::SpriteServer& sprServer() const { return *_sprServer; }
+         /**
+          * \brief エフェクトサーバーの参照を取得
+          * \return エフェクトサーバーのポインタ
+          */
+         inline Effect::EffectServer& efcServer() const { return *_efcServer; }
 
       private:
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
          std::unique_ptr<Object::ObjectServer> _objServer;      //!< オブジェクトの一括管理クラス
          std::unique_ptr<Sprite::SpriteServer> _sprServer;      //!< スプライトの一括管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス
          std::unique_ptr<Create::ObjectFactory> _objFactory;    //!< オブジェクト生成一括管理クラスのユニークポインタ
          std::unique_ptr<Stage::LoadStageFromJson> _loadStage;  //!< ステージ情報管理クラスのユニークポインタ
       };

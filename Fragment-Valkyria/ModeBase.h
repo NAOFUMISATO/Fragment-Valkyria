@@ -21,6 +21,9 @@ namespace FragmentValkyria {
    namespace Sprite {
       class SpriteServer;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief モード関係
     */
@@ -46,6 +49,11 @@ namespace FragmentValkyria {
           * \return スプライト一括管理クラスの参照
           */
          Sprite::SpriteServer& GetSprServer() const;
+         /**
+          * \brief エフェクト一括管理クラスの参照をゲームベース経由で取得
+          * \return エフェクト一括管理クラスの参照
+          */
+         Effect::EffectServer& GetEfcServer() const;
 
       protected:
          Game::GameMain& _gameMain; //!< ゲームクラスの参照

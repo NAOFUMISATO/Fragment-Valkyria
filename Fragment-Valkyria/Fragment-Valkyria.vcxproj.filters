@@ -135,9 +135,6 @@
     <ClInclude Include="EffectBase.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="EffectPlayerShot.h">
-      <Filter>ヘッダー ファイル\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="ModeBase.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
@@ -231,7 +228,7 @@
     <ClInclude Include="SpawnRecord.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
-    <ClInclude Include="EffectObjFall.h">
+    <ClInclude Include="EffectObjectFall.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="LargeEnemyHP.h">
@@ -263,6 +260,15 @@
     </ClInclude>
     <ClInclude Include="ModelComponent.h">
       <Filter>ヘッダー ファイル\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectGatlingMuzzleFlash.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectGatlingBullet.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectServer.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,9 +328,6 @@
     </ClCompile>
     <ClCompile Include="GatlingCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectPlayerShot.cpp">
-      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="LargeEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
@@ -398,7 +401,7 @@
     <ClCompile Include="ModeMovie.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-    <ClCompile Include="EffectObjFall.cpp">
+    <ClCompile Include="EffectObjectFall.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="LargeEnemyHP.cpp">
@@ -424,6 +427,15 @@
     </ClCompile>
     <ClCompile Include="SpriteServer.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectGatlingMuzzleFlash.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectGatlingBullet.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectServer.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

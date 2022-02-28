@@ -10,6 +10,9 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectServer.h"
+#include "EffectGatlingMuzzleFlash.h"
+#include "EffectGatlingBullet.h"
+#include "EffectServer.h"
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",
@@ -34,6 +37,11 @@ void Gatling::Init() {
    _moveDirection = Vector4(x, 0.0, z);
    // ’PˆÊ‰»‚·‚é
    _moveDirection.Normalized();
+   auto& efcServer = GetEfcServer();
+   auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>(_gameMain,"GatlingMuzzleFlash");
+   efcServer.Add(std::move(efcMuzzleFlash));
+   auto efcBullet = std::make_unique<Effect::EffectGatlingBullet>(_gameMain, "GatlingBullet");
+   efcServer.Add(std::move(efcBullet));
 }
 
 void Gatling::Update() {
@@ -108,6 +116,7 @@ void Gatling::StateChase::Update() {
 void Gatling::StateDie::Update() {
    // Ž€–Só‘Ô‚ÉÝ’è
    _owner.SetDead();
+   _owner._efcBullet->SetDead();
 }
 
 void Gatling::StateDie::Draw() {

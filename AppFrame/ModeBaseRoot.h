@@ -25,9 +25,6 @@ namespace AppFrame {
    namespace Sound {
       class SoundComponent;
    }
-   namespace Effect {
-      class EffectServer;
-   }
    namespace Texture {
       class TextureComponent;
    }
@@ -107,11 +104,6 @@ namespace AppFrame {
           * \return jsonファイル管理クラスの参照
           */
          Resource::LoadResourceJson& GetLoadJson() const;
-         /**
-          * \brief エフェクト一括管理クラスの参照をゲームベース経由で取得
-          * \return エフェクト一括管理クラスの参照
-          */
-         Effect::EffectServer& GetEfcServer() const;
          /**
           * \brief 画像簡易描画クラスの参照をゲームベース経由で取得
           * \return 画像簡易描画クラスの参照

@@ -9,6 +9,7 @@
 #pragma comment(lib,"AppFrame.lib")
 
 #include <DxLib.h>
+#include <EffekseerForDXLib.h>
 #include "GameBase.h"
 #include "ResourceServer.h"
 #include "ModeServer.h"
@@ -24,8 +25,6 @@
 #include "SoundComponent.h"
 #include "InputManager.h"
 #include "LoadResourceJson.h"
-#include "EffectBaseRoot.h"
-#include "EffectServer.h"
 #include "Singleton.h"
 #include "LoadParamJson.h"
 #include "TextureComponent.h"

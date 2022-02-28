@@ -131,11 +131,6 @@ namespace AppFrame {
           */
          inline Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
          /**
-          * \brief エフェクトサーバーの参照を取得
-          * \return エフェクトサーバーのポインタ
-          */
-         inline Effect::EffectServer& efcServer() const { return *_efcServer; }
-         /**
           * \brief 画像の簡易描画クラスの参照を取得
           * \return 画像の簡易描画クラスのポインタ
           */
@@ -165,7 +160,6 @@ namespace AppFrame {
          std::unique_ptr<Path::CurrentPathServer> _pathServer;     //!< パスの一括管理クラス
          std::unique_ptr<Sound::SoundComponent> _soundComponent;   //!< サウンドの一括管理クラス
          std::unique_ptr<Resource::LoadResourceJson> _loadresJson; //!< jsonファイル管理クラス
-         std::unique_ptr<Effect::EffectServer> _efcServer;         //!< エフェクトの一括管理クラス
          std::unique_ptr<Texture::TextureComponent> _texComponent; //!< 画像の簡易描画クラス
       };
    }

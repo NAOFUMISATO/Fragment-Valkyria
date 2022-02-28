@@ -15,7 +15,6 @@
 #include "SoundComponent.h"
 #include "CurrentPathServer.h"
 #include "LoadResourceJson.h"
-#include "EffectServer.h"
 #include "TextureComponent.h"
  /**
   * \brief アプリケーションフレーム
@@ -86,8 +85,6 @@ namespace AppFrame {
          _pathServer = std::make_unique<Path::CurrentPathServer>();
 
          _loadresJson = std::make_unique<Resource::LoadResourceJson>(*this);
-
-         _efcServer = std::make_unique<Effect::EffectServer>();
 
          _texComponent = std::make_unique<Texture::TextureComponent>(*this);
 

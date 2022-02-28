@@ -18,7 +18,6 @@
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
 #include "ModelAnimeComponent.h"
-#include "EffectPlayerShot.h" //‰¼
 
 using namespace FragmentValkyria::Mode;
 
@@ -67,10 +66,6 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
    }
    if (input.GetMouse().LeftClick()) {
       GetModeServer().GoToMode("ClearResult", 'S');
-   }
-   if (input.GetKeyboard().ZClick()) {
-      auto efcShot = std::make_unique<Effect::EffectPlayerShot>(_gameMain, "Shot");
-      GetEfcServer().Add(std::move(efcShot));
    }
    //-----------‰¼--------------
    ModeInGameBase::Input(input);

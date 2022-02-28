@@ -17,6 +17,7 @@
 #include "SpriteBase.h"
 #include "SpriteServer.h"
 #include "Stage.h"
+#include "EffectServer.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -27,7 +28,6 @@ ModeInGameBase::ModeInGameBase(Game::GameMain& gameMain) : ModeBase{gameMain} {
 void ModeInGameBase::Enter() {
    _lighting = std::make_unique<Lighting::LightAndShadow>(_gameMain);
    _stage = std::make_unique<Stage::Stage>(_gameMain);
-   Update();
 }
 
 void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {

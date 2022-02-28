@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
+#include "EffectGatlingBullet.h"
 /**
  * \brief プロジェクト名
  */
@@ -29,10 +30,6 @@ namespace FragmentValkyria {
           * \param gameMain ゲーム本体の参照
           */
          Gatling(Game::GameMain& gameMain);
-         /**
-          * \brief デフォルトデストラクタ
-          */
-         virtual ~Gatling() override = default;
          /**
          * \brief オブジェクトの種類を返す
          * \return プレイヤー
@@ -71,6 +68,7 @@ namespace FragmentValkyria {
 
          Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };                  //!< 移動量のベクトル
          Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };          //!< 移動する方向のベクトル
+         std::unique_ptr<Effect::EffectGatlingBullet> _efcBullet;   //!< エフェクトガトリング弾のユニークポインタ
 
       public:
          /**

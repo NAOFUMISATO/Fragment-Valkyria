@@ -162,8 +162,6 @@
     <ClInclude Include="AppFrame.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="DxUtility.h" />
-    <ClInclude Include="EffectBaseRoot.h" />
-    <ClInclude Include="EffectServer.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
@@ -194,8 +192,6 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DxUtility.cpp" />
-    <ClCompile Include="EffectBaseRoot.cpp" />
-    <ClCompile Include="EffectServer.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadParamJson.cpp" />

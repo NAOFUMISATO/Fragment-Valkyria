@@ -37,10 +37,6 @@ namespace AppFrame {
          return _gameBase.soundComponent(); 
       }
 
-      Effect::EffectServer& ModeBaseRoot::GetEfcServer() const {
-         return _gameBase.efcServer();
-      }
-
       Texture::TextureComponent& ModeBaseRoot::GetTexComponent() const {
          return _gameBase.texComponent();
       }

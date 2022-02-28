@@ -38,12 +38,12 @@
 		{
 			"keyname": "GatlingMuzzleFlash",
 			"filename": "GatlingMuzzleFlash.efkefc",
-			"scale": 10.0
+			"scale": 30.0
 		},
 		{
 			"keyname": "GatlingBullet",
 			"filename": "GatlingBullet.efkefc",
-			"scale": 10.0
+			"scale": 30.0
 		},
 		{
 			"keyname": "BossWalk",

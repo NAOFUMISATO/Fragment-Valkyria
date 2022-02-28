@@ -61,12 +61,6 @@
     <Filter Include="ヘッダー ファイル\Math">
       <UniqueIdentifier>{8ca39fdf-1633-44f3-a149-1b24c1b05dba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Effect">
-      <UniqueIdentifier>{51cf172c-954b-4941-9ec6-a7faf492dbff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Effect">
-      <UniqueIdentifier>{70df5d69-4e74-4738-8242-b4c19ca9be02}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Temp">
       <UniqueIdentifier>{5e51596f-f165-4c18-a9af-7de48c85d15b}</UniqueIdentifier>
     </Filter>
@@ -128,12 +122,6 @@
     </ClCompile>
     <ClCompile Include="DxUtility.cpp">
       <Filter>ソース ファイル\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectBaseRoot.cpp">
-      <Filter>ソース ファイル\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectServer.cpp">
-      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>ソース ファイル\Data</Filter>
@@ -211,12 +199,6 @@
     </ClInclude>
     <ClInclude Include="AppFrame.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectBaseRoot.h">
-      <Filter>ヘッダー ファイル\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectServer.h">
-      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>ヘッダー ファイル\Data</Filter>

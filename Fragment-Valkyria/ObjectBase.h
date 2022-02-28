@@ -24,6 +24,9 @@ namespace FragmentValkyria {
    namespace Collision {
        class CollisionComponent;
    }
+   namespace Effect {
+      class EffectServer;
+   }
    /**
     * \brief オブジェクト関係
     */
@@ -214,7 +217,7 @@ namespace FragmentValkyria {
           * \brief エフェクト一括管理クラスの参照をゲーム本体経由で取得
           * \return エフェクト一括管理クラスの参照
           */
-         AppFrame::Effect::EffectServer& GetEfcServer() const;
+         FragmentValkyria::Effect::EffectServer& GetEfcServer() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲーム本体経由で取得
           * \return jsonファイル管理クラスの参照
