@@ -41,10 +41,10 @@ namespace FragmentValkyria {
           */
          void Draw()override;
          /**
-          * \brief スプライト種別:UIの取得
-          * \return スプライト種別:UI
+          * \brief スプライト種別の取得
+          * \return スプライト種別:プレイヤーHP
           */
-         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
+         virtual SpriteType GetSprType() const { return SpriteType::PlayerHP; }
 
       private:
          /**

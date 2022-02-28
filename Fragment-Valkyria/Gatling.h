@@ -102,6 +102,10 @@ namespace FragmentValkyria {
              */
             StateChase(Gatling& owner) : StateBase{ owner } {};
             /**
+             * \brief “üŒûˆ—
+             */
+            void Enter()override;
+            /**
              * \brief XVˆ—
              */
             void Update() override;

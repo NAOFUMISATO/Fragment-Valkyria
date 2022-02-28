@@ -42,9 +42,9 @@ namespace FragmentValkyria {
          void Draw()override;
          /**
           * \brief スプライト種別の取得
-          * \return 種別:スプライト
+          * \return 種別:ボスHP
           */
-         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
+         virtual SpriteType GetSprType() const { return SpriteType::LargeEnemyHP; }
 
          private:
             double _hp{ 0.0 };                //!< 体力

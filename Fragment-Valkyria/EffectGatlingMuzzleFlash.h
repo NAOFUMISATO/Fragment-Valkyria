@@ -28,7 +28,11 @@ namespace FragmentValkyria {
           * \brief 更新処理
           */
          void Update()override;
-
+         /**
+          * \brief エフェクトの種類を返す
+          * \return 種別:ガトリングの発火炎(マズルフラッシュ)
+          */
+         virtual EffectType GetEfcType() const override { return EffectType::GatlingMuzzleFlash; }
       };
    }
 

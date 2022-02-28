@@ -40,9 +40,9 @@ namespace FragmentValkyria {
          void Draw()override;
          /**
           * \brief スプライト種別の取得
-          * \return 種別Sprite
+          * \return 種別:残り弱攻撃弾数
           */
-         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
+         virtual SpriteType GetSprType() const { return SpriteType::RemainingBullet; }
 
       private:
          /**

@@ -13,6 +13,7 @@ void EffectGatlingMuzzleFlash::Init() {
 }
 
 void EffectGatlingMuzzleFlash::Update() {
+   EffectBase::Update();
    if (!IsPlaying()) {
       SetDead();
    }

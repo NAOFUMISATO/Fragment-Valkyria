@@ -40,9 +40,9 @@ namespace FragmentValkyria {
          void Draw()override;
          /**
           * \brief スプライト種別の取得
-          * \return 種別:Sprite
+          * \return 種別:レティクル
           */
-         virtual SpriteType GetSprType()const { return SpriteType::Sprite; }
+         virtual SpriteType GetSprType()const { return SpriteType::Reticle; }
 
       private:
          bool _isAim{ false };   //!< プレイヤーがエイムしているかのフラグ

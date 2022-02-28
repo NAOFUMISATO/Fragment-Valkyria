@@ -11,258 +11,254 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-    /**
-     * \brief 敵関係
-     */
+   /**
+    * \brief 敵関係
+    */
    namespace Enemy {
-        /**
-         * \class 落下オブジェクトの処理を回すクラス
-         * \brief 落下オブジェクトの処理を回す
-         */
+      /**
+       * \class 落下オブジェクトの処理を回すクラス
+       * \brief 落下オブジェクトの処理を回す
+       */
       class FallObject : public Object::ObjectBase {
-            using InputManager = AppFrame::Input::InputManager;
-            using Vector4 = AppFrame::Math::Vector4;
+         using InputManager = AppFrame::Input::InputManager;
+         using Vector4 = AppFrame::Math::Vector4;
       public:
-            /**
-             * \brief コンストラクタ
-             * \param gameMain ゲーム本体の参照
-             */
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体の参照
+          */
          FallObject(Game::GameMain& gameMain);
-            /**
-             * \brief デフォルトデストラクタ
-             */
-         virtual ~FallObject() override = default;
+         /**
+          * \brief 初期化処理
+          */
+         virtual void Init() override;
+         /**
+          * \brief 入力処理
+          * \param input 入力一括管理クラスの参照
+          */
+         void Input(InputManager& input) override;
+         /**
+          * \brief 更新処理
+          */
+         void Update() override;
+         /**
+          * \brief 描画処理
+          */
+         void Draw() override;
          /**
           * \brief オブジェクトの種類を返す
-          * \return 落下オブジェクト
+          * \return 種別:落下オブジェクト
           */
          ObjectType GetObjType() const override { return ObjectType::FallObject; };
+         /**
+          * \brief 残留オブジェクトか確認
+          * \return 残留オブジェクトかどうか
+          */
+         bool residual() { return _residual; }
+         /**
+          * \brief 残留オブジェクトかどうか設定
+          * \param residual 残留オブジェクトかどうか
+          */
+         void residual(bool residual) { _residual = residual; }
+
+      private:
+         /**
+          * \brief プレイヤーが浮く範囲内にいるか確認
+          */
+         void HitCheckFromPlayerPoint();
+         /**
+          * \brief ラージエネミーのオブジェクトと当たっているか確認
+          */
+         void HitCheckFromLargeEnemy();
+         /**
+          * \brief レーザーと当たっているか確認
+          */
+         void HitCheckFromLaser();
+         /**
+          * \brief ガトリング攻撃をしてくる雑魚敵と当たっているか確認
+          */
+         void HitCheckFromPoorEnemyGatling();
+         /**
+          * \brief ステージ外にいるか確認
+          */
+         void OutStageCheck();
+         /**
+          * \brief プレイヤーがノックバックしているか確認
+          */
+         void CheckPlayerKnockBack();
+         /**
+          * \brief 浮かせながら回転させる処理
+          */
+         void Save();
+         /**
+          * \brief 上に上げていく処理
+          */
+         void Up();
+         /**
+          * \brief 打った時の注視点に向かって進む処理
+          */
+         void Shoot();
+         double _fallTimer{ 0.0 };                          //!< 落下状態の進捗
+         double _upDownAngle{ 0.0 };                        //!< ふわふわさせる時のサインの値を取るときの角度
+         double _rotateAngle{ 0.0 };                        //!< 不規則な回転さをせる時のサインの値を取るときの角度
+         bool _saveFlag{ false };                           //!< ふわふわ浮かせるか
+         bool _isFall{ true };                              //!< 落下状態かどうか
+         bool _residual{ true };                            //!< 残留オブジェクトか
+         int _collision{ 0 };                               //!< モデルのコリジョンフレーム番号
+         Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };  //!< 浮く状態に入った時の位置ベクトル
+         Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
+         std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
+         std::vector<int> _fallPointHandles{ -1 };          //!< 落下地点ビルボード画像ハンドル
+
+      public:
+         /**
+         * \class 落下オブジェクトの状態の基底クラス
+         * \brief 各落下オブジェクトの状態はこれを派生して定義する
+         */
+         class StateBase : public AppFrame::State::StateBaseRoot {
+         public:
             /**
-            * \brief 初期化処理
-            */
-            virtual void Init() override;
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
+             */
+            StateBase(FallObject& owner) : _owner{ owner } {};
             /**
-            * \brief 入力処理
-            * \param input 入力一括管理クラスの参照
-            */
-            virtual void Input(InputManager& input) override;
+             * \brief 描画処理
+             */
+            virtual void Draw() override;
+
+         protected:
+            FallObject& _owner;   //!< 落下オブジェクトの参照
+         };
+         /**
+          * \class 待機状態クラス
+          * \brief 待機状態の処理を回す
+          */
+         class StateIdle : public StateBase {
+         public:
             /**
-            * \brief 更新処理
-            */
-            virtual void Update() override;
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
+             */
+            StateIdle(FallObject& owner) : StateBase{ owner } {};
             /**
-            * \brief 描画処理
-            */
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
+         /**
+          * \class 落下状態クラス
+          * \brief 落下状態の処理を回す
+          */
+         class StateFall : public StateBase {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
+             */
+            StateFall(FallObject& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+            /**
+             * \brief 描画処理
+             */
             void Draw() override;
+         };
+         /**
+          * \class 浮く状態のクラス
+          * \brief 浮く状態の処理を回す
+          */
+         class StateSave : public StateBase {
+         public:
             /**
-             * \brief 残留オブジェクトか確認
-             * \return 残留オブジェクトかどうか
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
              */
-            bool residual() { return _residual; }
+            StateSave(FallObject& owner) : StateBase{ owner } {};
             /**
-             * \brief 残留オブジェクトかどうか設定
-             * \param residual 残留オブジェクトかどうか
+             * \brief 入口処理
              */
-            void residual(bool residual) { _residual = residual; }
-
-        private:
+            void Enter() override;
             /**
-             * \brief プレイヤーが浮く範囲内にいるか確認
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
              */
-            void HitCheckFromPlayerPoint();
+            void Input(InputManager& input) override;
             /**
-             * \brief ラージエネミーのオブジェクトと当たっているか確認
+             * \brief 更新処理
              */
-            void HitCheckFromLargeEnemy();
+            void Update() override;
+         };
+         /**
+          * \class 発射状態のクラス
+          * \brief 発射状態の処理を回す
+          */
+         class StateShoot : public StateBase {
+         public:
             /**
-             * \brief レーザーと当たっているか確認
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
              */
-            void HitCheckFromLaser();
+            StateShoot(FallObject& owner) : StateBase{ owner } {};
             /**
-             * \brief ガトリング攻撃をしてくる雑魚敵と当たっているか確認
+             * \brief 入口処理
              */
-            void HitCheckFromPoorEnemyGatling();
+            void Enter() override;
             /**
-             * \brief ステージ外にいるか確認
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
              */
-            void OutStageCheck();
+            void Input(InputManager& input) override;
             /**
-             * \brief プレイヤーがノックバックしているか確認
+             * \brief 更新処理
              */
-            void CheckPlayerKnockBack();
+            void Update() override;
+         };
+         /**
+          * \class 死亡状態クラス
+          * \brief 死亡状態の処理を回す
+          */
+         class StateDie : public StateBase {
+         public:
             /**
-             * \brief 浮かせながら回転させる処理
+             * \brief コンストラクタ
+             * \param owner 落下オブジェクトの参照
              */
-            void Save();
+            StateDie(FallObject& owner) : StateBase{ owner } {};
             /**
-             * \brief 上に上げていく処理
+             * \brief 入口処理
              */
-            void Up();
+            void Enter() override;
             /**
-             * \brief 打った時の注視点に向かって進む処理
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
              */
-            void Shoot();
-            double _fallTimer{ 0.0 };                          //!< 落下状態の進捗
-            double _upDownAngle{ 0.0 };                        //!< ふわふわさせる時のサインの値を取るときの角度
-            double _rotateAngle{ 0.0 };                        //!< 不規則な回転さをせる時のサインの値を取るときの角度
-            bool _saveFlag{ false };                           //!< ふわふわ浮かせるか
-            bool _isFall{ true };                              //!< 落下状態かどうか
-            bool _residual{ true };                            //!< 残留オブジェクトか
-            int _collision{ 0 };                               //!< モデルのコリジョンフレーム番号
-            Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };  //!< 浮く状態に入った時の位置ベクトル
-            Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
-            std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
-            std::vector<int> _fallPointHandles{ -1 };          //!< 落下地点ビルボード画像ハンドル
-
-        public:
+            void Input(InputManager& input) override;
             /**
-            * \class 落下オブジェクトの状態の基底クラス
-            * \brief 各落下オブジェクトの状態はこれを派生して定義する
-            */
-            class StateBase : public AppFrame::State::StateBaseRoot {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateBase(FallObject& owner) : _owner{ owner } {};
-                /**
-                 * \brief 描画処理
-                 */
-                virtual void Draw() override;
-
-            protected:
-                FallObject& _owner;   //!< 落下オブジェクトの参照
-            };
-            /**
-             * \class 待機状態クラス
-             * \brief 待機状態の処理を回す
+             * \brief 更新処理
              */
-            class StateIdle : public StateBase {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateIdle(FallObject& owner) : StateBase{ owner } {};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
-                 */
-                void Input(InputManager& input) override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-            };
-            /**
-             * \class 落下状態クラス
-             * \brief 落下状態の処理を回す
-             */
-            class StateFall : public StateBase {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateFall(FallObject& owner) : StateBase{ owner } {};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
-                 */
-                void Input(InputManager& input) override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-                /**
-                 * \brief 描画処理
-                 */
-                void Draw() override;
-            };
-            /**
-             * \class 浮く状態のクラス
-             * \brief 浮く状態の処理を回す
-             */
-            class StateSave : public StateBase {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateSave(FallObject& owner) : StateBase{ owner } {};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
-                 */
-                void Input(InputManager& input) override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-            };
-            /**
-             * \class 発射状態のクラス
-             * \brief 発射状態の処理を回す
-             */
-            class StateShoot : public StateBase {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateShoot(FallObject& owner) : StateBase{ owner } {};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
-                 */
-                void Input(InputManager& input) override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-            };
-            /**
-             * \class 死亡状態クラス
-             * \brief 死亡状態の処理を回す
-             */
-            class StateDie : public StateBase {
-            public:
-                /**
-                 * \brief コンストラクタ
-                 * \param owner 落下オブジェクトの参照
-                 */
-                StateDie(FallObject& owner) : StateBase{ owner } {};
-                /**
-                 * \brief 入口処理
-                 */
-                void Enter() override;
-                /**
-                 * \brief 入力処理
-                 * \param input 入力一括管理クラスの参照
-                 */
-                void Input(InputManager& input) override;
-                /**
-                 * \brief 更新処理
-                 */
-                void Update() override;
-            };
+            void Update() override;
+         };
       };
    }
 }

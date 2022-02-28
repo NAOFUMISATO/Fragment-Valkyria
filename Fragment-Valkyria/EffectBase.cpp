@@ -14,7 +14,7 @@ using namespace FragmentValkyria::Effect;
 EffectBase::EffectBase(Game::GameMain& gameMain,std::string_view key) : _gameMain{gameMain} {
 }
 
-void EffectBase::Draw() {
+void EffectBase::Update() {
    SetPosition();
    SetRotation();
    SetScale();

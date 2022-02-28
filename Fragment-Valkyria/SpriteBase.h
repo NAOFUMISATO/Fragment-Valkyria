@@ -42,7 +42,12 @@ namespace FragmentValkyria {
           * \brief スプライトの種別列挙
           */
          enum class SpriteType {
-            Sprite = 0,   //!< スプライト
+            Sprite = 0,      //!< スプライト
+            PlayerHP,        //!< プレイヤーHP
+            LargeEnemyHP,    //!< ボスHP
+            RemainingBullet, //!< 残り弱攻撃弾数
+            RemainingPortion,//!< 残り回復アイテム数
+            Reticle          //!< レティクル
          };
          /**
           * \brief コンストラクタ

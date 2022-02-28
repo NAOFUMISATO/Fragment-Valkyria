@@ -41,6 +41,7 @@ namespace FragmentValkyria {
                efc->Update();
             }
          }
+         Effekseer_Sync3DSetting();
          UpdateEffekseer3D();
          _updating = false;
 
@@ -58,12 +59,11 @@ namespace FragmentValkyria {
 
       void EffectServer::Render() {
          for (auto&& efc : _runEffects) {
-            // _runObjects‚É“o˜^‚³‚ê‚Ä‚¢‚éActiveó‘Ô‚ÌƒGƒtƒFƒNƒg‚Ì•`‰æˆ—‚ð‰ñ‚·
+            // _runEffects‚É“o˜^‚³‚ê‚Ä‚¢‚éActiveó‘Ô‚ÌƒGƒtƒFƒNƒg‚Ì•`‰æˆ—‚ð‰ñ‚·
             if (efc->IsActive()) {
                efc->Draw();
             }
          }
-         Effekseer_Sync3DSetting();
          DrawEffekseer3D();
       }
 

@@ -36,6 +36,15 @@ namespace FragmentValkyria {
             Dead        //!< 死亡
          };
          /**
+          * \brief エフェクトの種別列挙
+          */
+         enum class EffectType {
+            Effect,             //!< エフェクト
+            GatlingBullet,      //!< ガトリング弾
+            GatlingMuzzleFlash, //!< ガトリングの発火炎(マズルフラッシュ)
+            ObjectFall          //!< オブジェクト落下
+         };
+         /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体クラスの参照
           * \param key ResourceServerに登録した任意の文字列のエフェクトキー
@@ -53,11 +62,16 @@ namespace FragmentValkyria {
          /**
           * \brief 更新処理
           */
-         virtual void Update() {};
+         virtual void Update();
          /**
           * \brief 描画処理
           */
-         virtual void Draw();
+         virtual void Draw() {};
+         /**
+          * \brief エフェクトの種別を返す（純粋仮想関数化）
+          * \return 派生先で定義
+          */
+         virtual EffectType GetEfcType() const = 0;
          /**
           * \brief 死亡判定を返す
           * \return 死亡状態ならtrue,でないならfalse
@@ -167,10 +181,10 @@ namespace FragmentValkyria {
          int _loadHandle{ -1 };                        //!< エフェクトを読み込むハンドル
          int _playHandle{ -1 };                        //!< エフェクトを再生するハンドル
          double _speed{ 10.0 };                        //!< 再生速度
-         Vector4 _position{ 0,0,0 };             //!< 位置
-         Vector4 _rotation{ 0,0,0 };             //!< 回転角
-         Vector4 _scale{ 1.0,1.0,1.0 };          //!< 拡大率
-         Color _color{ Color() };          //!< 色(RGBA)
+         Vector4 _position{ 0,0,0 };                   //!< 位置
+         Vector4 _rotation{ 0,0,0 };                   //!< 回転角
+         Vector4 _scale{ 1.0,1.0,1.0 };                //!< 拡大率
+         Color _color{ Color() };                      //!< 色(RGBA)
       };
 }
 }

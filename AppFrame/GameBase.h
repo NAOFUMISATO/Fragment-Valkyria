@@ -137,7 +137,7 @@ namespace AppFrame {
          inline Texture::TextureComponent& texComponent() const { return *_texComponent; }
          /**
           * \brief ウィンドウモードに設定するか
-          * \param _window_mode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
+          * \param windowMode TRUEでウィンドウモードで実行、でなければフルスクリーンモードで実行
           */
          inline virtual void AppWindowMode(bool windowMode) { ChangeWindowMode(windowMode); }
          /**

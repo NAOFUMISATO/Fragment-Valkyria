@@ -13,7 +13,8 @@ void EffectGatlingBullet::Init() {
 }
 
 void EffectGatlingBullet::Update() {
+   EffectBase::Update();
    if (!IsPlaying()) {
-      PlayEffect();
+      SetDead();
    }
 }
