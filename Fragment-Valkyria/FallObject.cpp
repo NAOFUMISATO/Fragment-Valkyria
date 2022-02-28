@@ -45,9 +45,10 @@ FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 void FallObject::Init() {
    auto modelHandle = _modelAnimeComponent->modelHandle();
    _collision = MV1SearchFrame(modelHandle, "drum_green_c");
-   //// ナビメッシュを非表示
-   //MV1SetFrameVisible(modelHandle, _collision, FALSE);
-#ifdef _DEBUG
+   // ナビメッシュの表示設定
+#ifndef _DEBUG
+   MV1SetFrameVisible(modelHandle, _collision, true);
+#else
    MV1SetFrameOpacityRate(modelHandle, _collision, 0.5f);
 #endif
 

@@ -18,6 +18,7 @@
 #include "SpriteServer.h"
 #include "Stage.h"
 #include "EffectServer.h"
+#include "Gatling.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -72,6 +73,7 @@ void ModeInGameBase::Render() {
 }
 
 void ModeInGameBase::Exit() {
+   IndividualEffectClear();
    GetObjServer().Clear();
    GetEfcServer().Clear();
    GetSprServer().Clear();
@@ -82,6 +84,16 @@ void ModeInGameBase::Exit() {
 
 Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
    return _gameMain.objFactory();
+}
+
+void ModeInGameBase::IndividualEffectClear() {
+   for (auto& object : GetObjServer().runObjects()) {
+      if (object->GetObjType() == Object::ObjectBase::ObjectType::Gatling) {
+         auto& gatling = dynamic_cast<Enemy::Gatling&>(*object);
+         auto& efcBullet = gatling.efcBullet();
+         efcBullet.StopEffect();
+      }
+   }
 }
 
 #ifdef _DEBUG

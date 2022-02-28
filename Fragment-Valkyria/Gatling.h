@@ -47,6 +47,11 @@ namespace FragmentValkyria {
          * \brief 描画処理
          */
          void Draw() override;
+         /**
+          * \brief ガトリング弾エフェクトの参照の取得
+          * \return ガトリング弾エフェクトの参照
+          */
+         Effect::EffectGatlingBullet& efcBullet() const { return *_efcBullet; }
 
       private:
          /**

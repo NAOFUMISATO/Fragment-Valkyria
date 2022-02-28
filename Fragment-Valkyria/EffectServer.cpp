@@ -69,6 +69,9 @@ namespace FragmentValkyria {
 
       void EffectServer::Clear() {
          // 全ての動的配列内の要素を削除する
+         for (auto& effect : _runEffects) {
+            effect->StopEffect();
+         }
          _runEffects.clear();
          _pendingEffects.clear();
       }
