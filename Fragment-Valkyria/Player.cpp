@@ -198,7 +198,7 @@ void Player::HitCheckFromGatling() {
         // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
         // ノックバック状態へ
-        _stateServer->PushBack("KnockBack");
+        _stateServer->GoToState("KnockBack");
     }
 }
 
@@ -251,7 +251,7 @@ void Player::HitCheckFromFallObject() {
         // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
         // ノックバック状態へ
-        _stateServer->PushBack("KnockBack");
+        _stateServer->GoToState("KnockBack");
     }
 }
 
@@ -281,7 +281,7 @@ void Player::HitCheckFromLaser() {
         // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
         // ノックバック状態へ
-        _stateServer->PushBack("KnockBack");
+        _stateServer->GoToState("KnockBack");
     }
 }
 
@@ -306,7 +306,7 @@ void Player::HitCheckFromLargeEnemy() {
         // カメラのズームをしないと設定
         _cameraComponent->SetZoom(false);
         // ノックバック状態へ
-        _stateServer->PushBack("KnockBack");
+        _stateServer->GoToState("KnockBack");
     }
 }
 
@@ -706,6 +706,20 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
 void Player::StateWeakShootReady::Update() {
    // 射撃状態の回転処理
    _owner.ShootRotate();
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
    // クールタイムの更新
    --_coolTime;
    // 無敵時間更新
@@ -730,6 +744,20 @@ void Player::StateReload::Update() {
       _owner._bulletStock = 5;
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
    // リロード状態のカウントの更新
    ++_reloadCnt;
    // 無敵時間更新
@@ -795,6 +823,20 @@ void Player::StateRecovery::Update() {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
    // 回復状態のカウントの更新
    ++_recoveryCnt;
    // 無敵時間更新

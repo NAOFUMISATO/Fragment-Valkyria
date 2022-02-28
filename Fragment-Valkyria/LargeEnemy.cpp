@@ -354,7 +354,7 @@ void LargeEnemy::StateIdle::Update() {
    // ゲームのフレームカウントの取得
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
-   auto count = _stateCnt - gameCount;
+   auto count = gameCount - _stateCnt;
    // 一定フレーム数たったら行動をする
    if (count >= 60 * 1) {
       _owner.Action();
@@ -368,28 +368,20 @@ void LargeEnemy::StateIdle::Update() {
 }
 
 void LargeEnemy::StateFallObject::Enter() {
-   // この状態になった時のゲームのフレームカウントの保存
-   _stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("object_attack", false);
 }
 
 void LargeEnemy::StateFallObject::Update() {
-   // ゲームのフレームカウントの取得
-   auto gameCount = _owner.gameMain().modeServer().frameCount();
-   // この状態に入ってからの経過フレーム数の取得
-   auto count = _stateCnt - gameCount;
    // アニメーションを繰り返した回数の取得
    auto cnt = _owner._modelAnimeComponent->repeatedCount();
    // アニメーションを1回行ったら待機状態へ
    if (cnt > 0) {
-      _owner._stateServer->GoToState("Idle");
-   }
-   // この状態に入った瞬間に落下オブジェクトを生成する
-   if (count == 0) {
       // カメラを振動させるためにカメラの振動に使うYの位置を0.0に設定
       _owner._cameraComponent->SetVibValue(0.0);
+      // 落下オブジェクトの生成
       _owner.CreateFallObject();
+      _owner._stateServer->GoToState("Idle");
    }
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
@@ -524,7 +516,7 @@ void LargeEnemy::StateMove::Update() {
    // ゲームのフレームカウントの取得
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
-   auto count = _stateCnt - gameCount;
+   auto count = gameCount - _stateCnt;
    // 
    FootStepSound();
    // 移動中最初に移動方向に回転する場合移動方向へ回転させる
@@ -621,7 +613,7 @@ void LargeEnemy::StateLaser::Update() {
    // ゲームのフレームカウントの取得
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
-   auto count = _stateCnt - gameCount;
+   auto count = gameCount - _stateCnt;
    // 既定のフレーム数経過したら待機状態へ
    if (count >= 60 * 6) {
    _owner._stateServer->GoToState("Idle");
