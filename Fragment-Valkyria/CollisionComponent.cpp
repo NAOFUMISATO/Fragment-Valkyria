@@ -228,45 +228,45 @@ void CollisionComponent::GatlingFromObjectModel() {
 }
 
 void CollisionComponent::GatlingFromPlayer() {
-   //プレイヤーの参照型にキャスト
+   // プレイヤーの参照型にキャスト
    auto& player = dynamic_cast<Player::Player&>(_owner);
-   //無敵時間の取得
+   // 無敵時間の取得
    auto invincibleCnt = player.invincibleCnt();
-   //無敵時間中だったら何もしない
+   // 無敵時間中だったら何もしない
    if (invincibleCnt > 0) {
       return;
    }
-   //プレイヤー側のカプセルを設定
+   // プレイヤー側のカプセルを設定
    auto playerPos = _owner.position();
-   //カプセルの位一つ目の位置
+   // カプセルの位一つ目の位置
    auto capsulePos1 = playerPos + Vector4(0.0, 30.0, 0.0);
-   //カプセルの二つ目の位置
+   // カプセルの二つ目の位置
    auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
-   //カプセルの半径
+   // カプセルの半径
    auto casuleRadian = PlayerRadius;
-   //自前のカプセルを定義
+   // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //ガトリングじゃなかったら何もしない
+      // ガトリングじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
          continue;
       }
-      //ガトリングの位置の取得
+      // ガトリングの位置の取得
       auto gatling = object->position();
-      //ガトリングの半径の設定
+      // ガトリングの半径の設定
       auto gatlingRadian = GatlingRadius;
-      //自前の球を定義
+      // 自前の球を定義
       AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlingRadian);
-      //カプセルと球で当たり判定をとる
+      // カプセルと球で当たり判定をとる
       if (AppFrame::Math::Utility::CollisionCapsuleSphere(playerCapsule, gatlingSphere)) {
-         //当たっていたらガトリング側の当たり判定の結果をプレイヤーと当たったと設定
+         // 当たっていたらガトリング側の当たり判定の結果をプレイヤーと当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromPlayer);
-         //プレイヤー側の当たり判定の結果をガトリングと当たったと設定
+         // プレイヤー側の当たり判定の結果をガトリングと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromGatling);
-         //ダメージの設定
+         // ダメージの設定
          _owner.collisionComponent().damage(20.0);
-         //プレイヤーの当たった位置にガトリングの位置を設定
+         // プレイヤーの当たった位置にガトリングの位置を設定
          _owner.collisionComponent().hitPos(object->position());
       }
    }

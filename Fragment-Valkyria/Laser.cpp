@@ -38,7 +38,7 @@ void Laser::StateBase::Draw() {
 }
 
 void Laser::StateIrradiation::Enter() {
-   // フレームカウントの取得
+   // この状態になった時のゲームのフレームカウントの保存
    _stateCnt = _owner.gameMain().modeServer().frameCount();
 }
 

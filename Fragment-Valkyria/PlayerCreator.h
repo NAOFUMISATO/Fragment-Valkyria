@@ -28,8 +28,7 @@ namespace FragmentValkyria {
           PlayerCreator(Game::GameMain& gameMain);
       private:
          /**
-          * \brief プレイヤーの位置、アニメーション、状態の登録を行う
-          * \param game ゲーム本体クラスの参照
+          * \brief カメラの位置、状態とプレイヤーの位置、アニメーション、状態の登録を行う
           * \return プレイヤーのインスタンス
           */
          virtual std::unique_ptr<Object::ObjectBase> Create() override;

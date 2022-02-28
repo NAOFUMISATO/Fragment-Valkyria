@@ -38,14 +38,14 @@ void LargeEnemy::Init() {
    _collision = _modelAnimeComponent->FindFrame("S301_typeCO");
    // コリジョンフレームをナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collision, 3, 6, 3);
+   // ヒットポイントの設定
+   _hp = 1000.0;
    // 行動に追加する状態の文字列の動的配列を作成
    _actionList.emplace_back("FallObject");
    _actionList.emplace_back("Gatling");
    _actionList.emplace_back("Move");
    _actionList.emplace_back("Laser");
    _actionList.emplace_back("FanGatling");
-   // ヒットポイントの設定
-   _hp = 1000.0;
 }
 
 void LargeEnemy::Input(InputManager& input) {

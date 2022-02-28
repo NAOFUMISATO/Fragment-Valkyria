@@ -51,7 +51,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    player->cameraComponent(camera);
    player->position({0,0,-2000.0});
 
-   // アニメーション一括管理クラスの生成
+   // プレイヤーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*player);
    // モデルの設定
    model->SetModel("Player");
@@ -69,6 +69,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("WeakShootReady", std::make_shared<Player::Player::StateWeakShootReady>(*player));
    state->Register("Reload", std::make_shared<Player::Player::StateReload>(*player));
    state->Register("Recovery", std::make_shared<Player::Player::StateRecovery>(*player));
+   // プレイヤーの状態一括管理クラスの設定
    player->stateServer(std::move(state));
 
    auto& sprServer = _gameMain.sprServer();
@@ -77,6 +78,6 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    sprServer.Add(std::make_unique<Player::RemainingPortion>(_gameMain));
    sprServer.Add(std::make_unique<Player::Reticle>(_gameMain));
 
-   // プレイヤーのユニークポインタを返す
+   // プレイヤーのインスタンスを返す
    return std::move(player);
 }

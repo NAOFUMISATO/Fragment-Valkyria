@@ -25,34 +25,41 @@ LargeEnemyCreator::LargeEnemyCreator(Game::GameMain& gameMain) : CreatorBase{ ga
 
 std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    using Vector4 = AppFrame::Math::Vector4;
-
+   // ラージエネミーの生成
    auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
+   // ラージエネミーの位置の設定
    largeEnemy->position(Vector4(0.0, 0.0, 1000.0));
-   largeEnemy->scale(Vector4(1.0, 1.0, 1.0));
-   largeEnemy->rotation(Vector4(0.0, 0.0, 0.0));
 
+   // ラージエネミーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
+   // モデルの設定
    model->SetModel("LargeEnemy");
+   // ラージエネミーのアニメーション一括管理クラスの設定
    largeEnemy->modelAnimeComponent(std::move(model));
 
+   // ラージエネミーの状態一括管理クラスの生成
    auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
+   // ラージエネミーの状態の追加登録
    state->Register("FallObject", std::make_shared<Enemy::LargeEnemy::StateFallObject>(*largeEnemy));
    state->Register("Gatling", std::make_shared<Enemy::LargeEnemy::StateGatling>(*largeEnemy));
    state->Register("Move", std::make_shared<Enemy::LargeEnemy::StateMove>(*largeEnemy));
    state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
    state->Register("Laser", std::make_shared<Enemy::LargeEnemy::StateLaser>(*largeEnemy));
    state->Register("FanGatling", std::make_shared<Enemy::LargeEnemy::StateFanGatling>(*largeEnemy));
+   // ラージエネミーの状態一括管理クラスの設定
    largeEnemy->stateServer(std::move(state));
-
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _gameMain.objServer().runObjects()) {
-
+      // プレイヤーでなければ処理をスキップして戻る
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
       }
+      // ラージエネミーのカメラ管理クラスをプレイヤーのカメラ管理クラスに設定
       largeEnemy->cameraComponent(object->cameraComponent());
    }
 
    _gameMain.sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>(_gameMain));
 
+   // ラージエネミーのインスタンスを返す
    return std::move(largeEnemy);
 }

@@ -73,8 +73,8 @@ namespace FragmentValkyria {
 
             protected:
                 Laser& _owner;   //!< レーザーの参照
+                int _stateCnt{ 0 };   //!< 各状態へ入った時のフレームカウント保存用
             };
-
             /**
              * \class 照射状態クラス
              * \brief 照射状態の処理を回す
@@ -94,9 +94,6 @@ namespace FragmentValkyria {
                  * \brief 更新処理
                  */
                 void Update() override;
-
-            private:
-               int _stateCnt{ 0 };
             };
       };
    }

@@ -16,8 +16,8 @@ namespace FragmentValkyria {
      */
    namespace Enemy {
         /**
-         * \class 落下オブジェクトクラス
-         * \brief 落下オブジェクトクラスを管理する
+         * \class 落下オブジェクトの処理を回すクラス
+         * \brief 落下オブジェクトの処理を回す
          */
       class FallObject : public Object::ObjectBase {
             using InputManager = AppFrame::Input::InputManager;
@@ -119,8 +119,7 @@ namespace FragmentValkyria {
             * \class 落下オブジェクトの状態の基底クラス
             * \brief 各落下オブジェクトの状態はこれを派生して定義する
             */
-            class StateBase : public AppFrame::State::StateBaseRoot
-            {
+            class StateBase : public AppFrame::State::StateBaseRoot {
             public:
                 /**
                  * \brief コンストラクタ
@@ -139,8 +138,7 @@ namespace FragmentValkyria {
              * \class 待機状態クラス
              * \brief 待機状態の処理を回す
              */
-            class StateIdle : public StateBase
-            {
+            class StateIdle : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
@@ -165,8 +163,7 @@ namespace FragmentValkyria {
              * \class 落下状態クラス
              * \brief 落下状態の処理を回す
              */
-            class StateFall : public StateBase
-            {
+            class StateFall : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
@@ -195,8 +192,7 @@ namespace FragmentValkyria {
              * \class 浮く状態のクラス
              * \brief 浮く状態の処理を回す
              */
-            class StateSave : public StateBase
-            {
+            class StateSave : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
@@ -221,8 +217,7 @@ namespace FragmentValkyria {
              * \class 発射状態のクラス
              * \brief 発射状態の処理を回す
              */
-            class StateShoot : public StateBase
-            {
+            class StateShoot : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
@@ -247,8 +242,7 @@ namespace FragmentValkyria {
              * \class 死亡状態クラス
              * \brief 死亡状態の処理を回す
              */
-            class StateDie : public StateBase
-            {
+            class StateDie : public StateBase {
             public:
                 /**
                  * \brief コンストラクタ
