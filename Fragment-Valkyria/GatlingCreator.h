@@ -1,28 +1,37 @@
 #pragma once
 /*****************************************************************//**
  * \file   GatlingCreator.h
- * \brief  
+ * \brief  ガトリング攻撃の弾の生成管理クラス
  * 
  * \author AHMD2000
  * \date   January 2022
  *********************************************************************/
 #include "CreatorBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
-
+   /**
+    * \brief  オブジェクト生成関係
+    */
    namespace Create {
-
+      /**
+       * \class ガトリング攻撃の弾の生成管理クラス
+       * \brief ガトリング攻撃の弾の位置、状態の登録を行う
+       */
       class GatlingCreator : public CreatorBase {
-         public:
-          GatlingCreator(Game::GameMain& gameMain);
+      public:
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体の参照
+          */
+         GatlingCreator(Game::GameMain& gameMain);
       private:
          /**
-          * \brief プレイヤーの位置、アニメーション、状態の登録を行う
-          * \param game ゲーム本体クラスの参照
-          * \return プレイヤーのインスタンス
+          * \brief ガトリング攻撃の弾の位置、状態の登録を行う
+          * \return ガトリング攻撃の弾のインスタンス
           */
          virtual std::unique_ptr<Object::ObjectBase> Create() override;
-
       };
    }
 }

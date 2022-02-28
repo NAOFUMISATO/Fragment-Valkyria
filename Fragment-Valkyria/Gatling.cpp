@@ -83,7 +83,7 @@ void Gatling::OutStageCheck() {
 }
 
 void Gatling::StateBase::Draw() {
-   // 位置を自作のVector4クラスからDxLib::VECTOR構造体への変換
+   // 位置を自作のVector4クラスからDxLib::VECTOR構造体へ変換
    auto position = AppFrame::Math::ToDX(_owner._position);
    // 半径をfloat型にキャスト
    auto radian = static_cast<float>(Radius);

@@ -8,7 +8,6 @@
  *********************************************************************/
 #include <memory>
 #include "AppFrame.h"
-
  /**
   * \brief プロジェクト名
   */
@@ -30,23 +29,28 @@ namespace FragmentValkyria {
        */
       class CreatorBase {
       public:
-          CreatorBase(Game::GameMain& gameMain);
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体の参照
+          */
+         CreatorBase(Game::GameMain& gameMain);
          /**
           * \brief デフォルトデストラクタ
           */
          virtual ~CreatorBase() = default;
          /**
           * \brief 派生先でオブジェクト生成を行う
-          * \param game ゲーム本体クラスの参照
           * \return 派生先で定義
           */
          virtual std::unique_ptr<Object::ObjectBase> Create() = 0;
-
+         /**
+          * \brief ゲーム本体クラスからJson読み込み用クラスの参照の取得
+          * \return Json読み込み用クラスの参照
+          */
          inline AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
-      
+
       protected:
-          Game::GameMain& _gameMain;
-      
+         Game::GameMain& _gameMain;          //!< ゲーム本体の参照
       };
    }
 }
