@@ -32,7 +32,6 @@ std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
    bullet->Init();
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Shoot", std::make_shared<Player::Bullet::StateShoot>(*bullet));
-   state->Register("Die", std::make_shared<Player::Bullet::StateDie>(*bullet));
    bullet->stateServer(std::move(state));
 
    return std::move(bullet);

@@ -19,6 +19,7 @@
 #include "Stage.h"
 #include "EffectServer.h"
 #include "Gatling.h"
+#include "Bullet.h"
 
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
@@ -90,7 +91,14 @@ void ModeInGameBase::IndividualEffectClear() {
    for (auto& object : GetObjServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Gatling) {
          auto& gatling = dynamic_cast<Enemy::Gatling&>(*object);
-         auto& efcBullet = gatling.efcBullet();
+         auto& efcGatling = gatling.efcBullet();
+         efcGatling.StopEffect();
+      }
+   }
+   for (auto& object : GetObjServer().runObjects()) {
+      if (object->GetObjType() == Object::ObjectBase::ObjectType::Bullet) {
+         auto& bullet = dynamic_cast<Player::Bullet&>(*object);
+         auto& efcBullet = bullet.efcBullet();
          efcBullet.StopEffect();
       }
    }

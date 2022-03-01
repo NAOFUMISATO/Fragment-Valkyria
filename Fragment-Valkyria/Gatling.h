@@ -51,7 +51,7 @@ namespace FragmentValkyria {
           * \brief ガトリング弾エフェクトの参照の取得
           * \return ガトリング弾エフェクトの参照
           */
-         Effect::EffectGatlingBullet& efcBullet() const { return *_efcBullet; }
+         Effect::EffectGatlingBullet& efcBullet() const { return *_efcGatling; }
 
       private:
          /**
@@ -73,7 +73,7 @@ namespace FragmentValkyria {
 
          Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };                  //!< 移動量のベクトル
          Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };          //!< 移動する方向のベクトル
-         std::unique_ptr<Effect::EffectGatlingBullet> _efcBullet;   //!< エフェクトガトリング弾のユニークポインタ
+         std::unique_ptr<Effect::EffectGatlingBullet> _efcGatling;   //!< エフェクトガトリング弾のユニークポインタ
 
       public:
          /**

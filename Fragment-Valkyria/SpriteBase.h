@@ -157,6 +157,7 @@ namespace FragmentValkyria {
          int _cx{ 0 };                                  //!< ‰æ‘œ‚ÌXŠî€“_
          int _cy{ 0 };                                  //!< ‰æ‘œ‚ÌYŠî€“_
          int _alpha{ 255 };                             //!< “§–¾“x
+         bool _transFlag{ true };                       //!< ”wŒi“§‰ßƒtƒ‰ƒO
          bool _turnFlag{ false };                       //!< ”½“]”»’è
          double _scale{ 1.0 };                          //!< Šg‘å—¦
          double _angle{ 0.0 };                          //!< Šp“x

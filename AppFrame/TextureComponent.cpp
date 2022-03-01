@@ -43,15 +43,15 @@ namespace AppFrame {
          DrawRotaGraph(drawX, drawY, scale, angle, handles[animeNo], DefaultTransFlag, DefaultTurnFlag);
       }
 
-      void TextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle, bool turnFrag) {
-         DrawRotaGraph2(x, y, cx, cy, scale, angle, handle, DefaultTransFlag, turnFrag);
+      void TextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle,bool transFlag, bool turnFrag) {
+         DrawRotaGraph2(x, y, cx, cy, scale, angle, handle, transFlag, turnFrag);
       }
 
-      void TextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, std::vector<int> handles, int animeSpeed, bool turnFrag) {
+      void TextureComponent::TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, std::vector<int> handles, int animeSpeed, bool transFlag, bool turnFrag) {
          auto count = _gameBase.modeServer().frameCount();
          auto animeMax = handles.size();
          auto animeNo = (count / animeSpeed) % animeMax;
-         DrawRotaGraph2(x, y, cx, cy, scale, angle, handles[animeNo], DefaultTransFlag, turnFrag);
+         DrawRotaGraph2(x, y, cx, cy, scale, angle, handles[animeNo], transFlag, turnFrag);
       }
 
       void TextureComponent::DrawBillBoard(Math::Vector4 pos, double scale, double angle, int handle) {

@@ -52,7 +52,7 @@ void Bullet::HitCheckFromLargeEnemy() {
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
       // ‚±‚±‚Å€–Só‘Ô‚Éİ’è‚·‚é‚±‚Æ‚Å’e‚ª•¡”“–‚½‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ğ’¼‚¹‚½
       SetDead();
-      _stateServer->GoToState("Die");
+      _efcBullet->StopEffect();
    }
 }
 
@@ -63,7 +63,7 @@ void Bullet::HitCheckFromPoorEnemyGatling() {
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
       // ‚±‚±‚Å€–Só‘Ô‚Éİ’è‚·‚é‚±‚Æ‚Å’e‚ª•¡”“–‚½‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ğ’¼‚¹‚½
       SetDead();
-      _stateServer->GoToState("Die");
+      _efcBullet->StopEffect();
    }
 }
 
@@ -74,7 +74,7 @@ void Bullet::OutCheckFromStage() {
    if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
       // ‚±‚±‚Å€–Só‘Ô‚Éİ’è‚·‚é‚±‚Æ‚Å’e‚ª•¡”“–‚½‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ğ’¼‚¹‚½
       SetDead();
-      _stateServer->GoToState("Die");
+      _efcBullet->StopEffect();
    }
 }
 
@@ -85,6 +85,12 @@ void Bullet::StateBase::Draw() {
    auto radius = static_cast<float>(Radius);
    // DxLib‚É‚æ‚é‹…‚Ì•`‰æ
    DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), TRUE);
+}
+
+void Bullet::StateShoot::Enter() {
+   _owner._efcBullet = std::make_unique<Effect::EffectWeakBullet>(_owner._gameMain,"WeakBullet");
+   _owner._efcBullet->Init();
+   Update();
 }
 
 void Bullet::StateShoot::Update() {
@@ -100,11 +106,9 @@ void Bullet::StateShoot::Update() {
    _owner.HitCheckFromPoorEnemyGatling();
    // ƒXƒe[ƒWŠO‚É‚¢‚é‚©Šm”F
    _owner.OutCheckFromStage();
+   _owner._efcBullet->position(_owner._position);
+   _owner._efcBullet->Update();
 }
 
-void Bullet::StateDie::Update() {
-   // €–Só‘Ô‚Éİ’è
-   _owner.SetDead();
-}
 
 

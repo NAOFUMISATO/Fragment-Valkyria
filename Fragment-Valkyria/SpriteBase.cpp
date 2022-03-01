@@ -17,7 +17,8 @@ SpriteBase::SpriteBase(Game::GameMain& gameMain) : _gameMain{ gameMain }{
 void SpriteBase::Draw() {
    auto [x, y] = _position.GetVec2();
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
-   GetTexComponent().TransDrawTexture(static_cast<int>(x), static_cast<int>(y), _cx, _cy, _scale, _angle, _grHandle, _turnFlag);
+   GetTexComponent().TransDrawTexture(static_cast<int>(x), static_cast<int>(y), _cx, _cy, 
+      _scale, _angle, _grHandle, _transFlag,_turnFlag);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 

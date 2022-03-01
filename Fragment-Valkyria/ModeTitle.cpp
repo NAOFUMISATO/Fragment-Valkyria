@@ -26,8 +26,12 @@ namespace {
    const int OptionPosY = paramMap["option_y"];
    const int GameEndPosX = paramMap["end_x"];
    const int GameEndPosY = paramMap["end_y"];
+   constexpr auto TitleBgCX = 0;
+   constexpr auto TitleBgCY = 0;
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
+   constexpr auto DefaultTransFlag = false;
+   constexpr auto DefaultTurnFlag = false;
 }
 
 ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
@@ -79,7 +83,8 @@ void ModeTitle::Render() {
 
 void ModeTitle::StateBase::Draw() {
    auto [bgHandle, titleHandles, anyBottonHandles, startHandle,optionHandle, endHandle,cusorHandle] = _owner._grHandles;
-   _owner.GetTexComponent().DrawTexture(TitleBgPosX, TitleBgPosY, DefaultGraphScale, DefaultGraphAngle, bgHandle);
+   _owner.GetTexComponent().TransDrawTexture(TitleBgPosX, TitleBgPosY, TitleBgCX, TitleBgCY,
+      DefaultGraphScale, DefaultGraphAngle, bgHandle, DefaultTransFlag, DefaultTurnFlag);
    _owner.GetTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, titleHandles, 2);
    if (!_owner._pushAnyBotton) {
       _owner.GetTexComponent().DrawTexture(AnyBottonPosX, AnyBottonPosX, DefaultGraphScale, DefaultGraphAngle, anyBottonHandles, 2);

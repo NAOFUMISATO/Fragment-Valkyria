@@ -15,6 +15,8 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "GameMain.h"
+#include "EffectHeal.h"
+#include "EffectServer.h"
 
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
@@ -806,6 +808,10 @@ void Player::StateRecovery::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("heal", false);
    // ‰ñ•œó‘Ô‚ÌƒJƒEƒ“ƒg‚ğ0‚Éİ’è
    _recoveryCnt = 0;
+   auto efcHeal = std::make_unique<Effect::EffectHeal>(_owner._gameMain,"Heal");
+   auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
+   efcHeal->position(hipsFramePos);
+   _owner.GetEfcServer().Add(std::move(efcHeal));
 }
 
 void Player::StateRecovery::Update() {

@@ -47,7 +47,7 @@ void FallObject::Init() {
    _collision = MV1SearchFrame(modelHandle, "drum_green_c");
    // ナビメッシュの表示設定
 #ifndef _DEBUG
-   MV1SetFrameVisible(modelHandle, _collision, true);
+   MV1SetFrameVisible(modelHandle, _collision, false);
 #else
    MV1SetFrameOpacityRate(modelHandle, _collision, 0.5f);
 #endif

@@ -3,7 +3,7 @@
 		{
 			"keyname": "WeakBullet",
 			"filename": "WeakBullet.efkefc",
-			"scale": 10.0,
+			"scale": 30.0,
 			"speed":2.0
 		},
 		{
@@ -33,13 +33,7 @@
 		{
 			"keyname": "Heal",
 			"filename": "Heal.efkefc",
-			"scale": 10.0,
-			"speed":2.0
-		},
-		{
-			"keyname": "Heal",
-			"filename": "Heal.efkefc",
-			"scale": 10.0,
+			"scale": 25.0,
 			"speed":2.0
 		},
 		{

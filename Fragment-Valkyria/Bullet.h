@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
+#include "EffectWeakBullet.h"
 /**
  * \brief プロジェクト名
  */
@@ -45,6 +46,11 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Draw() override;
+         /**
+          * \brief 弱攻撃弾エフェクトクラスの参照の取得
+          * \return 弱攻撃弾エフェクトクラスの参照
+          */
+         Effect::EffectWeakBullet& efcBullet() const { return *_efcBullet; }
 
       private:
          /**
@@ -64,6 +70,7 @@ namespace FragmentValkyria {
           */
          void OutCheckFromStage();
 
+         std::unique_ptr<Effect::EffectWeakBullet> _efcBullet;
          Vector4 _moved{ Vector4() };     //!< 移動量のベクトル
 
       public:
@@ -98,21 +105,9 @@ namespace FragmentValkyria {
              */
             StateShoot(Bullet& owner) : StateBase{ owner } {};
             /**
-             * \brief 更新処理
+             * \brief 入口処理
              */
-            void Update() override;
-         };
-         /**
-          * \class 死亡状態クラス
-          * \brief 死亡状態の処理を回す
-          */
-         class StateDie : public StateBase {
-         public:
-            /**
-             * \brief コンストラクタ
-             * \param owner プレイヤーの参照
-             */
-            StateDie(Bullet& owner) : StateBase{ owner } {};
+            void Enter()override;
             /**
              * \brief 更新処理
              */

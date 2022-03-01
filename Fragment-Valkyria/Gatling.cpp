@@ -87,7 +87,7 @@ void Gatling::OutStageCheck() {
 }
 
 void Gatling::StateBase::Draw() {
-   _owner._efcBullet->Draw();
+   _owner._efcGatling->Draw();
 #ifdef _DEBUG
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体への変換
    auto position = AppFrame::Math::ToDX(_owner._position);
@@ -102,8 +102,8 @@ void Gatling::StateChase::Enter() {
    auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>(_owner._gameMain,"GatlingMuzzleFlash");
    efcMuzzleFlash->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcMuzzleFlash));
-   _owner._efcBullet = std::make_unique<Effect::EffectGatlingBullet>(_owner._gameMain, "GatlingBullet");
-   _owner._efcBullet->Init();
+   _owner._efcGatling = std::make_unique<Effect::EffectGatlingBullet>(_owner._gameMain, "GatlingBullet");
+   _owner._efcGatling->Init();
    Update();
 }
 
@@ -118,14 +118,14 @@ void Gatling::StateChase::Update() {
    _owner.HitCheckFromObjectModel();
    // ステージ外にいるか確認
    _owner.OutStageCheck();
-   _owner._efcBullet->position(_owner._position);
-   _owner._efcBullet->Update();
+   _owner._efcGatling->position(_owner._position);
+   _owner._efcGatling->Update();
 }
 
 void Gatling::StateDie::Update() {
    // 死亡状態に設定
    _owner.SetDead();
-   _owner._efcBullet->StopEffect();
+   _owner._efcGatling->StopEffect();
 }
 
 void Gatling::StateDie::Draw() {

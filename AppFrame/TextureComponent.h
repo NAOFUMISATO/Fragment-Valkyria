@@ -61,9 +61,10 @@ namespace AppFrame {
           * \param scale 拡大率
           * \param angle 角度(弧度法)
           * \param handle 画像ハンドル
+          * \param transFlag 背景透過フラグ
           * \param turnFrag 反転判定
           */
-         void TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle, bool turnFrag);
+         void TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, int handle, bool transFlag, bool turnFrag);
          /**
           * \brief 画像のアニメーション描画を詳細設定を行い、描画する
           * \param x 画像左上X座標
@@ -74,9 +75,10 @@ namespace AppFrame {
           * \param angle 角度(弧度法)
           * \param handles 画像ハンドルの動的配列
           * \param animeSpeed アニメーションスピード
+          * \param transFlag 背景透過フラグ
           * \param turnFrag 反転判定
           */
-         void TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, std::vector<int> handles, int animeSpeed, bool turnFrag);
+         void TransDrawTexture(int x, int y, int cx, int cy, double scale, double angle, std::vector<int> handles, int animeSpeed, bool transFlag,bool turnFrag);
          /**
           * \brief 画像のビルボード描画を簡易的に行う
           * \param pos 描画座標(足下基準)
