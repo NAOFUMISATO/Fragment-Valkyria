@@ -146,25 +146,26 @@ namespace AppFrame {
          /**
           * \brief エフェクトを連想配列に登録する
           * \param key キーとなる任意の文字列
-          * \param effectInfo ファイル名と初期拡大率のペア
+          * \param effectInfo ファイル名と初期拡大率と再生速度のTuple型
           */
-         virtual void LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo);
+         virtual void LoadEffect(std::string_view key, std::tuple<std::string, double, double> effectInfo);
          /**
           * \brief 連想配列に登録したエフェクトのハンドル
           * \param key ハンドルに関連付けた任意の文字列
-          * \return エフェクトハンドル
+          * \return エフェクトハンドルと再生速度のペア
           */
-         virtual int GetEffectHandle(std::string_view key);
+         virtual std::pair<int, double> GetEffectInfo(std::string_view key);
 
       private:
-         Game::GameBase& _gameBase;                                //!< ゲームベースの参照
+         Game::GameBase& _gameBase;                                  //!< ゲームベースの参照
          std::unordered_map<std::string, 
-            std::pair<Texture, std::vector<int>>> _textures;       //!< 任意の文字列をキーにして画像データクラスと画像ハンドルのペアを管理
-         std::unordered_map<std::string,std::pair<std::vector<int>,
-            std::unordered_map<std::string, int>>> _models;        //!< 任意の文字列をキーにしてハンドルとアニメマップのペアを管理
+            std::pair<Texture, std::vector<int>>> _textures;         //!< 画像データクラスと画像ハンドルの連想配列
+         std::unordered_map<std::string,std::tuple<std::vector<int>,
+            std::unordered_map<std::string, int>>> _models;          //!< モデルハンドルとアニメマップの連想配列
          std::unordered_map<std::string, 
-            std::pair<SoundData,int>> _sounds;                     //!< 任意の文字列をキーにして音源データとハンドルを管理
-         std::unordered_map<std::string, int> _effects;            //!< 任意の文字列をキーにしてエフェクトハンドルを管理
+            std::pair<SoundData,int>> _sounds;                       //!< 音源データとハンドルの連想配列
+         std::unordered_map<std::string,
+            std::pair<int, double>> _effects;                        //!< エフェクトハンドルと再生速度の連想配列
       };
    }
 }

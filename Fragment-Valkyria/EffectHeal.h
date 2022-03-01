@@ -1,25 +1,25 @@
 #pragma once
 #include "EffectBase.h"
- /**
-  * \brief プロジェクト名
-  */
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
    /**
     * \brief エフェクト関係
     */
    namespace Effect {
       /**
-       * \classオブジェクト落下エフェクトクラス
-       * \brief 落下エフェクトの発生
+       * \class回復エフェクトクラス
+       * \brief 回復エフェクトの発生
        */
-      class EffectObjectFall :public EffectBase {
+      class EffectHeal :public EffectBase {
       public:
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体クラスの参照
           * \param key エフェクトハンドルを登録した文字列
           */
-         EffectObjectFall(Game::GameMain& gameMain, std::string_view key);
+         EffectHeal(Game::GameMain& gameMain, std::string_view key);
          /**
           * \brief 初期化処理
           */
@@ -29,10 +29,10 @@ namespace FragmentValkyria {
           */
          void Update()override;
          /**
-          * \brief エフェクトの種類を返す
-          * \return 種別:オブジェクト落下
+          * \brief エフェクトの種別を返す
+          * \return 種別:回復
           */
-         virtual EffectType GetEfcType() const override { return EffectType::ObjectFall; }
+         virtual EffectType GetEfcType() const override { return EffectType::Heal; }
       };
    }
 }

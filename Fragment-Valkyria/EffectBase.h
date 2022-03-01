@@ -42,7 +42,9 @@ namespace FragmentValkyria {
             Effect,             //!< エフェクト
             GatlingBullet,      //!< ガトリング弾
             GatlingMuzzleFlash, //!< ガトリングの発火炎(マズルフラッシュ)
-            ObjectFall          //!< オブジェクト落下
+            ObjectFall,         //!< オブジェクト落下
+            Heal,               //!< 回復
+            WeakBullet          //!< プレイヤー弱攻撃
          };
          /**
           * \brief コンストラクタ

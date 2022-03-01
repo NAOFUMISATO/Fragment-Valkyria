@@ -270,6 +270,12 @@
     <ClInclude Include="EffectServer.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="EffectHeal.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectWeakBullet.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -435,6 +441,12 @@
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="EffectServer.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectHeal.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectWeakBullet.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>

@@ -185,12 +185,13 @@ namespace AppFrame {
             const auto keyName = effectData["keyname"];    // キー
             const auto fileName = effectData["filename"];  // ファイル名
             const auto scale = effectData["scale"];        // 初期拡大率
+            const auto speed = effectData["speed"];        // 初期再生速度
             // エフェクトを格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
             auto effectDirectory = _gameBase.pathServer().GetCurrentPath("Effect") / keyName;
             // ファイルへのパスを形成
             const auto effectPath = (effectDirectory / fileName).generic_string();
-            // 取り出したキー及びエフェクトへのファイルパスと初期拡大率のpair型をResourceServerに登録する
-            _gameBase.resServer().LoadEffect(keyName, std::make_pair(effectPath, scale));
+            // 取り出したキー及びエフェクトへのファイルパスと初期拡大率と初期再生速度のtuple型をResourceServerに登録する
+            _gameBase.resServer().LoadEffect(keyName, std::make_tuple(effectPath, scale, speed));
          }
       }
    }

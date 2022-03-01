@@ -37,14 +37,11 @@ void Gatling::Init() {
    _moveDirection = Vector4(x, 0.0, z);
    // 単位化する
    _moveDirection.Normalized();
-   _efcBullet = std::make_unique<Effect::EffectGatlingBullet>(_gameMain, "GatlingBullet");
-   _efcBullet->Init();
 }
 
 void Gatling::Update() {
    // 状態の更新
    _stateServer->Update();
-   _efcBullet->Update();
    // ワールド行列の更新
    ComputeWorldTransform();
    
@@ -53,7 +50,6 @@ void Gatling::Update() {
 void Gatling::Draw() {
    // 各状態の描画処理を回す
    _stateServer->Draw();
-   _efcBullet->Draw();
 }
 
 void Gatling::Move() {
@@ -91,6 +87,7 @@ void Gatling::OutStageCheck() {
 }
 
 void Gatling::StateBase::Draw() {
+   _owner._efcBullet->Draw();
 #ifdef _DEBUG
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体への変換
    auto position = AppFrame::Math::ToDX(_owner._position);
@@ -105,6 +102,9 @@ void Gatling::StateChase::Enter() {
    auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>(_owner._gameMain,"GatlingMuzzleFlash");
    efcMuzzleFlash->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcMuzzleFlash));
+   _owner._efcBullet = std::make_unique<Effect::EffectGatlingBullet>(_owner._gameMain, "GatlingBullet");
+   _owner._efcBullet->Init();
+   Update();
 }
 
 void Gatling::StateChase::Update() {
@@ -119,6 +119,7 @@ void Gatling::StateChase::Update() {
    // ステージ外にいるか確認
    _owner.OutStageCheck();
    _owner._efcBullet->position(_owner._position);
+   _owner._efcBullet->Update();
 }
 
 void Gatling::StateDie::Update() {

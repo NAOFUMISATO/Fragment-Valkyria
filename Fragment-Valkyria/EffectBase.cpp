@@ -23,8 +23,9 @@ void EffectBase::Update() {
 }
 
 void EffectBase::SetEffectLoadHandle(std::string_view key) {
-   auto handle = _gameMain.resServer().GetEffectHandle(key);
+   auto [handle, speed] = _gameMain.resServer().GetEffectInfo(key);
    _loadHandle = handle;
+   _speed = speed;
 }
 
 void EffectBase::PlayEffect() {

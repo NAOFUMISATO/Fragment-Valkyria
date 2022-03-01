@@ -349,22 +349,25 @@ namespace AppFrame {
 
 
       void ResourceServer::ClearEffects() {
-         for (auto&& [key, handle] : _effects) {
+         for (auto&& [key, effectInfo] : _effects) {
+            auto [handle, speed] = effectInfo;
             DeleteEffekseerEffect(handle);
          }
          _effects.clear();
       }
 
-      void ResourceServer::LoadEffect(std::string_view key, std::pair<std::string, double> effectInfo) {
+      void ResourceServer::LoadEffect(std::string_view key, std::tuple<std::string, double,double> effectInfo) {
 #ifndef _DEBUG
          if (_effects.contains(key.data())) {
-            DeleteEffekseerEffect(_effects[key.data()]);
+            auto [handle, speed] = _effects[key.data()];
+            DeleteEffekseerEffect(handle);
             _effects.erase(key.data());  // 指定したキーの削除
          }
 #else
          try{
             if (_effects.contains(key.data())) {
-               DeleteEffekseerEffect(_effects[key.data()]);
+               auto [handle, speed] = _effects[key.data()];
+               DeleteEffekseerEffect(handle);
                _effects.erase(key.data());  // 指定したキーの削除
                std::string message = key.data();
                throw std::logic_error("----------キー[" + message + "]のエフェクトが再度、読み込まれました。以前のエフェクトハンドルデータは破棄されます。----------\n");
@@ -374,15 +377,15 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
-         auto [fileName,scale] = effectInfo;
+         auto [fileName,scale,speed] = effectInfo;
          auto handle = LoadEffekseerEffect(fileName.c_str(), static_cast<float>(scale));
-         _effects.emplace(key, handle);
+         _effects.emplace(key, std::make_pair(handle, speed));
       }
 
-      int ResourceServer::GetEffectHandle(std::string_view key) {
+      std::pair<int, double> ResourceServer::GetEffectInfo(std::string_view key) {
 #ifndef _DEBUG
          if (!_effects.contains(key.data())) {
-            return -1;   // キーが未登録
+            return std::make_pair(-1, 0);   // キーが未登録
          }
 #else
          try {
