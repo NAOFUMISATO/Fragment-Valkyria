@@ -86,6 +86,11 @@ namespace FragmentValkyria {
           * \return 死亡モーション中ならばtrue,でなければfalse
           */
          inline bool isDeadMotion() { return _isDeadMotion; }
+         /**
+          * \brief オブジェクトを持ち上げられるかの取得
+          * \return オブジェクトを持ち上げられるならtrue,持ち上げられなければfalse
+          */
+         inline bool isLift() { return _isLift; }
       private:
          /**
           * \brief 移動処理
@@ -139,6 +144,7 @@ namespace FragmentValkyria {
          int _portionStock{ 3 };                    //!< ポーションの数
          bool _isAim{ false };                      //!< エイム中か
          bool _isDeadMotion{ false };               //!< 死亡モーション中か
+         bool _isLift{ true };                      //!< オブジェクトを持ち上げられるか
          double _hp{ 100.0 };                       //!< ヒットポイント
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル

@@ -41,7 +41,7 @@ namespace {
    const double FallObjectCapsulePos1 = paramMap["fallobject_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
    const double FallObjectCapsulePos2 = paramMap["fallobject_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
    const double FallObjectRadius = paramMap["fallobject_radius"];                    //!< フォールオブジェクトのカプセルの半径
-   const double LaserRadius = paramMap["laser_radius"];                              //!<レーザーのカプセルの半径
+   const double LaserRadius = paramMap["laser_radius"];                              //!< レーザーのカプセルの半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -49,72 +49,9 @@ CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owne
    _report = std::make_unique<Report>();
 }
 
-void CollisionComponent::ObjectRangeFromPlayer() {
-   //プレイヤーの位置取得
-   auto plyPoint = _owner.position();
-   //オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //落下するオブジェクトじゃない場合なにもしない
-      if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
-         continue;
-      }
-      //落下するオブジェクトの位置取得
-      auto objectPos = object->position();
-      //落下するオブジェクトを持ち上げられる球の範囲の半径
-      auto objectRadian = FallObjectRange;
-      //自前の球を定義
-      AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
-      //球と点の当たり判定をとる
-      if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
-         //当たっていたら落下するオブジェクトの当たり判定の結果にプレイヤーに当たっていると設定
-         object->collisionComponent().report().id(ReportId::HitFromPlayer);
-         break;
-      }
-      else {
-         //当たっていなかったら落下するオブジェクトの当たり判定の結果に当たっていないと設定
-         object->collisionComponent().report().id(ReportId::None);
-      }
-   }
-}
-
 void CollisionComponent::PlayerFromObjectRange() {
-   // 落下するオブジェクトの位置を取得
-   auto objectPos = _owner.position();
-   // 落下するオブジェクトを持ち上げられる範囲の球の半径
-   auto objectRadian = FallObjectRange;
-   // 自前の球を定義
-   AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      // 当たり判定の結果がプレイヤーと当たっているか確認
-      if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
-         // オブジェクトサーバーの各オブジェクトを取得
-         for (auto&& plyObject : _owner.GetObjServer().runObjects()) {
-            // プレイヤーじゃなければ何もしない
-            if (plyObject->GetObjType() != Object::ObjectBase::ObjectType::Player) {
-               continue;
-            }
-            // 他のオブジェクトに当たっていた場合は終了する
-            if (object->collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
-               break;
-            }
-            if (object->collisionComponent().report().id() == ReportId::HitFromFallObject) {
-               break;
-            }
-            if (object->collisionComponent().report().id() == ReportId::HitFromGatling) {
-               break;
-            }
-            if (object->collisionComponent().report().id() == ReportId::HitFromLargeEnemy) {
-               break;
-            }
-            if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
-               break;
-            }
-            // プレイヤーが他のオブジェクトと当たっていなかったら落下するオブジェクトを持ち上げられる球の範囲にいると設定
-            plyObject->collisionComponent().report().id(ReportId::HitFromObjectRange);
-         }
-         break;
-      }
       // プレイヤーじゃなければ何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -135,16 +72,70 @@ void CollisionComponent::PlayerFromObjectRange() {
       if (object->collisionComponent().report().id() == ReportId::HitFromPoorEnemy) {
          break;
       }
+      // プレイヤーの参照型にキャストする
+      auto& player = dynamic_cast<Player::Player&>(*object);
+      // オブジェクトサーバーの各オブジェクトを取得
+      for (auto&& object : _owner.GetObjServer().runObjects()) {
+         // 当たり判定の結果がプレイヤーと当たっているか確認
+         if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
+            // プレイヤーと当たっているオブジェクトがあった場合
+            // プレイヤーがオブジェクトを持ち上げられない場合落下するオブジェクトの当たり判定の結果に当たっていないと設定
+            if (!player.isLift()) {
+               object->collisionComponent().report().id(ReportId::None);
+               // 処理をスキップして戻る
+               return;
+            }
+            // 落下するオブジェクトの位置を取得
+            auto objectPos = object->position();
+            // 落下するオブジェクトを持ち上げられる範囲の球の半径
+            auto objectRadian = FallObjectRange;
+            // 自前の球を定義
+            AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+            // プレイヤーの位置取得
+            auto plyPoint = player.position();
+            // 球と点の当たり判定をとる
+            if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
+               // 当たっていたらプレイヤーの当たり判定の結果にオブジェクトを持ち上げられる範囲にいると設定
+               player.collisionComponent().report().id(ReportId::HitFromObjectRange);
+               // 落下するオブジェクトの当たり判定の結果にプレイヤーに当たっていると設定
+               object->collisionComponent().report().id(ReportId::HitFromPlayer);
+            }
+            else {
+               // 当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
+               player.collisionComponent().report().id(ReportId::None);
+               // 落下するオブジェクトの当たり判定の結果に当たっていないと設定
+               object->collisionComponent().report().id(ReportId::None);
+            }
+            // 処理をスキップして戻る
+            return;
+         }
+      }
+      // 落下するオブジェクトの位置を取得
+      auto objectPos = _owner.position();
+      // 落下するオブジェクトを持ち上げられる範囲の球の半径
+      auto objectRadian = FallObjectRange;
+      // 自前の球を定義
+      AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
       // プレイヤーの位置取得
-      auto plyPoint = object->position();
+      auto plyPoint = player.position();
+      // プレイヤーがオブジェクトを持ち上げられない場合落下するオブジェクトの当たり判定の結果に当たっていないと設定
+      if (!player.isLift()) {
+         _owner.collisionComponent().report().id(ReportId::None);
+         // 処理をスキップして戻る
+         return;
+      }
       // 球と点の当たり判定をとる
       if (AppFrame::Math::Utility::CollisionSpherePoint(plyPoint, objectRange)) {
          // 当たっていたらプレイヤーの当たり判定の結果にオブジェクトを持ち上げられる範囲にいると設定
-         object->collisionComponent().report().id(ReportId::HitFromObjectRange);
-      } 
+         player.collisionComponent().report().id(ReportId::HitFromObjectRange);
+         // 落下するオブジェクトの当たり判定の結果にプレイヤーに当たっていると設定
+         _owner.collisionComponent().report().id(ReportId::HitFromPlayer);
+      }
       else {
          // 当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
-         object->collisionComponent().report().id(ReportId::None);
+         player.collisionComponent().report().id(ReportId::None);
+         // 落下するオブジェクトの当たり判定の結果に当たっていないと設定
+         _owner.collisionComponent().report().id(ReportId::None);
       }
    }
 }

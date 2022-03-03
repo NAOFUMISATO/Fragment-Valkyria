@@ -68,10 +68,6 @@ namespace FragmentValkyria {
           */
          CollisionComponent(Object::ObjectBase& owner);
          /**
-          * \brief プレイヤーがオブジェクトの持ち上げられる範囲にいるか確認
-          */
-         void ObjectRangeFromPlayer();
-         /**
           * \brief オブジェクトを持ち上げられる範囲にプレイヤーがいるか確認
           */
          void PlayerFromObjectRange();

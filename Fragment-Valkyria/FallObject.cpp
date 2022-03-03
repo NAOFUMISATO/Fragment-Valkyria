@@ -80,7 +80,7 @@ void FallObject::Draw() {
 void FallObject::HitCheckFromPlayerPoint() {
    auto report = _collisionComponent->report();
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
-      _stateServer->PushBack("Save");
+      _stateServer->GoToState("Save");
    }
 }
 
@@ -88,7 +88,7 @@ void FallObject::HitCheckFromLargeEnemy() {
    auto report = _collisionComponent->report();
 
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
-      _stateServer->PushBack("Die");
+      _stateServer->GoToState("Die");
    }
 }
 
@@ -96,7 +96,7 @@ void FallObject::HitCheckFromLaser() {
    auto report = _collisionComponent->report();
 
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLaser) {
-      _stateServer->PushBack("Die");
+      _stateServer->GoToState("Die");
    }
 }
 
@@ -104,7 +104,7 @@ void FallObject::HitCheckFromPoorEnemyGatling() {
    auto report = _collisionComponent->report();
 
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
-      _stateServer->PushBack("Die");
+      _stateServer->GoToState("Die");
    }
 }
 
@@ -112,14 +112,14 @@ void FallObject::OutStageCheck() {
    auto report = _collisionComponent->report();
 
    if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
-      _stateServer->PushBack("Die");
+      _stateServer->GoToState("Die");
    }
 }
 
 void FallObject::CheckPlayerKnockBack() {
    auto result = _collisionComponent->knockBack();
    if (result) {
-      _stateServer->PushBack("Die");
+      _stateServer->GoToState("Die");
    }
 }
 
@@ -204,7 +204,7 @@ void FallObject::StateFall::Update() {
       efcFall->position(_owner._position);
       efcFall->speed(2.0);
       _owner.GetEfcServer().Add(std::move(efcFall));
-      _owner._stateServer->PushBack("Idle");
+      _owner._stateServer->GoToState("Idle");
    }
 
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
@@ -227,7 +227,7 @@ void FallObject::StateSave::Enter() {
 
 void FallObject::StateSave::Input(InputManager& input) {
    if (input.GetXJoypad().RBClick()) {
-      _owner._stateServer->PushBack("Shoot");
+      _owner._stateServer->GoToState("Shoot");
    }
 }
 
