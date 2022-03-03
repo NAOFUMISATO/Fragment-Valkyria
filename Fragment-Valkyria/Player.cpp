@@ -39,6 +39,7 @@ namespace {
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
+    
 }
 
 using namespace FragmentValkyria::Player;
@@ -609,6 +610,8 @@ void Player::StateShootReady::Update() {
 }
 
 void Player::StateShootReady::Exit() {
+   // 当たり判定の結果を当たっていないと設定
+   _owner._collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
    // エイム中じゃないと設定
    _owner._isAim = false;
 }
