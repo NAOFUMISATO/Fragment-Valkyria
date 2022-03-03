@@ -13,8 +13,8 @@ void EffectObjectFall::Init() {
 }
 
 void EffectObjectFall::Update() {
-   EffectBase::Update();
    if (!IsPlaying()) {
       SetDead();
    }
+   EffectBase::Update();
 }

@@ -12,10 +12,10 @@ void EffectWeakBullet::Init() {
 }
 
 void EffectWeakBullet::Update() {
-   EffectBase::Update();
    if (!IsPlaying()) {
       SetDead();
    }
+   EffectBase::Update();
 }
 
 

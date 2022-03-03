@@ -69,7 +69,12 @@ namespace FragmentValkyria {
           * \brief Ä¶ŠÔ‚ÌŠ|—¦‚Ìİ’è
           * \param Ä¶ŠÔ‚ÌŠ|—¦
           */
-         inline void timeRate(double timeRate) { _timeRate = timeRate; };
+         inline void timeRate(double timeRate) { _timeRate = timeRate; }
+         /**
+          * \brief Ä¶ŠÔ‚Ìİ’è
+          * \param playTime İ’è‚·‚éÄ¶ŠÔ
+          */
+         inline void playTime(float playTime) { _playTime = playTime; }
 
       private:
          int _animIndex{ -1 };      //!< Œ»İ‚ÌƒAƒjƒ”Ô†

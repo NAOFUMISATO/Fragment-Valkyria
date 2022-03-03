@@ -89,14 +89,14 @@ Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
 
 void ModeInGameBase::IndividualEffectClear() {
    for (auto& object : GetObjServer().runObjects()) {
-      if (object->GetObjType() == Object::ObjectBase::ObjectType::Gatling) {
+      using enum Object::ObjectBase::ObjectType;
+      if (object->GetObjType() == Gatling) {
          auto& gatling = dynamic_cast<Enemy::Gatling&>(*object);
          auto& efcGatling = gatling.efcBullet();
          efcGatling.StopEffect();
+         continue;
       }
-   }
-   for (auto& object : GetObjServer().runObjects()) {
-      if (object->GetObjType() == Object::ObjectBase::ObjectType::Bullet) {
+      if (object->GetObjType() == Bullet) {
          auto& bullet = dynamic_cast<Player::Bullet&>(*object);
          auto& efcBullet = bullet.efcBullet();
          efcBullet.StopEffect();

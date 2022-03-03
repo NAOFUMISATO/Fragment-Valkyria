@@ -30,10 +30,6 @@ namespace FragmentValkyria {
           */
          LargeEnemy(Game::GameMain& gameMain);
          /**
-          * \brief デフォルトデストラクタ
-          */
-         virtual ~LargeEnemy() override = default;
-         /**
           * \brief オブジェクトの種別を返す
           * \return ラージエネミー
           */
@@ -68,6 +64,7 @@ namespace FragmentValkyria {
           * \return ボスの体力
           */
          double hp() { return _hp; }
+
       private:
          /**
           * \brief 落下オブジェクトを生成する
@@ -271,6 +268,9 @@ namespace FragmentValkyria {
             void Update() override;
 
          private:
+            /**
+             * \brief 足音の処理
+             */
             void FootStepSound();
             bool _footRightStep{ false };       //!< 足音処理のフラグ
             bool _footLeftStep{ false };        //!< 足音処理のフラグ
@@ -296,7 +296,17 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit()override;
+         
          private:
+            /**
+             * \brief レーザー充填及び発射位置の取得
+             * \return レーザー充填及び発射位置
+             */
+            Vector4 GetLaserPos();
             bool _createLaser{ false };       //!< レーザーを生成するか
          };
       };

@@ -157,6 +157,11 @@ namespace AppFrame {
           */
          inline const double GetY() const { return _y; }
          /**
+         * \brief z¬•ª‚Ìæ“¾
+         * \return z¬•ª
+         */
+         inline const double GetZ() const { return _z; }
+         /**
           * \brief w¬•ª‚Ìæ“¾
           * \return w¬•ª
           */

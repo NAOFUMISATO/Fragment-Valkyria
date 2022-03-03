@@ -37,16 +37,15 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create() {
 
       break;
    }
-
-   auto state = std::make_unique<AppFrame::State::StateServer>("Irradiation", std::make_shared<Enemy::Laser::StateIrradiation>(*laser));
-   laser->stateServer(std::move(state));
-
    auto laegeEnemyPos = _gameMain.objServer().GetVecData("LargeEnemyPos");
 
    auto laserDirection = _gameMain.objServer().GetVecData("LaserDirectionPos") - laegeEnemyPos/*Vector4(laserX, 0.0, laserZ)*/;
    laserDirection.Normalized();
    auto endPos = laegeEnemyPos + laserDirection * 10000 + Vector4(0.0, laser->position().GetY(), 0.0);
    laser->end(endPos);
+   
+   auto state = std::make_unique<AppFrame::State::StateServer>("Irradiation", std::make_shared<Enemy::Laser::StateIrradiation>(*laser));
+   laser->stateServer(std::move(state));
 
    return std::move(laser);
 }

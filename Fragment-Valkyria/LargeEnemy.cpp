@@ -15,6 +15,8 @@
 #include "PoorEnemyGatling.h"
 #include "ObjectServer.h"
 #include "FallObject.h"
+#include "EffectServer.h"
+#include "EffectBossCharge.h"
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -23,6 +25,7 @@ namespace {
 
    constexpr auto MaxNum = 6;                              //!< 落下オブジェクトの最大数
    constexpr auto FootStepHeight = 40.0;                   //!< 走り状態時の足音発生高さ
+   constexpr auto LaserDiffPos = 150.0;                    //!< レーザー生成位置に一番近い位置のフレームからのオフセット
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -62,10 +65,12 @@ void LargeEnemy::Update() {
    ComputeWorldTransform();
    // モデルの更新
    _modelAnimeComponent->Update();
+   // オブジェクトサーバーの参照を取得
+   auto& objServer = GetObjServer();
    // オブジェクトサーバーに位置を通知
-   GetObjServer().RegistVector("LargeEnemyPos", _position);
+   objServer.RegistVector("LargeEnemyPos", _position);
    // オブジェクトサーバーにヒットポイントを通知
-   GetObjServer().RegistDouble("BossHP", _hp);
+   objServer.RegistDouble("LargeEnemyHP", _hp);
 }
 
 void LargeEnemy::Draw() {
@@ -74,17 +79,18 @@ void LargeEnemy::Draw() {
 }
 
 void LargeEnemy::CreateGatling() {
+   auto& objServer = GetObjServer();
    // ガトリングを生成する位置を取得
-   auto gatlingFramePos = modelAnimeComponent().GetFrameChildPosion("root", "gatling3");
+   auto gatlingFramePos = _modelAnimeComponent->GetFrameChildPosion("root", "gatling3");
    // ガトリングを生成する座標を設定
-   GetObjServer().RegistVector("GatlingPos", gatlingFramePos);
+   objServer.RegistVector("GatlingPos", gatlingFramePos);
    // ガトリングを打つ向きの設定
    auto gatlingDirection = _position + _rotateDir * 100.0 - gatlingFramePos;
    // オブジェクトサーバーにガトリングを打つ向きを通知
-   GetObjServer().RegistVector("GatlingMoveDirection", gatlingDirection);
+   objServer.RegistVector("GatlingMoveDirection", gatlingDirection);
    // ガトリングを生成してオブジェクトサーバーへ追加
    auto gatling = gameMain().objFactory().Create("Gatling");
-   GetObjServer().Add(std::move(gatling));
+   objServer.Add(std::move(gatling));
 }
 
 void LargeEnemy::CreateLaser() {
@@ -445,12 +451,12 @@ void LargeEnemy::StateDie::Enter() {
    // ゲームクリアまでのフレーム数の設定
    _owner._freezeTime = 60 * 2;
    // モデルのアニメーションの設定
-   _owner.modelAnimeComponent().ChangeAnime("beem", false);
+   _owner._modelAnimeComponent->ChangeAnime("beem", false);
 }
 
 void LargeEnemy::StateDie::Update() {
    // アニメーション時間の取得
-   auto playTime = _owner.modelAnimeComponent().playTime();
+   auto playTime = _owner._modelAnimeComponent->playTime();
    // アニメーションが既定の時間経過しているか確認
    if (playTime >= 70.0f) {
       // アニメーションが既定の時間経過していたら
@@ -508,7 +514,6 @@ void LargeEnemy::StateMove::Enter() {
       // 移動量のベクトルを設定
       _owner._moved = _owner._moved * 30.0;
    }
-   // 
    _footCnt = 0;
 }
 
@@ -517,7 +522,7 @@ void LargeEnemy::StateMove::Update() {
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
    auto count = gameCount - _stateCnt;
-   // 
+   // 足音の処理
    FootStepSound();
    // 移動中最初に移動方向に回転する場合移動方向へ回転させる
    if (_owner._firstRotating) {
@@ -561,39 +566,6 @@ void LargeEnemy::StateMove::Update() {
    _owner.HitCheckFromBullet();
 }
 
-void LargeEnemy::StateMove::FootStepSound() {
-   // フレームカウントの取得
-   auto count = _owner.gameMain().modeServer().frameCount();
-   // ボスの両前足の接地部分のフレームを取得
-   auto rightFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_right_hand");
-   auto leftFootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "front_left_hand");
-   // ボスの両前足の接地部分のフレームの高さを取得
-   auto rightFootY = rightFootFramePos.GetY();
-   auto leftFootY = leftFootFramePos.GetY();
-   // 右前足の接地部分フレームは一定以上高さか
-   if (rightFootY >= FootStepHeight) {
-      _footRightStep = true;    // 足音が鳴るフラグをtrue
-   }
-   else {
-      // 右足音が鳴るフラグをtrueか
-      if (_footRightStep) {
-         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
-         _footRightStep = false;                                              // 足音が鳴るフラグをfalse
-      }
-   }
-   // 左前足の接地部分フレームは一定以上高さか
-   if (leftFootY >= FootStepHeight) {
-      _footLeftStep = true;    // 足音が鳴るフラグをtrue
-   }
-   else {
-      // 左足音が鳴るフラグをtrueか
-      if (_footLeftStep) {
-         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
-         _footLeftStep = false;                                               // 足音が鳴るフラグをfalse
-      }
-   }
-}
-
 void LargeEnemy::StateLaser::Enter() {
    // この状態になった時のゲームのフレームカウントの保存
    _stateCnt = _owner.gameMain().modeServer().frameCount();
@@ -607,6 +579,17 @@ void LargeEnemy::StateLaser::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("beem", true);
    // 鳴らすサウンドの設定
    _owner.GetSoundComponent().Play("BossCharge",_owner._position);
+   // レーザー生成位置を取得
+   auto laserPos = GetLaserPos();
+   // レーザー生成位置をオブジェクトサーバーに登録
+   _owner.GetObjServer().RegistVector("LaserPos", laserPos);
+   // チャージエフェクトのインスタンスを生成
+   auto efcCharge = std::make_unique<Effect::EffectBossCharge>(_owner._gameMain, "BossCharge");
+   // エフェクトの位置設定
+   efcCharge->position(laserPos);
+   // エフェクトサーバーに登録
+   _owner.GetEfcServer().Add(std::move(efcCharge));
+
 }
 
 void LargeEnemy::StateLaser::Update() {
@@ -648,6 +631,25 @@ void LargeEnemy::StateLaser::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // レーザー生成位置をオブジェクトサーバーに登録
+   _owner.GetObjServer().RegistVector("LaserPos", GetLaserPos());
+}
+
+void LargeEnemy::StateLaser::Exit() {
+   // ビーム関連エフェクトを再生していたなら停止する
+   for (auto& effect : _owner.GetEfcServer().runEffects()) {
+      // 列挙型のusing宣言
+      using enum Effect::EffectBase::EffectType;
+      switch (effect->GetEfcType()) {
+      // ビーム関連エフェクト
+      case BossCharge:
+      case BossBeam:
+         effect->StopEffect();   // エフェクトの停止
+         break;
+      default:
+         break;
+      }
+   }
 }
 
 void LargeEnemy::StateFanGatling::Enter() {
@@ -709,4 +711,47 @@ void LargeEnemy::StateFanGatling::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+}
+
+void LargeEnemy::StateMove::FootStepSound() {
+   // フレームカウントの取得
+   auto count = _owner.gameMain().modeServer().frameCount();
+   // ボスの両前足の接地部分のフレームを取得
+   auto rightFootFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("root", "front_right_hand");
+   auto leftFootFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("root", "front_left_hand");
+   // ボスの両前足の接地部分のフレームの高さを取得
+   auto rightFootY = rightFootFramePos.GetY();
+   auto leftFootY = leftFootFramePos.GetY();
+   // 右前足の接地部分フレームは一定以上高さか
+   if (rightFootY >= FootStepHeight) {
+      _footRightStep = true;    // 足音が鳴るフラグをtrue
+   }
+   else {
+      // 右足音が鳴るフラグをtrueか
+      if (_footRightStep) {
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
+         _footRightStep = false;                                              // 足音が鳴るフラグをfalse
+      }
+   }
+   // 左前足の接地部分フレームは一定以上高さか
+   if (leftFootY >= FootStepHeight) {
+      _footLeftStep = true;    // 足音が鳴るフラグをtrue
+   }
+   else {
+      // 左足音が鳴るフラグをtrueか
+      if (_footLeftStep) {
+         _owner.GetSoundComponent().Play("BossFootStep", _owner._position);   // 足音の再生
+         _footLeftStep = false;                                               // 足音が鳴るフラグをfalse
+      }
+   }
+}
+
+AppFrame::Math::Vector4 LargeEnemy::StateLaser::GetLaserPos() {
+   // ボスの向きの取得(ボスのZ座標が逆の為、反転させておく)
+   auto bossDir = _owner.GetForward() * -1.0;
+   // レーザー生成位置に近いフレームの取得
+   auto laserFramePos = _owner.modelAnimeComponent().GetFramePosion("pasted__laser_collision");
+   // 指定座標分ずらす
+   auto laserPos = laserFramePos + bossDir * LaserDiffPos;
+   return laserPos;
 }

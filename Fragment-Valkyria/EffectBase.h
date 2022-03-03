@@ -44,7 +44,9 @@ namespace FragmentValkyria {
             GatlingMuzzleFlash, //!< ガトリングの発火炎(マズルフラッシュ)
             ObjectFall,         //!< オブジェクト落下
             Heal,               //!< 回復
-            WeakBullet          //!< プレイヤー弱攻撃
+            WeakBullet,         //!< プレイヤー弱攻撃
+            BossBeam,           //!< ボスビーム攻撃
+            BossCharge          //!< ボスビームチャージ
          };
          /**
           * \brief コンストラクタ

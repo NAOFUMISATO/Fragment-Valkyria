@@ -12,9 +12,9 @@ void EffectHeal::Init() {
 }
 
 void EffectHeal::Update() {
-   EffectBase::Update();
    if (!IsPlaying()) {
       SetDead();
    }
+   EffectBase::Update();
 }
 
