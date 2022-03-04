@@ -14,7 +14,7 @@
 			"filename": "TitleLogo.png",
 			"allnum": 60,
 			"xnum": 1,
-			"ynum": 60,
+			"ynum": 120,
 			"xsize": 1440,
 			"ysize": 360
 		},
@@ -28,8 +28,8 @@
 			"ysize": 120
 		},
 		{
-			"keyname": "Start",
-			"filename": "GameStart.png",
+			"keyname": "GameStartNoSelect",
+			"filename": "GameStartNoSelect.png",
 			"allnum": 1,
 			"xnum": 1,
 			"ynum": 1,
@@ -37,8 +37,8 @@
 			"ysize": 80
 		},
 		{
-			"keyname": "End",
-			"filename": "GameEnd.png",
+			"keyname": "GameEndNoSelect",
+			"filename": "GameEndNoSelect.png",
 			"allnum": 1,
 			"xnum": 1,
 			"ynum": 1,
@@ -46,17 +46,8 @@
 			"ysize": 80
 		},
 		{
-			"keyname": "TitleCusor",
-			"filename": "Cusor.png",
-			"allnum": 1,
-			"xnum": 1,
-			"ynum": 1,
-			"xsize": 400,
-			"ysize": 80
-		},
-		{
-			"keyname": "Option",
-			"filename": "Option.png",
+			"keyname": "OptionNoSelect",
+			"filename": "OptionNoSelect.png",
 			"allnum": 1,
 			"xnum": 1,
 			"ynum": 1,
