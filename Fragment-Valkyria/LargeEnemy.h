@@ -3,7 +3,7 @@
  * \file   LargeEnemy.h
  * \brief  ラージエネミーの処理を回すクラス
  * 
- * \author AHMD2000
+ * \author AHMD2000, NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
@@ -104,9 +104,16 @@ namespace FragmentValkyria {
           * \brief 回転の角速度の設定
           */
          void SetAddRotate();
+         /**
+          * \brief スタン値の更新と確認
+          */
+         void StunCheck();
 
          int _gatlingCnt{ 0 };                                      //!< ガトリングの弾を打つ回数
-         int _collision{ 0 };                                       //!< モデルのコリジョンフレーム番号
+         int _wholeCollision{ 0 };                                  //!< モデルの全体のコリジョンフレーム番号
+         int _bodyCollision{ 0 };                                   //!< モデルの胴体のコリジョンフレーム番号
+         int _weakNessesCollision{ 0 };                             //!< モデルの弱点のコリジョンフレーム番号
+         int _faceCollision{ 0 };                                   //!< モデルの顔のコリジョンフレーム番号
          int _freezeTime{ 0 };                                      //!< 死亡してからゲームクリアまでのフレーム数
          bool _firstRotating{ true };                               //!< 移動中最初に移動方向に回転するか
          bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
@@ -116,6 +123,7 @@ namespace FragmentValkyria {
          double _rotateDot{ 0.0 };                                  //!< 向かせたい方向のベクトルとフォワードベクトルを90度回転させたベクトルの内積の結果
          double _addRotate{ 0.0 };                                  //!< 角速度
          double _hp{ 0.0 };                                         //!< ヒットポイント
+         double _stunValue{ 0.0 };                                  //!< スタン値
          int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
          Vector4 _moved{ 0.0, 0.0, 0.0 };                           //!< 移動量のベクトル
          Vector4 _rotateDir{ 0.0, 0.0, 0.0 };                       //!< 回転の向きのベクトル
@@ -308,6 +316,33 @@ namespace FragmentValkyria {
              */
             Vector4 GetLaserPos();
             bool _createLaser{ false };       //!< レーザーを生成するか
+         };
+         /**
+         * \class 気絶状態クラス
+         * \brief 気絶状態の処理を回す
+         */
+         class StateStun : public StateBase {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner ラージエネミーの参照
+             */
+            StateStun(LargeEnemy& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit()override;
+
+         private:
+            
          };
       };
    }

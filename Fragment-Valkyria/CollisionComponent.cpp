@@ -297,29 +297,55 @@ void CollisionComponent::ObjectModelFromLargeEnemy() {
 }
 
 void CollisionComponent::LargeEnemyFromBullet() {
-   //遠隔弱攻撃の弾の位置を取得
+   // 遠隔弱攻撃の弾の位置を取得
    auto bulletPos = _owner.position();
-   //遠隔弱攻撃の弾の半径を設定
+   // 遠隔弱攻撃の弾の半径を設定
    auto bulletRadius = static_cast<float>(20.0);
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()){
-      //ラージエネミーじゃなかったら何もしない
+      // ラージエネミーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
          continue;
       }
-      //ラージエネミーのモデルのハンドルを取得
+      // ラージエネミーのモデルのハンドルを取得
       auto largeEnemyModel = object->modelAnimeComponent().modelHandle();
-      //ラージエネミーのモデルのコリジョンフレーム番号の取得
-      auto collision = object->modelAnimeComponent().FindFrame("S301_typeCO");
-      //モデルと球の当たり判定を取る
+      // ラージエネミーのモデルの顔のコリジョンフレーム番号の取得
+      auto collision = object->modelAnimeComponent().FindFrame("pasted__face_collision");
+      // モデルと球の当たり判定を取る
       auto result = MV1CollCheck_Sphere(largeEnemyModel, collision, AppFrame::Math::ToDX(bulletPos), bulletRadius);
-      //当たり判定の結果から当たっているか確認
+      // 当たり判定の結果から当たっているか確認
       if (result.HitNum > 0) {
-         //当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
+         // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromBullet);
-         //ダメージの設定
+         // ダメージ量の設定
          object->collisionComponent().damage(100.0);
-         //遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
+         // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
+         _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+      }
+      // ラージエネミーのモデルの胴体のコリジョンフレーム番号の取得
+      collision = object->modelAnimeComponent().FindFrame("pasted__body_collision");
+      // モデルと球の当たり判定を取る
+      result = MV1CollCheck_Sphere(largeEnemyModel, collision, AppFrame::Math::ToDX(bulletPos), bulletRadius);
+      // 当たり判定の結果から当たっているか確認
+      if (result.HitNum > 0) {
+         // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
+         object->collisionComponent().report().id(ReportId::HitFromBullet);
+         // ダメージ量の設定
+         object->collisionComponent().damage(0.0);
+         // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
+         _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
+      }
+      // ラージエネミーのモデルの弱点のコリジョンフレーム番号の取得
+      collision = object->modelAnimeComponent().FindFrame("pasted__weak_collision");
+      // モデルと球の当たり判定を取る
+      result = MV1CollCheck_Sphere(largeEnemyModel, collision, AppFrame::Math::ToDX(bulletPos), bulletRadius);
+      // 当たり判定の結果から当たっているか確認
+      if (result.HitNum > 0) {
+         // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
+         object->collisionComponent().report().id(ReportId::HitFromBullet);
+         // ダメージ量の設定
+         object->collisionComponent().damage(1000.0);
+         // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
       }
    }

@@ -3,7 +3,7 @@
  * \file   LargeEnemy.cpp
  * \brief  ラージエネミーの処理を回すクラス
  * 
- * \author AHMD2000
+ * \author AHMD2000, NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
 #include "LargeEnemy.h"
@@ -20,12 +20,17 @@
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
-      "gatling_frame" });
-   const int GatlingFrame = paramMap["gatling_frame"];     //!< ガトリングを打つフレームの間隔
+      "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
+      "bullet_stun_value"});
+   const int GatlingFrame = paramMap["gatling_frame"];             //!< ガトリングを打つフレームの間隔
+   const double MaxStun = paramMap["max_stun"];                    //!< スタン値の最大値
+   const double StunDecrease = paramMap["stun_decrease"];          //!< 毎フレーム減らすスタン値の値
+   const double ObjectStunValue = paramMap["object_stun_value"];   //!< オブジェクト攻撃を受けた時に増えるスタン値
+   const double BulletStunValue = paramMap["bullet_stun_value"];   //!< 遠隔弱攻撃を受けた時に増えるスタン値
 
-   constexpr auto MaxNum = 6;                              //!< 落下オブジェクトの最大数
-   constexpr auto FootStepHeight = 40.0;                   //!< 走り状態時の足音発生高さ
-   constexpr auto LaserDiffPos = 150.0;                    //!< レーザー生成位置に一番近い位置のフレームからのオフセット
+   constexpr auto MaxNum = 6;                                      //!< 落下オブジェクトの最大数
+   constexpr auto FootStepHeight = 40.0;                           //!< 走り状態時の足音発生高さ
+   constexpr auto LaserDiffPos = 150.0;                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -37,10 +42,22 @@ LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 void LargeEnemy::Init() {
    // モデルのハンドルの取得
    auto modelHandle = _modelAnimeComponent->modelHandle();
-   // コリジョンフレームの番号の取得
-   _collision = _modelAnimeComponent->FindFrame("S301_typeCO");
+   // モデルの全体のコリジョンフレームの番号の取得
+   _wholeCollision = _modelAnimeComponent->FindFrame("S301_typeCO");
    // コリジョンフレームをナビメッシュとして使用
-   MV1SetupCollInfo(modelHandle, _collision, 3, 6, 3);
+   MV1SetupCollInfo(modelHandle, _bodyCollision, 7, 6, 5);
+   // モデルの胴体のコリジョンフレームの番号の取得
+   _bodyCollision = _modelAnimeComponent->FindFrame("pasted__body_collision");
+   // コリジョンフレームをナビメッシュとして使用
+   MV1SetupCollInfo(modelHandle, _bodyCollision, 6, 6, 5);
+   // モデルの弱点のコリジョンフレームの番号の取得
+   _weakNessesCollision = _modelAnimeComponent->FindFrame("pasted__weak_collision");
+   // コリジョンフレームをナビメッシュとして使用
+   MV1SetupCollInfo(modelHandle, _weakNessesCollision, 1, 0, 1);
+   // モデルの顔のコリジョンフレームの番号の取得
+   _faceCollision = _modelAnimeComponent->FindFrame("pasted__face_collision");
+   // コリジョンフレームをナビメッシュとして使用
+   MV1SetupCollInfo(modelHandle, _faceCollision, 3, 2, 1);
    // ヒットポイントの設定
    _hp = 1000.0;
    // 行動に追加する状態の文字列の動的配列を作成
@@ -57,10 +74,15 @@ void LargeEnemy::Input(InputManager& input) {
 }
 
 void LargeEnemy::Update() {
-   //コリジョン情報の更新
-   MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collision);
+   // コリジョン情報の更新
+   MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _wholeCollision);
+   MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _bodyCollision);
+   MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _weakNessesCollision);
+   MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _faceCollision);
    // 状態の更新
    _stateServer->Update();
+   // スタン値の更新と確認
+   StunCheck();
    // ワールド行列の更新
    ComputeWorldTransform();
    // モデルの更新
@@ -215,6 +237,8 @@ void LargeEnemy::HitCheckFromFallObject() {
       // 落下オブジェクトと当たっていたら
       // ヒットポイントをダメージ量分減らす
       _hp -= _collisionComponent->damage();
+      // スタン値を既定の値増やす
+      _stunValue += ObjectStunValue;
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
@@ -233,6 +257,8 @@ void LargeEnemy::HitCheckFromBullet() {
       // 遠隔弱攻撃の弾と当たっていたら
       // ヒットポイントをダメージ量分減らす
       _hp -= _collisionComponent->damage();
+      // スタン値を既定の値増やす
+      _stunValue += BulletStunValue;
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
@@ -350,6 +376,16 @@ void LargeEnemy::SetAddRotate() {
    // 内積の結果が0より大きくない場合各速度をマイナスにする
    else {
       _addRotate = -1.0;
+   }
+}
+
+void LargeEnemy::StunCheck() {
+   _stunValue -= StunDecrease;
+   if (_stunValue >= MaxStun) {
+      _stateServer->GoToState("Stun");
+   }
+   else if (_stunValue <= 0.0) {
+      _stunValue = 0.0;
    }
 }
 
@@ -753,6 +789,29 @@ void LargeEnemy::StateMove::FootStepSound() {
          _footLeftStep = false;                                               // 足音が鳴るフラグをfalse
       }
    }
+}
+
+void LargeEnemy::StateStun::Enter() {
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("stan", true, 0.5);
+}
+
+void LargeEnemy::StateStun::Update() {
+   // アニメーションの繰り返した回数の取得
+   auto repeated = _owner._modelAnimeComponent->repeatedCount();
+   // アニメーションを一回再生したら待機状態へ
+   if (repeated >= 1) {
+      _owner._stateServer->GoToState("Idle");
+   }
+   // 落下オブジェクトと当たったか確認
+   _owner.HitCheckFromFallObject();
+   // 遠隔弱攻撃の弾と当たっているか確認
+   _owner.HitCheckFromBullet();
+}
+
+void LargeEnemy::StateStun::Exit() {
+   // スタン値を初期化
+   _owner._stunValue = 0.0;
 }
 
 AppFrame::Math::Vector4 LargeEnemy::StateLaser::GetLaserPos() {

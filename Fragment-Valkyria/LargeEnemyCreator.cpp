@@ -46,8 +46,10 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    state->Register("Die", std::make_shared<Enemy::LargeEnemy::StateDie>(*largeEnemy));
    state->Register("Laser", std::make_shared<Enemy::LargeEnemy::StateLaser>(*largeEnemy));
    state->Register("FanGatling", std::make_shared<Enemy::LargeEnemy::StateFanGatling>(*largeEnemy));
+   state->Register("Stun", std::make_shared<Enemy::LargeEnemy::StateStun>(*largeEnemy));
    // ラージエネミーの状態一括管理クラスの設定
    largeEnemy->stateServer(std::move(state));
+
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _gameMain.objServer().runObjects()) {
       // プレイヤーでなければ処理をスキップして戻る

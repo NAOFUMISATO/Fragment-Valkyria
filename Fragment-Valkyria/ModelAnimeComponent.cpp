@@ -70,7 +70,7 @@ void ModelAnimeComponent::Update() {
    }
 }
 
-void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate,double animeSpeed) {
+void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate, double animeSpeed) {
    // アニメーションブレンド中に、ChangeAnime関数を呼んだならブレンドの終了処理を行う
    if (_blending) {
       _animIndex = _newAnimIndex;  // アニメ番号の更新
