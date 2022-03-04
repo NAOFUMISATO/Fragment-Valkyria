@@ -155,7 +155,7 @@ void LargeEnemy::CreateFallObject() {
    // プレイヤーへの向きのベクトルを左に既定の角度回転させる
    auto leftMoveVec = MoveVec * leftTransMatrix;
    // 落下オブジェクトを落とす距離の設定
-   auto distance = LargeEnemyToPlyDistance - 800.0;
+   auto distance = LargeEnemyToPlyDistance * 0.5;
    // 落下オブジェクトを落とす位置の配列の作成
    std::array<Vector4, 3> startPosition = {
       playerPos + Vector4(0.0, 500.0, 0.0),
@@ -260,12 +260,21 @@ void LargeEnemy::Action() {
    if (_action.empty()) {
       _action = _actionList;
    }
-   // 0から行動させる範囲を制限した行動状態への文字列の動的配列の個数を-1した数の範囲の値をランダムに取得
-   auto random = AppFrame::Math::Utility::GetRandom(0, static_cast<int>(_action.size()) - 1);
-   // ランダムに取得した値番目の行動状態へ移動
-   _stateServer->GoToState(_action[random]);
-   // 移動した行動状態への文字列を動的配列から削除
-   _action.erase(_action.begin() + random);
+   // 行動状態への文字列の動的配列の要素の個数が最大だった場合
+   if (_action.size() >= 5) {
+      // 最初の行動状態へ移動
+      _stateServer->GoToState(_action[0]);
+      // 最初の行動状態への文字列を動的配列から削除
+      _action.erase(_action.begin());
+   }
+   else {
+      // 0から行動させる範囲を制限した行動状態への文字列の動的配列の要素の個数を-1した数の範囲の値をランダムに取得
+      auto random = AppFrame::Math::Utility::GetRandom(0, static_cast<int>(_action.size()) - 1);
+      // ランダムに取得した値番目の行動状態へ移動
+      _stateServer->GoToState(_action[random]);
+      // 移動した行動状態への文字列を動的配列から削除
+      _action.erase(_action.begin() + random);
+   }
 }
 
 void LargeEnemy::AugularRotate(bool& rotating) {
