@@ -41,10 +41,10 @@ namespace FragmentValkyria {
          void Render();
 
       private:
-         Game::GameMain& _gameMain;                                      //!< ゲーム本体クラスの参照
-         std::pair<int, int> _lightHandles{ -1,-1 };                     //!< 光源ハンドルのペア型
-         std::pair<Vector4, Vector4> _lightPositions{ {0,0,0},{0,0,0} }; //!< 光源ハンドル位置のペア型
-         int _shadowHandle{ -1 };                                        //!< 落ち影ハンドル
+         Game::GameMain& _gameMain;       //!< ゲーム本体クラスの参照
+         int _lightHandle{ -1 };         //!< 光源ハンドルのペア型
+         Vector4 _lightPosition{ 0,0,0 }; //!< 光源ハンドル位置のペア型
+         int _shadowHandle{ -1 };         //!< 落ち影ハンドル
       };
    }
 

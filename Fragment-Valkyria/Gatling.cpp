@@ -94,7 +94,7 @@ void Gatling::StateBase::Draw() {
    // 半径をfloat型にキャスト
    auto radian = static_cast<float>(Radius);
    // DxLibによる球の描画
-   DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+   DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), FALSE);
 #endif
 }
 
@@ -137,7 +137,7 @@ void Gatling::StateDie::Draw() {
    // ブレンドモードをαブレンドに設定
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
    // DxLibによる球の描画
-   DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+   DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), FALSE);
    // ブレンドモードをノーブレンドに設定
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 #endif

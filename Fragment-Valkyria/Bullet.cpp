@@ -79,12 +79,14 @@ void Bullet::OutCheckFromStage() {
 }
 
 void Bullet::StateBase::Draw() {
+#ifdef _DEBUG
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体へ変換
    auto pos = AppFrame::Math::ToDX(_owner._position);
    // 半径をfloat型にキャスト
    auto radius = static_cast<float>(Radius);
    // DxLibによる球の描画
-   DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), TRUE);
+   DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), FALSE);
+#endif
 }
 
 void Bullet::StateShoot::Enter() {
