@@ -532,7 +532,7 @@ void CollisionComponent::PoorEnemyFromPlayer() {
    //ラージエネミーのモデルのハンドルの取得
    auto poorEnemyModel = _owner.modelAnimeComponent().modelHandle();
    //ラージエネミーのモデルのコリジョンフレーム番号の取得
-   auto collision = _owner.modelAnimeComponent().FindFrame("Spider");
+   auto collision = _owner.modelAnimeComponent().FindFrame("mob");
    //オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       //プレイヤーじゃなかったら何もしない
@@ -573,7 +573,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
    //ガトリング攻撃をしてくる雑魚敵のモデルハンドルの取得
    auto poorEnemyGatlingModel = _owner.modelAnimeComponent().modelHandle();
    //モデルのコリジョンフレームの取得
-   auto collision = _owner.modelAnimeComponent().FindFrame("Spider");
+   auto collision = _owner.modelAnimeComponent().FindFrame("mob");
    //オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       //遠隔弱攻撃の弾じゃなかったらなにもしない
@@ -617,7 +617,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
       //ガトリング攻撃をしてくる雑魚敵のモデルハンドルを取得
       auto poorEnemyGatlingModel = object->modelAnimeComponent().modelHandle();
       //モデルのコリジョンフレーム番号を取得
-      auto collision = object->modelAnimeComponent().FindFrame("Spider");
+      auto collision = object->modelAnimeComponent().FindFrame("mob");
       //モデルとカプセルの当たり判定を取る
       auto result = MV1CollCheck_Capsule(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(capsulePos1), AppFrame::Math::ToDX(capsulePos2), capsuleRadian);
       //当たり判定の結果を確認

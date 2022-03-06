@@ -26,10 +26,10 @@
 		},
 		{
 			"keyname": "PoorEnemyGatling",
-			"filename": "Spider_3.mv1"
+			"filename": "PoorEnemy.mv1"
 		},{
 			"keyname": "PoorEnemyMelee",
-			"filename": "Spider_3.mv1"
+			"filename": "PoorEnemy.mv1"
 		}
 	]
 }

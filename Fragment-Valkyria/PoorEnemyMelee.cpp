@@ -30,7 +30,7 @@ void PoorEnemyMelee::Rush(const Vector4& moved) {
 }
 
 void PoorEnemyMelee::StateRush::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true,2.0);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();

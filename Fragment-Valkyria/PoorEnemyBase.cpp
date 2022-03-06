@@ -28,7 +28,7 @@ PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gam
 
 void PoorEnemyBase::Init() {
    auto modelHandle = _modelAnimeComponent->modelHandle();
-   _collNum = _modelAnimeComponent->FindFrame("Spider");
+   _collNum = _modelAnimeComponent->FindFrame("mob");
    // フレーム1をナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collNum, 1, 1, 1);
    _actionList.emplace_back("SideStep");
@@ -101,12 +101,12 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 void PoorEnemyBase::DamageExpression() {
    auto frame = _gameMain.modeServer().frameCount() - _damageCnt;
    if (frame < WhiteFrame) {
+      _modelAnimeComponent->SetEmiColor(0, 1.0f, 1.0f, 1.0f);
       _modelAnimeComponent->SetEmiColor(1, 1.0f, 1.0f, 1.0f);
-      _modelAnimeComponent->SetAmbColor(1, 1.0f, 1.0f, 1.0f);
    }
    else {
+      _modelAnimeComponent->SetEmiColor(0, 0.0f, 0.0f, 0.0f);
       _modelAnimeComponent->SetEmiColor(1, 0.0f, 0.0f, 0.0f);
-      _modelAnimeComponent->SetAmbColor(1, 0.0f, 0.0f, 0.0f);
    }
 }
 
@@ -115,7 +115,7 @@ void PoorEnemyBase::StateBase::Draw() {
 }
 
 void PoorEnemyBase::StateIdle::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|warte_pose", true);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
 }
 
@@ -134,7 +134,7 @@ void PoorEnemyBase::StateIdle::Update() {
 }
 
 void PoorEnemyBase::StateSideStep::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true);
    SideStepDecide();
 }
 
@@ -147,8 +147,8 @@ void PoorEnemyBase::StateSideStep::Update() {
 }
 
 void PoorEnemyBase::StateFall::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|fall", true);
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   _owner._modelAnimeComponent->ChangeAnime("idle", true);
+   _stateCnt = 0;
 }
 
 void PoorEnemyBase::StateFall::Update() {
@@ -157,14 +157,14 @@ void PoorEnemyBase::StateFall::Update() {
    _owner.Rotate();
 
    if (_owner.position().GetY() <= 0.0) {
-      auto [x, y, z] = _owner.position().GetVec3();
-      _owner.position(Vector4(x, 0.0, z));
+      _owner.position().SetY(0.0);
       _owner._stateServer->GoToState("Idle");
    }
-}
+   _stateCnt++;
+ }
 
 void PoorEnemyBase::StateDie::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|warte_pose", true);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _opacityRate = MaxOpacityRate;
 }

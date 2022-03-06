@@ -33,7 +33,7 @@ void PoorEnemyGatling::Init() {
 }
 
 void PoorEnemyGatling::CreateGatling() {
-   auto gatlingFramePos = modelAnimeComponent().GetFramePosion("Spider_Armature");
+   auto gatlingFramePos = modelAnimeComponent().GetFrameChildPosion("root","mob_gun");
    _gameMain.objServer().RegistVector("GatlingPos", gatlingFramePos);
    _gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
    auto gatling = _gameMain.objFactory().Create("Gatling");
@@ -41,7 +41,7 @@ void PoorEnemyGatling::CreateGatling() {
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
+   _owner._modelAnimeComponent->ChangeAnime("attack", true);
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _remainingGatiling = 5;
