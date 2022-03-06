@@ -42,7 +42,7 @@ namespace FragmentValkyria {
 
       private:
          Game::GameMain& _gameMain;       //!< ゲーム本体クラスの参照
-         int _lightHandle{ -1 };         //!< 光源ハンドルのペア型
+         int _lightHandle{ -1 };          //!< 光源ハンドルのペア型
          Vector4 _lightPosition{ 0,0,0 }; //!< 光源ハンドル位置のペア型
          int _shadowHandle{ -1 };         //!< 落ち影ハンドル
       };
