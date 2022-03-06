@@ -47,46 +47,46 @@ void StageModelComponent::SetModels(std::string_view key) {
    }
 }
 
-void StageModelComponent::SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+void StageModelComponent::SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
    auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
       if (fileName == stageName) {
-         MV1SetMaterialDifColor(handle, index, GetColorF(red, green, blue, alpha));
+         MV1SetMaterialDifColor(handle, index, GetColorF(red, green, blue, 1.0f));
       }
    }
 }
 
-void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
    auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
       if (fileName == stageName) {
-         MV1SetMaterialSpcColor(handle, index, GetColorF(red, green, blue, alpha));
+         MV1SetMaterialSpcColor(handle, index, GetColorF(red, green, blue, 1.0f));
       }
    }
 }
 
-void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
    auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
       if (fileName == stageName) {
-         MV1SetMaterialEmiColor(handle, index, GetColorF(red, green, blue, alpha));
+         MV1SetMaterialEmiColor(handle, index, GetColorF(red, green, blue, 1.0f));
       }
    }
 }
 
-void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha) {
+void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
    auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
       if (fileName == stageName) {
-         MV1SetMaterialAmbColor(handle, index, GetColorF(red, green, blue, alpha));
+         MV1SetMaterialAmbColor(handle, index, GetColorF(red, green, blue, 1.0f));
       }
    }
 }

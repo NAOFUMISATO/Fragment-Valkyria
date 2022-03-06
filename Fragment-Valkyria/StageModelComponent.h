@@ -70,9 +70,8 @@ namespace FragmentValkyria {
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         void SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue);
          /**
           * \brief モデルの鏡面反射光色の設定
           * \param key ステージ情報の連想配列に関連付けた文字列
@@ -81,9 +80,8 @@ namespace FragmentValkyria {
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         void SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue);
          /**
           * \brief モデルの自己発光色の設定
           * \param key ステージ情報の連想配列に関連付けた文字列
@@ -92,9 +90,8 @@ namespace FragmentValkyria {
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetEmiColor(std::string_view key,std::string_view fileName,int index, float red, float green, float blue, float alpha);
+         void SetEmiColor(std::string_view key,std::string_view fileName,int index, float red, float green, float blue);
          /**
           * \brief モデルの環境光色の設定
           * \param key ステージ情報の連想配列に関連付けた文字列
@@ -103,9 +100,8 @@ namespace FragmentValkyria {
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue, float alpha);
+         void SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue);
          /**
           * \brief 鏡面反射光の強さを設定
           * \param key ステージ情報の連想配列に関連付けた文字列

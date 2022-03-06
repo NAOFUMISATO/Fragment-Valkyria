@@ -31,18 +31,18 @@ void PoorEnemyMelee::Rush(const Vector4& moved) {
 
 void PoorEnemyMelee::StateRush::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
-   _owner._stateCnt = 0;
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
    _moved = _moved * RushSpeed;
 }
 
 void PoorEnemyMelee::StateRush::Update() {
-   if (_owner._stateCnt <= 60 * 4) {
+   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   if (frame <= 60 * 4) {
       _owner.Rush(_moved);
    }
    else {
       _owner._stateServer->GoToState("Idle");
    }
-   _owner._stateCnt++;
 }

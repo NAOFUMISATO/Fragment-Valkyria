@@ -91,36 +91,32 @@ namespace FragmentValkyria {
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetDifColor(int index, float red, float green, float blue, float alpha);
+         void SetDifColor(int index, float red, float green, float blue);
          /**
           * \brief モデルの鏡面反射光色の設定
           * \param index 設定するモデルのマテリアル番号
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetSpcColor(int index, float red, float green, float blue, float alpha);
+         void SetSpcColor(int index, float red, float green, float blue);
          /**
           * \brief モデルの自己発光色の設定
           * \param index 設定するモデルのマテリアル番号
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetEmiColor(int index, float red, float green, float blue, float alpha);
+         void SetEmiColor(int index, float red, float green, float blue);
          /**
           * \brief モデルの環境光色の設定
           * \param index 設定するモデルのマテリアル番号
           * \param red 赤
           * \param green 緑
           * \param blue 青
-          * \param alpha 透明度
           */
-         void SetAmbColor(int index, float red, float green, float blue, float alpha);
+         void SetAmbColor(int index, float red, float green, float blue);
          /**
           * \brief モデルの鏡面反射光の強さの設定
           * \param index 設定するモデルのマテリアル番号

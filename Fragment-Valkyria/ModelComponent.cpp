@@ -55,20 +55,20 @@ void ModelComponent::SetMatrix(Matrix44& world) {
    MV1SetMatrix(_modelHandle, AppFrame::Math::ToDX(world));
 }
 
-void ModelComponent::SetDifColor(int index, float red, float green, float blue, float alpha) {
-   MV1SetMaterialDifColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+void ModelComponent::SetDifColor(int index, float red, float green, float blue) {
+   MV1SetMaterialDifColor(_modelHandle, index, GetColorF(red, green, blue, 1.0f));
 }
 
-void ModelComponent::SetSpcColor(int index, float red, float green, float blue, float alpha) {
-   MV1SetMaterialSpcColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+void ModelComponent::SetSpcColor(int index, float red, float green, float blue) {
+   MV1SetMaterialSpcColor(_modelHandle, index, GetColorF(red, green, blue, 1.0f));
 }
 
-void ModelComponent::SetEmiColor(int index, float red, float green, float blue, float alpha) {
-   MV1SetMaterialEmiColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+void ModelComponent::SetEmiColor(int index, float red, float green, float blue) {
+   MV1SetMaterialEmiColor(_modelHandle, index, GetColorF(red, green, blue, 1.0f));
 }
 
-void ModelComponent::SetAmbColor(int index, float red, float green, float blue, float alpha) {
-   MV1SetMaterialAmbColor(_modelHandle, index, GetColorF(red, green, blue, alpha));
+void ModelComponent::SetAmbColor(int index, float red, float green, float blue) {
+   MV1SetMaterialAmbColor(_modelHandle, index, GetColorF(red, green, blue, 1.0f));
 }
 
 void ModelComponent::SetSpcPower(int index, float power) {

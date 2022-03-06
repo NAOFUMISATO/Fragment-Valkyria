@@ -519,7 +519,7 @@ void CollisionComponent::PoorEnemyFromPlayer() {
    }
 }
 
-void CollisionComponent::BulletFromPoorEnemyGatling() {
+void CollisionComponent::BulletFromPoorEnemy() {
    //ガトリング攻撃をしてくる雑魚敵のモデルハンドルの取得
    auto poorEnemyGatlingModel = _owner.modelAnimeComponent().modelHandle();
    //モデルのコリジョンフレームの取得

@@ -111,7 +111,7 @@ namespace FragmentValkyria {
          /**
           * \brief ガトリング攻撃をしてくる雑魚敵が遠隔弱攻撃の弾と当たっているか確認
           */
-         void BulletFromPoorEnemyGatling();
+         void BulletFromPoorEnemy();
          /**
           * \brief 落下するオブジェクトがガトリング攻撃をしてくる雑魚敵と当たったか確認
           */

@@ -47,10 +47,6 @@ namespace FragmentValkyria {
          
       protected:
          /**
-          * \brief 落下処理
-          */
-         void Fall();
-         /**
           * \brief 回転処理
           */
          void Rotate();
@@ -62,10 +58,11 @@ namespace FragmentValkyria {
           * \brief プレイヤーのオブジェクト発射攻撃に当たった場合の処理
           */
          void HitCheckFromFallObject();
+         void DamageExpression();
 
-         int _stateCnt{ 0 };                    //!< 状態遷移時に使用するフレーム保存用
          int _collNum{ 0 };                     //!< コリジョン番号保存用
-         double _hp{ 20.0 };                    //!< 体力
+         int _damageCnt{ 0 };                   //!< ダメージ表現のフレームカウント保存用
+         double _hp{ 0.0 };                     //!< 体力
          std::vector<std::string> _actionList;  //!< 各状態の文字列を全て登録する動的配列
          std::vector<std::string> _action;      //!< 各状態の文字列を登録し、ランダムに行動させるための動的配列
 
@@ -88,6 +85,7 @@ namespace FragmentValkyria {
 
          protected:
             PoorEnemyBase& _owner;   //!< 雑魚敵基底クラスの参照
+            int _stateCnt;           //!< 状態遷移時に使用するフレーム保存用
          };
 
          /**
@@ -181,9 +179,14 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+            /**
+             * \brief 描画処理
+             */
+            void Draw()override;
 
          private:
-            int _timeOver{ 0 };     //!< 死亡モーション後から消滅するまでの猶予フレーム
+            float _opacityRate{ 1.0f }; //!< 不透明度
+            int _timeOver{ 0 };         //!< 死亡モーション後から消滅するまでの猶予フレーム
          };
       };
    }

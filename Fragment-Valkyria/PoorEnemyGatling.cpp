@@ -43,21 +43,21 @@ void PoorEnemyGatling::CreateGatling() {
 void PoorEnemyGatling::StateGatling::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|Jump", true);
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
-   _owner._stateCnt = 0;
-   _gatlingCnt = 5;
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   _remainingGatiling = 5;
 }
 
 void PoorEnemyGatling::StateGatling::Update() {
-   if (_owner._stateCnt % 60 == 0) {
+   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   if (frame % 60 == 0) {
       _owner.CreateGatling();
-      --_gatlingCnt;
-      if (_gatlingCnt <= 0) {
+      --_remainingGatiling;
+      if (_remainingGatiling <= 0) {
          _owner._stateServer->GoToState("Idle");
       }
    }
-   _owner._collisionComponent->BulletFromPoorEnemyGatling();
+   _owner._collisionComponent->BulletFromPoorEnemy();
    _owner._collisionComponent->PoorEnemyFromPlayer();
    _owner.HitCheckFromBullet();
    _owner.HitCheckFromFallObject();
-   ++_owner._stateCnt;
 }

@@ -18,6 +18,9 @@ namespace {
    constexpr auto StepDistance = 1000.0;
    constexpr auto StepSpeed = 15.0;
    constexpr auto StepDistanceLimit = 100.0;
+   constexpr auto MaxOpacityRate = 1.0f;
+   constexpr auto FadeOutFrame = 60;
+   constexpr auto WhiteFrame = 20;
 }
 
 PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
@@ -29,15 +32,17 @@ void PoorEnemyBase::Init() {
    // フレーム1をナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collNum, 1, 1, 1);
    _actionList.emplace_back("SideStep");
+   _hp = 20.0;
 }
 
 void PoorEnemyBase::Update() {
    //コリジョン情報の更新
    MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collNum);
-   _collisionComponent->BulletFromPoorEnemyGatling();
+   _collisionComponent->BulletFromPoorEnemy();
    _collisionComponent->PoorEnemyFromPlayer();
    HitCheckFromBullet();
    HitCheckFromFallObject();
+   DamageExpression();
    // 状態の更新
    _stateServer->Update();
    // ワールド行列の更新
@@ -48,11 +53,6 @@ void PoorEnemyBase::Update() {
 
 void PoorEnemyBase::Draw() {
    _stateServer->Draw();
-}
-
-void PoorEnemyBase::Fall() {
-   auto y = 0.5 * Gravity * _stateCnt * _stateCnt;
-   _position.Add(Vector4(0.0, y, 0.0));
 }
 
 void PoorEnemyBase::Rotate() {
@@ -78,6 +78,9 @@ void PoorEnemyBase::HitCheckFromBullet() {
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
       }
+      else {
+         _damageCnt = _gameMain.modeServer().frameCount() - _damageCnt;
+      }
    }
 }
 
@@ -95,19 +98,32 @@ void PoorEnemyBase::HitCheckFromFallObject() {
    }
 }
 
+void PoorEnemyBase::DamageExpression() {
+   auto frame = _gameMain.modeServer().frameCount() - _damageCnt;
+   if (frame < WhiteFrame) {
+      _modelAnimeComponent->SetEmiColor(1, 1.0f, 1.0f, 1.0f);
+      _modelAnimeComponent->SetAmbColor(1, 1.0f, 1.0f, 1.0f);
+   }
+   else {
+      _modelAnimeComponent->SetEmiColor(1, 0.0f, 0.0f, 0.0f);
+      _modelAnimeComponent->SetAmbColor(1, 0.0f, 0.0f, 0.0f);
+   }
+}
+
 void PoorEnemyBase::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
 }
 
 void PoorEnemyBase::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|warte_pose", true);
-   _owner._stateCnt = 0;
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
 }
 
 void PoorEnemyBase::StateIdle::Update() {
+   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
    _owner.Rotate();
    // 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
-   if (_owner._stateCnt >= 60 * 5) {
+   if (frame >= 60 * 5) {
       if (_owner._action.empty()) {
          _owner._action = _owner._actionList;
       }
@@ -115,7 +131,6 @@ void PoorEnemyBase::StateIdle::Update() {
       _owner._stateServer->GoToState(_owner._action[random]);
       _owner._action.erase(_owner._action.begin() + random);
    }
-   ++_owner._stateCnt;
 }
 
 void PoorEnemyBase::StateSideStep::Enter() {
@@ -133,11 +148,12 @@ void PoorEnemyBase::StateSideStep::Update() {
 
 void PoorEnemyBase::StateFall::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|fall", true);
-   _owner._stateCnt = 0;
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
 }
 
 void PoorEnemyBase::StateFall::Update() {
-   _owner.Fall();
+   auto y = 0.5 * Gravity * _stateCnt * _stateCnt;
+   _owner._position.Add(Vector4(0.0, y, 0.0));
    _owner.Rotate();
 
    if (_owner.position().GetY() <= 0.0) {
@@ -145,22 +161,29 @@ void PoorEnemyBase::StateFall::Update() {
       _owner.position(Vector4(x, 0.0, z));
       _owner._stateServer->GoToState("Idle");
    }
-
-   ++_owner._stateCnt;
 }
 
 void PoorEnemyBase::StateDie::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|die", true);
-   _owner._stateCnt = 0;
-   _timeOver = 90;
+   _owner._modelAnimeComponent->ChangeAnime("Spider_Armature|warte_pose", true);
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   _opacityRate = MaxOpacityRate;
 }
 
 void PoorEnemyBase::StateDie::Update() {
-   if (_timeOver <= 0) {
+   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   
+   auto deltaRate = MaxOpacityRate / static_cast<float>(FadeOutFrame);
+
+   _opacityRate -= deltaRate;
+   if (frame > FadeOutFrame) {
       _owner.SetDead();
    }
+}
 
-   --_timeOver;
+void PoorEnemyBase::StateDie::Draw() {
+   auto handle = _owner._modelAnimeComponent->modelHandle();
+   MV1SetOpacityRate(handle, _opacityRate);
+   StateBase::Draw();
 }
 
 void PoorEnemyBase::StateSideStep::SideStepDecide() {

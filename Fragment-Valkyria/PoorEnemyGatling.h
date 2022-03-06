@@ -63,8 +63,8 @@ namespace FragmentValkyria {
                 void Update() override;
 
             private:
-               PoorEnemyGatling& _owner;  //!< ‰“ŠuUŒ‚ƒ^ƒCƒv‚ÌŽG‹›“GƒNƒ‰ƒX‚ÌŽQÆ
-               int _gatlingCnt{ 5 };      //!< ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg•Û‘¶—p
+               PoorEnemyGatling& _owner;     //!< ‰“ŠuUŒ‚ƒ^ƒCƒv‚ÌŽG‹›“GƒNƒ‰ƒX‚ÌŽQÆ
+               int _remainingGatiling{ 5 };  //!< ƒKƒgƒŠƒ“ƒO‚ÌŽc’e”
             };
       };
    }
