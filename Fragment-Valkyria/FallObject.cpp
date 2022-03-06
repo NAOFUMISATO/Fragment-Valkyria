@@ -255,7 +255,7 @@ void FallObject::StateShoot::Input(InputManager& input) {
 void FallObject::StateShoot::Update() {
    _owner.Shoot();
 
-   _owner._collisionComponent->ObjectModelFromLargeEnemy();
+   _owner._collisionComponent->LargeEnemyFromObjectModel();
    _owner._collisionComponent->PoorEnemyGatlingFromObjectModel();
    _owner._collisionComponent->FallObjectFromLaser();
    _owner._collisionComponent->OutStage();

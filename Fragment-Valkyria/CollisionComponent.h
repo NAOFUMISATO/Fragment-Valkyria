@@ -87,7 +87,7 @@ namespace FragmentValkyria {
          /**
           * \brief ラージエネミーのモデルに落下するオブジェクトが当たったか確認
           */
-         void ObjectModelFromLargeEnemy();
+         void LargeEnemyFromObjectModel();
          /**
           * \brief 遠隔弱攻撃の弾がラージエネミーに当たったか確認
           */
