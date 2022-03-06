@@ -5,14 +5,19 @@
 			"bg_y":0,
 			"title_x":0,
 			"title_y":0,
-			"anybotton_x":660,
-			"anybotton_y":650,
+			"title_animespeed":2,
+			"anybutton_x":660,
+			"anybutton_y":650,
+			"anybutton_animespeed":2,
 			"start_x":760,
 			"start_y":550,
+			"start_animespeed":2,
 			"option_x":760,
 			"option_y":750,
+			"option_animespeed":2,
 			"end_x":760,
-			"end_y":950
+			"end_y":950,
+			"end_animespeed":2
 		}	
 	]	
 }

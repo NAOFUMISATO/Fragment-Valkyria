@@ -25,7 +25,6 @@ namespace FragmentValkyria {
        * \brief ゲームのタイトル処理を回す
        */
       class ModeTitle : public ModeBase {
-         using handles = std::vector<int>;
          using InputManager = AppFrame::Input::InputManager;
       public:
          /**
@@ -56,13 +55,13 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         std::unique_ptr<AppFrame::State::StateServer> _stateServer;       //!< 状態一括管理クラスのポインタ
-         int _alpha{ 0 };                                                  //!< 透明度
-         bool _pushAnyBotton{ false };                                     //!< タイトルのAnyBottonの押下フラグ
-         std::pair<int, int> _cusorPos{ 0,0 };                             //!< 選択エフェクトのカーソル座標
-         std::tuple<int, handles, handles, int, int, int, int> _grHandles{ //!< 画像ハンドル群
-           -1,0,0,-1,-1,-1,-1
-         };
+         std::unique_ptr<AppFrame::State::StateServer> _stateServer;  //!< 状態一括管理クラスのポインタ
+         int _firstInputCnt{ 0 };                                     //!< プレスエニイボタンから移行した後、連続入力によるゲーム開始を防ぐカウント
+         bool _pushAnyButton{ false };                                //!< タイトルのプレスエニイボタンの押下フラグ
+         std::vector<int> _startDrawHandles{ 0 };                     //!< ゲーム開始選択の描画用ハンドル
+         std::vector<int> _optionDrawHandles{ 0 };                    //!< オプション選択の描画用ハンドル
+         std::vector<int> _endDrawHandles{ 0 };                       //!< ゲーム終了選択の描画用ハンドル
+         std::unordered_map<std::string, std::vector<int>> _handleMap;//!< 画像ハンドルを保存する連想配列
 
       public:
          /**
@@ -88,13 +87,13 @@ namespace FragmentValkyria {
           * \class タイトルAnyBotton選択状態クラス
           * \brief タイトルAnyBottonを表示する
           */
-         class StateAnyBotton : public StateBase{
+         class StateAnyButton : public StateBase{
          public:
             /**
              * \brief コンストラクタ
              * \param owner モードタイトルの参照
              */
-            StateAnyBotton(ModeTitle& owner) :StateBase{ owner } {};
+            StateAnyButton(ModeTitle& owner) :StateBase{ owner } {};
             /**
              * \brief 入口処理
              */
@@ -130,6 +129,10 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit() override;
          };
 
          /**
@@ -152,6 +155,10 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit() override;
          };
 
          /**
@@ -174,6 +181,10 @@ namespace FragmentValkyria {
              * \param input 入力一括管理クラスの参照
              */
             void Input(InputManager& input) override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit() override;
          };
       };
    }
