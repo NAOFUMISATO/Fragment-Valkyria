@@ -53,7 +53,7 @@ void LargeEnemy::Init() {
    // モデルの弱点のコリジョンフレームの番号の取得
    _weakNessesCollision = _modelAnimeComponent->FindFrame("pasted__weak_collision");
    // コリジョンフレームをナビメッシュとして使用
-   MV1SetupCollInfo(modelHandle, _weakNessesCollision, 1, 0, 1);
+   MV1SetupCollInfo(modelHandle, _weakNessesCollision, 1, 1, 1);
    // モデルの顔のコリジョンフレームの番号の取得
    _faceCollision = _modelAnimeComponent->FindFrame("pasted__face_collision");
    // コリジョンフレームをナビメッシュとして使用
