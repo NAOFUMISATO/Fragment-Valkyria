@@ -37,8 +37,6 @@ namespace {
    constexpr auto TitleBgCY = 0;                                    //!< タイトル背景画像Y基準点
    constexpr auto DefaultGraphScale = 1.0;                          //!< 各画像拡大率
    constexpr auto DefaultGraphAngle = 0.0;                          //!< 各画像角度
-   constexpr auto DefaultTransFlag = false;                         //!< 各画像背景透過フラグ
-   constexpr auto DefaultTurnFlag = false;                          //!< 各画像反転フラグ
    constexpr auto FirstInputFrame = 120;                            //!< エニイボタンから移行後、ゲーム開始を受け付けないフレーム数
 }
 
@@ -46,9 +44,7 @@ ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 }
 
 void ModeTitle::Init() {
-   auto& loadJson = GetLoadJson();
-   loadJson.LoadTextures("title");
-   loadJson.LoadSounds("title");
+   GetLoadJson().LoadSounds("title");
 
    auto& resServer = GetResServer();
    
@@ -64,6 +60,7 @@ void ModeTitle::Init() {
       {"GameEndSelect",    resServer.GetTextures("GameEndSelect") }
    };
 
+   _logoHandle = _handleMap["TitleLogo"][0];
    _startDrawHandles = _handleMap["GameStartNoSelect"];
    _optionDrawHandles= _handleMap["OptionNoSelect"];
    _endDrawHandles= _handleMap["GameEndNoSelect"];
@@ -77,6 +74,7 @@ void ModeTitle::Init() {
 void ModeTitle::Enter() {
    GetSoundServer().Play("TitleBgm");
    _stateServer->PushBack("AnyButton");
+   _cntInit = false;
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
@@ -84,6 +82,7 @@ void ModeTitle::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeTitle::Update() {
+   LogoAnimation();
    _stateServer->Update();
 }
 
@@ -91,11 +90,24 @@ void ModeTitle::Render() {
    _stateServer->Draw();
 }
 
+void ModeTitle::LogoAnimation() {
+   if (!_cntInit) {
+      _logoCnt = _gameMain.modeServer().frameCount();
+      _cntInit = true;
+   }
+   auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
+   auto frame = gameCount - _logoCnt;
+   auto allNum = std::get<0>(GetResServer().GetTextureInfo("TitleLogo").GetDivParams());
+   if (frame < allNum * GameTitleAnimeSpeed) {
+      _logoHandle = _handleMap["TitleLogo"][(frame / GameTitleAnimeSpeed) % allNum];
+   }
+}
+
 void ModeTitle::StateBase::Draw() {
    auto handleMap = _owner._handleMap;
    _owner.GetTexComponent().TransDrawTexture(TitleBgPosX, TitleBgPosY, TitleBgCX, TitleBgCY,
-      DefaultGraphScale, DefaultGraphAngle, handleMap["TitleBg"], DefaultAnimeSpeed, DefaultTransFlag, DefaultTurnFlag);
-   _owner.GetTexComponent().DrawTexture(GameTitlePosX, GameTitlePosY, DefaultGraphScale, DefaultGraphAngle, handleMap["TitleLogo"], GameTitleAnimeSpeed);
+      DefaultGraphScale, DefaultGraphAngle, handleMap["TitleBg"], DefaultAnimeSpeed, false, false);
+   DrawGraph(GameTitlePosX, GameTitlePosY, _owner._logoHandle, true);
    if (!_owner._pushAnyButton) {
       _owner.GetTexComponent().DrawTexture(AnyButtonPosX, AnyButtonPosX, DefaultGraphScale, DefaultGraphAngle, handleMap["AnyButton"], AnyButtonAnimeSpeed);
    }

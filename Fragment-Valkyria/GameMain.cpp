@@ -22,6 +22,8 @@
 #include "ModeOption.h"
 #include "ModePoor.h"
 #include "ModeMovie.h"
+#include "ModeAmg.h"
+#include "ModeTeam.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -60,8 +62,9 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
 
-   _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Title", std::make_shared<Mode::ModeTitle>(*this));
-
+   _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Amg", std::make_shared<Mode::ModeAmg>(*this));
+   _modeServer->Register("Team", std::make_shared<Mode::ModeTeam>(*this));
+   _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("Poor",std::make_shared<Mode::ModePoor>(*this));
    _modeServer->Register("Movie" ,std::make_shared<Mode::ModeMovie>(*this));
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));

@@ -190,6 +190,7 @@
     <ClInclude Include="LaserCreator.h" />
     <ClInclude Include="LightAndShadow.h" />
     <ClInclude Include="LoadStageFromJson.h" />
+    <ClInclude Include="ModeAmg.h" />
     <ClInclude Include="ModeBase.h" />
     <ClInclude Include="ModeBoss.h" />
     <ClInclude Include="ModeClearResult.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="ModeMovie.h" />
     <ClInclude Include="ModeOption.h" />
     <ClInclude Include="ModePoor.h" />
+    <ClInclude Include="ModeTeam.h" />
     <ClInclude Include="ModeTitle.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectFactory.h" />
@@ -253,6 +255,7 @@
     <ClCompile Include="LaserCreator.cpp" />
     <ClCompile Include="LightAndShadow.cpp" />
     <ClCompile Include="LoadStageFromJson.cpp" />
+    <ClCompile Include="ModeAmg.cpp" />
     <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeBoss.cpp" />
     <ClCompile Include="ModeClearResult.cpp" />
@@ -265,6 +268,7 @@
     <ClCompile Include="ModeMovie.cpp" />
     <ClCompile Include="ModeOption.cpp" />
     <ClCompile Include="ModePoor.cpp" />
+    <ClCompile Include="ModeTeam.cpp" />
     <ClCompile Include="ModeTitle.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />

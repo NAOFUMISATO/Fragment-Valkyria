@@ -14,7 +14,7 @@
 			"filename": "TitleLogo.png",
 			"allnum": 60,
 			"xnum": 1,
-			"ynum": 120,
+			"ynum": 60,
 			"xsize": 1440,
 			"ysize": 360
 		},
@@ -80,6 +80,24 @@
 			"ynum": 60,
 			"xsize": 400,
 			"ysize": 80
+		},
+		{
+			"keyname": "AmgLogo",
+			"filename": "AmgLogo.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 1920,
+			"ysize": 1080
+		},
+		{
+			"keyname": "TeamLogo",
+			"filename": "TeamLogo.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum":1,
+			"xsize": 1920,
+			"ysize": 1080
 		}
 	]
 }

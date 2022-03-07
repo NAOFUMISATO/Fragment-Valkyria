@@ -55,8 +55,12 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
+         void LogoAnimation();
          std::unique_ptr<AppFrame::State::StateServer> _stateServer;  //!< 状態一括管理クラスのポインタ
+         int _logoCnt{ 0 };                                           //!< タイトルロゴのアニメーションカウント
          int _firstInputCnt{ 0 };                                     //!< プレスエニイボタンから移行した後、連続入力によるゲーム開始を防ぐカウント
+         int _logoHandle{ -1 };                                       //!< タイトルロゴの描画ハンドル
+         bool _cntInit{ false };                                      //!< カウント初期化フラグ
          bool _pushAnyButton{ false };                                //!< タイトルのプレスエニイボタンの押下フラグ
          std::vector<int> _startDrawHandles{ 0 };                     //!< ゲーム開始選択の描画用ハンドル
          std::vector<int> _optionDrawHandles{ 0 };                    //!< オプション選択の描画用ハンドル
