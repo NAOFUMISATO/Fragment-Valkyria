@@ -103,32 +103,32 @@ void CameraComponent::Vibration() {
 void CameraComponent::StateNormal::Input(InputManager& input) {
    auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
    //右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
-    if (input.GetXJoypad().RightStickY() >= deadZone) {
-        _owner._upDownAngle += cameraSens;
+    if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() <= deadZone * 1000) {
+        _owner._upDownAngle += cameraSens * 0.5;
         //10度以上傾いていたら10度にする
         if (_owner._upDownAngle >= 10.0) {
             _owner._upDownAngle = 10.0;
         }
     }
     //右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
-    if (input.GetXJoypad().RightStickY() <= -deadZone) {
-        _owner._upDownAngle -= cameraSens;
+    if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() >= -deadZone * 1000) {
+        _owner._upDownAngle -= cameraSens + 0.5;
         //-20度以上傾いていたら-20度にする
         if (_owner._upDownAngle <= -20.0) {
             _owner._upDownAngle = -20.0;
         }
     }
     //右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
-    if (input.GetXJoypad().RightStickX() >= deadZone) {
-        _owner._sideAngle -= cameraSens;
+    if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() <= deadZone * 1000) {
+        _owner._sideAngle -= cameraSens * 0.5;
         //-360度以下になったら0度にする
         if (_owner._sideAngle <= -360.0) {
             _owner._sideAngle = 0.0;
         }
     }
     //右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
-    if (input.GetXJoypad().RightStickX() <= -deadZone) {
-        _owner._sideAngle += cameraSens;
+    if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() >= -deadZone * 1000) {
+        _owner._sideAngle += cameraSens * 0.5;
         if (_owner._sideAngle >= 360.0) {
             _owner._sideAngle = 0.0;
         }
@@ -229,7 +229,7 @@ void CameraComponent::StateShootReady::Update() {
     _owner.Rotate();
     _owner.Vibration();
     _owner.Placement();
-    //ズームしない場合ズームアウト状態へ
+    // ズームしない場合ズームアウト状態へ
     if (!_owner._zoom) {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("ZoomOut");
@@ -237,9 +237,9 @@ void CameraComponent::StateShootReady::Update() {
 }
 
 void CameraComponent::StateZoomOut::Update() {
-    //ズームの割合のサインの値を取るラジアンを5ラジアン減らす
+    // ズームの割合のサインの値を取るラジアンを5ラジアン減らす
     _owner._zoomRateRadian -= AppFrame::Math::RADIAN_1 * 5.0;
-    //もし0ラジアンより小さくなったら通常状態へ
+    // もし0ラジアンより小さくなったら通常状態へ
     if (_owner._zoomRateRadian <= 0.0) {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("Normal");
