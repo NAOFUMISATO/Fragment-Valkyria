@@ -9,18 +9,24 @@ using namespace FragmentValkyria::Enemy;
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
-      { "gravity", "rotate_speed" });
+      { "gravity", "rotate_speed" ,"step_distance","step_speed","idle_animespeed",
+      "walk_animespeed","fall_animespeed","die_animespeed","white_frame" });
 
    const double Gravity = paramMap["gravity"];
    const double RotateSpeed = paramMap["rotate_speed"];
+   const double StepDistance = paramMap["step_distance"];
+   const double StepSpeed = paramMap["step_speed"];
+   const double IdleAnimeSpeed = paramMap["idle_animespeed"];
+   const double WalkAnimeSpeed = paramMap["walk_animespeed"];
+   const double FallAnimeSpeed = paramMap["fall_animespeed"];
+   const double DieAnimeSpeed = paramMap["die_animespeed"];
+   const int WhiteFrame = paramMap["white_frame"];
+
    constexpr auto OneFrame = 60;
    constexpr auto DegreeQuarter = 90;
-   constexpr auto StepDistance = 1000.0;
-   constexpr auto StepSpeed = 15.0;
    constexpr auto StepDistanceLimit = 100.0;
    constexpr auto MaxOpacityRate = 1.0f;
    constexpr auto FadeOutFrame = 60;
-   constexpr auto WhiteFrame = 20;
 }
 
 PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
@@ -99,7 +105,7 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 }
 
 void PoorEnemyBase::DamageExpression() {
-   auto frame = _gameMain.modeServer().frameCount() - _damageCnt;
+   auto frame = static_cast<int>(_gameMain.modeServer().frameCount() - _damageCnt);
    if (frame < WhiteFrame) {
       _modelAnimeComponent->SetEmiColor(0, 1.0f, 1.0f, 1.0f);
       _modelAnimeComponent->SetEmiColor(1, 1.0f, 1.0f, 1.0f);
@@ -115,7 +121,7 @@ void PoorEnemyBase::StateBase::Draw() {
 }
 
 void PoorEnemyBase::StateIdle::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true, IdleAnimeSpeed);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
 }
 
@@ -134,7 +140,7 @@ void PoorEnemyBase::StateIdle::Update() {
 }
 
 void PoorEnemyBase::StateSideStep::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, WalkAnimeSpeed);
    SideStepDecide();
 }
 
@@ -147,7 +153,7 @@ void PoorEnemyBase::StateSideStep::Update() {
 }
 
 void PoorEnemyBase::StateFall::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true, FallAnimeSpeed);
    _stateCnt = 0;
 }
 
@@ -164,7 +170,7 @@ void PoorEnemyBase::StateFall::Update() {
  }
 
 void PoorEnemyBase::StateDie::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true, DieAnimeSpeed);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _opacityRate = MaxOpacityRate;
 }

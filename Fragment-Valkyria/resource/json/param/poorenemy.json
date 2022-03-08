@@ -3,7 +3,20 @@
 		{
 			"max_wave":4,
 			"gravity": -0.01,
-            "rotate_speed": 10.0
+            "rotate_speed": 10.0,
+			"step_distance":1000.0,
+			"step_speed":15.0,
+			"rush_speed":15.0,
+			"rush_frame":240,
+			"max_gatling":5,
+			"gatling_rate":60,
+			"idle_animespeed":1.0,
+			"walk_animespeed":1.0,
+			"rush_animespeed":2.0,
+			"gatling_animespeed":1.0,
+			"fall_animespeed":1.0,
+			"die_animespeed":1.0,
+			"white_frame":20
 		}	
 	]	
 }

@@ -13,10 +13,17 @@
 #include "GameMain.h"
 #include "ObjectServer.h"
 
+namespace {
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
+      { "max_gatling","gatling_rate","gatling_animespeed" });
+   const int MaxGatling = paramMap["max_gatling"];
+   const int GatlingRate = paramMap["gatling_rate"];
+   const double GatlingAnimeSpeed = paramMap["gatling_animespeed"];
+}
+
 using namespace FragmentValkyria::Enemy;
 
 PoorEnemyGatling::PoorEnemyGatling(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
-
 }
 
 void PoorEnemyGatling::Init() {
@@ -33,15 +40,15 @@ void PoorEnemyGatling::CreateGatling() {
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("attack", true);
+   _owner._modelAnimeComponent->ChangeAnime("attack", true, GatlingAnimeSpeed);
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _stateCnt = _owner._gameMain.modeServer().frameCount();
-   _remainingGatiling = 5;
+   _remainingGatiling = MaxGatling;
 }
 
 void PoorEnemyGatling::StateGatling::Update() {
    auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame % 60 == 0) {
+   if (frame % GatlingRate == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;
       if (_remainingGatiling <= 0) {

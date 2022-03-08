@@ -7,12 +7,14 @@
 #include "ObjectServer.h"
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemygatling",
-      { "gravity", "rotate_speed" });
-
-   const double Gravity = paramMap["gravity"];
-   const double RotateSpeed = paramMap["rotate_speed"];
-   constexpr auto RushSpeed = 15.0;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy", {
+      "max_gatling","gatling_rate","gatling_animespeed","rush_speed", "rush_frame","rush_animespeed" });
+   const int MaxGatling = paramMap["max_gatling"];
+   const int GatlingRate = paramMap["gatling_rate"];
+   const double GatlingAnimeSpeed = paramMap["gatling_animespeed"];
+   const double RushSpeed = paramMap["rush_speed"];
+   const int RushFrame = paramMap["rush_frame"];
+   const double RushAnimeSpeed = paramMap["rush_animespeed"];
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -43,7 +45,7 @@ void PoorEnemyAlmighty::CreateGatling() {
 }
 
 void PoorEnemyAlmighty::StateRush::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true, 2.0);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, RushAnimeSpeed);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
@@ -51,8 +53,8 @@ void PoorEnemyAlmighty::StateRush::Enter() {
 }
 
 void PoorEnemyAlmighty::StateRush::Update() {
-   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame <= 60 * 4) {
+   auto frame = static_cast<int>(_owner._gameMain.modeServer().frameCount() - _stateCnt);
+   if (frame <= RushFrame) {
       _owner.Rush(_moved);
    }
    else {
@@ -61,15 +63,15 @@ void PoorEnemyAlmighty::StateRush::Update() {
 }
 
 void PoorEnemyAlmighty::StateGatling::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("attack", true);
+   _owner._modelAnimeComponent->ChangeAnime("attack", true, GatlingAnimeSpeed);
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _stateCnt = _owner._gameMain.modeServer().frameCount();
-   _remainingGatiling = 5;
+   _remainingGatiling = MaxGatling;
 }
 
 void PoorEnemyAlmighty::StateGatling::Update() {
    auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame % 60 == 0) {
+   if (frame % GatlingRate == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;
       if (_remainingGatiling <= 0) {

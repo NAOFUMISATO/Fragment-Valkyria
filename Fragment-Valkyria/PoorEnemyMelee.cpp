@@ -7,7 +7,12 @@
 #include "ObjectServer.h"
 
 namespace {
-   constexpr auto RushSpeed = 15.0;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
+      { "rush_speed", "rush_frame","rush_animespeed" });
+
+   const double RushSpeed = paramMap["rush_speed"];
+   const int RushFrame = paramMap["rush_frame"];
+   const double RushAnimeSpeed = paramMap["rush_animespeed"];
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -30,7 +35,7 @@ void PoorEnemyMelee::Rush(const Vector4& moved) {
 }
 
 void PoorEnemyMelee::StateRush::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true,2.0);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, RushAnimeSpeed);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
@@ -38,8 +43,8 @@ void PoorEnemyMelee::StateRush::Enter() {
 }
 
 void PoorEnemyMelee::StateRush::Update() {
-   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame <= 60 * 4) {
+   auto frame = static_cast<int>(_owner._gameMain.modeServer().frameCount() - _stateCnt);
+   if (frame <= RushFrame) {
       _owner.Rush(_moved);
    }
    else {
