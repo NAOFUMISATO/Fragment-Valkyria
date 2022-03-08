@@ -46,7 +46,8 @@ namespace FragmentValkyria {
             Heal,               //!< 回復
             WeakBullet,         //!< プレイヤー弱攻撃
             BossBeam,           //!< ボスビーム攻撃
-            BossCharge          //!< ボスビームチャージ
+            BossCharge,         //!< ボスビームチャージ
+            ObjectUp            //!< オブジェクト上昇
          };
          /**
           * \brief コンストラクタ

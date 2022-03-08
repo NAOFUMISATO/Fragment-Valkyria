@@ -176,6 +176,7 @@
     <ClInclude Include="EffectGatlingMuzzleFlash.h" />
     <ClInclude Include="EffectHeal.h" />
     <ClInclude Include="EffectObjectFall.h" />
+    <ClInclude Include="EffectObjectUp.h" />
     <ClInclude Include="EffectServer.h" />
     <ClInclude Include="EffectWeakBullet.h" />
     <ClInclude Include="FallObject.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="EffectGatlingMuzzleFlash.cpp" />
     <ClCompile Include="EffectHeal.cpp" />
     <ClCompile Include="EffectObjectFall.cpp" />
+    <ClCompile Include="EffectObjectUp.cpp" />
     <ClCompile Include="EffectServer.cpp" />
     <ClCompile Include="EffectWeakBullet.cpp" />
     <ClCompile Include="Gatling.cpp" />
