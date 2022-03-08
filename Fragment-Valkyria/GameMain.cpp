@@ -18,6 +18,13 @@
 #include "ModeAmg.h"
 #include "ModeTeam.h"
 #include "ModeLoading.h"
+#include "ModePoor.h"
+#include "ModeMovie.h"
+#include "ModeClearResult.h"
+#include "ModeGameOver.h"
+#include "ModeMissionFailed.h"
+#include "ModeMissionCompleted.h"
+#include "ModeBoss.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -61,6 +68,16 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
    _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>(*this));
+
+   SetUseASyncLoadFlag(true);
+   _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>(*this));
+   _modeServer->Register("Movie", std::make_shared<Mode::ModeMovie>(*this));
+   _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
+   _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));
+   _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>(*this));
+   _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>(*this));
+   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
+
    return true;
 }
 

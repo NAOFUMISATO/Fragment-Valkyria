@@ -145,8 +145,13 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    }
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
-         //_owner.GetSoundComponent().Stop("TitleBgm");
-         _owner.GetModeServer().GoToMode("Loading", 'S');
+         if (GetASyncLoadNum() > 0) {
+            _owner.GetModeServer().GoToMode("Loading", 'S');
+         }
+         else {
+            _owner.GetModeServer().GoToMode("Poor");
+            SetUseASyncLoadFlag(false);
+         }
       }
    }
 }
