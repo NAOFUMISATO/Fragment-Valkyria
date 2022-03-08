@@ -288,6 +288,9 @@
     <ClInclude Include="ModeTeam.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
+    <ClInclude Include="PoorEnemyAlmighty.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
