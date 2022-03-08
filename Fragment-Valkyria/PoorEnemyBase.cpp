@@ -8,7 +8,7 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemygatling",
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
       { "gravity", "rotate_speed" });
 
    const double Gravity = paramMap["gravity"];
