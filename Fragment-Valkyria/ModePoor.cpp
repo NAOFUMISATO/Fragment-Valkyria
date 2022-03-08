@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "PoorEnemyGatlingCreator.h"
 #include "PoorEnemyMeleeCreator.h"
+#include "PoorEnemyAlmightyCreator.h"
 #include "StageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
@@ -43,6 +44,7 @@ void ModePoor::Enter() {
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
    objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>(_gameMain));
+   objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>(_gameMain));
 
    objFactory.LoadSpawnTables("poor", {"poorwave1","poorwave2" ,"poorwave3" ,"poorwave4" });
 

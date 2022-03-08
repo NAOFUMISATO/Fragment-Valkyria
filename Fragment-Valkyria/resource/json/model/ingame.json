@@ -27,8 +27,13 @@
 		{
 			"keyname": "PoorEnemyGatling",
 			"filename": "PoorEnemy.mv1"
-		},{
+		},
+		{
 			"keyname": "PoorEnemyMelee",
+			"filename": "PoorEnemy.mv1"
+		},
+		{
+			"keyname": "PoorEnemyAlmighty",
 			"filename": "PoorEnemy.mv1"
 		}
 	]

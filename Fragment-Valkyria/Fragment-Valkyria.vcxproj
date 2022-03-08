@@ -211,6 +211,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCreator.h" />
     <ClInclude Include="PoorEnemyAlmighty.h" />
+    <ClInclude Include="PoorEnemyAlmightyCreator.h" />
     <ClInclude Include="PoorEnemyBase.h" />
     <ClInclude Include="PoorEnemyMelee.h" />
     <ClInclude Include="PoorEnemyMeleeCreator.h" />
@@ -276,6 +277,8 @@
     <ClCompile Include="ObjectServer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCreator.cpp" />
+    <ClCompile Include="PoorEnemyAlmighty.cpp" />
+    <ClCompile Include="PoorEnemyAlmightyCreator.cpp" />
     <ClCompile Include="PoorEnemyBase.cpp" />
     <ClCompile Include="PoorEnemyMelee.cpp" />
     <ClCompile Include="PoorEnemyMeleeCreator.cpp" />
