@@ -20,6 +20,12 @@
 #include "LoadStageFromJson.h"
 #include "ModelAnimeComponent.h"
 
+namespace {
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
+      { "max_wave" });
+   const int MaxWave = paramMap["max_wave"];
+}
+
 using namespace FragmentValkyria::Mode;
 
 ModePoor::ModePoor(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
@@ -88,22 +94,10 @@ void ModePoor::WaveProcess() {
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
    if (!isActiveEnemy) {
-      switch (_wave) {
-      case 1:
-         GetObjFactory().SetSpawnTable("poorwave2");
-         _wave++;
-         break;
-      case 2:
-         GetObjFactory().SetSpawnTable("poorwave3");
-         _wave++;
-         break;
-      case 3:
-         GetObjFactory().SetSpawnTable("poorwave4");
-         _wave++;
-         break;
-      case 4:
+      if (_wave >= MaxWave) {
          GetModeServer().GoToMode("Movie");
-         break;
       }
+      GetObjFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));
+      _wave++;
    }
 }
