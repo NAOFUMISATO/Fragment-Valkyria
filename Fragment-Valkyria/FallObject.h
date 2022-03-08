@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"
+#include "EffectObjectUp.h"
 /**
  * \brief プロジェクト名
  */
@@ -98,6 +99,7 @@ namespace FragmentValkyria {
           * \brief 打った時の注視点に向かって進む処理
           */
          void Shoot();
+
          double _fallTimer{ 0.0 };                          //!< 落下状態の進捗
          double _upDownAngle{ 0.0 };                        //!< ふわふわさせる時のサインの値を取るときの角度
          double _rotateAngle{ 0.0 };                        //!< 不規則な回転さをせる時のサインの値を取るときの角度
@@ -109,6 +111,7 @@ namespace FragmentValkyria {
          Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
          std::string_view _collisionName{ "" };             //!< モデルのコリジョンフレームの名前
          std::vector<int> _fallPointHandles{ -1 };          //!< 落下地点ビルボード画像ハンドル
+         std::unique_ptr<Effect::EffectObjectUp> _efcUp;    //!< オブジェクト上昇クラスのポインタ
 
       public:
          /**
@@ -208,6 +211,10 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit()override;
          };
          /**
           * \class 発射状態のクラス

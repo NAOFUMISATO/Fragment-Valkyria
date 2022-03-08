@@ -36,6 +36,7 @@ namespace {
    const int FallPointAnimeSpeed = paramMap["fallpoint_animespeed"];
    constexpr auto DefaultPointScale = 1.0;
    constexpr auto DefaultPointAngle = 0.0;
+   constexpr auto UpEffectDiffY = 20.0;
 }
 
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
@@ -221,8 +222,13 @@ void FallObject::StateFall::Draw() {
 
 void FallObject::StateSave::Enter() {
    _owner._vecBeforeSave = _owner._position;
-
    _owner.residual(false);
+   _owner._efcUp = std::make_unique<Effect::EffectObjectUp>(_owner._gameMain, "ObjectUp");
+   auto efcPos = _owner._position;
+   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
+   _owner._efcUp->position(efcPos);
+   _owner._efcUp->Init();
+   Update();
 }
 
 void FallObject::StateSave::Input(InputManager& input) {
@@ -241,6 +247,14 @@ void FallObject::StateSave::Update() {
    }
    _owner._collisionComponent->PlayerKnockBack();
    _owner.CheckPlayerKnockBack();
+   auto efcPos = _owner._position;
+   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
+   _owner._efcUp->position(efcPos);
+   _owner._efcUp->Update();
+}
+
+void FallObject::StateSave::Exit() {
+   _owner._efcUp->StopEffect();
 }
 
 void FallObject::StateShoot::Enter() {
