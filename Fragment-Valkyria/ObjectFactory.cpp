@@ -80,7 +80,7 @@ void ObjectFactory::LoadSpawnTable(std::string_view key, SpawnTable& spawnTable)
    _spawnTableMap.emplace(key, spawnTable);
 }
 
-void ObjectFactory::LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string_view> tableNames) {
+void ObjectFactory::LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string> tableNames) {
    namespace AppMath = AppFrame::Math;
    auto jsonDirectory = _gameMain.pathServer().GetCurrentPath("SpawnJson");
    auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";

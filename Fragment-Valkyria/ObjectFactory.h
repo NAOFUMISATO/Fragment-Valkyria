@@ -60,7 +60,7 @@ namespace FragmentValkyria {
 
          void UpdateSpawn();
 
-         void LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string_view> tableNames);
+         void LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string> tableNames);
 
          void LoadSpawnTable(std::string_view key, SpawnTable& spawnTables);
 

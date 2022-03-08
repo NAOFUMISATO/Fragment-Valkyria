@@ -52,7 +52,12 @@ void ModePoor::Enter() {
    objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>(_gameMain));
    objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>(_gameMain));
 
-   objFactory.LoadSpawnTables("poor", {"poorwave1","poorwave2" ,"poorwave3" ,"poorwave4" });
+   std::vector<std::string> spawnTableNames;
+   for (int i = 1; MaxWave >= i; i++) {
+      std::string tableName = "poorwave" + std::to_string(i);
+      spawnTableNames.emplace_back(tableName);
+   }
+   objFactory.LoadSpawnTables("poor", spawnTableNames );
 
    objFactory.SetSpawnTable("poorwave1");
 
