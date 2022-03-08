@@ -68,7 +68,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
    _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>(*this));
-
+   _loadresJson->LoadEffects("ingame");
    SetUseASyncLoadFlag(true);
    _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>(*this));
    _modeServer->Register("Movie", std::make_shared<Mode::ModeMovie>(*this));

@@ -30,5 +30,4 @@ void ModeLoading::Render() {
 
 void ModeLoading::Exit() {
    SetUseASyncLoadFlag(false);
-   GetLoadJson().LoadEffects("ingame");
 }
