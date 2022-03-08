@@ -33,7 +33,7 @@ namespace AppFrame {
          return _gameBase.resServer(); 
       }
 
-      Sound::SoundComponent& ModeBaseRoot::GetSoundServer() const {
+      Sound::SoundComponent& ModeBaseRoot::GetSoundComponent() const {
          return _gameBase.soundComponent(); 
       }
 

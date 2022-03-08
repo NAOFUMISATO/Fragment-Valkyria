@@ -72,7 +72,7 @@ void ModeTitle::Init() {
 }
 
 void ModeTitle::Enter() {
-   GetSoundServer().Play("TitleBgm");
+   GetSoundComponent().Play("TitleBgm");
    _stateServer->PushBack("AnyButton");
    _cntInit = false;
 }
@@ -145,6 +145,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    }
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
+         //_owner.GetSoundComponent().Stop("TitleBgm");
          _owner.GetModeServer().GoToMode("Poor", 'L');
       }
    }

@@ -50,6 +50,8 @@ void ModeBoss::Enter() {
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
 
+   GetSoundComponent().PlayLoop("BossBattle");
+
    auto largeEnemy = objFactory.Create("LargeEnemy");
    objServer.Add(std::move(largeEnemy));
 

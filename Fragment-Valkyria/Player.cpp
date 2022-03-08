@@ -446,7 +446,7 @@ void Player::StateRun::Enter() {
    // オブジェクトを持ち上げられると設定
    _owner._isLift = true;
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("run", true, RunAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("run_02", true, RunAnimeSpeed);
    // ゲームのフレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
    // この状態へ入った時のゲームのフレームカウントの
@@ -754,7 +754,7 @@ void Player::StateWeakShootReady::Exit() {
 
 void Player::StateReload::Enter() {
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("stealth_sit", true, 0.8);
+   _owner._modelAnimeComponent->ChangeAnime("reload", true,0.5);
    // リロード状態のカウントを0に設定
    _reloadCnt = 0;
    // オブジェクトを持ち上げられないと設定

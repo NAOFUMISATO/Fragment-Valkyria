@@ -54,6 +54,7 @@ void ModePoor::Enter() {
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
 
+   GetSoundComponent().Play("PoorBattle");
    _gameMain.ingameTimer(0);
    _wave = 1;
    ModeInGameBase::Enter();
@@ -101,6 +102,7 @@ void ModePoor::WaveProcess() {
          break;
       case 4:
          GetModeServer().GoToMode("Movie");
+         GetSoundComponent().Stop("PoorBattle");
          break;
       }
    }
