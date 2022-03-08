@@ -146,7 +146,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
          //_owner.GetSoundComponent().Stop("TitleBgm");
-         _owner.GetModeServer().GoToMode("Poor", 'L');
+         _owner.GetModeServer().GoToMode("Loading", 'S');
       }
    }
 }

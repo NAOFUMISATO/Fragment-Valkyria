@@ -62,6 +62,24 @@
 			"ynum": 1,
 			"xsize": 1920,
 			"ysize": 1080
+		},
+		{
+			"keyname": "Loading",
+			"filename": "Loading.png",
+			"allnum": 30,
+			"xnum": 1,
+			"ynum": 30,
+			"xsize": 400,
+			"ysize": 150
+		},
+		{
+			"keyname": "LoadingBg",
+			"filename": "LoadingBg.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 1920,
+			"ysize": 1080
 		}
 	]
 }

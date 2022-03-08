@@ -34,8 +34,6 @@ ModePoor::ModePoor(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
 void ModePoor::Init() {
    auto& loadJson = GetLoadJson();
    loadJson.LoadModels("ingame");
-   loadJson.LoadEffects("ingame");
-   loadJson.LoadTextures("ingame");
    loadJson.LoadSounds("ingame");
    _gameMain.loadStage().LoadStageModels("Stage");
 }

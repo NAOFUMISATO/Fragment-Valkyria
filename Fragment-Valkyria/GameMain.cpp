@@ -8,22 +8,16 @@
  *********************************************************************/
 #include "GameMain.h"
 #include "ModeTitle.h"
-#include "ModeBoss.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
 #include "LoadStageFromJson.h"
 #include "ObjectServer.h"
 #include "SpriteServer.h"
 #include "EffectServer.h"
-#include "ModeClearResult.h"
-#include "ModeGameOver.h"
-#include "ModeMissionFailed.h"
-#include "ModeMissionCompleted.h"
 #include "ModeOption.h"
-#include "ModePoor.h"
-#include "ModeMovie.h"
 #include "ModeAmg.h"
 #include "ModeTeam.h"
+#include "ModeLoading.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -65,14 +59,8 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Amg", std::make_shared<Mode::ModeAmg>(*this));
    _modeServer->Register("Team", std::make_shared<Mode::ModeTeam>(*this));
    _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
-   _modeServer->Register("Poor",std::make_shared<Mode::ModePoor>(*this));
-   _modeServer->Register("Movie" ,std::make_shared<Mode::ModeMovie>(*this));
-   _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
    _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
-   _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));
-   _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>(*this));
-   _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>(*this));
-   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
+   _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>(*this));
    return true;
 }
 

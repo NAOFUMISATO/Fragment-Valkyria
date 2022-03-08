@@ -294,6 +294,9 @@
     <ClInclude Include="PoorEnemyAlmightyCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
+    <ClInclude Include="ModeLoading.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -484,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="PoorEnemyAlmightyCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeLoading.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
