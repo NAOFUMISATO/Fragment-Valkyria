@@ -98,7 +98,7 @@ namespace AppFrame {
           * \brief 音源一括管理クラスの参照をゲームベース経由で取得
           * \return
           */
-         Sound::SoundComponent& GetSoundServer() const;
+         Sound::SoundComponent& GetSoundComponent() const;
          /**
           * \brief jsonファイル管理クラスの参照をゲームベース経由で取得
           * \return jsonファイル管理クラスの参照

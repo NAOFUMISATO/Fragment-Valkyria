@@ -514,6 +514,7 @@ void LargeEnemy::StateDie::Update() {
       }
       // ゲームクリアまでのフレーム数が残っていなかったらモードサーバーにゲームクリアモードを挿入
       else {
+         _owner.GetSoundComponent().Stop("BossBattle");
          _owner.gameMain().modeServer().PushBack("MissionCompleted");
       }
    }
