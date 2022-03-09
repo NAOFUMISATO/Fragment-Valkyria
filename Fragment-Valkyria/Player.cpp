@@ -826,11 +826,13 @@ void Player::StateShootReady::Enter() {
    _owner._isAim = true;
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
+   // オブジェクトを打てないと設定
+   _owner._objectShoot = false;
 }
 
 void Player::StateShootReady::Input(InputManager& input) {
-   // RBボタンが押されたら待機状態へ
-   if (input.GetXJoypad().RBClick()) {
+   // RBボタンが押されてオブジェクトを打てる場合待機状態へ
+   if (input.GetXJoypad().RBClick() && _owner._objectShoot) {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
       // 鳴らすサウンドの設定
