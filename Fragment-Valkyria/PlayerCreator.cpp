@@ -69,6 +69,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    state->Register("WeakShootReady", std::make_shared<Player::Player::StateWeakShootReady>(*player));
    state->Register("Reload", std::make_shared<Player::Player::StateReload>(*player));
    state->Register("Recovery", std::make_shared<Player::Player::StateRecovery>(*player));
+   state->Register("Walk", std::make_shared<Player::Player::StateWalk>(*player));
    // プレイヤーの状態一括管理クラスの設定
    player->stateServer(std::move(state));
 

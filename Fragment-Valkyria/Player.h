@@ -112,7 +112,7 @@ namespace FragmentValkyria {
          /**
           * \brief 待機状態の落下オブジェクトと当たっているか確認
           */
-         void HitCheckFromIdleFallObject();
+         void HitCheckFromIdleFallObject(std::string_view state);
          /**
           * \brief ガトリングと当たっているか確認
           */
@@ -199,6 +199,33 @@ namespace FragmentValkyria {
             void Update() override;
          };
          /**
+          * \class 歩き状態クラス
+          * \brief 歩き状態の処理を回す
+          */
+         class StateWalk : public StateBase {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner プレイヤーの参照
+             */
+            StateWalk(Player& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+
+         private:
+         };
+         /**
           * \class 走り状態クラス
           * \brief 走り状態の処理を回す
           */
@@ -262,7 +289,7 @@ namespace FragmentValkyria {
              void Exit()override;
 
          private:
-            bool _changeAnim;              //!< アニメーションを変えたか
+            bool _changeAnim{ false };              //!< アニメーションを変えたか
          };
          /**
           * \class ノックバック状態クラス

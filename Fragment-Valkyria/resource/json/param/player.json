@@ -6,14 +6,15 @@
 			"run_animespeed": 0.6,
 			"shootready_animespeed": 0.4,
 			"shoot_animespeed": 1.0,
-			"move_speed": 12.0,
-			"rot_speed": 10.0,
+			"run_speed": 12.0,
 			"capsule_pos1": 30.0,
 			"capsule_pos2": 60.0,
 			"capsule_radius": 30.0,
 			"rocovery_rate": 0.5,
 			"max_hp": 100.0,
-			"rotate_rate": 5.0
+			"rotate_rate": 5.0,
+			"walk_speed": 6.0,
+			"walk_dead_zone_range": 20000
 		}
 	],
 	"player_vec": [

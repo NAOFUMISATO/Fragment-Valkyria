@@ -21,21 +21,24 @@
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
-       "move_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
-        "rocovery_rate", "max_hp", "rotate_rate"});
+       "run_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
+        "rocovery_rate", "max_hp", "rotate_rate", "walk_speed",
+        "walk_dead_zone_range"});
 
     const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
     const double RunAnimeSpeed = paramMap["run_animespeed"];                  //!< 走り状態のアニメーションスピード
     const double ShootReadyAnimeSpeed = paramMap["shootready_animespeed"];    //!< 射撃準備中のアニメーションスピード
     const double ShootAnimeSpeed = paramMap["shoot_animespeed"];              //!< 射撃のアニメーションスピード
-    const double MoveSpeed = paramMap["move_speed"];                          //!< 移動の速さ
+    const double RunSpeed = paramMap["run_speed"];                            //!< 走りの速さ
     const double CapsulePos1 = paramMap["capsule_pos1"];                      //!< カプセルの一つ目の座標までの位置からの高さ
     const double CapsulePos2 = paramMap["capsule_pos2"];                      //!< カプセルの二つ目の座標までの位置からの高さ
     const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
     const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
     const double RecoveryRate = paramMap["rocovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
     const double RotateRate = paramMap["rotate_rate"];                        //!< 回転をさせるときのベクトルの面積を求めるときのベクトルの大きさ
+    const double WalkDeadZone = paramMap["walk_dead_zone_range"];             //!< 歩き状態のスティックの入力範囲の最大値
+    const double WalkSpeed = paramMap["walk_speed"];                          //!< 歩きの速さ
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -160,7 +163,7 @@ void Player::HitCheckFromFallObjectRange() {
     }
 }
 
-void Player::HitCheckFromIdleFallObject() {
+void Player::HitCheckFromIdleFallObject(std::string_view state) {
     // 当たり判定結果クラスの参照の取得
     auto report = _collisionComponent->report();
     // 当たり判定結果の確認
@@ -168,8 +171,16 @@ void Player::HitCheckFromIdleFallObject() {
         // 待機状態の落下オブジェクトと当たっていたら
         // 当たったポリゴンの法線を取得
         auto normal = _collisionComponent->hitPos();
-        // 法線に移動の速さをかけたベクトル分位置をずらす
-        _position = _position + normal * MoveSpeed;
+        // 走り状態の場合
+        if ("Run" == state) {
+           // 法線に移動の速さをかけたベクトル分位置をずらす
+           _position = _position + normal * RunSpeed;
+        }
+        // 歩き状態の場合
+        else if ("Walk" == state) {
+           // 法線に移動の速さをかけたベクトル分位置をずらす
+           _position = _position + normal * WalkSpeed;
+        }
         // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
@@ -382,18 +393,48 @@ void Player::StateIdle::Enter() {
 }
 
 void Player::StateIdle::Input(InputManager& input) {
-   // 左スティックが動いていたら走り状態へ
-   if (input.GetXJoypad().LeftStickX() >= 3000) {
+   // デッドゾーンの取得
+   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   // 左スティックが動いているか確認
+   // 左スティックが右に動いていて歩きの入力範囲より大きい場合
+   if (input.GetXJoypad().LeftStickX() > WalkDeadZone) {
+      // 走り状態へ
       _owner._stateServer->GoToState("Run");
    }
-   if (input.GetXJoypad().LeftStickX() <= -3000) {
+   // 歩きの入力範囲以下でデッドゾーン以上だった場合
+   else if (input.GetXJoypad().LeftStickX() >= deadZone) {
+      // 歩き状態へ
+      _owner._stateServer->GoToState("Walk");
+   }
+   // 左スティックが左に動いていて歩きの入力範囲より小さい場合
+   if (input.GetXJoypad().LeftStickX() < -WalkDeadZone) {
+      // 走り状態へ
       _owner._stateServer->GoToState("Run");
    }
-   if (input.GetXJoypad().LeftStickY() >= 3000) {
+   // 歩きの入力範囲以上でデッドゾーン以下だった場合
+   else if (input.GetXJoypad().LeftStickX() <= -deadZone) {
+      // 歩き状態へ
+      _owner._stateServer->GoToState("Walk");
+   }
+   // 左スティックが上に動いていて歩きの入力範囲より大きい場合
+   if (input.GetXJoypad().LeftStickY() > WalkDeadZone) {
+      // 走り状態へ
       _owner._stateServer->GoToState("Run");
    }
-   if (input.GetXJoypad().LeftStickY() <= -3000) {
+   // 歩きの入力範囲以下でデッドゾーン以上だった場合
+   else if (input.GetXJoypad().LeftStickY() >= deadZone) {
+      // 歩き状態へ
+      _owner._stateServer->GoToState("Walk");
+   }
+   // 左スティックが下に動いていて歩きの入力範囲より小さい場合
+   if (input.GetXJoypad().LeftStickY() < -WalkDeadZone) {
+      // 走り状態へ
       _owner._stateServer->GoToState("Run");
+   }
+   // 歩きの入力範囲以下でデッドゾーン以下だった場合
+   else if (input.GetXJoypad().LeftStickY() <= -deadZone) {
+      // 歩き状態へ
+      _owner._stateServer->GoToState("Walk");
    }
    // 左トリガーが押されているか確認
    if (input.GetXJoypad().LeftTrigger() >= 20) {
@@ -420,8 +461,6 @@ void Player::StateIdle::Input(InputManager& input) {
 void Player::StateIdle::Update() {
    // 回転処理
    _owner.Rotate();
-   // 待機状態の落下オブジェクトと当たっているか確認
-   _owner.HitCheckFromIdleFallObject();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
@@ -440,19 +479,18 @@ void Player::StateIdle::Update() {
    --_owner._invincibleCnt;
 }
 
-void Player::StateRun::Enter() {
+void Player::StateWalk::Enter() {
    // オブジェクトを持ち上げられると設定
    _owner._isLift = true;
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("run_02", true, RunAnimeSpeed);
-   // ゲームのフレームカウントの取得
-   auto count = _owner.gameMain().modeServer().frameCount();
-   // この状態へ入った時のゲームのフレームカウントの
-   _footCnt = count;
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, WalkAnimeSpeed);
 }
-void Player::StateRun::Input(InputManager& input) {
+
+void Player::StateWalk::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
-   _owner.HitCheckFromIdleFallObject();
+   _owner.HitCheckFromIdleFallObject("Walk");
+   // デッドゾーンの取得
+   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
    // 移動しているかのフラグを作成して初期ではしていないと設定
    auto moved = false;
    // カメラから注視点への方向単位ベクトルをもとめる
@@ -463,30 +501,70 @@ void Player::StateRun::Input(InputManager& input) {
    // 移動量のベクトルを初期化
    _owner._moved = Vector4();
    // 左スティックが右に動いているか確認
-   if (input.GetXJoypad().LeftStickX() >= 3000) {
-      // 左スティックが右に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+   // 左スティックが右に動いていてスティックの入力範囲がデッドゾーン以上で歩きの入力範囲以下だった場合
+   if (input.GetXJoypad().LeftStickX() >= deadZone && input.GetXJoypad().LeftStickX() <= WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
       _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
       // 移動しているかのフラグを移動していると設定
       moved = true;
    }
+   // 左スティックが右に動いていてスティックの入力範囲が歩きの入力範囲より大きい場合
+   else if (input.GetXJoypad().LeftStickX() > WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+      // 走り状態へ
+      _owner._stateServer->GoToState("Run");
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
    // 左スティックが左に動いているか確認
-   if (input.GetXJoypad().LeftStickX() <= -3000) {
-      // 左スティックが左に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+   // 左スティックが左に動いていてスティックの入力範囲がデッドゾーン以下で歩きの入力範囲以上だった場合
+   if (input.GetXJoypad().LeftStickX() <= -deadZone && input.GetXJoypad().LeftStickX() >= -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
       _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
       // 移動しているかのフラグを移動していると設定
       moved = true;
    }
+   // 左スティックが左に動いていてスティックの入力範囲が歩きの入力範囲より小さい場合
+   else if (input.GetXJoypad().LeftStickX() < -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+      // 走り状態へ
+      _owner._stateServer->GoToState("Run");
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
    // 左スティックが上に動いているか確認
-   if (input.GetXJoypad().LeftStickY() >= 3000) {
-      // 左スティックが上に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+   // 左スティックが上に動いていてスティックの入力範囲がデッドゾーン以上で歩きの入力範囲以下だった場合
+   if (input.GetXJoypad().LeftStickY() >= deadZone && input.GetXJoypad().LeftStickY() <= WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
       _owner._moved = _owner._moved + _owner._direction;
       // 移動しているかのフラグを移動していると設定
       moved = true;
    }
+   // 左スティックが上に動いていてスティックの入力範囲が歩きの入力範囲より大きい場合
+   else if (input.GetXJoypad().LeftStickY() > WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+      _owner._moved = _owner._moved + _owner._direction;
+      // 走り状態へ
+      _owner._stateServer->GoToState("Run");
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
    // 左スティックが下に動いているか確認
-   if (input.GetXJoypad().LeftStickY() <= -3000) {
-      // 左スティックが下に動いていたら移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+   // 左スティックが下に動いていてスティックの入力範囲がデッドゾーン以下で歩きの入力範囲以上だった場合
+   if (input.GetXJoypad().LeftStickY() <= -deadZone && input.GetXJoypad().LeftStickY() >= -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
       _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
+   // 左スティックが下に動いていてスティックの入力範囲が歩きの入力範囲より小さい場合
+   else if (input.GetXJoypad().LeftStickY() < -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+      // 走り状態へ
+      _owner._stateServer->GoToState("Run");
       // 移動しているかのフラグを移動していると設定
       moved = true;
    }
@@ -534,7 +612,182 @@ void Player::StateRun::Input(InputManager& input) {
          _owner._rotateDir = _owner._moved * RotateRate;
       }
       // 移動量のベクトルを設定
-      _owner._moved = _owner._moved * MoveSpeed;
+      _owner._moved = _owner._moved * WalkSpeed;
+   }
+}
+
+void Player::StateWalk::Update() {
+   // 移動処理
+   _owner.Move(_owner._moved);
+   // 回転処理
+   _owner.Rotate();
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
+   // 無敵時間更新
+   --_owner._invincibleCnt;
+}
+
+void Player::StateRun::Enter() {
+   // オブジェクトを持ち上げられると設定
+   _owner._isLift = true;
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("run_02", true, RunAnimeSpeed);
+   // ゲームのフレームカウントの取得
+   auto count = _owner.gameMain().modeServer().frameCount();
+   // この状態へ入った時のゲームのフレームカウントの
+   _footCnt = count;
+}
+void Player::StateRun::Input(InputManager& input) {
+   // 待機状態の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromIdleFallObject("Run");
+   // デッドゾーンの取得
+   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   // 移動しているかのフラグを作成して初期ではしていないと設定
+   auto moved = false;
+   // カメラから注視点への方向単位ベクトルをもとめる
+   auto camForward = _owner._cameraComponent->GetForward();
+   auto [x, y, z] = camForward.GetVec3();
+   // 高さをなくす
+   _owner._direction = Vector4(x, 0.0, z);
+   // 移動量のベクトルを初期化
+   _owner._moved = Vector4();
+   // 左スティックが右に動いているか確認
+   // 左スティックが右に動いていて歩きの入力範囲より大きい場合
+   if (input.GetXJoypad().LeftStickX() > WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
+   // 歩きの入力範囲以下でデッドゾーン以上の場合
+   else if (input.GetXJoypad().LeftStickX() >= deadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+      // 左スティックの縦軸が走りの範囲外だった場合
+      if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
+         // 歩き状態へ
+         _owner._stateServer->GoToState("Walk");
+      }
+   }
+   // 左スティックが左に動いているか確認
+   // 左スティックが左に動いていて歩きの入力範囲より小さい場合
+   if (input.GetXJoypad().LeftStickX() < -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
+   // 歩きの入力範囲以上でデッドゾーン以下の場合
+   else if (input.GetXJoypad().LeftStickX() <= -deadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+      // 左スティックの縦軸が走りの範囲外だった場合
+      if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
+         // 歩き状態へ
+         _owner._stateServer->GoToState("Walk");
+      }
+   }
+   // 左スティックが上に動いているか確認
+   // 左スティックが上に動いていて歩きの入力範囲より大きい場合
+   if (input.GetXJoypad().LeftStickY() > WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+      _owner._moved = _owner._moved + _owner._direction;
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
+   // 歩きの入力範囲以下でデッドゾーン以上の場合
+   else if (input.GetXJoypad().LeftStickY() >= deadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+      _owner._moved = _owner._moved + _owner._direction;
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+      // 左スティックの横軸が走りの範囲外だった場合
+      if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
+         // 歩き状態へ
+         _owner._stateServer->GoToState("Walk");
+      }
+   }
+   // 左スティックが下に動いているか確認
+   // 左スティックが下に動いていて歩きの入力範囲より小さい場合
+   if (input.GetXJoypad().LeftStickY() < -WalkDeadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+   }
+   // 歩きの入力範囲以上でデッドゾーン以下の場合
+   else if (input.GetXJoypad().LeftStickY() <= -deadZone) {
+      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+      // 移動しているかのフラグを移動していると設定
+      moved = true;
+      // 左スティックの横軸が走りの範囲外だった場合
+      if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
+         // 歩き状態へ
+         _owner._stateServer->GoToState("Walk");
+      }
+   }
+   // 左トリガーが押されているか確認
+   if (input.GetXJoypad().LeftTrigger() >= 20) {
+      // 左トリガーが押されていたらオブジェクトを持ち上げる範囲にいるか確認
+      _owner.HitCheckFromFallObjectRange();
+   }
+   // 左トリガーが押されていないときにLBボタンが押されているか確認
+   else if (input.GetXJoypad().LBClick()) {
+      // 左トリガーが押されていないときにLBボタンが押されていたら遠隔弱攻撃射撃準備状態へ
+      _owner._stateServer->GoToState("WeakShootReady");
+      // カメラのズームをさせる
+      _owner._cameraComponent->SetZoom(true);
+   }
+   // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
+   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
+      _owner._stateServer->GoToState("Reload");
+   }
+   // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
+   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+      _owner._stateServer->GoToState("Recovery");
+   }
+   // 移動しているかのフラグが移動していないとなっているか確認
+   if (!moved) {
+      // 移動していないとなっていたらこの状態を状態のリストから除外する
+      _owner._stateServer->GoToState("Idle");
+   }
+   // 移動している場合
+   else {
+      // 移動量のベクトルを単位化する
+      _owner._moved.Normalized();
+      // 移動する方向が現在向いている方向と比べて真逆に近いか確認
+      if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
+         // 移動する方向が現在向いている方向と比べて真逆に近い場合
+         // 1度回転させるマトリクスを作成
+         Matrix44 mat;
+         mat.RotateY(1.0, true);
+         // 向かせたい方向のベクトルを移動方向のベクトルを1度回転させて既定の真逆のときの大きさを掛けて設定
+         _owner._rotateDir = _owner._moved * mat * 20.0;
+      }
+      // 真逆に近くない場合
+      else {
+         // 向かせたい方向のベクトルを移動方向のベクトルを回転を求めるときの既定の大きさを掛けて設定
+         _owner._rotateDir = _owner._moved * RotateRate;
+      }
+      // 移動量のベクトルを設定
+      _owner._moved = _owner._moved * RunSpeed;
    }
 }
 
