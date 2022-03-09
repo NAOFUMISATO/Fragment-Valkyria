@@ -312,6 +312,9 @@
     <ClInclude Include="EffectBossWalk.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="ClearScore.h">
+      <Filter>ヘッダー ファイル\Clear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -520,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="EffectBossDieAfter.cpp">
       <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearScore.cpp">
+      <Filter>ソース ファイル\Clear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

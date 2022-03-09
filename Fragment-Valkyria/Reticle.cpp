@@ -37,6 +37,6 @@ void Reticle::Update() {
 void Reticle::Draw() {
    if (_isAim) {
       auto [x, y, z] = _position.GetVec3();
-      GetTexComponent().DrawTexture(x, y, DefaultScale, DefaultAngle, _grHandles, ReticleAnimeSpeed);
+      GetTexComponent().DrawTexture(static_cast<int>(x), static_cast<int>(y), DefaultScale, DefaultAngle, _grHandles, ReticleAnimeSpeed);
    }
 }

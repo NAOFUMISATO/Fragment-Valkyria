@@ -28,23 +28,14 @@ namespace FragmentValkyria{
           */
          void Init()override;
          /**
-          * \brief 入力処理
-          * \param input 入力一括管理クラス
-          */
-         void Input(AppFrame::Input::InputManager& input)override;
-         /**
-          * \brief 更新処理
-          */
-         void Update()override;
-         /**
           * \brief 描画処理
           */
          void Draw()override;
          /**
           * \brief スプライト種別の取得
-          * \return 種別Sprite
+          * \return 種別:クリア時間
           */
-         virtual SpriteType GetSprType() const { return SpriteType::Sprite; }
+         virtual SpriteType GetSprType() const { return SpriteType::ClearTime; }
 
       private:
          std::tuple<Uint, Uint, Uint, Uint, Uint> _xPositions{ 0,0,0,0,0 }; //!< クリア時間1桁ごとのX座標

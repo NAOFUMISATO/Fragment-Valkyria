@@ -166,6 +166,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletCreator.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="ClearScore.h" />
     <ClInclude Include="ClearTime.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CreatorBase.h" />
@@ -236,6 +237,7 @@
     <ClInclude Include="StageModelComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClearScore.cpp" />
     <ClCompile Include="EffectBossCharge.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletCreator.cpp" />

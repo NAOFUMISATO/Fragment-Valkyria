@@ -33,12 +33,6 @@ void ClearTime::Init() {
       static_cast<int>(x + 150.0 * FourthMultRate),
       static_cast<int>(x + 150.0 * FifthMultRate)
    };
-}
-
-void ClearTime::Input(AppFrame::Input::InputManager& input) {
-}
-
-void ClearTime::Update() {
    auto timer = _gameMain.ingameTimer();
    auto allSec = timer / 60;
    auto sec = allSec % 60;

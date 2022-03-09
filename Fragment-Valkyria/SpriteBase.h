@@ -47,7 +47,10 @@ namespace FragmentValkyria {
             LargeEnemyHP,    //!< ボスHP
             RemainingBullet, //!< 残り弱攻撃弾数
             RemainingPortion,//!< 残り回復アイテム数
-            Reticle          //!< レティクル
+            Reticle,         //!< レティクル
+            ClearTime,       //!< クリア時間
+            ClearScore       //!< クリアスコア
+
          };
          /**
           * \brief コンストラクタ

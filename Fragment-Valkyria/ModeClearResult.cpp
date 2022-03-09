@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ModeClearResult.h"
 #include "ClearTime.h"
+#include "ClearScore.h"
 #include "SpriteServer.h"
 
 using namespace FragmentValkyria::Mode;
@@ -32,7 +33,9 @@ void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
 
 void ModeClearResult::Update() {
    if (_born) {
-      GetSprServer().Add(std::make_unique<Clear::ClearTime>(_gameMain));
+      auto& sprServer = GetSprServer();
+      sprServer.Add(std::make_unique<Clear::ClearTime>(_gameMain));
+      sprServer.Add(std::make_unique<Clear::ClearScore>(_gameMain));
       _born = false;
    }
    GetSprServer().Update();
