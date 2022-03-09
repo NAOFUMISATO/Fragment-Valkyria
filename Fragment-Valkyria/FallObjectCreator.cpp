@@ -39,6 +39,7 @@ std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
    state->Register("Save", std::make_shared<Enemy::FallObject::StateSave>(*fallObject));
    state->Register("Shoot", std::make_shared<Enemy::FallObject::StateShoot>(*fallObject));
    state->Register("Die", std::make_shared<Enemy::FallObject::StateDie>(*fallObject));
+   state->Register("Up", std::make_shared<Enemy::FallObject::StateUp>(*fallObject));
    fallObject->stateServer(std::move(state));
    
    return std::move(fallObject);

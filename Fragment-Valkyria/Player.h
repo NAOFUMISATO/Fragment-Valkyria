@@ -91,6 +91,11 @@ namespace FragmentValkyria {
           * \return オブジェクトを持ち上げられるならtrue,持ち上げられなければfalse
           */
          inline bool isLift() { return _isLift; }
+         /**
+          * \brief オブジェクトを打てるか設定
+          * \param shoot オブジェクトを打てるならtrue,打てなければfalse
+          */
+         void objectShoot(bool shoot) { _objectShoot = shoot; }
       private:
          /**
           * \brief 移動処理
@@ -145,6 +150,7 @@ namespace FragmentValkyria {
          bool _isAim{ false };                      //!< エイム中か
          bool _isDeadMotion{ false };               //!< 死亡モーション中か
          bool _isLift{ true };                      //!< オブジェクトを持ち上げられるか
+         bool _objectShoot{ false };                //!< オブジェクトを打てるか
          double _hp{ 100.0 };                       //!< ヒットポイント
          Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
          Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
