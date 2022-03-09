@@ -111,7 +111,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
    // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
    auto deadZoneMulti = DeadZoneDivideValue / deadZone;
    // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
-   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   // デッドゾーン以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
    if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {
       // カメラ感度を0.2倍したものを足す
       _owner._upDownAngle += cameraSens * 0.2;
@@ -157,7 +157,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
       }
    }
    // 右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
-   // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   // デッドゾーン以下でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
    if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti) {
       // カメラ感度を0.2倍したものを引く
       _owner._upDownAngle -= cameraSens * 0.2;
@@ -203,7 +203,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
       }
    }
    // 右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
-   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   // デッドゾーン以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
    if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti) {
       // カメラ感度を0.2倍したものを引く
       _owner._sideAngle -= cameraSens * 0.2;
@@ -249,7 +249,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
       }
    }
    // 右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
-   // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   // デッドゾーン以下でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
    if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti) {
       // カメラ感度を0.2倍したものを足す
       _owner._sideAngle += cameraSens * 0.2;
@@ -342,7 +342,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
     // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
     auto deadZoneMulti = DeadZoneDivideValue / deadZone;
     // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
-   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   // デッドゾーンより以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
     if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {
        // エイム感度を0.2倍したものを足す
        _owner._upDownAngle += aimSens * 0.2;
@@ -388,7 +388,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
        }
     }
     // 右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
-    // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    // デッドゾーン以下でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
     if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti) {
        // エイム感度を0.2倍したものを引く
        _owner._upDownAngle -= aimSens * 0.2;
@@ -434,7 +434,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
        }
     }
     // 右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
-    // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    // デッドゾーン以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
     if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti) {
        // エイム感度を0.2倍したものを引く
        _owner._sideAngle -= aimSens * 0.2;
@@ -480,7 +480,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
        }
     }
     // 右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
-    // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    // デッドゾーン以下でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
     if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti) {
        // エイム感度を0.2倍したものを足す
        _owner._sideAngle += aimSens * 0.2;
