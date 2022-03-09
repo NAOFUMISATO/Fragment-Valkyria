@@ -349,7 +349,7 @@ void LargeEnemy::AreaRotate(bool& rotating) {
       _rotateDir = _rotateDir * dirRotate;
     }
    // 回転の向きのベクトルを既定の値大きくする
-   _rotateDir = _rotateDir * 50.0;
+   _rotateDir = _rotateDir * _rotateEnlarge;
    // フォワードベクトルと回転の向きのベクトルとの三角形の面積の取得
    auto area = forward.Cross(_rotateDir);
    auto rotateValue = 0.5 * area.GetY();
@@ -447,6 +447,8 @@ void LargeEnemy::StateGatling::Enter() {
    _gatlingFrameCnt = 0;
    // ガトリングの弾を打つ回数の設定
    _owner._gatlingCnt = 10;
+   // 向かせたい方向のベクトルを大きくする値を設定
+   _owner._rotateEnlarge = 50.0;
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
@@ -617,6 +619,12 @@ void LargeEnemy::StateMove::Update() {
 void LargeEnemy::StateLaser::Enter() {
    // この状態になった時のゲームのフレームカウントの保存
    _stateCnt = _owner.gameMain().modeServer().frameCount();
+   // レーザーを生成する位置を設定
+   _owner.SetLaserPosition();
+   // 攻撃する方向を設定
+   _owner._rotateDir = _owner._gameMain.objServer().GetVecData("LaserDirectionPos") - _owner._position;
+   // 向かせたい方向のベクトルを大きくする値を設定
+   _owner._rotateEnlarge = 10.0;
    // 回転処理をすると設定
    _owner._rotating = true;
    // 攻撃をしていないと設定
@@ -650,15 +658,13 @@ void LargeEnemy::StateLaser::Update() {
    // アニメーション再生が終了したら待機状態へ
    auto repeated = _owner._modelAnimeComponent->repeatedCount();
    auto playTime = _owner._modelAnimeComponent->playTime();
+   // 攻撃する方向へ回転させる
+   _owner.AreaRotate(_owner._rotating);
    if (repeated >= 1) {
       _owner._stateServer->GoToState("Idle");
    }
    // 既定のフレーム数経過していてレーザーを生成しないとなっていたら
    else if (playTime > LaserIrradiationTime && !_createLaser) {
-      // レーザーを生成する位置を設定
-      _owner.SetLaserPosition();
-      // 攻撃する方向を設定
-      _owner._rotateDir = _owner._gameMain.objServer().GetVecData("LaserDirectionPos") - _owner._position;
       // 攻撃していると設定
       _owner._attack = true;
       // レーザーを生成すると設定
@@ -667,8 +673,6 @@ void LargeEnemy::StateLaser::Update() {
    // 攻撃しているか確認
    if (_owner._attack) {
       // 攻撃していた場合
-      // 攻撃する方向へ回転させる
-      _owner.AreaRotate(_owner._rotating);
       // 回転が終了したら
       if (!_owner._rotating) {
          // レーザーを生成する
@@ -715,6 +719,8 @@ void LargeEnemy::StateFanGatling::Enter() {
    _owner._fanAngle = -45.0;
    // プレイヤーへの向きを取得
    _owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   // 向かせたい方向のベクトルを大きくする値を設定
+   _owner._rotateEnlarge = 50.0;
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
