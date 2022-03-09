@@ -4,6 +4,16 @@
 #include "ObjectServer.h"
 #include "PlayerHP.h"
 
+namespace {
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", {"reticle_animespeed"});
+   const int ReticleAnimeSpeed = paramMap["reticle_animespeed"];
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "reticle_pos" });
+   const auto ReticlePos = vecParamMap["reticle_pos"];
+
+   constexpr auto DefaultScale = 1.0;
+   constexpr auto DefaultAngle = 0.0;
+}
+
 using namespace FragmentValkyria::Player;
 
 Reticle::Reticle(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
@@ -11,8 +21,8 @@ Reticle::Reticle(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
 }
 
 void Reticle::Init() {
-   _grHandle = GetResServer().GetTexture("Reticle");
-   _position = { 0,0,0 };
+   _grHandles = GetResServer().GetTextures("Reticle");
+   _position = ReticlePos;
 }
 
 void Reticle::Update() {
@@ -26,6 +36,7 @@ void Reticle::Update() {
 
 void Reticle::Draw() {
    if (_isAim) {
-      SpriteBase::Draw();
+      auto [x, y, z] = _position.GetVec3();
+      GetTexComponent().DrawTexture(x, y, DefaultScale, DefaultAngle, _grHandles, ReticleAnimeSpeed);
    }
 }
