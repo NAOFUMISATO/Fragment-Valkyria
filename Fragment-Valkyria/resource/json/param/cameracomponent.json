@@ -1,0 +1,10 @@
+{
+	"cameracomponent": [
+		{
+			"center_height": 60.0,
+            "spring_k": 1.0,
+            "divide_t": 10.0,
+            "dead_zone_divide_value": 6000
+		}	
+	]	
+}

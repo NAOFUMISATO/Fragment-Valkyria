@@ -420,8 +420,6 @@ void Player::StateIdle::Input(InputManager& input) {
 void Player::StateIdle::Update() {
    // 回転処理
    _owner.Rotate();
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -546,8 +544,6 @@ void Player::StateRun::Update() {
    _owner.Move(_owner._moved);
    // 回転処理
    _owner.Rotate();
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
@@ -568,9 +564,11 @@ void Player::StateRun::Update() {
 
 void Player::StateShootReady::Enter() {
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_loop", true, ShootReadyAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true, ShootReadyAnimeSpeed);
    // 鳴らすサウンドの設定
    _owner.GetSoundComponent().Play("PlayerShootReady");
+   // アニメーションは変えていないと設定
+   _changeAnim = false;
    // エイム中と設定
    _owner._isAim = true;
    // オブジェクトを持ち上げられないと設定
@@ -580,21 +578,27 @@ void Player::StateShootReady::Enter() {
 void Player::StateShootReady::Input(InputManager& input) {
    // RBボタンが押されたら待機状態へ
    if (input.GetXJoypad().RBClick()) {
+      // 待機状態へ
+      _owner._stateServer->GoToState("Idle");
       // 鳴らすサウンドの設定
       _owner.GetSoundComponent().Play("PlayerShoot");
       // モデルのアニメーションの設定
-      _owner._modelAnimeComponent->ChangeAnime("H_attack_attack", false, ShootAnimeSpeed);
-      _owner._stateServer->GoToState("Idle");
+      _owner._modelAnimeComponent->ChangeAnime("H_attack_attack",false, ShootAnimeSpeed);
       // カメラのズームをしないと設定
       _owner._cameraComponent->SetZoom(false);
    }
 }
 
 void Player::StateShootReady::Update() {
+   // 最初のアニメーションを1回再生していてアニメーションを変えていない場合次のアニメーションを設定
+   if (_owner._modelAnimeComponent->repeatedCount() >= 1 && !_changeAnim) {
+      // モデルのアニメーションの設定
+      _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_loop", true, ShootReadyAnimeSpeed);
+      // アニメーションを変えたと設定
+      _changeAnim = true;
+   }
    // 射撃状態の回転処理
    _owner.ShootRotate();
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
@@ -630,8 +634,6 @@ void Player::StateKnockBack::Enter() {
 }
 
 void Player::StateKnockBack::Update() {
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // ノックバックする時間中か確認
    if (_owner._freezeTime > 0) {
       // ノックバック処理
@@ -673,8 +675,6 @@ void Player::StateDie::Enter() {
 }
 
 void Player::StateDie::Update() {
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // ゲームオーバーまでのフレーム数が残っていたら減らす
    if (_timeOver > 0) {
       --_timeOver;
@@ -725,8 +725,6 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
 void Player::StateWeakShootReady::Update() {
    // 射撃状態の回転処理
    _owner.ShootRotate();
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
@@ -767,8 +765,6 @@ void Player::StateReload::Update() {
       _owner._bulletStock = 5;
       _owner._stateServer->GoToState("Idle");
    }
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
    // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
@@ -785,6 +781,56 @@ void Player::StateReload::Update() {
    _owner.HitCheckFromLaser();
    // リロード状態のカウントの更新
    ++_reloadCnt;
+   // 無敵時間更新
+   --_owner._invincibleCnt;
+}
+
+void Player::StateRecovery::Enter() {
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("heal", false);
+   // 回復状態のカウントを0に設定
+   _recoveryCnt = 0;
+   auto efcHeal = std::make_unique<Effect::EffectHeal>(_owner._gameMain, "Heal");
+   auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
+   efcHeal->position(hipsFramePos);
+   _owner.GetEfcServer().Add(std::move(efcHeal));
+   // オブジェクトを持ち上げられないと設定
+   _owner._isLift = false;
+}
+
+void Player::StateRecovery::Update() {
+   // 回復状態のカウントが既定の値よりも大きいか確認
+   if (_recoveryCnt > 60 * 1) {
+      // 回復状態のカウントが既定の値よりも大きい場合
+      // 回復量の設定
+      auto recovery = MaxHp * RecoveryRate;
+      // ヒットポイントを回復量分増やす
+      _owner._hp += recovery;
+      // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
+      if (_owner._hp >= MaxHp) {
+         _owner._hp = MaxHp;
+      }
+      // ポーションの数を一つ減らす
+      --_owner._portionStock;
+      // 待機状態へ
+      _owner._stateServer->GoToState("Idle");
+   }
+   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
+   _owner._collisionComponent->GatlingFromPlayer();
+   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
+   _owner._collisionComponent->PlayerFromLaser();
+   // ラージエネミーと当たっているか確認
+   _owner.HitCheckFromLargeEnemy();
+   // 雑魚敵と当たっているか確認
+   _owner.HitCheckFromPoorEnemy();
+   // 落下中の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromFallObject();
+   // ガトリングと当たっているか確認
+   _owner.HitCheckFromGatling();
+   // レーザーと当たっているか確認
+   _owner.HitCheckFromLaser();
+   // 回復状態のカウントの更新
+   ++_recoveryCnt;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -824,56 +870,4 @@ void Player::StateRun::FootStepSound() {
          }
       }
    }
-}
-
-void Player::StateRecovery::Enter() {
-   // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("heal", false);
-   // 回復状態のカウントを0に設定
-   _recoveryCnt = 0;
-   auto efcHeal = std::make_unique<Effect::EffectHeal>(_owner._gameMain,"Heal");
-   auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
-   efcHeal->position(hipsFramePos);
-   _owner.GetEfcServer().Add(std::move(efcHeal));
-   // オブジェクトを持ち上げられないと設定
-   _owner._isLift = false;
-}
-
-void Player::StateRecovery::Update() {
-   // 回復状態のカウントが既定の値よりも大きいか確認
-   if (_recoveryCnt > 60 * 1) {
-      // 回復状態のカウントが既定の値よりも大きい場合
-      // 回復量の設定
-      auto recovery = MaxHp * RecoveryRate;
-      // ヒットポイントを回復量分増やす
-      _owner._hp += recovery;
-      // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
-      if (_owner._hp >= MaxHp) {
-         _owner._hp = MaxHp;
-      }
-      // ポーションの数を一つ減らす
-      --_owner._portionStock;
-      // 待機状態へ
-      _owner._stateServer->GoToState("Idle");
-   }
-   // 当たり判定処理を行うクラスでプレイヤーがオブジェクトを持ち上げられる範囲にいるか確認
-   //_owner._collisionComponent->ObjectRangeFromPlayer();
-   // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
-   _owner._collisionComponent->GatlingFromPlayer();
-   // 当たり判定処理を行うクラスでプレイヤーがレーザーと当たっているか確認
-   _owner._collisionComponent->PlayerFromLaser();
-   // ラージエネミーと当たっているか確認
-   _owner.HitCheckFromLargeEnemy();
-   // 雑魚敵と当たっているか確認
-   _owner.HitCheckFromPoorEnemy();
-   // 落下中の落下オブジェクトと当たっているか確認
-   _owner.HitCheckFromFallObject();
-   // ガトリングと当たっているか確認
-   _owner.HitCheckFromGatling();
-   // レーザーと当たっているか確認
-   _owner.HitCheckFromLaser();
-   // 回復状態のカウントの更新
-   ++_recoveryCnt;
-   // 無敵時間更新
-   --_owner._invincibleCnt;
 }

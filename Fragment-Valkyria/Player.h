@@ -260,6 +260,9 @@ namespace FragmentValkyria {
               * \brief 出口処理
               */
              void Exit()override;
+
+         private:
+            bool _changeAnim;              //!< アニメーションを変えたか
          };
          /**
           * \class ノックバック状態クラス
