@@ -10,9 +10,14 @@
 #include "GameMain.h"
 
 namespace {
-    const double CenterHeight = 60.0;
-    const double SpringK = 1.0;
-    const double DivideT = 10.0;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("cameracomponent", {
+      "dead_zone_divide_value", "center_height", "spring_k",
+      "divide_t" });
+
+   const int DeadZoneDivideValue = paramMap["dead_zone_divide_value"];     //!< パッドのスティックの一定方向の入力範囲を一定の分割数で割った数
+   const double CenterHeight = paramMap["center_height"];                  //!< ばねの動きを始める位置までの高さ
+   const double SpringK = paramMap["spring_k"];                            //!< ばね定数
+   const double DivideT = paramMap["divide_t"];                            //!< オイラー法の時間の分割数
 }
 
 using namespace FragmentValkyria::Camera;
@@ -101,71 +106,227 @@ void CameraComponent::Vibration() {
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
+   // ゲーム内感度の取得
    auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
-   //右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
-    if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() <= deadZone * 1000) {
-        _owner._upDownAngle += cameraSens * 0.5;
-        //10度以上傾いていたら10度にする
-        if (_owner._upDownAngle >= 10.0) {
-            _owner._upDownAngle = 10.0;
-        }
-    }
-    //右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
-    if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() >= -deadZone * 1000) {
-        _owner._upDownAngle -= cameraSens + 0.5;
-        //-20度以上傾いていたら-20度にする
-        if (_owner._upDownAngle <= -20.0) {
-            _owner._upDownAngle = -20.0;
-        }
-    }
-    //右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
-    if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() <= deadZone * 1000) {
-        _owner._sideAngle -= cameraSens * 0.5;
-        //-360度以下になったら0度にする
-        if (_owner._sideAngle <= -360.0) {
-            _owner._sideAngle = 0.0;
-        }
-    }
-    //右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
-    if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() >= -deadZone * 1000) {
-        _owner._sideAngle += cameraSens * 0.5;
-        if (_owner._sideAngle >= 360.0) {
-            _owner._sideAngle = 0.0;
-        }
-    }
-    //カメラの位置から注視点へのベクトル作成
-    auto posToTarget = _owner._target - _owner._position;
-    //カメラの位置から注視点へのベクトルを90度回転させる
-    auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-    //上下の回転のマトリクス作成
-    Matrix44 rotateUpDown = Matrix44();
-    rotateUpDown.RotateAnyVecQuaternion(anyAxisVec, _owner._upDownAngle, true);
-    //左右の回転のマトリクス作成
-    Matrix44 rotateSide = Matrix44();
-    rotateSide.RotateAnyVecQuaternion(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
-    //上下の回転と左右の回転を合わせたマトリクスを作成
-    _owner._rotateMatrix = rotateSide * rotateUpDown;
+   // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
+   auto deadZoneMulti = DeadZoneDivideValue / deadZone;
+   // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
+   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {
+      // カメラ感度を0.2倍したものを足す
+      _owner._upDownAngle += cameraSens * 0.2;
+      // 10度以上傾いていたら10度にする
+      if (_owner._upDownAngle >= 10.0) {
+         _owner._upDownAngle = 10.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 2) {
+      // カメラ感度を0.4倍したものを足す
+      _owner._upDownAngle += cameraSens * 0.4;
+      // 10度以上傾いていたら10度にする
+      if (_owner._upDownAngle >= 10.0) {
+         _owner._upDownAngle = 10.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 3) {
+      // カメラ感度を0.6倍したものを足す
+      _owner._upDownAngle += cameraSens * 0.6;
+      // 10度以上傾いていたら10度にする
+      if (_owner._upDownAngle >= 10.0) {
+         _owner._upDownAngle = 10.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 4) {
+      // カメラ感度を0.8倍したものを足す
+      _owner._upDownAngle += cameraSens * 0.8;
+      // 10度以上傾いていたら10度にする
+      if (_owner._upDownAngle >= 10.0) {
+         _owner._upDownAngle = 10.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より大きかった場合
+   else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 4) {
+      // カメラ感度を足す
+      _owner._upDownAngle += cameraSens;
+      // 10度以上傾いていたら10度にする
+      if (_owner._upDownAngle >= 10.0) {
+         _owner._upDownAngle = 10.0;
+      }
+   }
+   // 右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
+   // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti) {
+      // カメラ感度を0.2倍したものを引く
+      _owner._upDownAngle -= cameraSens * 0.2;
+      // -20度以上傾いていたら-20度にする
+      if (_owner._upDownAngle <= -20.0) {
+         _owner._upDownAngle = -20.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 2) {
+      // カメラ感度を0.4倍したものを引く
+      _owner._upDownAngle -= cameraSens * 0.4;
+      // -20度以上傾いていたら-20度にする
+      if (_owner._upDownAngle <= -20.0) {
+         _owner._upDownAngle = -20.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 3) {
+      // カメラ感度を0.6倍したものを引く
+      _owner._upDownAngle -= cameraSens * 0.6;
+      // -20度以上傾いていたら-20度にする
+      if (_owner._upDownAngle <= -20.0) {
+         _owner._upDownAngle = -20.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 4) {
+      // カメラ感度を0.8倍したものを引く
+      _owner._upDownAngle -= cameraSens * 0.8;
+      // -20度以上傾いていたら-20度にする
+      if (_owner._upDownAngle <= -20.0) {
+         _owner._upDownAngle = -20.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より小さかった場合
+   else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 4) {
+      // カメラ感度を引く
+      _owner._upDownAngle -= cameraSens;
+      // -20度以上傾いていたら-20度にする
+      if (_owner._upDownAngle <= -20.0) {
+         _owner._upDownAngle = -20.0;
+      }
+   }
+   // 右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
+   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti) {
+      // カメラ感度を0.2倍したものを引く
+      _owner._sideAngle -= cameraSens * 0.2;
+      // -360度以下になったら0度にする
+      if (_owner._sideAngle <= -360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 2) {
+      // カメラ感度を0.4倍したものを引く
+      _owner._sideAngle -= cameraSens * 0.4;
+      //-360度以下になったら0度にする
+      if (_owner._sideAngle <= -360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 3) {
+      // カメラ感度を0.6倍したものを引く
+      _owner._sideAngle -= cameraSens * 0.6;
+      // -360度以下になったら0度にする
+      if (_owner._sideAngle <= -360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 4) {
+      // カメラ感度を0.8倍したものを引く
+      _owner._sideAngle -= cameraSens * 0.8;
+      // -360度以下になったら0度にする
+      if (_owner._sideAngle <= -360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より大きかった場合
+   else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 4) {
+      // カメラ感度を引く
+      _owner._sideAngle -= cameraSens;
+      // -360度以下になったら0度にする
+      if (_owner._sideAngle <= -360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // 右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
+   // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+   if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti) {
+      // カメラ感度を0.2倍したものを足す
+      _owner._sideAngle += cameraSens * 0.2;
+      // 360度以上になったら0度にする
+      if (_owner._sideAngle >= 360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 2) {
+      // カメラ感度を0.4倍したものを足す
+      _owner._sideAngle += cameraSens * 0.4;
+      // 360度以上になったら0度にする
+      if (_owner._sideAngle >= 360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 3) {
+      // カメラ感度を0.6倍したものを足す
+      _owner._sideAngle += cameraSens * 0.6;
+      // 360度以上になったら0度にする
+      if (_owner._sideAngle >= 360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+   else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 4) {
+      // カメラ感度を0.8倍したものを足す
+      _owner._sideAngle += cameraSens * 0.8;
+      // 360度以上になったら0度にする
+      if (_owner._sideAngle >= 360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より小さかった場合
+   else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 4) {
+      // カメラ感度を足す
+      _owner._sideAngle += cameraSens;
+      // 360度以上になったら0度にする
+      if (_owner._sideAngle >= 360.0) {
+         _owner._sideAngle = 0.0;
+      }
+   }
+   // カメラの位置から注視点へのベクトル作成
+   auto posToTarget = _owner._target - _owner._position;
+   // カメラの位置から注視点へのベクトルを90度回転させる
+   auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
+   // 上下の回転のマトリクス作成
+   Matrix44 rotateUpDown = Matrix44();
+   rotateUpDown.RotateAnyVecQuaternion(anyAxisVec, _owner._upDownAngle, true);
+   // 左右の回転のマトリクス作成
+   Matrix44 rotateSide = Matrix44();
+   rotateSide.RotateAnyVecQuaternion(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
+   // 上下の回転と左右の回転を合わせたマトリクスを作成
+   _owner._rotateMatrix = rotateSide * rotateUpDown;
 }
 
 void CameraComponent::StateNormal::Update() {
     _owner.Rotate();
     _owner.Vibration();
     _owner.Placement();
-    //ズームする場合はズーム状態へ
+    // ズームする場合はズーム状態へ
     if (_owner._zoom) {
         _owner._stateServer->PushBack("ZoomIn");
     }
 }
 
 void CameraComponent::StateZoomIn::Enter() {
-    //ズームの割合のサインの値を取るラジアンの0.0に
+    // ズームの割合のサインの値を取るラジアンの0.0に
     _owner._zoomRateRadian = 0.0;
 }
 
 void CameraComponent::StateZoomIn::Update() {
-    //ズームの割合のサインの値を取るラジアンを5ラジアン増やす
+    // ズームの割合のサインの値を取るラジアンを5ラジアン増やす
     _owner._zoomRateRadian += AppFrame::Math::RADIAN_1 * 5.0;
-    //もし二分のパイラジアンより大きくなったら射撃準備状態へ
+    // もし二分のパイラジアンより大きくなったら射撃準備状態へ
     if (_owner._zoomRateRadian >= AppFrame::Math::PI / 2.0) {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("ShootReady");
@@ -176,52 +337,205 @@ void CameraComponent::StateZoomIn::Update() {
 }
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
+   // 感度の取得
     auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
-    //右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
-    if (input.GetXJoypad().RightStickY() >= deadZone) {
-        _owner._upDownAngle += aimSens;
-        //10度以上傾いていたら10度にする
-        if (_owner._upDownAngle >= 10.0) {
-            _owner._upDownAngle = 10.0;
-        }
+    // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
+    auto deadZoneMulti = DeadZoneDivideValue / deadZone;
+    // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
+   // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {
+       // エイム感度を0.2倍したものを足す
+       _owner._upDownAngle += aimSens * 0.2;
+       // 10度以上傾いていたら10度にする
+       if (_owner._upDownAngle >= 10.0) {
+          _owner._upDownAngle = 10.0;
+       }
     }
-    //右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
-    if (input.GetXJoypad().RightStickY() <= -deadZone) {
-        
-        _owner._upDownAngle -= aimSens;
-        //-20度以上傾いていたら-20度にする
-        if (_owner._upDownAngle <= -20.0) {
-            _owner._upDownAngle = -20.0;
-        }
+    // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 2) {
+       // エイム感度を0.4倍したものを足す
+       _owner._upDownAngle += aimSens * 0.4;
+       // 10度以上傾いていたら10度にする
+       if (_owner._upDownAngle >= 10.0) {
+          _owner._upDownAngle = 10.0;
+       }
     }
-    //右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
-    if (input.GetXJoypad().RightStickX() >= deadZone) {
-
-        _owner._sideAngle -= aimSens;
-        //-360度以下になったら0度にする
-        if (_owner._sideAngle <= -360.0) {
-            _owner._sideAngle = 0.0;
-        }
+    // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 3) {
+       // エイム感度を0.6倍したものを足す
+       _owner._upDownAngle += aimSens * 0.6;
+       // 10度以上傾いていたら10度にする
+       if (_owner._upDownAngle >= 10.0) {
+          _owner._upDownAngle = 10.0;
+       }
     }
-    //右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
-    if (input.GetXJoypad().RightStickX() <= -deadZone) {
-        _owner._sideAngle += aimSens;
-        //360度以上になったら0度にする
-        if (_owner._sideAngle >= 360.0) {
-            _owner._sideAngle = 0.0;
-        }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti * 4) {
+       // エイム感度を0.8倍したものを足す
+       _owner._upDownAngle += aimSens * 0.8;
+       // 10度以上傾いていたら10度にする
+       if (_owner._upDownAngle >= 10.0) {
+          _owner._upDownAngle = 10.0;
+       }
     }
-    //カメラの位置から注視点へのベクトル作成
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より大きかった場合
+    else if (input.GetXJoypad().RightStickY() >= deadZone * deadZoneMulti * 4) {
+       // エイム感度を足す
+       _owner._upDownAngle += aimSens;
+       // 10度以上傾いていたら10度にする
+       if (_owner._upDownAngle >= 10.0) {
+          _owner._upDownAngle = 10.0;
+       }
+    }
+    // 右スティックが下に傾いていたらカメラの上下の回転の角度を減らす
+    // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    if (input.GetXJoypad().RightStickY() <= -deadZone && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti) {
+       // エイム感度を0.2倍したものを引く
+       _owner._upDownAngle -= aimSens * 0.2;
+       // -20度以上傾いていたら-20度にする
+       if (_owner._upDownAngle <= -20.0) {
+          _owner._upDownAngle = -20.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 2) {
+       // エイム感度を0.4倍したものを引く
+       _owner._upDownAngle -= aimSens * 0.4;
+       // -20度以上傾いていたら-20度にする
+       if (_owner._upDownAngle <= -20.0) {
+          _owner._upDownAngle = -20.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 3) {
+       // エイム感度を0.6倍したものを引く
+       _owner._upDownAngle -= aimSens * 0.6;
+       // -20度以上傾いていたら-20度にする
+       if (_owner._upDownAngle <= -20.0) {
+          _owner._upDownAngle = -20.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickY() > -deadZone * deadZoneMulti * 4) {
+       // エイム感度を0.8倍したものを引く
+       _owner._upDownAngle -= aimSens * 0.8;
+       // -20度以上傾いていたら-20度にする
+       if (_owner._upDownAngle <= -20.0) {
+          _owner._upDownAngle = -20.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より小さかった場合
+    else if (input.GetXJoypad().RightStickY() <= -deadZone * deadZoneMulti * 4) {
+       // エイム感度を引く
+       _owner._upDownAngle -= aimSens;
+       // -20度以上傾いていたら-20度にする
+       if (_owner._upDownAngle <= -20.0) {
+          _owner._upDownAngle = -20.0;
+       }
+    }
+    // 右スティックが右に傾いていたらカメラの左右の回転の角度を減らす
+    // デッドゾーンより大きくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    if (input.GetXJoypad().RightStickX() >= deadZone && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti) {
+       // エイム感度を0.2倍したものを引く
+       _owner._sideAngle -= aimSens * 0.2;
+       // -360度以下になったら0度にする
+       if (_owner._sideAngle <= -360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 2) {
+       // エイム感度を0.4倍したものを引く
+       _owner._sideAngle -= aimSens * 0.4;
+       //-360度以下になったら0度にする
+       if (_owner._sideAngle <= -360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 3) {
+       // エイム感度を0.6倍したものを引く
+       _owner._sideAngle -= aimSens * 0.6;
+       // -360度以下になったら0度にする
+       if (_owner._sideAngle <= -360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickX() < deadZone * deadZoneMulti * 4) {
+       // エイム感度を0.8倍したものを引く
+       _owner._sideAngle -= aimSens * 0.8;
+       // -360度以下になったら0度にする
+       if (_owner._sideAngle <= -360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より大きかった場合
+    else if (input.GetXJoypad().RightStickX() >= deadZone * deadZoneMulti * 4) {
+       // エイム感度を引く
+       _owner._sideAngle -= aimSens;
+       // -360度以下になったら0度にする
+       if (_owner._sideAngle <= -360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // 右スティックが左に傾いていたらカメラの左右の回転の角度を増やす
+    // デッドゾーンより小さくパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
+    if (input.GetXJoypad().RightStickX() <= -deadZone && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti) {
+       // エイム感度を0.2倍したものを足す
+       _owner._sideAngle += aimSens * 0.2;
+       // 360度以上になったら0度にする
+       if (_owner._sideAngle >= 360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の二つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 2) {
+       // エイム感度を0.4倍したものを足す
+       _owner._sideAngle += aimSens * 0.4;
+       // 360度以上になったら0度にする
+       if (_owner._sideAngle >= 360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の三つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 2 && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 3) {
+       // エイム感度を0.6倍したものを足す
+       _owner._sideAngle += aimSens * 0.6;
+       // 360度以上になったら0度にする
+       if (_owner._sideAngle >= 360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲内だった場合
+    else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 3 && input.GetXJoypad().RightStickX() > -deadZone * deadZoneMulti * 4) {
+       // エイム感度を0.8倍したものを足す
+       _owner._sideAngle += aimSens * 0.8;
+       // 360度以上になったら0度にする
+       if (_owner._sideAngle >= 360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // パッドのスティックの入力範囲を分割した範囲の四つ目の範囲より小さかった場合
+    else if (input.GetXJoypad().RightStickX() <= -deadZone * deadZoneMulti * 4) {
+       // エイム感度を足す
+       _owner._sideAngle += aimSens;
+       // 360度以上になったら0度にする
+       if (_owner._sideAngle >= 360.0) {
+          _owner._sideAngle = 0.0;
+       }
+    }
+    // カメラの位置から注視点へのベクトル作成
     auto posToTarget = _owner._target - _owner._position;
-    //カメラの位置から注視点へのベクトルを90度回転させる
+    // カメラの位置から注視点へのベクトルを90度回転させる
     auto anyAxisVec = posToTarget * _owner._anyAxisMatrix;
-    //上下の回転のマトリクス作成
+    // 上下の回転のマトリクス作成
     Matrix44 rotateUpDown = Matrix44();
     rotateUpDown.RotateAnyVec(anyAxisVec, _owner._upDownAngle, true);
-    //左右の回転のマトリクス作成
+    // 左右の回転のマトリクス作成
     Matrix44 rotateSide = Matrix44();
     rotateSide.RotateAnyVec(Vector4(0.0, 1.0, 0.0), _owner._sideAngle, true);
-    //上下の回転と左右の回転を合わせたマトリクスを作成
+    // 上下の回転と左右の回転を合わせたマトリクスを作成
     _owner._rotateMatrix = rotateSide * rotateUpDown;
 }
 
