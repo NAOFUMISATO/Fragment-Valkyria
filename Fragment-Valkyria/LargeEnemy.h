@@ -120,6 +120,7 @@ namespace FragmentValkyria {
          int _weakNessesCollision{ 0 };                             //!< モデルの弱点のコリジョンフレーム番号
          int _faceCollision{ 0 };                                   //!< モデルの顔のコリジョンフレーム番号
          int _freezeTime{ 0 };                                      //!< 死亡してからゲームクリアまでのフレーム数
+         int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
          bool _firstRotating{ true };                               //!< 移動中最初に移動方向に回転するか
          bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
          bool _rotating{ false };                                   //!< 回転処理をするか
@@ -130,7 +131,7 @@ namespace FragmentValkyria {
          double _addRotate{ 0.0 };                                  //!< 角速度
          double _hp{ 0.0 };                                         //!< ヒットポイント
          double _stunValue{ 0.0 };                                  //!< スタン値
-         int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
+         double _rotateEnlarge{ 0.0 };                              //!< 向かせたい方向のベクトルを大きくする値
          Vector4 _moved{ 0.0, 0.0, 0.0 };                           //!< 移動量のベクトル
          Vector4 _rotateDir{ 0.0, 0.0, 0.0 };                       //!< 回転の向きのベクトル
          std::vector<std::pair<double, Vector4>> _objectDistance;   //!< 各落下オブジェクトからプレイヤーへの距離の2乗と各落下オブジェクトの位置のペアの動的配列

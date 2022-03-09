@@ -652,95 +652,123 @@ void Player::StateRun::Enter() {
 void Player::StateRun::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Run");
-   // デッドゾーンの取得
-   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
-   // 移動しているかのフラグを作成して初期ではしていないと設定
-   auto moved = false;
-   // カメラから注視点への方向単位ベクトルをもとめる
-   auto camForward = _owner._cameraComponent->GetForward();
-   auto [x, y, z] = camForward.GetVec3();
-   // 高さをなくす
-   _owner._direction = Vector4(x, 0.0, z);
-   // 移動量のベクトルを初期化
-   _owner._moved = Vector4();
-   // 左スティックが右に動いているか確認
-   // 左スティックが右に動いていて歩きの入力範囲より大きい場合
-   if (input.GetXJoypad().LeftStickX() > WalkDeadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-   }
-   // 歩きの入力範囲以下でデッドゾーン以上の場合
-   else if (input.GetXJoypad().LeftStickX() >= deadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-      // 左スティックの縦軸が走りの範囲外だった場合
-      if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
-         // 歩き状態へ
-         _owner._stateServer->GoToState("Walk");
+   if ((_owner.gameMain().modeServer().frameCount() - _footCnt) % 5 == 0) {
+      // デッドゾーンの取得
+      auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+      // 移動しているかのフラグを作成して初期ではしていないと設定
+      auto moved = false;
+      // カメラから注視点への方向単位ベクトルをもとめる
+      auto camForward = _owner._cameraComponent->GetForward();
+      auto [x, y, z] = camForward.GetVec3();
+      // 高さをなくす
+      _owner._direction = Vector4(x, 0.0, z);
+      // 移動量のベクトルを初期化
+      _owner._moved = Vector4();
+      // 左スティックが右に動いているか確認
+      // 左スティックが右に動いていて歩きの入力範囲より大きい場合
+      if (input.GetXJoypad().LeftStickX() > WalkDeadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
       }
-   }
-   // 左スティックが左に動いているか確認
-   // 左スティックが左に動いていて歩きの入力範囲より小さい場合
-   if (input.GetXJoypad().LeftStickX() < -WalkDeadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-   }
-   // 歩きの入力範囲以上でデッドゾーン以下の場合
-   else if (input.GetXJoypad().LeftStickX() <= -deadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-      // 左スティックの縦軸が走りの範囲外だった場合
-      if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
-         // 歩き状態へ
-         _owner._stateServer->GoToState("Walk");
+      // 歩きの入力範囲内でデッドゾーン以上の場合
+      else if (input.GetXJoypad().LeftStickX() >= deadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを90度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._rightRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+         // 左スティックの縦軸が走りの範囲外だった場合
+         if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
+            // 待機状態へ
+            _owner._stateServer->GoToState("Idle");
+         }
       }
-   }
-   // 左スティックが上に動いているか確認
-   // 左スティックが上に動いていて歩きの入力範囲より大きい場合
-   if (input.GetXJoypad().LeftStickY() > WalkDeadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
-      _owner._moved = _owner._moved + _owner._direction;
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-   }
-   // 歩きの入力範囲以下でデッドゾーン以上の場合
-   else if (input.GetXJoypad().LeftStickY() >= deadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
-      _owner._moved = _owner._moved + _owner._direction;
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-      // 左スティックの横軸が走りの範囲外だった場合
-      if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
-         // 歩き状態へ
-         _owner._stateServer->GoToState("Walk");
+      // 左スティックが左に動いているか確認
+      // 左スティックが左に動いていて歩きの入力範囲より小さい場合
+      if (input.GetXJoypad().LeftStickX() < -WalkDeadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
       }
-   }
-   // 左スティックが下に動いているか確認
-   // 左スティックが下に動いていて歩きの入力範囲より小さい場合
-   if (input.GetXJoypad().LeftStickY() < -WalkDeadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-   }
-   // 歩きの入力範囲以上でデッドゾーン以下の場合
-   else if (input.GetXJoypad().LeftStickY() <= -deadZone) {
-      // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
-      _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
-      // 移動しているかのフラグを移動していると設定
-      moved = true;
-      // 左スティックの横軸が走りの範囲外だった場合
-      if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
-         // 歩き状態へ
-         _owner._stateServer->GoToState("Walk");
+      // 歩きの入力範囲内でデッドゾーン以下の場合
+      else if (input.GetXJoypad().LeftStickX() <= -deadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを-90度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._leftRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+         // 左スティックの縦軸が走りの範囲外だった場合
+         if (!(input.GetXJoypad().LeftStickY() > WalkDeadZone || input.GetXJoypad().LeftStickY() < -WalkDeadZone)) {
+            // 待機状態へ
+            _owner._stateServer->GoToState("Idle");
+         }
+      }
+      // 左スティックが上に動いているか確認
+      // 左スティックが上に動いていて歩きの入力範囲より大きい場合
+      if (input.GetXJoypad().LeftStickY() > WalkDeadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+         _owner._moved = _owner._moved + _owner._direction;
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+      }
+      // 歩きの入力範囲内でデッドゾーン以上の場合
+      else if (input.GetXJoypad().LeftStickY() >= deadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを足す
+         _owner._moved = _owner._moved + _owner._direction;
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+         // 左スティックの横軸が走りの範囲外だった場合
+         if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
+            // 待機状態へ
+            _owner._stateServer->GoToState("Idle");
+         }
+      }
+      // 左スティックが下に動いているか確認
+      // 左スティックが下に動いていて歩きの入力範囲より小さい場合
+      if (input.GetXJoypad().LeftStickY() < -WalkDeadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+      }
+      // 歩きの入力範囲内でデッドゾーン以下の場合
+      else if (input.GetXJoypad().LeftStickY() <= -deadZone) {
+         // 移動量のベクトルにカメラから注視点への方向単位ベクトルを180度回転させたベクトルを足す
+         _owner._moved = _owner._moved + (_owner._direction * _owner._backRotation);
+         // 移動しているかのフラグを移動していると設定
+         moved = true;
+         // 左スティックの横軸が走りの範囲外だった場合
+         if (!(input.GetXJoypad().LeftStickX() > WalkDeadZone || input.GetXJoypad().LeftStickX() < -WalkDeadZone)) {
+            // 待機状態へ
+            _owner._stateServer->GoToState("Idle");
+         }
+      }
+      // 移動しているかのフラグが移動していないとなっているか確認
+      if (!moved) {
+         // 移動していないとなっていたらこの状態を状態のリストから除外する
+         _owner._stateServer->GoToState("Idle");
+      }
+      // 移動している場合
+      else {
+         // 移動量のベクトルを単位化する
+         _owner._moved.Normalized();
+         // 移動する方向が現在向いている方向と比べて真逆に近いか確認
+         if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
+            // 移動する方向が現在向いている方向と比べて真逆に近い場合
+            // 1度回転させるマトリクスを作成
+            Matrix44 mat;
+            mat.RotateY(1.0, true);
+            // 向かせたい方向のベクトルを移動方向のベクトルを1度回転させて既定の真逆のときの大きさを掛けて設定
+            _owner._rotateDir = _owner._moved * mat * 20.0;
+         }
+         // 真逆に近くない場合
+         else {
+            // 向かせたい方向のベクトルを移動方向のベクトルを回転を求めるときの既定の大きさを掛けて設定
+            _owner._rotateDir = _owner._moved * RotateRate;
+         }
+         // 移動量のベクトルを設定
+         _owner._moved = _owner._moved * RunSpeed;
       }
    }
    // 左トリガーが押されているか確認
@@ -762,32 +790,6 @@ void Player::StateRun::Input(InputManager& input) {
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
    if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
       _owner._stateServer->GoToState("Recovery");
-   }
-   // 移動しているかのフラグが移動していないとなっているか確認
-   if (!moved) {
-      // 移動していないとなっていたらこの状態を状態のリストから除外する
-      _owner._stateServer->GoToState("Idle");
-   }
-   // 移動している場合
-   else {
-      // 移動量のベクトルを単位化する
-      _owner._moved.Normalized();
-      // 移動する方向が現在向いている方向と比べて真逆に近いか確認
-      if (_owner.GetForward().Dot(_owner._moved) < -0.5) {
-         // 移動する方向が現在向いている方向と比べて真逆に近い場合
-         // 1度回転させるマトリクスを作成
-         Matrix44 mat;
-         mat.RotateY(1.0, true);
-         // 向かせたい方向のベクトルを移動方向のベクトルを1度回転させて既定の真逆のときの大きさを掛けて設定
-         _owner._rotateDir = _owner._moved * mat * 20.0;
-      }
-      // 真逆に近くない場合
-      else {
-         // 向かせたい方向のベクトルを移動方向のベクトルを回転を求めるときの既定の大きさを掛けて設定
-         _owner._rotateDir = _owner._moved * RotateRate;
-      }
-      // 移動量のベクトルを設定
-      _owner._moved = _owner._moved * RunSpeed;
    }
 }
 
