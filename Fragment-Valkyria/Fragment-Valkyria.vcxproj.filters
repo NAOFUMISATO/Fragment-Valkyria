@@ -300,6 +300,9 @@
     <ClInclude Include="EffectObjectUp.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="EffectPoorCrash.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -495,6 +498,9 @@
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="EffectObjectUp.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectPoorCrash.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,6 +4,8 @@
 #include "ObjectFactory.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "EffectPoorCrash.h"
+#include "EffectServer.h"
 
 using namespace FragmentValkyria::Enemy;
 
@@ -173,6 +175,9 @@ void PoorEnemyBase::StateDie::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("idle", true, DieAnimeSpeed);
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _opacityRate = MaxOpacityRate;
+   auto efcCrash = std::make_unique<Effect::EffectPoorCrash>(_owner._gameMain, "PoorCrash");
+   efcCrash->position(_owner._position);
+   _owner.GetEfcServer().Add(std::move(efcCrash));
 }
 
 void PoorEnemyBase::StateDie::Update() {

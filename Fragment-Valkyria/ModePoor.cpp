@@ -93,15 +93,22 @@ void ModePoor::Render() {
 }
 
 void ModePoor::WaveProcess() {
+   // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
    auto&& runObjects = GetObjServer().runObjects();
+   // 動的配列に一致する要素があるか判定を行う
    auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
+         // 生存状態の雑魚敵はいるか
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
+   // 生存状態の雑魚敵がいないか
    if (!isActiveEnemy) {
+      // 最大waveに達したならモード遷移を行う
       if (_wave >= MaxWave) {
          GetModeServer().GoToMode("Movie");
       }
+      // 次のwaveのスポーンテーブルを設定する
       GetObjFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));
+      // waveを進める
       _wave++;
    }
 }
