@@ -64,6 +64,11 @@ namespace FragmentValkyria {
           * \return ボスの体力
           */
          double hp() { return _hp; }
+         /**
+          * \brief レーザー攻撃を行っているか
+          * \return 行っていればtrue,でなければfalse
+          */
+         bool isLaser() { return _isLaser; }
 
       private:
          /**
@@ -119,6 +124,7 @@ namespace FragmentValkyria {
          bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
          bool _rotating{ false };                                   //!< 回転処理をするか
          bool _attack{ false };                                     //!< 攻撃をしているか
+         bool _isLaser{ false };                                    //!< レーザー攻撃を行っているか
          double _fanAngle{ 0.0 };                                   //!< 扇状ガトリング攻撃をするときの向きを取得するときベクトルを回転させる角度
          double _rotateDot{ 0.0 };                                  //!< 向かせたい方向のベクトルとフォワードベクトルを90度回転させたベクトルの内積の結果
          double _addRotate{ 0.0 };                                  //!< 角速度

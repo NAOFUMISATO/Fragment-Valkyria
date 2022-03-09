@@ -11,6 +11,8 @@
 #include "EffectBossBeam.h"
 #include "EffectServer.h"
 #include "ObjectServer.h"
+#include "LargeEnemy.h"
+
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("laser",
       { "radius" });
@@ -54,7 +56,12 @@ void Laser::StateIrradiation::Enter() {
 
 void Laser::StateIrradiation::Update() {
    auto count = _owner.gameMain().modeServer().frameCount();
-   if (count-_stateCnt >= 60 * 3) {
-      _owner.SetDead();
+   for (auto& object : _owner.GetObjServer().runObjects()) {
+      if (object->GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
+         auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(*object);
+         if (!largeEnemy.isLaser()) {
+            _owner.SetDead();
+         }
+      }
    }
 }

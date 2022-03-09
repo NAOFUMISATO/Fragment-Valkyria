@@ -47,8 +47,12 @@ namespace FragmentValkyria {
             WeakBullet,         //!< プレイヤー弱攻撃
             BossBeam,           //!< ボスビーム攻撃
             BossCharge,         //!< ボスビームチャージ
+            BossStan,           //!< ボスのスタン
+            BossDieAfter,       //!< ボスの死亡後
+            BossWalk,           //!< ボス歩き
             ObjectUp,           //!< オブジェクト上昇
             PoorCrash           //!< 雑魚敵の破壊
+            
          };
          /**
           * \brief コンストラクタ

@@ -17,6 +17,7 @@
 #include "FallObject.h"
 #include "EffectServer.h"
 #include "EffectBossCharge.h"
+#include "EffectBossStan.h"
 
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -31,6 +32,7 @@ namespace {
    constexpr auto MaxNum = 6;                                      //!< 落下オブジェクトの最大数
    constexpr auto FootStepHeight = 40.0;                           //!< 走り状態時の足音発生高さ
    constexpr auto LaserDiffPos = 150.0;                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
+   constexpr auto LaserIrradiationTime = 155.f;                    //!< アニメーション始まってからのレーザーの照射時間
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -496,7 +498,7 @@ void LargeEnemy::StateDie::Enter() {
    // ゲームクリアまでのフレーム数の設定
    _owner._freezeTime = 60 * 2;
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("beem", false);
+   _owner._modelAnimeComponent->ChangeAnime("dead", false);
 }
 
 void LargeEnemy::StateDie::Update() {
@@ -619,10 +621,12 @@ void LargeEnemy::StateLaser::Enter() {
    _owner._rotating = true;
    // 攻撃をしていないと設定
    _owner._attack = false;
+   // レーザー攻撃フラグを設定
+   _owner._isLaser = true;
    // レーザーを生成しないと設定
    _createLaser = false;
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("beem", true);
+   _owner._modelAnimeComponent->ChangeAnime("beem", false);
    // 鳴らすサウンドの設定
    _owner.GetSoundComponent().Play("BossCharge",_owner._position);
    // レーザー生成位置を取得
@@ -643,12 +647,14 @@ void LargeEnemy::StateLaser::Update() {
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
    auto count = gameCount - _stateCnt;
-   // 既定のフレーム数経過したら待機状態へ
-   if (count >= 60 * 6) {
-   _owner._stateServer->GoToState("Idle");
+   // アニメーション再生が終了したら待機状態へ
+   auto repeated = _owner._modelAnimeComponent->repeatedCount();
+   auto playTime = _owner._modelAnimeComponent->playTime();
+   if (repeated >= 1) {
+      _owner._stateServer->GoToState("Idle");
    }
    // 既定のフレーム数経過していてレーザーを生成しないとなっていたら
-   else if (count >= 60 * 3 && !_createLaser) {
+   else if (playTime > LaserIrradiationTime && !_createLaser) {
       // レーザーを生成する位置を設定
       _owner.SetLaserPosition();
       // 攻撃する方向を設定
@@ -696,6 +702,8 @@ void LargeEnemy::StateLaser::Exit() {
          break;
       }
    }
+   // レーザー攻撃フラグを設定
+   _owner._isLaser = false;
 }
 
 void LargeEnemy::StateFanGatling::Enter() {
@@ -795,6 +803,10 @@ void LargeEnemy::StateMove::FootStepSound() {
 void LargeEnemy::StateStun::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("stan", true, 0.5);
+   auto efcStan = std::make_unique<Effect::EffectBossStan>(_owner._gameMain, "BossStan");
+   efcStan->position(_owner._position);
+   _owner.GetEfcServer().Add(std::move(efcStan));
+
 }
 
 void LargeEnemy::StateStun::Update() {
