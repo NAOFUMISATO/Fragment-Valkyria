@@ -70,7 +70,7 @@ void PoorEnemyBase::Rotate() {
    AppFrame::Math::Matrix44 rotate;
    rotate.RotateY(_rotation.GetY(), true);
 
-   auto forward = Vector4(0.0, 0.0, 1.0) * rotate;
+   auto forward = Vector4(0.0, 0.0, -1.0) * rotate;
    auto addRotate = 0.5 * forward.Cross(toPlayer).GetY();
    _rotation.Add(Vector4(0.0, addRotate * RotateSpeed, 0.0));
 }

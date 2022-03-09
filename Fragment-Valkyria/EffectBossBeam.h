@@ -25,6 +25,8 @@ namespace FragmentValkyria {
           */
          virtual EffectType GetEfcType() const override { return EffectType::GatlingBullet; }
 
+      private:
+         int _playCount{ 0 };
       };
    }
 }
