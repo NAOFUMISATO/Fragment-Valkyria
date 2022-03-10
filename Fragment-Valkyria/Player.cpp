@@ -21,9 +21,8 @@
 namespace {
     auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
-       "run_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
-        "rocovery_rate", "max_hp", "rotate_rate", "walk_speed",
-        "walk_dead_zone_range", "wait_frame"});
+       "run_speed", "capsule_pos1", "capsule_pos2", "capsule_radius","rocovery_rate", "max_hp", 
+       "rotate_rate", "walk_speed", "walk_dead_zone_range", "wait_frame","invincible_frame" ,"blinking_frame" });
 
     const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
@@ -40,6 +39,8 @@ namespace {
     const double WalkSpeed = paramMap["walk_speed"];                          //!< 歩きの速さ
     const int WalkDeadZone = paramMap["walk_dead_zone_range"];                //!< 歩き状態のスティックの入力範囲の最大値
     const int WaitFrame = paramMap["wait_frame"];                             //!< 左スティックの入力を待つフレーム数
+    const int InvincibleFrame = paramMap["invincible_frame"];                 //!< 無敵フレーム
+    const int BlinkingFrame = paramMap["blinking_frame"];                     //!< 無敵時の点滅フレーム
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -362,33 +363,21 @@ void Player::StateBase::Update() {
       // 無敵状態に入ってからのフレームカウント数の取得
       auto cnt = _owner.gameMain().modeServer().frameCount() - _owner._invincibleModeCnt;
       // 既定のフレーム数経過したら
-      if (cnt % 5 == 0) {
-         // ブレンドモードがαブレンドであれば加算ブレンドへ
-         if (_owner._blendMode == DX_BLENDMODE_ALPHA) {
-            _owner._blendMode = DX_BLENDMODE_ADD;
-         }
-         // αブレンドでない場合αブレンドへ
-         else {
-            _owner._blendMode = DX_BLENDMODE_ALPHA;
-         }
+      if (cnt % (BlinkingFrame * 2) == 0) {
+         _owner._modelAnimeComponent->SetBlendModeAdd(0);
       }
+      if (cnt % (BlinkingFrame * 2) == BlinkingFrame) {
+         _owner._modelAnimeComponent->SetBlendModeReset(0);
+      }
+   }
+   else {
+      _owner._modelAnimeComponent->SetBlendModeReset(0);
    }
 }
 
 void Player::StateBase::Draw() {
    // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
-   // 無敵時間中か確認
-   if (_owner._invincibleCnt > 0) {
-      // 無敵時間中だったらモデルを透明に近くする
-       MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 0, _owner._blendMode);
-       MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 1, _owner._blendMode);
-   }
-   else {
-      // 無敵時間中じゃなかったらモデルを不透明にする
-      MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 0, DX_BLENDMODE_ALPHA);
-      MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 1, DX_BLENDMODE_ALPHA);
-   }
 #ifdef _DEBUG
    // プレイヤーのカプセルの一つ目の座標の設定
    auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
@@ -944,7 +933,7 @@ void Player::StateKnockBack::Update() {
    // ヒットポイントが0以下じゃなかった場合
    else {
       // 無敵時間の設定
-      _owner._invincibleCnt = 60 * 2;
+      _owner._invincibleCnt = InvincibleFrame;
       // 無敵状態に入った時のモードサーバーのフレームカウント数の設定
       _owner._invincibleModeCnt = _owner.gameMain().modeServer().frameCount();
       // ノックバックしていないと設定

@@ -79,6 +79,10 @@ void ModelComponent::SetBlendModeAdd(int index) {
    MV1SetMaterialDrawBlendMode(_modelHandle, index, DX_BLENDMODE_ADD);
 }
 
+void ModelComponent::SetBlendModeAlpha(int index) {
+   MV1SetMaterialDrawBlendMode(_modelHandle, index, DX_BLENDMODE_ALPHA);
+}
+
 void ModelComponent::SetBlendModeReset(int index) {
    MV1SetMaterialDrawBlendMode(_modelHandle, index, DX_BLENDMODE_NOBLEND);
 }

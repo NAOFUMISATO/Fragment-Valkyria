@@ -15,7 +15,9 @@
 			"rotate_rate": 5.0,
 			"walk_speed": 6.0,
 			"walk_dead_zone_range": 30000,
-			"wait_frame": 5
+			"wait_frame": 5,
+			"invincible_frame":120,
+			"blinking_frame":5
 		}
 	],
 	"player_vec": [

@@ -10,6 +10,12 @@
 #include "GameMain.h"
 
 namespace {
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", { "number_diffx" });
+   const double NumberDiffX = paramMap["number_diffx"];
+
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "time_pos" });
+   const auto TimePos = vecParamMap["time_pos"];
+
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
@@ -24,14 +30,14 @@ ClearTime::ClearTime(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
 
 void ClearTime::Init() {
    _grHandles = GetResServer().GetTextures("NumberAndColon");
-   _position = { 600,540,0 };
+   _position = TimePos;
    auto [x, y] = _position.GetVec2();
    _xPositions = {
       static_cast<int>(x),
-      static_cast<int>(x + 150.0),
-      static_cast<int>(x + 150.0 * ThirdMultRate),
-      static_cast<int>(x + 150.0 * FourthMultRate),
-      static_cast<int>(x + 150.0 * FifthMultRate)
+      static_cast<int>(x + NumberDiffX),
+      static_cast<int>(x + NumberDiffX * ThirdMultRate),
+      static_cast<int>(x + NumberDiffX * FourthMultRate),
+      static_cast<int>(x + NumberDiffX * FifthMultRate)
    };
    auto timer = _gameMain.ingameTimer();
    auto allSec = timer / 60;

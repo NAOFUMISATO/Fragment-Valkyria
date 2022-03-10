@@ -1,28 +1,42 @@
 #include "ClearScore.h"
 #include "GameMain.h"
 
+namespace {
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", {
+      "s_scoresec","a_scoresec","b_scoresec","c_scoresec" });
+   const int SScoreSec = paramMap["s_scoresec"];
+   const int AScoreSec = paramMap["a_scoresec"];
+   const int BScoreSec = paramMap["b_scoresec"];
+   const int CScoreSec = paramMap["c_scoresec"];
+
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "score_pos" });
+   const auto ScorePos = vecParamMap["score_pos"];
+
+   constexpr auto OneSecFrame = 60;
+}
+
 using namespace FragmentValkyria::Clear;
 
 ClearScore::ClearScore(Game::GameMain& gameMain) :SpriteBase{ gameMain } {
 }
 
 void ClearScore::Init() {
-   _position = { 910,750,0 };
+   _position = ScorePos;
    auto handles = GetResServer().GetTextures("ClearScore");
    auto timer = _gameMain.ingameTimer();
-   if (timer >= 60 * 50) {
+   if (timer >= OneSecFrame * CScoreSec) {
       _grHandle = handles[3];
    }
-   else if (timer >= 60 * 40 && 60 * 50 > timer) {
+   else if (timer >= OneSecFrame * BScoreSec && OneSecFrame * CScoreSec > timer) {
       _grHandle = handles[2];
    }
-   else if (timer >= 60 * 30 && 60 * 40 > timer) {
+   else if (timer >= OneSecFrame * AScoreSec && OneSecFrame * BScoreSec > timer) {
       _grHandle = handles[1];
    }
-   else if (timer >= 60 * 20 && 60 * 30 > timer) {
+   else if (timer >= OneSecFrame * SScoreSec && OneSecFrame * AScoreSec > timer) {
       _grHandle = handles[0];
    }
-   else if (60 * 20 > timer) {
+   else if (OneSecFrame * SScoreSec > timer) {
       _grHandle = handles[4];
    }
 }

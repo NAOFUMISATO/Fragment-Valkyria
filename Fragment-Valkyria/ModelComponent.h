@@ -129,6 +129,11 @@ namespace FragmentValkyria {
           */
          void SetBlendModeAdd(int index);
          /**
+          * \brief モデルのブレンドモードを透明モードに設定
+          * \param index 設定するモデルのマテリアル番号
+          */
+         void SetBlendModeAlpha(int index);
+         /**
           * \brief モデルのブレンドモード設定を解除する
           * \param index 解除するモデルのマテリアル番号
           */
