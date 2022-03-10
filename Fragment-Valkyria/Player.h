@@ -147,6 +147,9 @@ namespace FragmentValkyria {
          int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
          int _invincibleCnt{ 0 };                   //!< 無敵時間
          int _portionStock{ 3 };                    //!< ポーションの数
+         int _stateCnt{ 0 };                        //!< 各状態に入った時のモードサーバーのフレームカウント数
+         int _invincibleModeCnt{ 0 };               //!< 無敵状態に入った時のモードサーバーのフレームカウント数
+         int _blendMode{ DX_BLENDMODE_ALPHA };      //!< ブレンドモード
          bool _isAim{ false };                      //!< エイム中か
          bool _isDeadMotion{ false };               //!< 死亡モーション中か
          bool _isLift{ true };                      //!< オブジェクトを持ち上げられるか
@@ -171,6 +174,10 @@ namespace FragmentValkyria {
              * \param owner プレイヤーの参照
              */
             StateBase(Player& owner) : _owner{ owner } {};
+            /**
+             * \brief 更新処理
+             */
+            virtual void Update() override;
             /**
              * \brief 描画処理
              */
