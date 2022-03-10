@@ -23,7 +23,7 @@ namespace {
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
        "run_speed", "capsule_pos1", "capsule_pos2", "capsule_radius",
         "rocovery_rate", "max_hp", "rotate_rate", "walk_speed",
-        "walk_dead_zone_range"});
+        "walk_dead_zone_range", "wait_frame"});
 
     const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
@@ -37,8 +37,9 @@ namespace {
     const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
     const double RecoveryRate = paramMap["rocovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
     const double RotateRate = paramMap["rotate_rate"];                        //!< 回転をさせるときのベクトルの面積を求めるときのベクトルの大きさ
-    const double WalkDeadZone = paramMap["walk_dead_zone_range"];             //!< 歩き状態のスティックの入力範囲の最大値
     const double WalkSpeed = paramMap["walk_speed"];                          //!< 歩きの速さ
+    const int WalkDeadZone = paramMap["walk_dead_zone_range"];                //!< 歩き状態のスティックの入力範囲の最大値
+    const int WaitFrame = paramMap["wait_frame"];                             //!< 左スティックの入力を待つフレーム数
 
     constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
     constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
@@ -355,17 +356,38 @@ void Player::WeakAttack() {
     gameMain().objServer().Add(std::move(bullet));
 }
 
+void Player::StateBase::Update() {
+   // 無敵時間中の場合
+   if (_owner._invincibleCnt > 0) {
+      // 無敵状態に入ってからのフレームカウント数の取得
+      auto cnt = _owner.gameMain().modeServer().frameCount() - _owner._invincibleModeCnt;
+      // 既定のフレーム数経過したら
+      if (cnt % 5 == 0) {
+         // ブレンドモードがαブレンドであれば加算ブレンドへ
+         if (_owner._blendMode == DX_BLENDMODE_ALPHA) {
+            _owner._blendMode = DX_BLENDMODE_ADD;
+         }
+         // αブレンドでない場合αブレンドへ
+         else {
+            _owner._blendMode = DX_BLENDMODE_ALPHA;
+         }
+      }
+   }
+}
+
 void Player::StateBase::Draw() {
    // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
    // 無敵時間中か確認
    if (_owner._invincibleCnt > 0) {
       // 無敵時間中だったらモデルを透明に近くする
-       MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 0.1f);
+       MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 0, _owner._blendMode);
+       MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 1, _owner._blendMode);
    }
    else {
       // 無敵時間中じゃなかったらモデルを不透明にする
-       MV1SetOpacityRate(_owner._modelAnimeComponent->modelHandle(), 1.0f);
+      MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 0, DX_BLENDMODE_ALPHA);
+      MV1SetMaterialDrawBlendMode(_owner._modelAnimeComponent->modelHandle(), 1, DX_BLENDMODE_ALPHA);
    }
 #ifdef _DEBUG
    // プレイヤーのカプセルの一つ目の座標の設定
@@ -386,6 +408,7 @@ void Player::StateBase::Draw() {
 }
 
 void Player::StateIdle::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("stay", true, IdleAnimeSpeed);
    // オブジェクトを持ち上げられると設定
@@ -459,6 +482,8 @@ void Player::StateIdle::Input(InputManager& input) {
 }
 
 void Player::StateIdle::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // 回転処理
    _owner.Rotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -480,6 +505,7 @@ void Player::StateIdle::Update() {
 }
 
 void Player::StateWalk::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // オブジェクトを持ち上げられると設定
    _owner._isLift = true;
    // モデルのアニメーションの設定
@@ -617,6 +643,8 @@ void Player::StateWalk::Input(InputManager& input) {
 }
 
 void Player::StateWalk::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // 移動処理
    _owner.Move(_owner._moved);
    // 回転処理
@@ -644,6 +672,7 @@ void Player::StateRun::Enter() {
    _owner._isLift = true;
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("run_02", true, RunAnimeSpeed);
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // ゲームのフレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
    // この状態へ入った時のゲームのフレームカウントの
@@ -652,7 +681,8 @@ void Player::StateRun::Enter() {
 void Player::StateRun::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Run");
-   if ((_owner.gameMain().modeServer().frameCount() - _footCnt) % 5 == 0) {
+   // 左スティックの入力を数フレーム待つ
+   if ((_owner.gameMain().modeServer().frameCount() - _footCnt) % WaitFrame == 0) {
       // デッドゾーンの取得
       auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
       // 移動しているかのフラグを作成して初期ではしていないと設定
@@ -794,6 +824,8 @@ void Player::StateRun::Input(InputManager& input) {
 }
 
 void Player::StateRun::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    FootStepSound();
    // 移動処理
    _owner.Move(_owner._moved);
@@ -818,6 +850,7 @@ void Player::StateRun::Update() {
 }
 
 void Player::StateShootReady::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true, ShootReadyAnimeSpeed);
    // 鳴らすサウンドの設定
@@ -882,6 +915,7 @@ void Player::StateShootReady::Exit() {
 }
 
 void Player::StateKnockBack::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner.modelAnimeComponent().ChangeAnime("damaged", false, 1.2);
    // ノックバックする時間の設定
@@ -911,6 +945,8 @@ void Player::StateKnockBack::Update() {
    else {
       // 無敵時間の設定
       _owner._invincibleCnt = 60 * 2;
+      // 無敵状態に入った時のモードサーバーのフレームカウント数の設定
+      _owner._invincibleModeCnt = _owner.gameMain().modeServer().frameCount();
       // ノックバックしていないと設定
       _owner.collisionComponent().knockBack(false);
       // 当たり判定の結果を当たっていないと設定
@@ -944,6 +980,7 @@ void Player::StateDie::Update() {
 }
 
 void Player::StateWeakShootReady::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
@@ -980,6 +1017,8 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
 }
 
 void Player::StateWeakShootReady::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // 射撃状態の回転処理
    _owner.ShootRotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -1008,6 +1047,7 @@ void Player::StateWeakShootReady::Exit() {
 }
 
 void Player::StateReload::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("reload", true,0.5);
    // リロード状態のカウントを0に設定
@@ -1017,6 +1057,8 @@ void Player::StateReload::Enter() {
 }
 
 void Player::StateReload::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
    if (_reloadCnt > 60 * 2) {
       _owner._bulletStock = 5;
@@ -1043,6 +1085,7 @@ void Player::StateReload::Update() {
 }
 
 void Player::StateRecovery::Enter() {
+   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("heal", false);
    // 回復状態のカウントを0に設定
@@ -1056,6 +1099,8 @@ void Player::StateRecovery::Enter() {
 }
 
 void Player::StateRecovery::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // 回復状態のカウントが既定の値よりも大きいか確認
    if (_recoveryCnt > 60 * 1) {
       // 回復状態のカウントが既定の値よりも大きい場合
