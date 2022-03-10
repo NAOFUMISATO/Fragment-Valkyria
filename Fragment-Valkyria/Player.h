@@ -67,11 +67,6 @@ namespace FragmentValkyria {
           */
          void ComputeWorldTransform() override;
          /**
-          * \brief プレイヤーの体力の取得
-          * \return プレイヤーの体力
-          */
-         inline double hp() { return _hp; }
-         /**
           * \brief 無敵時間の取得
           * \return 無敵時間
           */

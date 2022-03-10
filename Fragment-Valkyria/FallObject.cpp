@@ -18,25 +18,27 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
-      { "range", "gravity", "shoot_speed", "up_speed", "rotate_angle",
-      "updown_range", "right_hand_up_value", "up_value", "capsule_pos1", "capsule_pos2", "capsule_radius",
-      "fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
+   auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
+      { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
+      "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
+   const double Gravity = fallParamMap["gravity"];
+   const double ShootSpeed = fallParamMap["shoot_speed"];
+   const double UpSpeed = fallParamMap["up_speed"];
+   const double RotateAngle = fallParamMap["rotate_angle"];
+   const double UpDownRange = fallParamMap["updown_range"];
+   const double RightHandUpValue = fallParamMap["right_hand_up_value"];
+   const double UpValue = fallParamMap["up_value"];
+   const double FallPointPosY = fallParamMap["fallpoint_pos_y"];
+   const double FallPointScale = fallParamMap["fallpoint_scale"];
+   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];
 
-   const double Range = paramMap["range"];
-   const double Gravity = paramMap["gravity"];
-   const double ShootSpeed = paramMap["shoot_speed"];
-   const double UpSpeed = paramMap["up_speed"];
-   const double RotateAngle = paramMap["rotate_angle"];
-   const double UpDownRange = paramMap["updown_range"];
-   const double RightHandUpValue = paramMap["right_hand_up_value"];
-   const double UpValue = paramMap["up_value"];
-   const double CapsulePos1 = paramMap["capsule_pos1"];
-   const double CapsulePos2 = paramMap["capsule_pos2"];
-   const double CapsuleRadius = paramMap["capsule_radius"];
-   const double FallPointPosY = paramMap["fallpoint_pos_y"];
-   const double FallPointScale = paramMap["fallpoint_scale"];
-   const int FallPointAnimeSpeed = paramMap["fallpoint_animespeed"];
+   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_capsule_pos1",
+      "fallobject_capsule_pos2", "fallobject_radius" });
+   const double Range = collParamMap["fallobject_range"];
+   const double CapsulePos1 = collParamMap["fallobject_capsule_pos1"];
+   const double CapsulePos2 = collParamMap["fallobject_capsule_pos2"];
+   const double CapsuleRadius = collParamMap["fallobject_radius"];
+
    constexpr auto DefaultPointScale = 1.0;
    constexpr auto DefaultPointAngle = 0.0;
    constexpr auto UpEffectDiffY = 20.0;

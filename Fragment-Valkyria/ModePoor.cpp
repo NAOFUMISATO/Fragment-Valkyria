@@ -21,9 +21,14 @@
 #include "ModelAnimeComponent.h"
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
+   auto poorParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
       { "max_wave" });
-   const int MaxWave = paramMap["max_wave"];
+   const int MaxWave = poorParamMap["max_wave"];
+
+   auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp","max_bullet","max_portion" });
+   const double MaxHp = playerParamMap["max_hp"];
+   const int MaxBullet = playerParamMap["max_bullet"];
+   const int MaxPortion= playerParamMap["max_portion"];
 }
 
 using namespace FragmentValkyria::Mode;
@@ -68,6 +73,7 @@ void ModePoor::Enter() {
    GetSoundComponent().Play("PoorBattle");
    _gameMain.ingameTimer(0);
    _wave = 1;
+   _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
    ModeInGameBase::Enter();
 }
 

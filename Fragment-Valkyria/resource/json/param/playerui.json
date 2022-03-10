@@ -10,7 +10,6 @@
 			"shake_frame":30,
 			"shake_width":3.0,
 			"redbar_speed":0.02,
-			"max_hp":100.0,
 			"bullet_diff_x":50,
 			"portion_diff_x":50,
 			"reticle_animespeed":1

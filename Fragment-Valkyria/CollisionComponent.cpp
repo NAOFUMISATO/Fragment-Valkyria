@@ -31,7 +31,7 @@ namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
       { "fallobject_range", "ply_radius", "ply_capsule_pos1",
        "ply_capsule_pos2", "gatling_radius", "fallobject_capsule_pos1",
-      "fallobject_capsule_pos2", "fallobject_radius", "laser_radius"});
+      "fallobject_capsule_pos2", "fallobject_radius", "laser_radius","bullet_radius" });
 
    const double FallObjectRange = paramMap["fallobject_range"];                      //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
    const double PlayerRadius = paramMap["ply_radius"];                               //!< プレイヤーのカプセルの半径
@@ -42,6 +42,7 @@ namespace {
    const double FallObjectCapsulePos2 = paramMap["fallobject_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
    const double FallObjectRadius = paramMap["fallobject_radius"];                    //!< フォールオブジェクトのカプセルの半径
    const double LaserRadius = paramMap["laser_radius"];                              //!< レーザーのカプセルの半径
+   const double BulletRadius = paramMap["bullet_radius"];                            //!< 弱攻撃の半径
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -338,7 +339,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
    // 遠隔弱攻撃の弾の位置を取得
    auto bulletPos = _owner.position();
    // 遠隔弱攻撃の弾の半径を設定
-   auto bulletRadius = static_cast<float>(20.0);
+   auto bulletRadius = static_cast<float>(BulletRadius);
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()){
       // ラージエネミーじゃなかったら何もしない
@@ -584,7 +585,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
       //球の位置
       auto bullet = object->position();
       //球の半径
-      auto bulletRadius = static_cast<float>(20.0);
+      auto bulletRadius = static_cast<float>(BulletRadius);
       //モデルと球の当たり判定を取る
       auto result = MV1CollCheck_Sphere(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(bullet), bulletRadius);
       //当たり判定の結果を確認

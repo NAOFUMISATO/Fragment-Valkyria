@@ -31,7 +31,7 @@ void RemainingPortion::Init() {
 }
 
 void RemainingPortion::Update() {
-   auto portionStock = _gameMain.objServer().GetDoubleData("PlayerPortionStock");
+   auto portionStock = _gameMain.playerPortion();
    StockCheck(static_cast<int>(portionStock));
 }
 

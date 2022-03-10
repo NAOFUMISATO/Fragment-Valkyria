@@ -23,7 +23,7 @@ ClearScore::ClearScore(Game::GameMain& gameMain) :SpriteBase{ gameMain } {
 void ClearScore::Init() {
    _position = ScorePos;
    auto handles = GetResServer().GetTextures("ClearScore");
-   auto timer = _gameMain.ingameTimer();
+   auto timer = static_cast<int>(_gameMain.ingameTimer());
    if (timer >= OneSecFrame * CScoreSec) {
       _grHandle = handles[3];
    }

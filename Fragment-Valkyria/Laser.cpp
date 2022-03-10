@@ -14,9 +14,9 @@
 #include "LargeEnemy.h"
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("laser",
-      { "radius" });
-   const double Radius = paramMap["radius"];
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
+      { "laser_radius" });
+   const double Radius = paramMap["laser_radius"];
 }
 
 using namespace FragmentValkyria::Enemy;

@@ -93,8 +93,57 @@ namespace FragmentValkyria {
           * \param aimSens エイム感度
           * \param deadZone デッドゾーン
           */
-         inline void sensitivity(double cameraSens,double aimSens,int deadZone) { 
-            _sensitivity = std::make_tuple(cameraSens, aimSens, deadZone);
+         inline void sensitivity(double cameraSens, double aimSens, int deadZone) { _sensitivity = std::make_tuple(cameraSens, aimSens, deadZone); }
+         /**
+          * \brief プレイヤーのステータスの取得
+          * \return プレイヤーのステータス
+          */
+         inline std::tuple<double, int, int> playerStatus() const { return _playerStatus; }
+         /**
+          * \brief プレイヤーのステータス設定
+          * \param hp 体力
+          * \param bullet 残弾
+          * \param portion 残回復アイテム数
+          */
+         inline void playerStatus(double hp, int bullet, int portion) { _playerStatus = std::make_tuple(hp, bullet, portion); }
+         /**
+          * \brief プレイヤー体力の取得
+          * \return プレイヤー体力
+          */
+         inline double playerHp()const { return std::get<0>(_playerStatus); }
+         /**
+          * \brief プレイヤー体力の設定
+          * \param hp 設定する体力
+          */
+         inline void playerHp(double hp) {
+            auto [oldHp, bullet, portion] = _playerStatus;
+            _playerStatus = std::make_tuple(hp, bullet, portion);
+         }
+         /**
+          * \brief プレイヤーの残弾数の取得
+          * \return プレイヤーの残弾数
+          */
+         inline int playerBullet() const { return std::get<1>(_playerStatus); }
+         /**
+          * \brief プレイヤーの残弾数の設定
+          * \param bullet 設定するプレイヤーの残弾数
+          */
+         inline void playerBullet(int bullet) {
+            auto [hp, oldBullet, portion] = _playerStatus;
+            _playerStatus = std::make_tuple(hp, bullet, portion);
+         }
+         /**
+          * \brief プレイヤーの残回復アイテム数の取得
+          * \return プレイヤーの残回復アイテム数
+          */
+         inline int playerPortion()const { return std::get<2>(_playerStatus); }
+         /**
+          * \brief プレイヤーの残回復アイテム数の設定
+          * \param portion 設定するプレイヤーの残回復アイテム数
+          */
+         inline void playerPortion(int portion) {
+            auto [hp, bullet, oldPortion] = _playerStatus;
+            _playerStatus = std::make_tuple(hp, bullet, portion);
          }
          /**
           * \brief 画面設定の値を返す
@@ -130,6 +179,7 @@ namespace FragmentValkyria {
       private:
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
+         std::tuple<double, int, int> _playerStatus;            //!< プレイヤーのステータスのTuple型
          std::unique_ptr<Object::ObjectServer> _objServer;      //!< オブジェクトの一括管理クラス
          std::unique_ptr<Sprite::SpriteServer> _sprServer;      //!< スプライトの一括管理クラス
          std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス

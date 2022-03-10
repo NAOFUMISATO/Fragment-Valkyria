@@ -11,8 +11,11 @@
 #include "ObjectServer.h"
 
 namespace {
-   constexpr double Radius = 20.0;       //!< ‹…‚Ì”¼Œa
-   constexpr double Speed = 50.0;        //!< ˆÚ“®‚Ì‘¬‚³
+   auto bulletParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("weakbullet", { "speed" });
+   const double Speed = bulletParamMap["speed"];        //!< ˆÚ“®‚Ì‘¬‚³
+
+   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "bullet_radius" });
+   const double Radius = collParamMap["bullet_radius"]; //!< ‹…‚Ì”¼Œa
 }
 
 using namespace FragmentValkyria::Player;

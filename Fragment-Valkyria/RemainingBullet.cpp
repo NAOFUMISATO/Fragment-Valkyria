@@ -41,7 +41,7 @@ void RemainingBullet::Init() {
 }
 
 void RemainingBullet::Update() {
-   auto bulletStock = _gameMain.objServer().GetDoubleData("PlayerBulletStock");
+   auto bulletStock = _gameMain.playerBullet();
    StockCheck(static_cast<int>(bulletStock));
 }
 

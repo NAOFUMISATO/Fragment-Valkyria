@@ -19,31 +19,36 @@
 #include "EffectServer.h"
 
 namespace {
-    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
+    auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
-       "run_speed", "capsule_pos1", "capsule_pos2", "capsule_radius","rocovery_rate", "max_hp", 
+       "knockback_animespeed","run_speed","recovery_rate", "max_hp","max_bullet", "max_portion",
        "rotate_rate", "walk_speed", "walk_dead_zone_range", "wait_frame","invincible_frame" ,"blinking_frame" });
+    const double IdleAnimeSpeed = playerParamMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
+    const double WalkAnimeSpeed = playerParamMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
+    const double RunAnimeSpeed = playerParamMap["run_animespeed"];                  //!< 走り状態のアニメーションスピード
+    const double ShootReadyAnimeSpeed = playerParamMap["shootready_animespeed"];    //!< 射撃準備中のアニメーションスピード
+    const double ShootAnimeSpeed = playerParamMap["shoot_animespeed"];              //!< 射撃のアニメーションスピード
+    const double KnockBackAnimeSpeed = playerParamMap["knockback_animespeed"];      //!< 被ダメージのアニメーションスピード
+    const double RunSpeed = playerParamMap["run_speed"];                            //!< 走りの速さ
+    const double MaxHp = playerParamMap["max_hp"];                                  //!< ヒットポイントの最大値
+    const double RecoveryRate = playerParamMap["recovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
+    const double RotateRate = playerParamMap["rotate_rate"];                        //!< 回転をさせるときのベクトルの面積を求めるときのベクトルの大きさ
+    const double WalkSpeed = playerParamMap["walk_speed"];                          //!< 歩きの速さ
+    const int MaxBullet = playerParamMap["max_bullet"];                             //!< 最大弾数
+    const int MaxPortion = playerParamMap["max_portion"];                           //!< 最大回復アイテム数
+    const int WalkDeadZone = playerParamMap["walk_dead_zone_range"];                //!< 歩き状態のスティックの入力範囲の最大値
+    const int WaitFrame = playerParamMap["wait_frame"];                             //!< 左スティックの入力を待つフレーム数
+    const int InvincibleFrame = playerParamMap["invincible_frame"];                 //!< 無敵フレーム
+    const int BlinkingFrame = playerParamMap["blinking_frame"];                     //!< 無敵時の点滅フレーム
 
-    const double IdleAnimeSpeed = paramMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
-    const double WalkAnimeSpeed = paramMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
-    const double RunAnimeSpeed = paramMap["run_animespeed"];                  //!< 走り状態のアニメーションスピード
-    const double ShootReadyAnimeSpeed = paramMap["shootready_animespeed"];    //!< 射撃準備中のアニメーションスピード
-    const double ShootAnimeSpeed = paramMap["shoot_animespeed"];              //!< 射撃のアニメーションスピード
-    const double RunSpeed = paramMap["run_speed"];                            //!< 走りの速さ
-    const double CapsulePos1 = paramMap["capsule_pos1"];                      //!< カプセルの一つ目の座標までの位置からの高さ
-    const double CapsulePos2 = paramMap["capsule_pos2"];                      //!< カプセルの二つ目の座標までの位置からの高さ
-    const double CapsuleRadius = paramMap["capsule_radius"];                  //!< カプセルの半径
-    const double MaxHp = paramMap["max_hp"];                                  //!< ヒットポイントの最大値
-    const double RecoveryRate = paramMap["rocovery_rate"];                    //!< ヒットポイントの最大値からの回復する割合
-    const double RotateRate = paramMap["rotate_rate"];                        //!< 回転をさせるときのベクトルの面積を求めるときのベクトルの大きさ
-    const double WalkSpeed = paramMap["walk_speed"];                          //!< 歩きの速さ
-    const int WalkDeadZone = paramMap["walk_dead_zone_range"];                //!< 歩き状態のスティックの入力範囲の最大値
-    const int WaitFrame = paramMap["wait_frame"];                             //!< 左スティックの入力を待つフレーム数
-    const int InvincibleFrame = paramMap["invincible_frame"];                 //!< 無敵フレーム
-    const int BlinkingFrame = paramMap["blinking_frame"];                     //!< 無敵時の点滅フレーム
+    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "ply_radius",
+       "ply_capsule_pos1","ply_capsule_pos2" });
+    const double CapsuleRadius = collParamMap["ply_radius"];                        //!< カプセルの半径
+    const double CapsulePos1 = collParamMap["ply_capsule_pos1"];                    //!< カプセルの一つ目の座標までの位置からの高さ
+    const double CapsulePos2 = collParamMap["ply_capsule_pos2"];                    //!< カプセルの二つ目の座標までの位置からの高さ
 
-    constexpr auto FootStepHeight = 3.0;                                      //!< 走り状態時の足音発生高さ(足の甲からの位置)
-    constexpr auto FootStepStart = 10;                                        //!< 走り状態遷移時からの足音未発生フレーム
+    constexpr auto FootStepHeight = 3.0;                                            //!< 走り状態時の足音発生高さ(足の甲からの位置)
+    constexpr auto FootStepStart = 10;                                              //!< 走り状態遷移時からの足音未発生フレーム
     
 }
 
@@ -90,12 +95,6 @@ void Player::Update() {
    GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
    // オブジェクトサーバーにカメラの位置を通知
    GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
-   // オブジェクトサーバーにヒットポイントを通知
-   GetObjServer().RegistDouble("PlayerHP",_hp);
-   // オブジェクトサーバーに遠隔弱攻撃の残り弾数を通知
-   GetObjServer().RegistDouble("PlayerBulletStock",static_cast<double>(_bulletStock));
-   // オブジェクトサーバーにポーションの数を通知
-   GetObjServer().RegistDouble("PlayerPortionStock", static_cast<double>(_portionStock));
 }
 
 void Player::Draw() {
@@ -206,7 +205,7 @@ void Player::HitCheckFromGatling() {
         // ノックバック量の設定
         _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        _hp -= _collisionComponent->damage();
+        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -259,7 +258,7 @@ void Player::HitCheckFromFallObject() {
             _knockBack = knockBackDelta * 10.0;
         }
         // ダメージ量分ヒットポイントを減らす
-        _hp -= _collisionComponent->damage();
+        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -289,7 +288,7 @@ void Player::HitCheckFromLaser() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackDelta * 20.0;
         // ダメージ量分ヒットポイントを減らす
-        _hp -= _collisionComponent->damage();
+        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -316,7 +315,7 @@ void Player::HitCheckFromLargeEnemy() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackVec * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        _hp -= _collisionComponent->damage();
+        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // カメラのズームをしないと設定
@@ -341,7 +340,7 @@ void Player::HitCheckFromPoorEnemy() {
       // ノックバック量のベクトルを設定
       _knockBack = knockBackVec * 10.0;
       // ダメージ量分ヒットポイントを減らす
-      _hp -= _collisionComponent->damage();
+      _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
       // ノックバックしていると設定
       _collisionComponent->knockBack(true);
       // カメラのズームをしないと設定
@@ -461,11 +460,11 @@ void Player::StateIdle::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
+   if (input.GetXJoypad().XClick() && _owner._gameMain.playerBullet() < MaxBullet) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+   if (input.GetXJoypad().YClick() && _owner._gameMain.playerPortion() > 0 && _owner._gameMain.playerHp() < MaxHp) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -596,11 +595,11 @@ void Player::StateWalk::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
+   if (input.GetXJoypad().XClick() && _owner._gameMain.playerBullet() < MaxBullet) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+   if (input.GetXJoypad().YClick() && _owner._gameMain.playerPortion() > 0 && _owner._gameMain.playerHp() < MaxHp) {
       _owner._stateServer->GoToState("Recovery");
    }
    // 移動しているかのフラグが移動していないとなっているか確認
@@ -803,11 +802,11 @@ void Player::StateRun::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && _owner._bulletStock < 5) {
+   if (input.GetXJoypad().XClick() && _owner._gameMain.playerBullet() < MaxBullet) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && _owner._portionStock > 0 && _owner._hp < 100.0) {
+   if (input.GetXJoypad().YClick() && _owner._gameMain.playerPortion() > 0 && _owner._gameMain.playerHp() < MaxHp) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -906,7 +905,7 @@ void Player::StateShootReady::Exit() {
 void Player::StateKnockBack::Enter() {
    _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
-   _owner.modelAnimeComponent().ChangeAnime("damaged", false, 1.2);
+   _owner.modelAnimeComponent().ChangeAnime("damaged", false, KnockBackAnimeSpeed);
    // ノックバックする時間の設定
    _owner._freezeTime = 30;
    // オブジェクトを持ち上げられないと設定
@@ -927,7 +926,7 @@ void Player::StateKnockBack::Update() {
       return;
    }
    // ヒットポイントが0以下だった場合死亡状態へ
-   if (_owner._hp <= 0) {
+   if (_owner._gameMain.playerHp() <= 0) {
       _owner._stateServer->GoToState("Die");
    }
    // ヒットポイントが0以下じゃなかった場合
@@ -984,7 +983,7 @@ void Player::StateWeakShootReady::Enter() {
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
    // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があるか確認
-   if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._bulletStock > 0) {
+   if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._gameMain.playerBullet() > 0) {
       // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があった場合
       // 遠隔弱攻撃処理
       _owner.WeakAttack();
@@ -993,7 +992,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
       // 鳴らすサウンドの設定
       _owner.GetSoundComponent().Play("PlayerShoot");
       // 遠隔弱攻撃の残り弾数を減らす
-      --_owner._bulletStock;
+      _owner._gameMain.playerBullet(_owner._gameMain.playerBullet() - 1);
       // クールタイムの設定
       _coolTime = 60 * 1;
    }
@@ -1050,7 +1049,7 @@ void Player::StateReload::Update() {
    StateBase::Update();
    // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
    if (_reloadCnt > 60 * 2) {
-      _owner._bulletStock = 5;
+      _owner._gameMain.playerBullet(5);
       _owner._stateServer->GoToState("Idle");
    }
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -1096,13 +1095,13 @@ void Player::StateRecovery::Update() {
       // 回復量の設定
       auto recovery = MaxHp * RecoveryRate;
       // ヒットポイントを回復量分増やす
-      _owner._hp += recovery;
+      _owner._gameMain.playerHp(_owner._gameMain.playerHp() + recovery);
       // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
-      if (_owner._hp >= MaxHp) {
-         _owner._hp = MaxHp;
+      if (_owner._gameMain.playerHp() >= MaxHp) {
+         _owner._gameMain.playerHp(MaxHp);
       }
       // ポーションの数を一つ減らす
-      --_owner._portionStock;
+      _owner._gameMain.playerPortion(_owner._gameMain.playerPortion() - 1);
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }

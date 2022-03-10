@@ -15,11 +15,11 @@
 #include "EffectServer.h"
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",
-      { "speed", "radius" });
+   auto gatParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",{ "speed" });
+   const double Speed = gatParamMap["speed"];
 
-   const double Speed = paramMap["speed"];
-   const double Radius = paramMap["radius"];
+   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "gatling_radius" });
+   const double Radius = collParamMap["gatling_radius"];
 }
 
 using namespace FragmentValkyria::Enemy;

@@ -12,19 +12,22 @@
 
 namespace {
    // jsonファイルから値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "frontcolor_red" ,
+   auto hpParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "frontcolor_red" ,
       "frontcolor_green" ,"frontcolor_blue", "backcolor_red" ,"backcolor_green",
-      "backcolor_blue" ,"shake_frame","shake_width","redbar_speed","max_hp" });
-   const unsigned char FrontColorRed = paramMap["frontcolor_red"];     //!< 前面バーの初期カラー赤値
-   const unsigned char FrontColorGreen = paramMap["frontcolor_green"]; //!< 前面バーの初期カラー緑値
-   const unsigned char FrontColorBlue = paramMap["frontcolor_blue"];   //!< 前面バーの初期カラー青値
-   const unsigned char BackColorRed = paramMap["backcolor_red"];       //!< 背面バーの初期カラー赤値
-   const unsigned char BackColorGreen = paramMap["backcolor_green"];   //!< 背面バーの初期カラー緑値
-   const unsigned char BackColorBlue = paramMap["backcolor_blue"];     //!< 背面バーの初期カラー青値
-   const unsigned char ShakeFrame= paramMap["shake_frame"];            //!< 振幅フレーム
-   const double ShakeWidth = paramMap["shake_width"];                  //!< 振幅の大きさ
-   const double RedBarSpeed = paramMap["redbar_speed"];                //!< 背面バーの減少速度
-   const double MaxHp= paramMap["max_hp"];                             //!< プレイヤー最大HP
+      "backcolor_blue" ,"shake_frame","shake_width","redbar_speed" });
+   const unsigned char FrontColorRed = hpParamMap["frontcolor_red"];     //!< 前面バーの初期カラー赤値
+   const unsigned char FrontColorGreen = hpParamMap["frontcolor_green"]; //!< 前面バーの初期カラー緑値
+   const unsigned char FrontColorBlue = hpParamMap["frontcolor_blue"];   //!< 前面バーの初期カラー青値
+   const unsigned char BackColorRed = hpParamMap["backcolor_red"];       //!< 背面バーの初期カラー赤値
+   const unsigned char BackColorGreen = hpParamMap["backcolor_green"];   //!< 背面バーの初期カラー緑値
+   const unsigned char BackColorBlue = hpParamMap["backcolor_blue"];     //!< 背面バーの初期カラー青値
+   const unsigned char ShakeFrame= hpParamMap["shake_frame"];            //!< 振幅フレーム
+   const double ShakeWidth = hpParamMap["shake_width"];                  //!< 振幅の大きさ
+   const double RedBarSpeed = hpParamMap["redbar_speed"];                //!< 背面バーの減少速度
+
+   auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp" });
+   const double MaxHp= playerParamMap["max_hp"];                         //!< プレイヤー最大HP
+
    // jsonファイルからVector4の値を取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "hp_pos" });
    const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
@@ -58,8 +61,8 @@ void PlayerHP::Update() {
    auto count = _gameMain.modeServer().frameCount();
    // HPバー振動の処理
    BarShake(count);
-   // プレイヤーHPをObjectServerから取得
-   _hp = _gameMain.objServer().GetDoubleData("PlayerHP");
+   // プレイヤーHPを取得
+   _hp = _gameMain.playerHp();
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / MaxHp + left, MaxRate);

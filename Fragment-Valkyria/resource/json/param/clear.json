@@ -1,8 +1,11 @@
 {
 	"clear": [
 		{
-			"number_diffx":150.0
-
+			"number_diffx":150.0,
+			"s_scoresec":20,
+			"a_scoresec":30,
+			"b_scoresec":40,
+			"c_scoresec":50
 		}	
 	],
 	"clear_vec": [
