@@ -22,17 +22,21 @@
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
-      "bullet_stun_value"});
-   const int GatlingFrame = paramMap["gatling_frame"];             //!< ガトリングを打つフレームの間隔
-   const double MaxStun = paramMap["max_stun"];                    //!< スタン値の最大値
-   const double StunDecrease = paramMap["stun_decrease"];          //!< 毎フレーム減らすスタン値の値
-   const double ObjectStunValue = paramMap["object_stun_value"];   //!< オブジェクト攻撃を受けた時に増えるスタン値
-   const double BulletStunValue = paramMap["bullet_stun_value"];   //!< 遠隔弱攻撃を受けた時に増えるスタン値
+      "bullet_stun_value", "hp", "consecutive_fall_object_frame",
+      "consecutive_num"});
+   const int GatlingFrame = paramMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
+   const double MaxStun = paramMap["max_stun"];                                                          //!< スタン値の最大値
+   const double StunDecrease = paramMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
+   const double ObjectStunValue = paramMap["object_stun_value"];                                         //!< オブジェクト攻撃を受けた時に増えるスタン値
+   const double BulletStunValue = paramMap["bullet_stun_value"];                                         //!< 遠隔弱攻撃を受けた時に増えるスタン値
+   const double MaxHitPoint = paramMap["hp"];                                                            //!< ヒットポイントの最大値
+   const int ConsecutiveFallObjectFrame = paramMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
+   const int ConsecutiveNum = paramMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
 
-   constexpr auto MaxNum = 6;                                      //!< 落下オブジェクトの最大数
-   constexpr auto FootStepHeight = 40.0;                           //!< 走り状態時の足音発生高さ
-   constexpr auto LaserDiffPos = 150.0;                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
-   constexpr auto LaserIrradiationTime = 155.f;                    //!< アニメーション始まってからのレーザーの照射時間
+   constexpr auto MaxNum = 6;                                                                            //!< 落下オブジェクトの最大数
+   constexpr auto FootStepHeight = 40.0;                                                                 //!< 走り状態時の足音発生高さ
+   constexpr auto LaserDiffPos = 150.0;                                                                  //!< レーザー生成位置に一番近い位置のフレームからのオフセット
+   constexpr auto LaserIrradiationTime = 155.f;                                                          //!< アニメーション始まってからのレーザーの照射時間
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -61,7 +65,7 @@ void LargeEnemy::Init() {
    // コリジョンフレームをナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _faceCollision, 3, 2, 1);
    // ヒットポイントの設定
-   _hp = 1000.0;
+   _hp = MaxHitPoint;
    // 行動に追加する状態の文字列の動的配列を作成
    _actionList.emplace_back("FallObject");
    _actionList.emplace_back("Gatling");
@@ -284,12 +288,23 @@ void LargeEnemy::Move(const Vector4& moved) {
 }
 
 void LargeEnemy::Action() {
+   // ヒットポイントがヒットポイントの最大値の50％以下になった最初の行動の場合
+   if (_hp <= MaxHitPoint * 0.5 && _firstAngryAction) {
+      // 各行動状態への文字列の動的配列にオブジェクト連続落下状態を追加
+      _actionList.emplace_back("Consecutive");
+      // オブジェクト連続落下状態へ
+      _stateServer->GoToState("Consecutive");
+      // ヒットポイントがヒットポイントの最大値の50％以下になった最初の行動でないと設定
+      _firstAngryAction = false;
+      // 処理をスキップして戻る
+      return;
+   }
    // 行動させる範囲を制限した行動状態への文字列の動的配列が空だったら各行動状態への文字列の動的配列を代入する
    if (_action.empty()) {
       _action = _actionList;
    }
    // 行動状態への文字列の動的配列の要素の個数が最大だった場合
-   if (_action.size() >= 5) {
+   if (_action.size() >= _actionList.size()) {
       // 最初の行動状態へ移動
       _stateServer->GoToState(_action[0]);
       // 最初の行動状態への文字列を動的配列から削除
@@ -773,6 +788,59 @@ void LargeEnemy::StateFanGatling::Update() {
    _owner.HitCheckFromBullet();
 }
 
+void LargeEnemy::StateStun::Enter() {
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("stan", true, 0.5);
+   auto efcStan = std::make_unique<Effect::EffectBossStan>(_owner._gameMain, "BossStan");
+   efcStan->position(_owner._position);
+   _owner.GetEfcServer().Add(std::move(efcStan));
+
+}
+
+void LargeEnemy::StateStun::Update() {
+   // アニメーションの繰り返した回数の取得
+   auto repeated = _owner._modelAnimeComponent->repeatedCount();
+   // アニメーションを一回再生したら待機状態へ
+   if (repeated >= 1) {
+      _owner._stateServer->GoToState("Idle");
+   }
+   // 落下オブジェクトと当たったか確認
+   _owner.HitCheckFromFallObject();
+   // 遠隔弱攻撃の弾と当たっているか確認
+   _owner.HitCheckFromBullet();
+}
+
+void LargeEnemy::StateStun::Exit() {
+   // スタン値を初期化
+   _owner._stunValue = 0.0;
+}
+
+void LargeEnemy::StateConsecutiveFallObject::Enter() {
+   // この状態になった時のゲームのフレームカウントの保存
+   _stateCnt = _owner.gameMain().modeServer().frameCount();
+   // 落下オブジェクトを生成する数を既定の値に設定
+   _fallObjectNum = ConsecutiveNum;
+}
+
+void LargeEnemy::StateConsecutiveFallObject::Update() {
+   // この状態に入ってからの経過フレーム数の取得
+   auto count = _owner.gameMain().modeServer().frameCount() - _stateCnt;
+   if (count % ConsecutiveFallObjectFrame == 0) {
+      // モデルのアニメーションの設定
+      _owner._modelAnimeComponent->ChangeAnime("object_attack", true, 1.0);
+      // アニメーションを始める時間の設定
+      _owner._modelAnimeComponent->playTime(60.0);
+      // 落下オブジェクトの生成
+      CreateFallObject();
+      // カメラを振動させるためにカメラの振動に使うYの位置を0.0に設定
+      _owner._cameraComponent->SetVibValue(0.0);
+      --_fallObjectNum;
+   }
+   if (_fallObjectNum <= 0) {
+      _owner._stateServer->GoToState("Idle");
+   }
+}
+
 void LargeEnemy::StateMove::FootStepSound() {
    // フレームカウントの取得
    auto count = _owner.gameMain().modeServer().frameCount();
@@ -806,33 +874,6 @@ void LargeEnemy::StateMove::FootStepSound() {
    }
 }
 
-void LargeEnemy::StateStun::Enter() {
-   // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("stan", true, 0.5);
-   auto efcStan = std::make_unique<Effect::EffectBossStan>(_owner._gameMain, "BossStan");
-   efcStan->position(_owner._position);
-   _owner.GetEfcServer().Add(std::move(efcStan));
-
-}
-
-void LargeEnemy::StateStun::Update() {
-   // アニメーションの繰り返した回数の取得
-   auto repeated = _owner._modelAnimeComponent->repeatedCount();
-   // アニメーションを一回再生したら待機状態へ
-   if (repeated >= 1) {
-      _owner._stateServer->GoToState("Idle");
-   }
-   // 落下オブジェクトと当たったか確認
-   _owner.HitCheckFromFallObject();
-   // 遠隔弱攻撃の弾と当たっているか確認
-   _owner.HitCheckFromBullet();
-}
-
-void LargeEnemy::StateStun::Exit() {
-   // スタン値を初期化
-   _owner._stunValue = 0.0;
-}
-
 AppFrame::Math::Vector4 LargeEnemy::StateLaser::GetLaserPos() {
    // ボスの向きの取得(ボスのZ座標が逆の為、反転させておく)
    auto bossDir = _owner.GetForward() * -1.0;
@@ -841,4 +882,21 @@ AppFrame::Math::Vector4 LargeEnemy::StateLaser::GetLaserPos() {
    // 指定座標分ずらす
    auto laserPos = laserFramePos + bossDir * LaserDiffPos;
    return laserPos;
+}
+
+void LargeEnemy::StateConsecutiveFallObject::CreateFallObject() {
+   // プレイヤーの位置の取得
+   auto plyPos = _owner.GetObjServer().GetVecData("PlayerPos");
+   // プレイヤーの位置に一定の高さを足す
+   plyPos.Add(0.0, 500.0, 0.0);
+   // 落下オブジェクトの生成
+   auto fallObjectBase = _owner.gameMain().objFactory().Create("FallObject");
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(*fallObjectBase);
+   // プレイヤーの位置に一定の高さを足した値を位置に設定
+   fallObject.position(plyPos);
+   // 残留しないと設定
+   fallObject.residual(false);
+   // オブジェクト一括管理クラスの動的配列に追加
+   _owner.GetObjServer().Add(std::move(fallObjectBase));
 }
