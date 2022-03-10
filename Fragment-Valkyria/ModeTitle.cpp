@@ -74,6 +74,7 @@ void ModeTitle::Init() {
 void ModeTitle::Enter() {
    GetSoundComponent().Play("TitleBgm");
    _stateServer->PushBack("AnyButton");
+   _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
 }
 
