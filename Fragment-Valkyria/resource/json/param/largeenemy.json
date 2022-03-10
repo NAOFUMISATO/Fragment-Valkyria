@@ -5,7 +5,10 @@
 			"max_stun": 10.0,
 			"stun_decrease": 0.01,
 			"object_stun_value": 5.0,
-			"bullet_stun_value": 5.0
+			"bullet_stun_value": 5.0,
+			"hp": 1000.0,
+			"consecutive_fall_object_frame": 30,
+			"consecutive_num": 5
 			
 		}
 	],

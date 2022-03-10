@@ -123,6 +123,7 @@ namespace FragmentValkyria {
          int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
          bool _firstRotating{ true };                               //!< 移動中最初に移動方向に回転するか
          bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
+         bool _firstAngryAction{ true };                            //!< ヒットポイントが50％を切った後の最初の行動の場合
          bool _rotating{ false };                                   //!< 回転処理をするか
          bool _attack{ false };                                     //!< 攻撃をしているか
          bool _isLaser{ false };                                    //!< レーザー攻撃を行っているか
@@ -197,6 +198,34 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+         };
+         /**
+         * \class オブジェクト連続落下状態クラス
+         * \brief オブジェクト連続落下状態の処理を回す
+         */
+         class StateConsecutiveFallObject : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner ラージエネミーの参照
+             */
+            StateConsecutiveFallObject(LargeEnemy& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         private:
+            /**
+             * \brief 落下オブジェクトの生成
+             */
+            void CreateFallObject();
+
+            int _fallObjectNum{ 0 };            //!< 落下オブジェクトを生成する数
          };
          /**
          * \class ガトリング攻撃状態クラス

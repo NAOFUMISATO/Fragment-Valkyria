@@ -269,7 +269,14 @@ void FallObject::StateFall::Update() {
       efcFall->position(_owner._position);
       efcFall->speed(2.0);
       _owner.GetEfcServer().Add(std::move(efcFall));
-      _owner._stateServer->GoToState("Idle");
+      // 残留オブジェクトでない場合死亡状態へ
+      if (!_owner._residual) {
+         _owner._stateServer->GoToState("Die");
+      }
+      // 残留オブジェクトの場合待機状態へ
+      else {
+         _owner._stateServer->GoToState("Idle");
+      }
    }
 
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
