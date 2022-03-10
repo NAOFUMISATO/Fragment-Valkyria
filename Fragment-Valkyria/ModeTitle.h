@@ -84,6 +84,7 @@ namespace FragmentValkyria {
              * \brief 描画処理
              */
             void Draw() override;
+
          protected:
             ModeTitle& _owner;   //!< モードタイトルの参照
          };
