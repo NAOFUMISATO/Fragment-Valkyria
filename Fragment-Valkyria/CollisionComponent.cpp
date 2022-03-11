@@ -15,6 +15,7 @@
 #include "Stage.h"
 #include "StageModelComponent.h"
 #include "LoadStageFromJson.h"
+#include "LargeEnemy.h"
 #include "Laser.h"
 #include "ModeBoss.h"
 #include "ModePoor.h"
@@ -32,7 +33,8 @@ namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
       { "fallobject_range", "ply_radius", "ply_capsule_pos1",
        "ply_capsule_pos2", "gatling_radius", "fallobject_drum_capsule_pos1",
-      "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius","bullet_radius" });
+      "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius",
+      "bullet_radius", "clearobject_radius"});
 
    const double FallObjectRange = paramMap["fallobject_range"];                           //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
    const double PlayerRadius = paramMap["ply_radius"];                                    //!< プレイヤーのカプセルの半径
@@ -44,6 +46,11 @@ namespace {
    const double FallObjectRadius = paramMap["fallobject_drum_radius"];                    //!< フォールオブジェクトのカプセルの半径
    const double LaserRadius = paramMap["laser_radius"];                                   //!< レーザーのカプセルの半径
    const double BulletRadius = paramMap["bullet_radius"];                                 //!< 弱攻撃の半径
+   const double ClearObjectRadius = paramMap["clearobject_radius"];                       //!< クリアオブジェクトを形成するカプセルの半径
+
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
+      "clearobject_pos" });
+   const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -81,6 +88,10 @@ void CollisionComponent::PlayerFromObjectRange() {
          // 当たり判定の結果がプレイヤーと当たっているか確認
          if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
             // プレイヤーと当たっているオブジェクトがあった場合
+            // 落下オブジェクトでなければ処理をスキップしてfor文を回す
+            if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+               continue;
+            }
             // プレイヤーがオブジェクトを持ち上げられない場合落下するオブジェクトの当たり判定の結果に当たっていないと設定
             if (!player.isLift()) {
                object->collisionComponent().report().id(ReportId::None);
@@ -640,6 +651,34 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          object->collisionComponent().damage(20.0);
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+      }
+   }
+}
+
+void CollisionComponent::PlayerFromClearObject() {
+   auto clearObjectSphere = std::make_tuple(ClearObjectPos, ClearObjectRadius);
+   // オブジェクトサーバーの各オブジェクトを取得
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
+      // プレイヤーじゃなかったら何もしない
+      if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
+         continue;
+      }
+      // プレイヤーの位置の取得
+      auto plyPos = object->position();
+      // 球とモデルの当たり判定の結果を取得
+      auto result = AppFrame::Math::Utility::CollisionSpherePoint(plyPos, clearObjectSphere);
+      // 当たり判定の結果が当たっているか確認
+      if (result) {
+         // 当たっている場合
+         // ラージエネミーの当たり判定の結果にプレイヤーと当たったと設定
+         _owner.collisionComponent().report().id(ReportId::HitFromPlayer);
+         break;
+      }
+      // 当たっていない場合
+      else {
+         // ラージエネミーの当たり判定の結果に当たっていないと設定
+         _owner.collisionComponent().report().id(ReportId::None);
+         break;
       }
    }
 }

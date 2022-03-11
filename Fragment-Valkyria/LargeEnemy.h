@@ -88,6 +88,10 @@ namespace FragmentValkyria {
           */
          void HitCheckFromBullet();
          /**
+          * \brief クリアオブジェクトにプレイヤーが当たっているか確認
+          */
+         void ClearObjectHitCheckFromPlayer();
+         /**
           * \brief 移動処理
           * \param moved 移動量のベクトル
           */
@@ -119,7 +123,6 @@ namespace FragmentValkyria {
          int _bodyCollision{ 0 };                                   //!< モデルの胴体のコリジョンフレーム番号
          int _weakNessesCollision{ 0 };                             //!< モデルの弱点のコリジョンフレーム番号
          int _faceCollision{ 0 };                                   //!< モデルの顔のコリジョンフレーム番号
-         int _freezeTime{ 0 };                                      //!< 死亡してからゲームクリアまでのフレーム数
          int _createNum{ 0 };                                       //!< 生成されている落下オブジェクトの数
          bool _firstRotating{ true };                               //!< 移動中最初に移動方向に回転するか
          bool _endRotating{ true };                                 //!< 移動中最後にプレイヤーの方向に回転するか
@@ -286,6 +289,11 @@ namespace FragmentValkyria {
              * \brief 入口処理
              */
             void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
             /**
              * \brief 更新処理
              */
