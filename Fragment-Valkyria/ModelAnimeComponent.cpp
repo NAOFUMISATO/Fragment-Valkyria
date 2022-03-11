@@ -20,6 +20,8 @@ ModelAnimeComponent::~ModelAnimeComponent() {
 }
 
 void ModelAnimeComponent::Init() {
+   _blendRate = 0.f;
+   _blending = false;
 }
 
 void ModelAnimeComponent::Update() {

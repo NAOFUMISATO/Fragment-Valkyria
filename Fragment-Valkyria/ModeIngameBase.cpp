@@ -78,7 +78,7 @@ void ModeInGameBase::Exit() {
    GetObjServer().Clear();
    GetEfcServer().Clear();
    GetSprServer().Clear();
-   GetResServer().DeleteDuplicateModels();
+   GetResServer().ClearModels();
    GetObjFactory().Clear();
    DeleteLightHandleAll();
 }

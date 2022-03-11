@@ -35,7 +35,7 @@ void ModeMovie::Update() {
       _play = false;
    }
    if (!GetMovieStateToGraph(_mvHandle)) {
-      GetModeServer().GoToMode("Boss");
+      GetModeServer().GoToMode("Boss", 'L');
    }
 }
 

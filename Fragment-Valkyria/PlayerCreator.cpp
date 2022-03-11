@@ -53,6 +53,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
 
    // プレイヤーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*player);
+   model->Init();
    // モデルの設定
    model->SetModel("Player");
    model->PixelLightingON();

@@ -76,6 +76,7 @@ void ModeTitle::Enter() {
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
+   _gameMain.isPoorClear(false);
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
@@ -146,13 +147,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    }
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
-         if (GetASyncLoadNum() > 0) {
-            _owner.GetModeServer().GoToMode("Loading", 'S');
-         }
-         else {
-            _owner.GetModeServer().GoToMode("Poor");
-            SetUseASyncLoadFlag(false);
-         }
+         _owner.GetModeServer().GoToMode("Loading", 'S');
       }
    }
 }

@@ -69,6 +69,16 @@ namespace FragmentValkyria {
          void Render()override;
 
          /**
+          * \brief 雑魚戦をクリアしたかの判定を返す
+          * \return クリアしていればtrue,でなければfalse
+          */
+         inline bool isPoorClear() { return _isPoorClear; }
+         /**
+          * \brief 雑魚戦をクリアしたかの判定を設定
+          * \param poorClear 雑魚戦をクリアしたかの判定
+          */
+         inline void isPoorClear(bool poorClear) { _isPoorClear = poorClear; }
+         /**
           * \brief 計測時間の取得
           * \return インゲームで計測している時間
           */
@@ -177,6 +187,7 @@ namespace FragmentValkyria {
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
 
       private:
+         bool _isPoorClear{ false };                            //!< 雑魚戦をクリアしたか
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
          std::tuple<double, int, int> _playerStatus;            //!< プレイヤーのステータスのTuple型

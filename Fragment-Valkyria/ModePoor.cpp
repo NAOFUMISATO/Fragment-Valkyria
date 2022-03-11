@@ -37,9 +37,7 @@ ModePoor::ModePoor(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
 }
 
 void ModePoor::Init() {
-   auto& loadJson = GetLoadJson();
-   loadJson.LoadModels("ingame");
-   loadJson.LoadSounds("ingame");
+   GetLoadJson().LoadSounds("ingame");
    _gameMain.loadStage().LoadStageModels("Stage");
 }
 
@@ -71,8 +69,9 @@ void ModePoor::Enter() {
    objServer.Add(std::move(player));
 
    GetSoundComponent().Play("PoorBattle");
-   _gameMain.ingameTimer(0);
+   
    _wave = 1;
+   _gameMain.ingameTimer(0);
    _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
    ModeInGameBase::Enter();
 }
@@ -80,7 +79,8 @@ void ModePoor::Enter() {
 void ModePoor::Input(AppFrame::Input::InputManager& input) {
    //-----------仮--------------
    if (input.GetXJoypad().BackClick()) {
-      GetModeServer().GoToMode("Movie",'L');
+      _gameMain.isPoorClear(true);
+      GetModeServer().GoToMode("Loading",'S');
    }
    if (input.GetMouse().LeftClick()) {
       GetModeServer().GoToMode("ClearResult", 'S');
@@ -110,7 +110,8 @@ void ModePoor::WaveProcess() {
    if (!isActiveEnemy) {
       // 最大waveに達したならモード遷移を行う
       if (_wave >= MaxWave) {
-         GetModeServer().GoToMode("Movie");
+         _gameMain.isPoorClear(true);
+         GetModeServer().GoToMode("Loading", 'S');
       }
       // 次のwaveのスポーンテーブルを設定する
       GetObjFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));

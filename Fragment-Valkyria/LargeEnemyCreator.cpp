@@ -32,6 +32,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
 
    // ラージエネミーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
+   model->Init();
    // モデルの設定
    model->SetModel("LargeEnemy");
    // ラージエネミーのアニメーション一括管理クラスの設定

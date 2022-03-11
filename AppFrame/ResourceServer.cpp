@@ -203,6 +203,7 @@ namespace AppFrame {
          }
 #endif
          auto handle = MV1LoadModel(filename.data());   // // DxLib::MV1LoadModel‚ğƒRƒs[‚·‚é
+
          std::vector<int> handles{ handle };
 
          auto animNum = MV1GetAnimNum(handle);

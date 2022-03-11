@@ -19,15 +19,18 @@ void ModeLoading::Init() {
 
 void ModeLoading::Update() {
    if (GetASyncLoadNum() == 0) {
-      GetModeServer().GoToMode("Poor",'L');
+      SetUseASyncLoadFlag(false);
+      GetLoadJson().LoadModels("ingame");
+      if (_gameMain.isPoorClear()) {
+         GetModeServer().GoToMode("Movie", 'L');
+      }
+      else {
+         GetModeServer().GoToMode("Poor", 'L');
+      }
    }
 }
 
 void ModeLoading::Render() {
    GetTexComponent().DrawTexture(0,0, DefaultScale, DefaultAngle,_grHandle);
-   GetTexComponent().DrawTexture(1420, 880, DefaultScale, DefaultAngle, _grHandles,2);
-}
-
-void ModeLoading::Exit() {
-   SetUseASyncLoadFlag(false);
+   GetTexComponent().DrawTexture(1420, 880, DefaultScale, DefaultAngle, _grHandles,1);
 }
