@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   FallObject.cpp
- * \brief  
+ * \brief  落下オブジェクトの処理を回すクラス
  * 
  * \author AHMD2000
  * \date   January 2022
@@ -32,12 +32,12 @@ namespace {
    const double FallPointScale = fallParamMap["fallpoint_scale"];
    const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];
 
-   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_capsule_pos1",
-      "fallobject_capsule_pos2", "fallobject_radius" });
+   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_drum_capsule_pos1",
+      "fallobject_drum_capsule_pos2", "fallobject_drum_radius" });
    const double Range = collParamMap["fallobject_range"];
-   const double CapsulePos1 = collParamMap["fallobject_capsule_pos1"];
-   const double CapsulePos2 = collParamMap["fallobject_capsule_pos2"];
-   const double CapsuleRadius = collParamMap["fallobject_radius"];
+   const double DrumCapsulePos1 = collParamMap["fallobject_drum_capsule_pos1"];
+   const double DrumCapsulePos2 = collParamMap["fallobject_drum_capsule_pos2"];
+   const double DrumCapsuleRadius = collParamMap["fallobject_drum_radius"];
 
    constexpr auto DefaultPointScale = 1.0;
    constexpr auto DefaultPointAngle = 0.0;
@@ -50,7 +50,7 @@ FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
 
 void FallObject::Init() {
    auto modelHandle = _modelAnimeComponent->modelHandle();
-   _collision = MV1SearchFrame(modelHandle, "drum_green_c");
+   _collision = MV1SearchFrame(modelHandle, _collisionName.data());
    // ナビメッシュの表示設定
 #ifndef _DEBUG
    MV1SetFrameVisible(modelHandle, _collision, false);
@@ -84,46 +84,59 @@ void FallObject::Draw() {
 }
 
 void FallObject::HitCheckFromPlayerPoint() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
+   // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
+      // プレイヤーと当たっていたら上昇状態へ
       _stateServer->GoToState("Up");
    }
 }
 
 void FallObject::HitCheckFromLargeEnemy() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
-
+   // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
+      // ラージエネミーと当たっていたら死亡状態へ
       _stateServer->GoToState("Die");
    }
 }
 
 void FallObject::HitCheckFromLaser() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
-
+   // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLaser) {
+      // レーザーと当たっていたら死亡状態へ
       _stateServer->GoToState("Die");
    }
 }
 
 void FallObject::HitCheckFromPoorEnemyGatling() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
-
+   // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+      // 雑魚敵と当たったら死亡状態へ
       _stateServer->GoToState("Die");
    }
 }
 
 void FallObject::OutStageCheck() {
+   // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
-
+   // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::OutStage) {
+      // ステージの外にいたら死亡状態へ
       _stateServer->GoToState("Die");
    }
 }
 
 void FallObject::CheckPlayerKnockBack() {
+   // 当たり判定結果クラスからプレイヤーがノックバックしているか取得
    auto result = _collisionComponent->knockBack();
+   // ノックバックしていたら死亡状態へ
    if (result) {
       _stateServer->GoToState("Die");
    }
@@ -212,8 +225,25 @@ void FallObject::Up() {
 }
 
 void FallObject::Shoot() {
+   // 移動量の設定
    auto move = _shootVec * ShootSpeed;
+   // 位置の更新
    _position = _position + move;
+}
+
+void FallObject::SetCapsulePos() {
+   // モデルの回転のマトリクスを作成
+   auto [rx, ry, rz] = _rotation.GetVec3();
+   auto world = AppFrame::Math::Matrix44();
+   world.RotateZ(rz, false);
+   world.RotateX(rx, false);
+   world.RotateY(ry, false);
+   if (_collisionName == "steel_frame_large_c") {
+
+   }
+   // カプセルの位置の設定
+   _capsulePos1 = _position + Vector4(0.0, DrumCapsulePos1, 0.0) * world;
+   _capsulePos2 = _position + Vector4(0.0, DrumCapsulePos2, 0.0) * world;
 }
 
 void FallObject::StateBase::Draw() {
@@ -223,11 +253,9 @@ void FallObject::StateBase::Draw() {
    auto radian = static_cast<float>(Range);
    DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
 
-   auto pos1 = _owner._position + Vector4(0.0, CapsulePos1, 0.0);
-   auto pos2 = _owner._position + Vector4(0.0, CapsulePos2, 0.0);
-   radian = static_cast<float>(CapsuleRadius);
+   radian = static_cast<float>(DrumCapsuleRadius);
 
-   DrawCapsule3D(AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(pos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
+   DrawCapsule3D(AppFrame::Math::ToDX(_owner._capsulePos1), AppFrame::Math::ToDX(_owner._capsulePos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
 }
 
@@ -242,6 +270,8 @@ void FallObject::StateIdle::Input(InputManager& input) {
 }
 
 void FallObject::StateIdle::Update() {
+   // カプセルの位置の設定
+   _owner.SetCapsulePos();
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
    _owner._collisionComponent->PlayerFromObjectRange();
    _owner._collisionComponent->GatlingFromObjectModel();
@@ -279,6 +309,9 @@ void FallObject::StateFall::Update() {
       }
    }
 
+   // カプセルの位置の設定
+   _owner.SetCapsulePos();
+
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
 
    ++_owner._fallTimer;
@@ -299,6 +332,8 @@ void FallObject::StateUp::Enter() {
 void FallObject::StateUp::Update() {
    // 上昇させる
    _owner.Up();
+   // カプセルの位置の設定
+   _owner.SetCapsulePos();
    // 当たり判定管理クラスでプレイヤーがノックバックしているか確認
    _owner._collisionComponent->PlayerKnockBack();
    // プレイヤーがノックバックしているか確認
@@ -335,6 +370,8 @@ void FallObject::StateSave::Input(InputManager& input) {
 void FallObject::StateSave::Update() {
     // 浮かせながら回転させる
    _owner.Save();
+   // カプセルの位置の設定
+   _owner.SetCapsulePos();
    // 当たり判定管理クラスでプレイヤーがノックバックしているか確認
    _owner._collisionComponent->PlayerKnockBack();
    // プレイヤーがノックバックしているか確認
@@ -360,7 +397,8 @@ void FallObject::StateShoot::Input(InputManager& input) {
 
 void FallObject::StateShoot::Update() {
    _owner.Shoot();
-
+   // カプセルの位置の設定
+   _owner.SetCapsulePos();
    _owner._collisionComponent->LargeEnemyFromObjectModel();
    _owner._collisionComponent->PoorEnemyGatlingFromObjectModel();
    _owner._collisionComponent->FallObjectFromLaser();
