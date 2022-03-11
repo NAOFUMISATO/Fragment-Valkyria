@@ -25,13 +25,15 @@ FallObjectCreator::FallObjectCreator(Game::GameMain& gameMain) : CreatorBase{ ga
 }
 
 std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
-
+   auto random = AppFrame::Math::Utility::GetRandom(0, _fallObjectModels.size() - 1);
+   // 落下オブジェクトの生成
    auto fallObject = std::make_unique<Enemy::FallObject>(_gameMain);
 
    auto model = std::make_unique<Model::ModelAnimeComponent>(*fallObject);
-   model->SetModel("DrumGreen", 1000);
+   model->SetModel(_fallObjectModels[random], 1000);
    fallObject->modelAnimeComponent(std::move(model));
 
+   fallObject->collisionName(_fallObjectCollisions[random]);
    fallObject->Init();
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::FallObject::StateFall>(*fallObject));

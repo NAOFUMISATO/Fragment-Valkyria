@@ -31,6 +31,26 @@
 		{
 			"keyname": "PoorEnemyAlmighty",
 			"filename": "PoorEnemy.mv1"
+		},
+		{
+			"keyname": "BoxBlack",
+			"filename": "box_black.mv1"
+		},
+		{
+			"keyname": "BoxGray",
+			"filename": "box_gray.mv1"
+		},
+		{
+			"keyname": "BoxRed",
+			"filename": "box_red.mv1"
+		},
+		{
+			"keyname": "SteelFrameLarge",
+			"filename": "steel_frame_large.mv1"
+		},
+		{
+			"keyname": "SteelFrameSmall",
+			"filename": "steel_frame_small.mv1"
 		}
 	]
 }
