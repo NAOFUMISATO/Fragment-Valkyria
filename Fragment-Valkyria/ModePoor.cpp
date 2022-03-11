@@ -67,9 +67,8 @@ void ModePoor::Enter() {
    auto& objServer = GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-
-   GetSoundComponent().Play("PoorBattle");
-   
+   GetSoundComponent().Stop("TitleBgm");
+   GetSoundComponent().PlayLoop("PoorBattle");
    _wave = 1;
    _gameMain.ingameTimer(0);
    _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
