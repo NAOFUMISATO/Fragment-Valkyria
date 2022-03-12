@@ -60,9 +60,6 @@ void ModeBoss::Enter() {
 
 void ModeBoss::Input(AppFrame::Input::InputManager& input) {
    //-----------‰¼--------------
-   if (input.GetMouse().RightClick()) {
-      GetModeServer().GoToMode("Title", 'L');
-   }
    if (input.GetMouse().LeftClick()) {
       GetModeServer().GoToMode("ClearResult", 'S');
    }

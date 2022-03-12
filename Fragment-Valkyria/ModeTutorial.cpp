@@ -89,15 +89,6 @@ void ModeTutorial::Input(InputManager& input) {
       ClearJudge("HealClear");
       break;
    }
-   //-----------‰¼--------------
-   if (input.GetXJoypad().BackClick()) {
-      _gameMain.isPoorClear(true);
-      GetModeServer().GoToMode("Loading", 'S');
-   }
-   if (input.GetMouse().LeftClick()) {
-      GetModeServer().GoToMode("ClearResult", 'S');
-   }
-   //-----------‰¼--------------
    ModeInGameBase::Input(input);
 }
 
