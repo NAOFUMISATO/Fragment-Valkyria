@@ -61,6 +61,26 @@ namespace FragmentValkyria {
           * \param residual 残留オブジェクトかどうか
           */
          void residual(bool residual) { _residual = residual; }
+         /**
+          * \brief カプセルを形成する一つ目の座標の取得
+          * \return カプセルを形成する一つ目の座標
+          */
+         Vector4 capsulePos1() { return _capsulePos1; }
+         /**
+          * \brief カプセルを形成する二つ目の座標の取得
+          * \return カプセルを形成する二つ目の座標
+          */
+         Vector4 capsulePos2() { return _capsulePos2; }
+         /**
+          * \brief モデルのコリジョンフレームの名前の設定
+          * \param collision モデルのコリジョンフレームの名前
+          */
+         void collisionName(std::string_view collision) { _collisionName = collision; }
+         /**
+          * \brief モデルのコリジョンフレームの名前の取得
+          * \return モデルのコリジョンフレームの名前
+          */
+         std::string_view collisionName() { return _collisionName; }
 
       private:
          /**
@@ -99,6 +119,10 @@ namespace FragmentValkyria {
           * \brief 打った時の注視点に向かって進む処理
           */
          void Shoot();
+         /**
+          * \brief カプセルの位置の更新
+          */
+         void SetCapsulePos();
 
          double _fallTimer{ 0.0 };                                 //!< 落下状態の進捗
          double _upDownAngle{ 0.0 };                               //!< ふわふわさせる時のサインの値を取るときの角度
@@ -110,6 +134,8 @@ namespace FragmentValkyria {
          Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };         //!< 浮く状態に入った時の位置ベクトル
          Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };              //!< 打った時の注視点へ向かうベクトル
          Vector4 _plyRightHandVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
+         Vector4 _capsulePos1{ Vector4(0.0, 0.0, 0.0) };           //!< カプセルを形成する一つ目の位置
+         Vector4 _capsulePos2{ Vector4(0.0, 0.0, 0.0) };           //!< カプセルを形成する二つ目の位置
          std::string_view _collisionName{ "" };                    //!< モデルのコリジョンフレームの名前
          std::vector<int> _fallPointHandles{ -1 };                 //!< 落下地点ビルボード画像ハンドル
          std::unique_ptr<Effect::EffectObjectUp> _efcUp;           //!< オブジェクト上昇クラスのポインタ

@@ -20,23 +20,31 @@
 #include "EffectBossStan.h"
 
 namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
+   auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
       "bullet_stun_value", "hp", "consecutive_fall_object_frame",
       "consecutive_num"});
-   const int GatlingFrame = paramMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
-   const double MaxStun = paramMap["max_stun"];                                                          //!< スタン値の最大値
-   const double StunDecrease = paramMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
-   const double ObjectStunValue = paramMap["object_stun_value"];                                         //!< オブジェクト攻撃を受けた時に増えるスタン値
-   const double BulletStunValue = paramMap["bullet_stun_value"];                                         //!< 遠隔弱攻撃を受けた時に増えるスタン値
-   const double MaxHitPoint = paramMap["hp"];                                                            //!< ヒットポイントの最大値
-   const int ConsecutiveFallObjectFrame = paramMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
-   const int ConsecutiveNum = paramMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
+   const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
+   const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
+   const double StunDecrease = largeEnemyParamMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
+   const double ObjectStunValue = largeEnemyParamMap["object_stun_value"];                                         //!< オブジェクト攻撃を受けた時に増えるスタン値
+   const double BulletStunValue = largeEnemyParamMap["bullet_stun_value"];                                         //!< 遠隔弱攻撃を受けた時に増えるスタン値
+   const double MaxHitPoint = largeEnemyParamMap["hp"];                                                            //!< ヒットポイントの最大値
+   const int ConsecutiveFallObjectFrame = largeEnemyParamMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
+   const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
 
-   constexpr auto MaxNum = 6;                                                                            //!< 落下オブジェクトの最大数
-   constexpr auto FootStepHeight = 40.0;                                                                 //!< 走り状態時の足音発生高さ
-   constexpr auto LaserDiffPos = 150.0;                                                                  //!< レーザー生成位置に一番近い位置のフレームからのオフセット
-   constexpr auto LaserIrradiationTime = 155.f;                                                          //!< アニメーション始まってからのレーザーの照射時間
+   auto collisionParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", {
+      "clearobject_radius"});
+   const double ClearObjectCapsuleRadius = collisionParamMap["clearobject_radius"];
+
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
+      "clearobject_pos" });
+   const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
+                                                                                                                   
+   constexpr auto MaxNum = 6;                                                                                      //!< 落下オブジェクトの最大数
+   constexpr auto FootStepHeight = 40.0;                                                                           //!< 走り状態時の足音発生高さ
+   constexpr auto LaserDiffPos = 150.0;                                                                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
+   constexpr auto LaserIrradiationTime = 155.f;                                                                    //!< アニメーション始まってからのレーザーの照射時間
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -274,6 +282,18 @@ void LargeEnemy::HitCheckFromBullet() {
    }
 }
 
+void LargeEnemy::ClearObjectHitCheckFromPlayer() {
+   // 当たり判定結果クラスの参照の取得
+   auto report = _collisionComponent->report();
+   // 当たり判定結果の確認
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
+      // クリアオブジェクトがプレイヤーに当たっていたら
+      GetSoundComponent().Stop("BossBattle");
+      // モードサーバーにゲームクリアモードを挿入
+      gameMain().modeServer().PushBack("MissionCompleted");
+   }
+}
+
 void LargeEnemy::Move(const Vector4& moved) {
    // 移動量のベクトルの成分を分解
    auto [x, y, z] = moved.GetVec3();
@@ -409,6 +429,12 @@ void LargeEnemy::StunCheck() {
 void LargeEnemy::StateBase::Draw() {
    // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
+
+#ifdef _DEBUG
+   auto spherePos = ClearObjectPos;
+   auto radius = static_cast<float>(ClearObjectCapsuleRadius);
+   DrawSphere3D(AppFrame::Math::ToDX(spherePos), radius, 10, AppFrame::Math::Utility::GetColorCode(128, 0, 128), AppFrame::Math::Utility::GetColorCode(0, 0, 0), FALSE);
+#endif
 }
 
 void LargeEnemy::StateIdle::Enter() {
@@ -512,30 +538,26 @@ void LargeEnemy::StateGatling::Update() {
 }
 
 void LargeEnemy::StateDie::Enter() {
-   // ゲームクリアまでのフレーム数の設定
-   _owner._freezeTime = 60 * 2;
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("dead", false);
+}
+
+void LargeEnemy::StateDie::Input(InputManager& input) {
+   // Aボタンが押されていたら
+   if (input.GetXJoypad().AClick()) {
+      // クリアオブジェクトにプレイヤーが当たっているか確認
+      _owner.ClearObjectHitCheckFromPlayer();
+   }
 }
 
 void LargeEnemy::StateDie::Update() {
    // アニメーション時間の取得
    auto playTime = _owner._modelAnimeComponent->playTime();
    // アニメーションが既定の時間経過しているか確認
-   if (playTime >= 70.0f) {
+   if (playTime >= 160.0f) {
       // アニメーションが既定の時間経過していたら
-      //モーションを止める
-      _owner.modelAnimeComponent().timeRate(0.0);
-      // ゲームクリアまでのフレーム数が残っているか確認
-      if (_owner._freezeTime > 0) {
-         // ゲームクリアまでのフレーム数が残っていたら更新する
-         --_owner._freezeTime;
-      }
-      // ゲームクリアまでのフレーム数が残っていなかったらモードサーバーにゲームクリアモードを挿入
-      else {
-         _owner.GetSoundComponent().Stop("BossBattle");
-         _owner.gameMain().modeServer().PushBack("MissionCompleted");
-      }
+      // 当たり判定処理を行うクラスでプレイヤーがクリアオブジェクトと当たっているか確認
+      _owner.collisionComponent().PlayerFromClearObject();
    }
 }
 

@@ -6,15 +6,23 @@
             "ply_capsule_pos1": 30.0,
             "ply_capsule_pos2": 60.0,
 			"gatling_radius": 30.0,
-			"fallobject_capsule_pos1": 30.0,
-			"fallobject_capsule_pos2": 60.0,
-			"fallobject_radius": 50.0,
+			"fallobject_drum_capsule_pos1": 30.0,
+			"fallobject_drum_capsule_pos2": 60.0,
+			"fallobject_drum_radius": 50.0,
 			"laser_radius": 500.0,
-			"bullet_radius":20.0
+			"bullet_radius":20.0,
+			"clearobject_radius": 50.0
 		}
 	],
 	"collision_vec": [
 	    {
+			"clearobject_pos":[
+				{
+					"x": 0.0,
+					"y": 0.0,
+					"z": 2217.0
+				}
+			]
 	    }	
 	]
 }

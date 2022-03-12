@@ -33,6 +33,12 @@ namespace FragmentValkyria {
          * \return 落下オブジェクトのインスタンス
          */
          virtual std::unique_ptr<Object::ObjectBase> Create() override;
+
+         std::array<std::string, 8> _fallObjectModels{ "BoxBlack", "BoxGray", "BoxRed", "DrumBlue",
+         "DrumGreen", "DrumRed", "SteelFrameLarge", "SteelFrameSmall"};
+
+         std::array<std::string_view, 8> _fallObjectCollisions{ "box_black_c", "box_gray_c", "box_red_c", "drum_blue_c",
+         "drum_green_c", "drum_red_c", "steel_frame_large_c", "steel_frame_small_c" };
       };
    }
 }

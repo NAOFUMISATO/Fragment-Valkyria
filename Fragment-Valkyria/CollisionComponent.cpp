@@ -8,12 +8,14 @@
  *********************************************************************/
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
+#include "FallObject.h"
 #include "Gatling.h"
 #include "GameMain.h"
 #include "Player.h"
 #include "Stage.h"
 #include "StageModelComponent.h"
 #include "LoadStageFromJson.h"
+#include "LargeEnemy.h"
 #include "Laser.h"
 #include "ModeBoss.h"
 #include "ModePoor.h"
@@ -30,19 +32,25 @@ using namespace FragmentValkyria::Collision;
 namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
       { "fallobject_range", "ply_radius", "ply_capsule_pos1",
-       "ply_capsule_pos2", "gatling_radius", "fallobject_capsule_pos1",
-      "fallobject_capsule_pos2", "fallobject_radius", "laser_radius","bullet_radius" });
+       "ply_capsule_pos2", "gatling_radius", "fallobject_drum_capsule_pos1",
+      "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius",
+      "bullet_radius", "clearobject_radius"});
 
-   const double FallObjectRange = paramMap["fallobject_range"];                      //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
-   const double PlayerRadius = paramMap["ply_radius"];                               //!< プレイヤーのカプセルの半径
-   const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];                    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];                    //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double GatlingRadius = paramMap["gatling_radius"];                          //!< ガトリングの半径
-   const double FallObjectCapsulePos1 = paramMap["fallobject_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectCapsulePos2 = paramMap["fallobject_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectRadius = paramMap["fallobject_radius"];                    //!< フォールオブジェクトのカプセルの半径
-   const double LaserRadius = paramMap["laser_radius"];                              //!< レーザーのカプセルの半径
-   const double BulletRadius = paramMap["bullet_radius"];                            //!< 弱攻撃の半径
+   const double FallObjectRange = paramMap["fallobject_range"];                           //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
+   const double PlayerRadius = paramMap["ply_radius"];                                    //!< プレイヤーのカプセルの半径
+   const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];                         //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+   const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];                         //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+   const double GatlingRadius = paramMap["gatling_radius"];                               //!< ガトリングの半径
+   const double FallObjectCapsulePos1 = paramMap["fallobject_drum_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+   const double FallObjectCapsulePos2 = paramMap["fallobject_drum_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+   const double FallObjectRadius = paramMap["fallobject_drum_radius"];                    //!< フォールオブジェクトのカプセルの半径
+   const double LaserRadius = paramMap["laser_radius"];                                   //!< レーザーのカプセルの半径
+   const double BulletRadius = paramMap["bullet_radius"];                                 //!< 弱攻撃の半径
+   const double ClearObjectRadius = paramMap["clearobject_radius"];                       //!< クリアオブジェクトを形成するカプセルの半径
+
+   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
+      "clearobject_pos" });
+   const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -80,6 +88,10 @@ void CollisionComponent::PlayerFromObjectRange() {
          // 当たり判定の結果がプレイヤーと当たっているか確認
          if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
             // プレイヤーと当たっているオブジェクトがあった場合
+            // 落下オブジェクトでなければ処理をスキップしてfor文を回す
+            if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
+               continue;
+            }
             // プレイヤーがオブジェクトを持ち上げられない場合落下するオブジェクトの当たり判定の結果に当たっていないと設定
             if (!player.isLift()) {
                object->collisionComponent().report().id(ReportId::None);
@@ -142,10 +154,12 @@ void CollisionComponent::PlayerFromObjectRange() {
 }
 
 void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのモデルのハンドル取得
-   auto objectModel = _owner.modelAnimeComponent().modelHandle();
+   auto objectModel = fallObject.modelAnimeComponent().modelHandle();
    // モデルのコリジョンのフレーム番号取得
-   auto collision = MV1SearchFrame(objectModel, "drum_green_c");
+   auto collision = MV1SearchFrame(objectModel, fallObject.collisionName().data());
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       // プレイヤーじゃなかったら何もしない
@@ -196,10 +210,12 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
 }
 
 void CollisionComponent::GatlingFromObjectModel() {
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのモデルのハンドルの取得
-   auto objectModel = _owner.modelAnimeComponent().modelHandle();
+   auto objectModel = fallObject.modelAnimeComponent().modelHandle();
    // モデルのコリジョンのフレーム番号取得
-   auto collision = MV1SearchFrame(objectModel, "drum_green_c");
+   auto collision = MV1SearchFrame(objectModel, fallObject.collisionName().data());
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       // ガトリングじゃなかったら何もしない
@@ -265,12 +281,14 @@ void CollisionComponent::GatlingFromPlayer() {
 }
 
 void CollisionComponent::LargeEnemyFromObjectModel() {
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのカプセルを作成
-   auto fallObjectPos = _owner.position();
+   auto fallObjectPos = fallObject.position();
    // カプセルの一つ目の位置
-   auto capsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
+   auto capsulePos1 = fallObject.capsulePos1();
    // カプセルの二つ目の位置
-   auto capsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
+   auto capsulePos2 = fallObject.capsulePos2();
    // カプセルの半径
    auto capsuleRadian = static_cast<float>(FallObjectRadius);
    // オブジェクトサーバーの各オブジェクトを取得
@@ -403,36 +421,38 @@ void CollisionComponent::LargeEnemyFromBullet() {
 }
 
 void CollisionComponent::FallObjectFromLaser() {
-   //落下するオブジェクトのカプセルの作成
-   auto fallObjectPos = _owner.position();
-   //カプセルの一つ目の位置
-   auto fallObjectCapsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
-   //カプセルの二つ目の位置
-   auto fallObjectCapsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
-   //カプセルの半径
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
+   // 落下するオブジェクトのカプセルの作成
+   auto fallObjectPos = fallObject.position();
+   // カプセルの一つ目の位置
+   auto fallObjectCapsulePos1 = fallObject.capsulePos1();
+   // カプセルの二つ目の位置
+   auto fallObjectCapsulePos2 = fallObject.capsulePos2();
+   // カプセルの半径
    auto fallObjectRadius = FallObjectRadius;
-   //自前のカプセルを定義
+   // 自前のカプセルを定義
    auto fallObjectCapsule = std::make_tuple(fallObjectCapsulePos1, fallObjectCapsulePos2, fallObjectRadius);
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //レーザーじゃなかったら何もしない
+      // レーザーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
          continue;
       }
-      //レーザーの参照型にキャスト
+      // レーザーの参照型にキャスト
       auto& laser = dynamic_cast<Enemy::Laser&>(*object);
-      //レーザーのカプセルを作成
-      //カプセルの一つ目の位置
+      // レーザーのカプセルを作成
+      // カプセルの一つ目の位置
       auto laserCapsulePos1 = laser.position();
-      //カプセルの二つ目の位置
+      // カプセルの二つ目の位置
       auto laserCapsulePos2 = laser.end();
-      //カプセルの半径
+      // カプセルの半径
       auto laserRadius = LaserRadius;
-      //自前のカプセルを定義
+      // 自前のカプセルを定義
       auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
-      //カプセルとカプセルの当たり判定を取る
+      // カプセルとカプセルの当たり判定を取る
       if (AppFrame::Math::Utility::CollisionCapsuleCapsule(fallObjectCapsule, laserCapsule)) {
-         //当たっていたら落下するオブジェクトの当たり判定結果をレーザーと当たったと設定
+         // 当たっていたら落下するオブジェクトの当たり判定結果をレーザーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLaser);
       }
       break;
@@ -440,48 +460,48 @@ void CollisionComponent::FallObjectFromLaser() {
 }
 
 void CollisionComponent::PlayerFromLaser() {
-   //プレイヤーの参照型の取得
+   // プレイヤーの参照型の取得
    auto& player = dynamic_cast<Player::Player&>(_owner);
-   //無敵時間の取得
+   // 無敵時間の取得
    auto invincibleCnt = player.invincibleCnt();
-   //無敵時間中だった場合何もしない
+   // 無敵時間中だった場合何もしない
    if (invincibleCnt > 0) {
       return;
    }
-   //プレイヤーのカプセルの作成
+   // プレイヤーのカプセルの作成
    auto playerPos = _owner.position();
-   //カプセルの一つ目の位置
+   // カプセルの一つ目の位置
    auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
-   //カプセルの二つ目の位置
+   // カプセルの二つ目の位置
    auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
-   //カプセルの半径
+   // カプセルの半径
    auto playerCapsuleRadius = PlayerRadius;
-   //自前のカプセルを定義
+   // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCapsuleRadius);
-   //オブジェクトサーバーの各オブジェクトを取得
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
-      //レーザーじゃなかったら何もしない
+      // レーザーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
          continue;
       }
-      //レーザーの参照型にキャスト
+      // レーザーの参照型にキャスト
       auto& laser = dynamic_cast<Enemy::Laser&>(*object);
-      //レーザーのカプセルを作成
-      //カプセルの一つ目の位置
+      // レーザーのカプセルを作成
+      // カプセルの一つ目の位置
       auto laserCapsulePos1 = laser.position();
-      //カプセルの二つ目の位置
+      // カプセルの二つ目の位置
       auto laserCapsulePos2 = laser.end();
-      //カプセルの半径
+      // カプセルの半径
       auto laserRadius = LaserRadius;
-      //自前のカプセルを定義
+      // 自前のカプセルを定義
       auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
-      //カプセルとカプセルの当たり判定を取る
+      // カプセルとカプセルの当たり判定を取る
       if (AppFrame::Math::Utility::CollisionCapsuleCapsule(playerCapsule, laserCapsule)) {
-         //当たっていた場合プレイヤーの当たり判定の結果をレーザーと当たったと設定
+         // 当たっていた場合プレイヤーの当たり判定の結果をレーザーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLaser);
-         //ダメージの設定
+         // ダメージの設定
          _owner.collisionComponent().damage(20.0);
-         //当たった位置にレーザーの位置を設定
+         // 当たった位置にレーザーの位置を設定
          _owner.collisionComponent().hitPos(laser.position());
       }
       break;
@@ -601,12 +621,14 @@ void CollisionComponent::BulletFromPoorEnemy() {
 }
 
 void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
+   // 落下オブジェクトの参照型にキャスト
+   auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    //落下するオブジェクトのカプセルの作成
-   auto fallObjectPos = _owner.position();
+   auto fallObjectPos = fallObject.position();
    //カプセルの一つ目の位置
-   auto capsulePos1 = Vector4(0.0, FallObjectCapsulePos1, 0.0) + fallObjectPos;
+   auto capsulePos1 = fallObject.capsulePos1();
    //カプセルの二つ目の位置
-   auto capsulePos2 = Vector4(0.0, FallObjectCapsulePos2, 0.0) + fallObjectPos;
+   auto capsulePos2 = fallObject.capsulePos2();
    //カプセルの半径
    auto capsuleRadian = static_cast<float>(FallObjectRadius);
    //オブジェクトサーバーの各オブジェクトを取得
@@ -629,6 +651,34 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          object->collisionComponent().damage(20.0);
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+      }
+   }
+}
+
+void CollisionComponent::PlayerFromClearObject() {
+   auto clearObjectSphere = std::make_tuple(ClearObjectPos, ClearObjectRadius);
+   // オブジェクトサーバーの各オブジェクトを取得
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
+      // プレイヤーじゃなかったら何もしない
+      if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
+         continue;
+      }
+      // プレイヤーの位置の取得
+      auto plyPos = object->position();
+      // 球とモデルの当たり判定の結果を取得
+      auto result = AppFrame::Math::Utility::CollisionSpherePoint(plyPos, clearObjectSphere);
+      // 当たり判定の結果が当たっているか確認
+      if (result) {
+         // 当たっている場合
+         // ラージエネミーの当たり判定の結果にプレイヤーと当たったと設定
+         _owner.collisionComponent().report().id(ReportId::HitFromPlayer);
+         break;
+      }
+      // 当たっていない場合
+      else {
+         // ラージエネミーの当たり判定の結果に当たっていないと設定
+         _owner.collisionComponent().report().id(ReportId::None);
+         break;
       }
    }
 }
