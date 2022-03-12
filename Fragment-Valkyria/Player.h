@@ -87,10 +87,15 @@ namespace FragmentValkyria {
           */
          inline bool isLift() { return _isLift; }
          /**
+          * \brief オブジェクトを打てるかを取得
+          * \return オブジェクトを打てるならtrue,打てなければfalse
+          */
+         inline bool objectShoot() { return _objectShoot; }
+         /**
           * \brief オブジェクトを打てるか設定
           * \param shoot オブジェクトを打てるならtrue,打てなければfalse
           */
-         void objectShoot(bool shoot) { _objectShoot = shoot; }
+         inline void objectShoot(bool shoot) { _objectShoot = shoot; }
       private:
          /**
           * \brief 移動処理

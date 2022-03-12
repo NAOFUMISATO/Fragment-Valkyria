@@ -49,7 +49,8 @@ namespace FragmentValkyria {
             RemainingPortion,//!< 残り回復アイテム数
             Reticle,         //!< レティクル
             ClearTime,       //!< クリア時間
-            ClearScore       //!< クリアスコア
+            ClearScore,      //!< クリアスコア
+            TutorialTips     //!< チュートリアル表示テキスト
 
          };
          /**

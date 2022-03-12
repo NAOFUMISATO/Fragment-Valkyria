@@ -21,11 +21,14 @@ void ModeLoading::Update() {
    if (GetASyncLoadNum() == 0) {
       SetUseASyncLoadFlag(false);
       GetLoadJson().LoadModels("ingame");
-      if (_gameMain.isPoorClear()) {
-         GetModeServer().GoToMode("Movie", 'L');
+      if (!_gameMain.isTutorialClear()) {
+         GetModeServer().GoToMode("Tutorial", 'S');
+      }
+      else if (!_gameMain.isPoorClear()) {
+         GetModeServer().GoToMode("Poor", 'L');
       }
       else {
-         GetModeServer().GoToMode("Poor", 'L');
+         GetModeServer().GoToMode("Movie", 'L');
       }
    }
 }

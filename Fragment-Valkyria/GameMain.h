@@ -78,6 +78,8 @@ namespace FragmentValkyria {
           * \param poorClear 雑魚戦をクリアしたかの判定
           */
          inline void isPoorClear(bool poorClear) { _isPoorClear = poorClear; }
+         inline bool isTutorialClear() { return _isTutorialClear; }
+         inline void isTutorialClear(bool tutorialEnd) { _isTutorialClear = tutorialEnd; }
          /**
           * \brief 計測時間の取得
           * \return インゲームで計測している時間
@@ -188,6 +190,7 @@ namespace FragmentValkyria {
 
       private:
          bool _isPoorClear{ false };                            //!< 雑魚戦をクリアしたか
+         bool _isTutorialClear{ false };                          //!< チュートリアルを終了またはスキップしたか
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
          std::tuple<double, int, int> _playerStatus;            //!< プレイヤーのステータスのTuple型

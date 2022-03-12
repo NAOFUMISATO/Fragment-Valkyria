@@ -56,7 +56,6 @@ namespace FragmentValkyria {
 
       private:
          void LogoAnimation();
-         std::unique_ptr<AppFrame::State::StateServer> _stateServer;  //!< 状態一括管理クラスのポインタ
          int _logoCnt{ 0 };                                           //!< タイトルロゴのアニメーションカウント
          int _firstInputCnt{ 0 };                                     //!< プレスエニイボタンから移行した後、連続入力によるゲーム開始を防ぐカウント
          int _logoHandle{ -1 };                                       //!< タイトルロゴの描画ハンドル
@@ -67,6 +66,7 @@ namespace FragmentValkyria {
          std::vector<int> _optionDrawHandles{ 0 };                    //!< オプション選択の描画用ハンドル
          std::vector<int> _endDrawHandles{ 0 };                       //!< ゲーム終了選択の描画用ハンドル
          std::unordered_map<std::string, std::vector<int>> _handleMap;//!< 画像ハンドルを保存する連想配列
+         std::unique_ptr<AppFrame::State::StateServer> _stateServer;  //!< 状態一括管理クラスのポインタ
 
       public:
          /**

@@ -97,6 +97,12 @@
     <Filter Include="ヘッダー ファイル\Clear">
       <UniqueIdentifier>{f37956c6-532c-4f64-ab35-d29692f4dd20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Tutorial">
+      <UniqueIdentifier>{66bcda5f-c717-4c02-873b-7013757c0a45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Tutorial">
+      <UniqueIdentifier>{3c04f80c-d726-4305-bad8-5f79e3b53c21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeBoss.h">
@@ -315,6 +321,15 @@
     <ClInclude Include="ClearScore.h">
       <Filter>ヘッダー ファイル\Clear</Filter>
     </ClInclude>
+    <ClInclude Include="ModeTutorial.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="ModeTutorialSelect.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialTips.h">
+      <Filter>ヘッダー ファイル\Tutorial</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -526,6 +541,15 @@
     </ClCompile>
     <ClCompile Include="ClearScore.cpp">
       <Filter>ソース ファイル\Clear</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeTutorial.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeTutorialSelect.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialTips.cpp">
+      <Filter>ソース ファイル\Tutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

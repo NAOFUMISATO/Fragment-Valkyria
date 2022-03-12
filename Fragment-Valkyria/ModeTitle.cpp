@@ -76,6 +76,7 @@ void ModeTitle::Enter() {
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
+   _gameMain.isTutorialClear(false);
    _gameMain.isPoorClear(false);
 }
 
@@ -147,7 +148,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    }
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
-         _owner.GetModeServer().GoToMode("Loading", 'S');
+         _owner.GetModeServer().GoToMode("TutorialSelect", 'S');
       }
    }
 }

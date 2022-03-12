@@ -30,5 +30,5 @@ void ModeTeam::Update() {
 }
 
 void ModeTeam::Render() {
-   _gameMain.texComponent().DrawTexture(0, 0, 1.0, 0.0, _grHandle);
+  GetTexComponent().DrawTexture(0, 0, 1.0, 0.0, _grHandle);
 }

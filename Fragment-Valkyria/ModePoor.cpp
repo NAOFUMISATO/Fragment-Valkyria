@@ -14,7 +14,6 @@
 #include "PoorEnemyGatlingCreator.h"
 #include "PoorEnemyMeleeCreator.h"
 #include "PoorEnemyAlmightyCreator.h"
-#include "StageCreator.h"
 #include "GatlingCreator.h"
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
@@ -34,11 +33,6 @@ namespace {
 using namespace FragmentValkyria::Mode;
 
 ModePoor::ModePoor(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
-}
-
-void ModePoor::Init() {
-   GetLoadJson().LoadSounds("ingame");
-   _gameMain.loadStage().LoadStageModels("Stage");
 }
 
 void ModePoor::Enter() {

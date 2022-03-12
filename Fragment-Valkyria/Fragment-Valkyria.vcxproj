@@ -212,6 +212,8 @@
     <ClInclude Include="ModePoor.h" />
     <ClInclude Include="ModeTeam.h" />
     <ClInclude Include="ModeTitle.h" />
+    <ClInclude Include="ModeTutorial.h" />
+    <ClInclude Include="ModeTutorialSelect.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ObjectServer.h" />
@@ -235,6 +237,7 @@
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageModelComponent.h" />
+    <ClInclude Include="TutorialTips.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClearScore.cpp" />
@@ -286,6 +289,8 @@
     <ClCompile Include="ModePoor.cpp" />
     <ClCompile Include="ModeTeam.cpp" />
     <ClCompile Include="ModeTitle.cpp" />
+    <ClCompile Include="ModeTutorial.cpp" />
+    <ClCompile Include="ModeTutorialSelect.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectServer.cpp" />
@@ -307,6 +312,7 @@
     <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="StageModelComponent.cpp" />
     <ClCompile Include="PlayerHP.cpp" />
+    <ClCompile Include="TutorialTips.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -25,6 +25,8 @@
 #include "ModeMissionFailed.h"
 #include "ModeMissionCompleted.h"
 #include "ModeBoss.h"
+#include "ModeTutorial.h"
+#include "ModeTutorialSelect.h"
 
 using namespace FragmentValkyria::Game;
 
@@ -68,8 +70,10 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
    _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
    _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>(*this));
+   _modeServer->Register("TutorialSelect", std::make_shared<Mode::ModeTutorialSelect>(*this));
    _loadresJson->LoadEffects("ingame");
    SetUseASyncLoadFlag(true);
+   _modeServer->Register("Tutorial", std::make_shared<Mode::ModeTutorial>(*this));
    _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>(*this));
    _modeServer->Register("Movie", std::make_shared<Mode::ModeMovie>(*this));
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));

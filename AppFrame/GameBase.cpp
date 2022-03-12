@@ -112,9 +112,11 @@ namespace AppFrame {
          }
          // 入力状態の更新
          _inputManager->Update();
+#ifdef _DEBUG
          if (_inputManager->GetKeyboard().EscClick()) {
             _gState = GameState::Quit;  // ESC押されたのでゲームを終了する
          }
+#endif
          _modeServer->Input(*_inputManager);    // モードサーバーの入力処理を実行
       }
 
