@@ -484,7 +484,7 @@ void LargeEnemy::StateFall::Update() {
       auto [x, y, z] = _owner._position.GetVec3();
       _owner._position = Vector4(x, 0.0, z);
       // ‘Ò‹@ó‘Ô‚Ö
-      _owner._stateServer->GoToState("Consecutive");
+      _owner._stateServer->GoToState("Idle");
    }
 }
 

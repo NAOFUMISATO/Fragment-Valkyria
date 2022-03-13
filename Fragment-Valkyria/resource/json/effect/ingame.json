@@ -19,12 +19,6 @@
 			"speed":2.0
 		},
 		{
-			"keyname": "PreliminaryLight",
-			"filename": "PreliminaryLight.efkefc",
-			"scale": 10.0,
-			"speed":2.0
-		},
-		{
 			"keyname": "PoorCrash",
 			"filename": "PoorCrash.efkefc",
 			"scale": 30.0,
@@ -82,7 +76,7 @@
 			"keyname": "PreliminaryLight",
 			"filename": "PreliminaryLight.efkefc",
 			"scale": 100.0,
-			"speed":1.5
+			"speed":0.7
 		}
 
 	]
