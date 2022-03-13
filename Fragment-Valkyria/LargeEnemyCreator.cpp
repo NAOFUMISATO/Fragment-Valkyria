@@ -27,12 +27,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    using Vector4 = AppFrame::Math::Vector4;
    // ラージエネミーの生成
    auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
-   // ラージエネミーの位置の設定
-   largeEnemy->position(Vector4(0.0, 2500.0, 1000.0));
-
    // ラージエネミーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
-   model->Init();
    // モデルの設定
    model->SetModel("LargeEnemy");
    // ラージエネミーのアニメーション一括管理クラスの設定

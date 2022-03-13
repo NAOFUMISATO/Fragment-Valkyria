@@ -52,9 +52,6 @@ void ModeBoss::Enter() {
    GetSoundComponent().Stop("PoorBattleBgm");
    GetSoundComponent().PlayLoop("BossBattleBgm");
 
-   auto largeEnemy = objFactory.Create("LargeEnemy");
-   objServer.Add(std::move(largeEnemy));
-
    ModeInGameBase::Enter();
 }
 

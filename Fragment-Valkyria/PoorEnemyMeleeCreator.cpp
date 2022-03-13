@@ -14,7 +14,6 @@ std::unique_ptr<Object::ObjectBase> PoorEnemyMeleeCreator::Create() {
    auto poorEnemyMelee = std::make_unique<Enemy::PoorEnemyMelee>(_gameMain);
 
    auto model = std::make_unique<Model::ModelAnimeComponent>(*poorEnemyMelee);
-   model->Init();
    model->SetModel("PoorEnemyMelee", 1000);
    poorEnemyMelee->modelAnimeComponent(std::move(model));
 

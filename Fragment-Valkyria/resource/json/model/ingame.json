@@ -43,14 +43,6 @@
 		{
 			"keyname": "BoxRed",
 			"filename": "box_red.mv1"
-		},
-		{
-			"keyname": "SteelFrameLarge",
-			"filename": "steel_frame_large.mv1"
-		},
-		{
-			"keyname": "SteelFrameSmall",
-			"filename": "steel_frame_small.mv1"
 		}
 	]
 }

@@ -22,7 +22,6 @@ std::unique_ptr<Object::ObjectBase> PoorEnemyGatlingCreator::Create() {
    auto poorEnemyGatling = std::make_unique<Enemy::PoorEnemyGatling>(_gameMain);
 
    auto model = std::make_unique<Model::ModelAnimeComponent>(*poorEnemyGatling);
-   model->Init();
    model->SetModel("PoorEnemyGatling", 1000);
    poorEnemyGatling->modelAnimeComponent(std::move(model));
 
