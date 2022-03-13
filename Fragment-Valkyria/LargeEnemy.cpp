@@ -24,7 +24,7 @@ namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
       "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",
-      "consecutive_num", "action_cooltime"});
+      "consecutive_num", "action_cooltime", "object_max_num"});
    const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
    const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
    const double StunDecrease = largeEnemyParamMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
@@ -35,6 +35,7 @@ namespace {
    const int ConsecutiveFallObjectFrame = largeEnemyParamMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
    const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
    const int ActionCoolTime = largeEnemyParamMap["action_cooltime"];                                               //!< 行動を行うクールタイム
+   const int MaxNum = largeEnemyParamMap["object_max_num"];                                                        //!< 落下オブジェクトの最大数
 
    auto collisionParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", {
       "clearobject_radius"});
@@ -44,7 +45,6 @@ namespace {
       "clearobject_pos" });
    const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
                                                                                                                    
-   constexpr auto MaxNum = 6;                                                                                      //!< 落下オブジェクトの最大数
    constexpr auto FootStepHeight = 40.0;                                                                           //!< 走り状態時の足音発生高さ
    constexpr auto LaserDiffPos = 150.0;                                                                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
    constexpr auto LaserIrradiationTime = 155.f;                                                                    //!< アニメーション始まってからのレーザーの照射時間
@@ -175,10 +175,14 @@ void LargeEnemy::CreateFallObject() {
    }
    // 右に既定の角度回転させるマトリクスの生成
    auto rightTransMatrix = Matrix44();
-   rightTransMatrix.RotateY(45.0, true);
+   rightTransMatrix.RotateY(30.0, true);
    // 左に既定の角度回転させるマトリクスの生成
    auto leftTransMatrix = Matrix44();
-   leftTransMatrix.RotateY(-45.0, true);
+   leftTransMatrix.RotateY(-30.0, true);
+   // ランダムに右か左に既定の角度回転させるマトリクスの作成
+   auto randomdegree = AppFrame::Math::Utility::GetRandom(0, 1) ? 60.0 : -60.0;
+   auto randomTransMatrix = Matrix44();
+   randomTransMatrix.RotateY(randomdegree, true);
    // プレイヤーの位置の取得
    auto playerPos = GetObjServer().GetVecData("PlayerPos");
    // プレイヤーへのベクトルの取得
@@ -191,16 +195,21 @@ void LargeEnemy::CreateFallObject() {
    auto rightMoveVec = MoveVec * rightTransMatrix;
    // プレイヤーへの向きのベクトルを左に既定の角度回転させる
    auto leftMoveVec = MoveVec * leftTransMatrix;
-   // 落下オブジェクトを落とす距離の設定
+   // プレイヤーへの向きのベクトルを右か左にランダムに既定の角度回転させる
+   auto randomtMoveVec = MoveVec * randomTransMatrix;
+   // 既定の角度回転させた向きから落下オブジェクトを落とす距離の設定
    auto distance = LargeEnemyToPlyDistance * 0.5;
+   // ランダムに回転させた向きから落下オブジェクトを落とす距離の設定
+   auto randomDistance = LargeEnemyToPlyDistance * 0.3;
    // 落下オブジェクトを落とす位置の配列の作成
-   std::array<Vector4, 3> startPosition = {
+   std::array<Vector4, 4> startPosition = {
       playerPos + Vector4(0.0, 500.0, 0.0),
       _position + Vector4(0.0, 500.0, 0.0) + (rightMoveVec * distance),
       _position + Vector4(0.0, 500.0, 0.0) + (leftMoveVec * distance),
+      _position + Vector4(0.0, 500.0, 0.0) + (randomtMoveVec * randomDistance),
    };
    // 落下オブジェクトを生成しオブジェクトサーバーに追加
-   for (auto i = 0; i < 3; ++i) {
+   for (auto i = 0; i < 4; ++i) {
       auto fallObject = gameMain().objFactory().Create("FallObject");
       // 生成された回数目の位置の配列の要素に位置を設定
       fallObject->position(startPosition[i]);
