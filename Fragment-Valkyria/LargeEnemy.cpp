@@ -24,7 +24,7 @@ namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
       "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",
-      "consecutive_num"});
+      "consecutive_num", "action_cooltime"});
    const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
    const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
    const double StunDecrease = largeEnemyParamMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
@@ -34,6 +34,7 @@ namespace {
    const double Gravity = largeEnemyParamMap["gravity"];                                                           //!< 重力
    const int ConsecutiveFallObjectFrame = largeEnemyParamMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
    const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
+   const int ActionCoolTime = largeEnemyParamMap["action_cooltime"];                                               //!< 行動を行うクールタイム
 
    auto collisionParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", {
       "clearobject_radius"});
@@ -489,7 +490,7 @@ void LargeEnemy::StateIdle::Update() {
    // この状態に入ってからの経過フレーム数の取得
    auto count = gameCount - _stateCnt;
    // 一定フレーム数たったら行動をする
-   if (count >= 60 * 1) {
+   if (count >= ActionCoolTime) {
       _owner.Action();
    }
    // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
