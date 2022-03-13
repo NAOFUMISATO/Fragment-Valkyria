@@ -88,7 +88,7 @@ namespace FragmentValkyria {
           */
          void HitCheckFromPlayerPoint();
          /**
-          * \brief ラージエネミーのオブジェクトと当たっているか確認
+          * \brief ラージエネミーのモデルと当たっているか確認
           */
          void HitCheckFromLargeEnemy();
          /**
@@ -131,7 +131,6 @@ namespace FragmentValkyria {
          bool _isFall{ true };                                     //!< 落下状態かどうか
          bool _residual{ true };                                   //!< 残留オブジェクトか
          int _collision{ 0 };                                      //!< モデルのコリジョンフレーム番号
-         Vector4 _vecBeforeSave{ Vector4(0.0, 0.0, 0.0) };         //!< 浮く状態に入った時の位置ベクトル
          Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };              //!< 打った時の注視点へ向かうベクトル
          Vector4 _plyRightHandVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
          Vector4 _capsulePos1{ Vector4(0.0, 0.0, 0.0) };           //!< カプセルを形成する一つ目の位置
@@ -200,11 +199,6 @@ namespace FragmentValkyria {
              * \brief 入口処理
              */
             void Enter() override;
-            /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
             /**
              * \brief 更新処理
              */
@@ -303,15 +297,6 @@ namespace FragmentValkyria {
              * \param owner 落下オブジェクトの参照
              */
             StateDie(FallObject& owner) : StateBase{ owner } {};
-            /**
-             * \brief 入口処理
-             */
-            void Enter() override;
-            /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
             /**
              * \brief 更新処理
              */

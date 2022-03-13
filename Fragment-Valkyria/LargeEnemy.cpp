@@ -95,8 +95,6 @@ void LargeEnemy::Update() {
    MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _faceCollision);
    // 状態の更新
    _stateServer->Update();
-   // スタン値の更新と確認
-   StunCheck();
    // ワールド行列の更新
    ComputeWorldTransform();
    // モデルの更新
@@ -417,11 +415,16 @@ void LargeEnemy::SetAddRotate() {
 }
 
 void LargeEnemy::StunCheck() {
+   // スタン値の更新
    _stunValue -= StunDecrease;
+   // スタン値が既定の値以上の場合
    if (_stunValue >= MaxStun) {
+      // 気絶状態へ
       _stateServer->GoToState("Stun");
    }
+   // スタン値が0以下の場合
    else if (_stunValue <= 0.0) {
+      // スタン値を0に
       _stunValue = 0.0;
    }
 }
@@ -459,6 +462,8 @@ void LargeEnemy::StateIdle::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateFallObject::Enter() {
@@ -481,6 +486,8 @@ void LargeEnemy::StateFallObject::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateGatling::Enter() {
@@ -535,6 +542,8 @@ void LargeEnemy::StateGatling::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateDie::Enter() {
@@ -651,6 +660,8 @@ void LargeEnemy::StateMove::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateLaser::Enter() {
@@ -724,6 +735,8 @@ void LargeEnemy::StateLaser::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
    // レーザー生成位置をオブジェクトサーバーに登録
    _owner.GetObjServer().RegistVector("LaserPos", GetLaserPos());
 }
@@ -808,6 +821,8 @@ void LargeEnemy::StateFanGatling::Update() {
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
    _owner.HitCheckFromBullet();
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateStun::Enter() {
@@ -861,6 +876,8 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
    if (_fallObjectNum <= 0) {
       _owner._stateServer->GoToState("Idle");
    }
+   // スタン値の更新と確認
+   _owner.StunCheck();
 }
 
 void LargeEnemy::StateMove::FootStepSound() {
