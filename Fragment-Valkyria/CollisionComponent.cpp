@@ -601,7 +601,7 @@ void CollisionComponent::PoorEnemyFromPlayer() {
          //当たった位置にラージエネミーの位置を設定
          player.collisionComponent().hitPos(_owner.position());
          //ダメージの設定
-         player.collisionComponent().damage(20.0);
+         player.collisionComponent().damage(PlayerPoorEnemyDamage);
       }
    }
 }
