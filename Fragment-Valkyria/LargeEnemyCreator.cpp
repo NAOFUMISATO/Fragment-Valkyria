@@ -28,7 +28,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    // ラージエネミーの生成
    auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
    // ラージエネミーの位置の設定
-   largeEnemy->position(Vector4(0.0, 0.0, 1000.0));
+   largeEnemy->position(Vector4(0.0, 2500.0, 1000.0));
 
    // ラージエネミーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
@@ -39,8 +39,9 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    largeEnemy->modelAnimeComponent(std::move(model));
 
    // ラージエネミーの状態一括管理クラスの生成
-   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::LargeEnemy::StateFall>(*largeEnemy));
    // ラージエネミーの状態の追加登録
+   state->Register("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
    state->Register("FallObject", std::make_shared<Enemy::LargeEnemy::StateFallObject>(*largeEnemy));
    state->Register("Consecutive", std::make_shared<Enemy::LargeEnemy::StateConsecutiveFallObject>(*largeEnemy));
    state->Register("Gatling", std::make_shared<Enemy::LargeEnemy::StateGatling>(*largeEnemy));

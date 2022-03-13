@@ -23,7 +23,7 @@
 namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
-      "bullet_stun_value", "hp", "consecutive_fall_object_frame",
+      "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",
       "consecutive_num"});
    const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
    const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
@@ -31,6 +31,7 @@ namespace {
    const double ObjectStunValue = largeEnemyParamMap["object_stun_value"];                                         //!< オブジェクト攻撃を受けた時に増えるスタン値
    const double BulletStunValue = largeEnemyParamMap["bullet_stun_value"];                                         //!< 遠隔弱攻撃を受けた時に増えるスタン値
    const double MaxHitPoint = largeEnemyParamMap["hp"];                                                            //!< ヒットポイントの最大値
+   const double Gravity = largeEnemyParamMap["gravity"];                                                           //!< 重力
    const int ConsecutiveFallObjectFrame = largeEnemyParamMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
    const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
 
@@ -250,11 +251,16 @@ void LargeEnemy::HitCheckFromFallObject() {
       // 落下オブジェクトと当たっていたら
       // ヒットポイントをダメージ量分減らす
       _hp -= _collisionComponent->damage();
-      // スタン値を既定の値増やす
-      _stunValue += ObjectStunValue;
+      // ダメージ量が0じゃなかった場合
+      if (_collisionComponent->damage() != 0.0) {
+         // スタン値を既定の値増やす
+         _stunValue += ObjectStunValue;
+      }
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
+         // スタン値の設定
+         _stunValue = 0.0;
       }
       // 当たり判定の結果を当たっていないと設定
       _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
@@ -275,6 +281,8 @@ void LargeEnemy::HitCheckFromBullet() {
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
+         // スタン値の設定
+         _stunValue = 0.0;
       }
       // 当たり判定の結果を当たっていないと設定
       _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
@@ -442,6 +450,30 @@ void LargeEnemy::StateBase::Draw() {
    auto radius = static_cast<float>(ClearObjectCapsuleRadius);
    DrawSphere3D(AppFrame::Math::ToDX(spherePos), radius, 10, AppFrame::Math::Utility::GetColorCode(128, 0, 128), AppFrame::Math::Utility::GetColorCode(0, 0, 0), FALSE);
 #endif
+}
+
+void LargeEnemy::StateFall::Enter() {
+   // この状態に入った時のモードサーバーのフレームカウントを保存
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("idle", true);
+}
+
+void LargeEnemy::StateFall::Update() {
+   // この状態に入ってからのフレーム数の取得
+   auto cnt = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   // 位置のY成分に足していく値の取得
+   auto addY = -0.5 * Gravity * cnt * cnt;
+   // 位置の更新
+   _owner._position.Add(0.0, addY, 0.0);
+   // 位置のY成分が0以下だったら
+   if (_owner._position.GetY() <= 0.0) {
+      // 位置のY成分を0にする
+      auto [x, y, z] = _owner._position.GetVec3();
+      _owner._position = Vector4(x, 0.0, y);
+      // 待機状態へ
+      _owner._stateServer->GoToState("Idle");
+   }
 }
 
 void LargeEnemy::StateIdle::Enter() {
