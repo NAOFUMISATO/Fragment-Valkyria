@@ -7,6 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ModeMissionFailed.h"
+#include "GameMain.h"
 
 namespace {
    constexpr auto BgAlpha = 150;
@@ -14,6 +15,7 @@ namespace {
    constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBoxcƒTƒCƒY
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
+   constexpr auto FailedAnimeSpeed = 1;
 }
 
 using namespace FragmentValkyria::Mode;
@@ -23,10 +25,12 @@ ModeMissionFailed::ModeMissionFailed(Game::GameMain& gameMain) :ModeBase{gameMai
 
 void ModeMissionFailed::Init() {
    GetLoadJson().LoadTextures("over");
-   _grHandle = GetResServer().GetTexture("MissionFailed");
+   _grHandles = GetResServer().GetTextures("MissionFailed");
 }
 
 void ModeMissionFailed::Enter() {
+   _animeNo = 0;
+   _cntInit = false;
 }
 
 void ModeMissionFailed::Input(AppFrame::Input::InputManager& input) {
@@ -37,12 +41,21 @@ void ModeMissionFailed::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeMissionFailed::Update() {
-
+   if (!_cntInit) {
+      _animeCnt = _gameMain.modeServer().frameCount();
+      _cntInit = true;
+   }
+   auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
+   auto frame = gameCount - _animeCnt;
+   auto allNum = std::get<0>(GetResServer().GetTextureInfo("MissionFailed").GetDivParams());
+   if (frame < allNum * FailedAnimeSpeed) {
+      _animeNo = frame / FailedAnimeSpeed % allNum;
+   }
 }
 
 void ModeMissionFailed::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA,BgAlpha);
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetTexComponent().DrawTexture(0,0, DefaultGraphScale, DefaultGraphAngle,_grHandle);
+   DrawGraph(0, 0, _grHandles[_animeNo], true);
 }

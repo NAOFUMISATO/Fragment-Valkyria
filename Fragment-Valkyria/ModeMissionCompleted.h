@@ -49,7 +49,7 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _grHandle{ -1 };   //!< 画像ハンドル
+         std::vector<int> _grHandles{ -1 };   //!< 画像ハンドル
       };
    }
 }

@@ -89,7 +89,26 @@ void TutorialTips::StateJudge::Enter() {
 }
 
 void TutorialTips::StateJudge::Input(InputManager& input) {
-   
+   switch (_owner._tipsNum[_owner._tipsName]) {
+   case 1:
+      MoveJudge(input);
+      break;
+   case 2:
+      CameraJudge(input);
+      break;
+   case 3:
+      WeakShootJudge(input);
+      break;
+   case 4:
+      ReloadJudge(input);
+      break;
+   case 5:
+      ObjectShootJudge(input);
+      break;
+   case 6:
+      HealJudge(input);
+      break;
+   }
 }
 
 void TutorialTips::StateFadeOut::Enter() {

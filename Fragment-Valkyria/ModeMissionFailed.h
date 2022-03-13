@@ -49,8 +49,10 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _grHandle{ -1 };   //!< 画像ハンドル
-         
+         int _animeNo{ 0 };
+         int _animeCnt{ 0 };
+         bool _cntInit{ true };
+         std::vector<int> _grHandles{ -1 };   //!< 画像ハンドル
       };
    }
 }

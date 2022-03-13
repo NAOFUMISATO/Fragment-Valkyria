@@ -962,6 +962,10 @@ void Player::StateDie::Update() {
    }
    // ゲームオーバーまでのフレーム数がたった場合
    else {
+      auto& soundComponent = _owner.GetSoundComponent();
+      soundComponent.Stop("PoorBattleBgm");
+      soundComponent.Stop("BossBattleBgm");
+      soundComponent.Stop("TutorialBgm");
       // モードサーバーにゲームオーバーモードを挿入
       _owner.gameMain().modeServer().PushBack("MissionFailed");
    }

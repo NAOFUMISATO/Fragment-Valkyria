@@ -23,7 +23,7 @@ ModeMissionCompleted::ModeMissionCompleted(Game::GameMain& gameMain) :ModeBase{ 
 
 void ModeMissionCompleted::Init() {
    GetLoadJson().LoadTextures("clear");
-   _grHandle = GetResServer().GetTexture("MissionCompleted");
+   _grHandles = GetResServer().GetTextures("MissionCompleted");
 }
 
 void ModeMissionCompleted::Enter() {
@@ -44,5 +44,5 @@ void ModeMissionCompleted::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, BgAlpha);
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle, _grHandle);
+   GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle, _grHandles, 2);
 }

@@ -3,10 +3,10 @@
 		{
 			"keyname": "MissionFailed",
 			"filename": "MissionFailed.png",
-			"allnum": 1,
+			"allnum": 60,
 			"xnum": 1,
-			"ynum": 1,
-			"xsize": 1400,
+			"ynum": 60,
+			"xsize": 1440,
 			"ysize": 150
 		},
 		{
@@ -17,6 +17,42 @@
 			"ynum": 1,
 			"xsize": 1920,
 			"ysize": 1080
+		},
+		{
+			"keyname": "ContinueSelect",
+			"filename": "ContinueSelect.png",
+			"allnum": 60,
+			"xnum": 1,
+			"ynum": 60,
+			"xsize": 360,
+			"ysize": 120
+		},
+		{
+			"keyname": "ContinueNoSelect",
+			"filename": "ContinueNoSelect.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 360,
+			"ysize": 120
+		},
+		{
+			"keyname": "ExitSelect",
+			"filename": "ExitSelect.png",
+			"allnum": 60,
+			"xnum": 1,
+			"ynum": 60,
+			"xsize": 360,
+			"ysize": 120
+		},
+		{
+			"keyname": "ExitNoSelect",
+			"filename": "ExitNoSelect.png",
+			"allnum": 1,
+			"xnum": 1,
+			"ynum": 1,
+			"xsize": 360,
+			"ysize": 120
 		}
 	]
 }

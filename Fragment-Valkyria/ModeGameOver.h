@@ -20,6 +20,7 @@ namespace FragmentValkyria {
        * \brief ゲームオーバー画面を表示する
        */
       class ModeGameOver:public ModeBase {
+         using InputManager = AppFrame::Input::InputManager;
       public:
          /**
           * \brief コンストラクタ
@@ -38,7 +39,7 @@ namespace FragmentValkyria {
           * \brief 入力処理
           * \param input 入力一括管理クラスの参照
           */
-         void Input(AppFrame::Input::InputManager& input)override;
+         void Input(InputManager& input)override;
          /**
           * \brief 更新処理
           */
@@ -49,7 +50,64 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _grHandle{ -1 };   //!< 画像ハンドル
+         std::vector<int> _continueDrawHandles;
+         std::vector<int> _exitDrawHandles;
+         std::unordered_map<std::string, std::vector<int>> _handleMap;
+         std::unique_ptr<AppFrame::State::StateServer> _stateServer;
+
+
+      public:
+         class StateBase : public AppFrame::State::StateBaseRoot {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner モードタイトルの参照
+             */
+            StateBase(ModeGameOver& owner) : _owner{ owner } {};
+            /**
+             * \brief 描画処理
+             */
+            void Draw() override;
+
+         protected:
+            ModeGameOver& _owner;
+         };
+
+         class StateContinue : public StateBase {
+         public:
+            StateContinue(ModeGameOver& owner) :StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit()override;
+         };
+
+         class StateExit : public StateBase {
+         public:
+            StateExit(ModeGameOver& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 入力処理
+             * \param input 入力一括管理クラスの参照
+             */
+            void Input(InputManager& input) override;
+            /**
+             * \brief 出口処理
+             */
+            void Exit() override;
+         };
       };
    }
 }
