@@ -119,6 +119,22 @@
 			"volume": 50,
 			"is3Dsound":true,
          	"radius":3000.0
+		},
+		{
+			"keyname": "LightOn",
+			"filename": "LightOn.wav",
+			"isload": true,
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
+		},
+		{
+			"keyname": "Buzzer",
+			"filename": "Buzzer.wav",
+			"isload": true,
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
 		}
 	]
 }

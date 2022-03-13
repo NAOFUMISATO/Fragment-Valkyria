@@ -2,7 +2,7 @@
    "boss":[
       {
          "bosswave1":[
-            {"progress":0,"type":"LargeEnemy","position":[{"x":0.0,"y":2500.0,"z":1000.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
+            {"progress":3,"type":"LargeEnemy","position":[{"x":0.0,"y":2500.0,"z":1000.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
          ],
          "bosswave2":[
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":500.0,"y":500.0,"z":500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},

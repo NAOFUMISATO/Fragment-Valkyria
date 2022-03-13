@@ -173,3 +173,11 @@ void LightAndShadow::Render() {
 #endif
 }
 
+void LightAndShadow::SetDifColor(float red, float green, float blue) {
+   SetLightDifColorHandle(_lightHandle, GetColorF(red, green, blue, FixedLightDifAlpha));
+}
+
+void LightAndShadow::SetAmbColor(float red, float green, float blue) {
+   SetLightAmbColorHandle(_lightHandle, GetColorF(red, green, blue, FixedLightDifAlpha));
+}
+

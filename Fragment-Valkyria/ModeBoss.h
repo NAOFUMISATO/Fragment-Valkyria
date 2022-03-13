@@ -47,6 +47,16 @@ namespace FragmentValkyria {
           * \brief •`‰æˆ—
           */
          void Render() override;
+
+      private:
+         void LightStaging();
+         bool _flag{ false };
+         bool _plus{ true };
+         int _lightOnCount{0};
+         int _lightCnt{ 0 };
+         float _red{0.1f};
+         float green{ 0 };
+         float blue{ 0 };
       };
    }
 }

@@ -39,7 +39,8 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render();
-
+         void SetDifColor(float red,float green,float blue);
+         void SetAmbColor(float red, float green, float blue);
       private:
          Game::GameMain& _gameMain;       //!< ゲーム本体クラスの参照
          int _lightHandle{ -1 };          //!< 光源ハンドルのペア型

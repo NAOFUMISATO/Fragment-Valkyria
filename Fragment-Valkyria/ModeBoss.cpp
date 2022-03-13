@@ -50,9 +50,10 @@ void ModeBoss::Enter() {
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
    GetSoundComponent().Stop("PoorBattleBgm");
-   GetSoundComponent().PlayLoop("BossBattleBgm");
-
    ModeInGameBase::Enter();
+   _red = 0.1f;
+   _flag = false;
+   _lightOnCount = 0;
 }
 
 void ModeBoss::Input(AppFrame::Input::InputManager& input) {
@@ -65,6 +66,12 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeBoss::Update() {
+   if (!_flag) {
+      _lightCnt = GetModeServer().frameCount();
+      _flag = true;
+      
+   }
+   LightStaging();
    ModeInGameBase::Update();
    _lighting->Update();
 }
@@ -75,4 +82,35 @@ void ModeBoss::Render() {
    auto bossHp = GetObjServer().GetDoubleData("BossHP");
    DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),"É{ÉXHP : %f", bossHp);
 #endif
+}
+
+void ModeBoss::LightStaging() {
+   auto frame = GetModeServer().frameCount() - _lightCnt;
+   if (_lightOnCount < 4) {
+      if (_plus) {
+         if (frame == 1) {
+            GetSoundComponent().Play("Buzzer");
+         }
+         _red += 0.02f;
+         if (_red > 0.5f) {
+            _plus = false;
+         }
+      }
+      if (!_plus) {
+         _red -= 0.02f;
+         if (_red < 0.1f) {
+            _plus = true;
+            _lightOnCount++;
+         }
+      }
+      _lighting->SetDifColor(_red, 0.1f, 0.1f);
+      _lighting->SetAmbColor(_red, 0.1f, 0.1f);
+   }
+   else{
+      _lighting->SetDifColor(0.6f, 0.6f, 0.7f);
+      _lighting->SetAmbColor(0.5f, 0.5f, 0.5f);
+   }
+   if (frame == 160) {
+      GetSoundComponent().Play("LightOn");
+   }
 }
