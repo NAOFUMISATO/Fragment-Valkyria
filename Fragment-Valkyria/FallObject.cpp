@@ -21,7 +21,7 @@ namespace {
    auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
       { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
       "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
-   const double Gravity = fallParamMap["gravity"];
+   const double Gravity = fallParamMap["gravity"];                             
    const double ShootSpeed = fallParamMap["shoot_speed"];
    const double UpSpeed = fallParamMap["up_speed"];
    const double RotateAngle = fallParamMap["rotate_angle"];
@@ -30,14 +30,14 @@ namespace {
    const double UpValue = fallParamMap["up_value"];
    const double FallPointPosY = fallParamMap["fallpoint_pos_y"];
    const double FallPointScale = fallParamMap["fallpoint_scale"];
-   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];
+   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];       
 
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_drum_capsule_pos1",
       "fallobject_drum_capsule_pos2", "fallobject_drum_radius" });
-   const double Range = collParamMap["fallobject_range"];
-   const double DrumCapsulePos1 = collParamMap["fallobject_drum_capsule_pos1"];
-   const double DrumCapsulePos2 = collParamMap["fallobject_drum_capsule_pos2"];
-   const double DrumCapsuleRadius = collParamMap["fallobject_drum_radius"];
+   const double Range = collParamMap["fallobject_range"];                        //!< オブジェクトを持ち上げられる範囲を形成する球の半径
+   const double DrumCapsulePos1 = collParamMap["fallobject_drum_capsule_pos1"];  //!< ドラム缶のカプセルの一つ目の位置までの位置からの高さ
+   const double DrumCapsulePos2 = collParamMap["fallobject_drum_capsule_pos2"];  //!< ドラム缶のカプセルの二つ目の位置までの位置からの高さ
+   const double DrumCapsuleRadius = collParamMap["fallobject_drum_radius"];      //!< ドラム缶のカプセルの半径
 
    constexpr auto DefaultPointScale = 1.0;
    constexpr auto DefaultPointAngle = 0.0;
@@ -247,24 +247,31 @@ void FallObject::SetCapsulePos() {
 }
 
 void FallObject::StateBase::Draw() {
+   // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
+   // 自作のベクトルクラスの位置をDxLibのVECTOR型に変換
    auto pos = AppFrame::Math::ToDX(_owner._position);
+   // float型にキャスト
    auto radian = static_cast<float>(Range);
+   // 球の描画
    DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
-
+   // float型にキャスト
    radian = static_cast<float>(DrumCapsuleRadius);
-
+   // カプセルの描画
    DrawCapsule3D(AppFrame::Math::ToDX(_owner._capsulePos1), AppFrame::Math::ToDX(_owner._capsulePos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
 }
 
 void FallObject::StateIdle::Enter() {
+   // 落下状態でないと設定
    _owner._isFall = false;
 }
 
 void FallObject::StateIdle::Input(InputManager& input) {
+   // 左トリガーが入力されていたら
    if (input.GetXJoypad().LeftTrigger() >= 20) {
+      // プレイヤーが浮く範囲内にいるか確認
       _owner.HitCheckFromPlayerPoint();
    }
 }
@@ -272,28 +279,33 @@ void FallObject::StateIdle::Input(InputManager& input) {
 void FallObject::StateIdle::Update() {
    // カプセルの位置の設定
    _owner.SetCapsulePos();
+   // 当たり判定処理を行うクラスでプレイヤーが落下オブジェクトのモデルと当たっているか確認
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
+   // 当たり判定処理を行うクラスでオブジェクトを持ち上げられる範囲にプレイヤーがいるか確認
    _owner._collisionComponent->PlayerFromObjectRange();
+   // 当たり判定処理を行うクラスでオブジェクトのモデルにガトリングが当たっているか確認
    _owner._collisionComponent->GatlingFromObjectModel();
+   // 当たり判定処理を行うクラスでレーザーが落下するオブジェクトに当たっているか確認
    _owner._collisionComponent->FallObjectFromLaser();
+   // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
 }
 
 void FallObject::StateFall::Enter() {
+   // 落下状態の進捗の初期値の設定
    _owner._fallTimer = 0.0;
 }
 
-void FallObject::StateFall::Input(InputManager& input) {
-   
-}
-
 void FallObject::StateFall::Update() {
+   // Y座標の位置の変化量の取得
    auto posY = (0.5 * Gravity * _owner._fallTimer * _owner._fallTimer);
-
+   // 位置の更新
    _owner._position.Add(0.0, -posY, 0.0);
-
+   // Y座標が地面より小さくなったら
    if (_owner._position.GetY() <= 0.0) {
+      // 位置の分解
       auto [oldPosX, oldPosY, oldPosZ] = _owner._position.GetVec3();
+      // 位置の高さを無くして設定
       _owner._position = AppFrame::Math::Vector4(oldPosX, 0.0, oldPosZ);
       auto efcFall = std::make_unique<Effect::EffectObjectFall>(_owner._gameMain, "ObjectFall");
       efcFall->position(_owner._position);
@@ -308,16 +320,16 @@ void FallObject::StateFall::Update() {
          _owner._stateServer->GoToState("Idle");
       }
    }
-
    // カプセルの位置の設定
    _owner.SetCapsulePos();
-
+   // 当たり判定処理を行うクラスでプレイヤーが落下オブジェクトのモデルと当たっているか確認
    _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
-
+   // 落下状態の進捗の更新
    ++_owner._fallTimer;
 }
 
 void FallObject::StateFall::Draw() {
+   // 状態の基底クラスの描画処理
    FallObject::StateBase::Draw();
    auto pointPosition = _owner._position;
    pointPosition.SetY(FallPointPosY);
@@ -325,7 +337,7 @@ void FallObject::StateFall::Draw() {
 }
 
 void FallObject::StateUp::Enter() {
-   _owner._vecBeforeSave = _owner._position;
+   // 残留オブジェクトでないと設定
    _owner.residual(false);
 }
 
@@ -345,11 +357,15 @@ void FallObject::StateUp::Exit() {
 }
 
 void FallObject::StateSave::Enter() {
+   // オブジェクト一括管理クラスの各オブジェクトの取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
+      // プレイヤーでなければ処理をスキップしてfor文を回す
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
-         return;
+         continue;
       }
+      // プレイヤーの参照型にキャスト
       auto& player = dynamic_cast<Player::Player&>(*object);
+      // プレイヤーがオブジェクトを打てると設定
       player.objectShoot(true);
       break;
    }
@@ -358,6 +374,7 @@ void FallObject::StateSave::Enter() {
    efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
    _owner._efcUp->position(efcPos);
    _owner._efcUp->Init();
+   // 更新処理
    Update();
 }
 
@@ -387,7 +404,9 @@ void FallObject::StateSave::Exit() {
 }
 
 void FallObject::StateShoot::Enter() {
+   // カメラの注視点へのベクトルを設定
    _owner._shootVec = _owner.GetObjServer().GetVecData("CamTarget") - _owner._position;
+   // 単位化する
    _owner._shootVec.Normalized();
 }
 
@@ -396,27 +415,29 @@ void FallObject::StateShoot::Input(InputManager& input) {
 }
 
 void FallObject::StateShoot::Update() {
+   // カメラの注視点へ進む処理
    _owner.Shoot();
    // カプセルの位置の設定
    _owner.SetCapsulePos();
+   // 当たり判定処理を行うクラスでラージエネミーのモデルに落下オブジェクトが当たっているか確認
    _owner._collisionComponent->LargeEnemyFromObjectModel();
+   // 当たり判定処理を行うクラスで雑魚敵のモデルに落下オブジェクトが当たっているか確認
    _owner._collisionComponent->PoorEnemyGatlingFromObjectModel();
+   // 当たり判定処理を行うクラスでレーザーが落下オブジェクトに当たっているか確認
    _owner._collisionComponent->FallObjectFromLaser();
+   // 当たり判定処理を行うクラスでステージ外にいるか確認
    _owner._collisionComponent->OutStage();
+   // ラージエネミーのモデルと当たっているか確認
    _owner.HitCheckFromLargeEnemy();
+   // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
+   // 雑魚敵と当たっているか確認
    _owner.HitCheckFromPoorEnemyGatling();
+   // ステージ外にいるか確認
    _owner.OutStageCheck();
 }
 
-void FallObject::StateDie::Enter() {
-
-}
-
-void FallObject::StateDie::Input(InputManager& input) {
-
-}
-
 void FallObject::StateDie::Update() {
+   // 死亡状態に設定
    _owner.SetDead();
 }
