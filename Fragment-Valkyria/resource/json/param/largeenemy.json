@@ -9,7 +9,8 @@
 			"hp": 1000.0,
 			"gravity": 0.003,
 			"consecutive_fall_object_frame": 30,
-			"consecutive_num": 5
+			"consecutive_num": 5,
+			"action_cooltime": 60
 			
 		}
 	],
