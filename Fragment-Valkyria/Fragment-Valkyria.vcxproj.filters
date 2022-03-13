@@ -330,6 +330,9 @@
     <ClInclude Include="TutorialTips.h">
       <Filter>ヘッダー ファイル\Tutorial</Filter>
     </ClInclude>
+    <ClInclude Include="CheckUpTips.h">
+      <Filter>ヘッダー ファイル\Clear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -550,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="TutorialTips.cpp">
       <Filter>ソース ファイル\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckUpTips.cpp">
+      <Filter>ソース ファイル\Clear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

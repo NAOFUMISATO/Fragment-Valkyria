@@ -33,6 +33,9 @@ namespace FragmentValkyria {
           * \return Ží•Ê:ƒ{ƒX‚ÌŽ€–SŒã
           */
          virtual EffectType GetEfcType() const override { return EffectType::BossDieAfter; }
+      
+      private:
+         int _efcCnt{ 0 };
       };
    }
 }

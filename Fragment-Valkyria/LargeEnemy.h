@@ -90,7 +90,7 @@ namespace FragmentValkyria {
          /**
           * \brief クリアオブジェクトにプレイヤーが当たっているか確認
           */
-         void ClearObjectHitCheckFromPlayer();
+         void ClearObjectHitCheckFromPlayer(InputManager& input);
          /**
           * \brief 移動処理
           * \param moved 移動量のベクトル
@@ -298,6 +298,9 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+
+         private:
+            bool _efcBorn{ true };
          };
          /**
          * \class 移動状態クラス

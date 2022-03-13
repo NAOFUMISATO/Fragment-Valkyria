@@ -50,8 +50,8 @@ namespace FragmentValkyria {
             Reticle,         //!< レティクル
             ClearTime,       //!< クリア時間
             ClearScore,      //!< クリアスコア
-            TutorialTips     //!< チュートリアル表示テキスト
-
+            TutorialTips,    //!< チュートリアル表示テキスト
+            ClearTips        //!< クリア表示テキスト
          };
          /**
           * \brief コンストラクタ

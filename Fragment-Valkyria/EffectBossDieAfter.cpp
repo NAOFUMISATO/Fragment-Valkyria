@@ -9,11 +9,14 @@ EffectBossDieAfter::EffectBossDieAfter(Game::GameMain& gameMain, std::string_vie
 
 void EffectBossDieAfter::Init() {
    PlayEffect();
+   _efcCnt = _gameMain.modeServer().frameCount();
+   EffectBase::Update();
 }
 
 void EffectBossDieAfter::Update() {
-   if (!IsPlaying()) {
-      SetDead();
+   auto frame = _gameMain.modeServer().frameCount() - _efcCnt;
+   if (frame % 120 == 0) {
+      PlayEffect();
    }
    EffectBase::Update();
 }

@@ -18,6 +18,7 @@
 #include "EffectServer.h"
 #include "EffectBossCharge.h"
 #include "EffectBossStan.h"
+#include "EffectBossDieAfter.h"
 
 namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -280,15 +281,18 @@ void LargeEnemy::HitCheckFromBullet() {
    }
 }
 
-void LargeEnemy::ClearObjectHitCheckFromPlayer() {
+void LargeEnemy::ClearObjectHitCheckFromPlayer(InputManager& input) {
    // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
    // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
-      // クリアオブジェクトがプレイヤーに当たっていたら
-      GetSoundComponent().Stop("BossBattle");
-      // モードサーバーにゲームクリアモードを挿入
-      gameMain().modeServer().PushBack("MissionCompleted");
+      // Aボタンを押したなら
+      if (input.GetXJoypad().AClick()) {
+         // クリアオブジェクトがプレイヤーに当たっていたら
+         GetSoundComponent().Stop("BossBattleBgm");
+         // モードサーバーにゲームクリアモードを挿入
+         gameMain().modeServer().PushBack("MissionCompleted");
+      }
    }
 }
 
@@ -549,14 +553,12 @@ void LargeEnemy::StateGatling::Update() {
 void LargeEnemy::StateDie::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("dead", false);
+   _efcBorn = true;
 }
 
 void LargeEnemy::StateDie::Input(InputManager& input) {
-   // Aボタンが押されていたら
-   if (input.GetXJoypad().AClick()) {
-      // クリアオブジェクトにプレイヤーが当たっているか確認
-      _owner.ClearObjectHitCheckFromPlayer();
-   }
+// クリアオブジェクトにプレイヤーが当たっているか確認
+_owner.ClearObjectHitCheckFromPlayer(input);
 }
 
 void LargeEnemy::StateDie::Update() {
@@ -564,6 +566,14 @@ void LargeEnemy::StateDie::Update() {
    auto playTime = _owner._modelAnimeComponent->playTime();
    // アニメーションが既定の時間経過しているか確認
    if (playTime >= 160.0f) {
+      if (_efcBorn) {
+         auto efcDieAfter = std::make_unique<Effect::EffectBossDieAfter>(_owner._gameMain, "BossDieAfter");
+         auto efcPosition = _owner._position;
+         efcPosition.SetY(_owner._position.GetY() + 350.0);
+         efcDieAfter->position(efcPosition);
+         _owner.GetEfcServer().Add(std::move(efcDieAfter));
+         _efcBorn = false;
+      }
       // アニメーションが既定の時間経過していたら
       // 当たり判定処理を行うクラスでプレイヤーがクリアオブジェクトと当たっているか確認
       _owner.collisionComponent().PlayerFromClearObject();
