@@ -208,7 +208,6 @@
     <ClInclude Include="ModeLoading.h" />
     <ClInclude Include="ModeMissionCompleted.h" />
     <ClInclude Include="ModeMissionFailed.h" />
-    <ClInclude Include="ModeMovie.h" />
     <ClInclude Include="ModeOption.h" />
     <ClInclude Include="ModePoor.h" />
     <ClInclude Include="ModeTeam.h" />
@@ -286,7 +285,6 @@
     <ClCompile Include="ModeLoading.cpp" />
     <ClCompile Include="ModeMissionCompleted.cpp" />
     <ClCompile Include="ModeMissionFailed.cpp" />
-    <ClCompile Include="ModeMovie.cpp" />
     <ClCompile Include="ModeOption.cpp" />
     <ClCompile Include="ModePoor.cpp" />
     <ClCompile Include="ModeTeam.cpp" />

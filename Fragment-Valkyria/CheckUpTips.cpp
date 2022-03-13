@@ -1,5 +1,11 @@
 #include "CheckUpTips.h"
 
+
+namespace {
+   constexpr auto MaxAlpha = 255;
+   constexpr auto MoveSpeed = 3;
+}
+
 using namespace FragmentValkyria::Clear;
 
 CheckUpTips::CheckUpTips(Game::GameMain& gameMain) :Sprite::SpriteBase{gameMain} {
@@ -19,28 +25,40 @@ void CheckUpTips::Init() {
    _isAppear = false;
 }
 
-void CheckUpTips::Update() {
+void CheckUpTips::Input(InputManager& input) {
+   _stateServer->Input(input);
+}
 
+void CheckUpTips::Update() {
+   _stateServer->Update();
 }
 
 void CheckUpTips::Draw() {
-
+   _stateServer->Draw();
 }
 
 void CheckUpTips::StateBase::Draw() {
-
+   _owner.SpriteBase::Draw();
 }
 
 void CheckUpTips::StateFadeIn::Enter() {
-
+   _owner._alpha = 0;
 }
 
 void CheckUpTips::StateFadeIn::Update() {
-
+   auto [x, y, z] = _owner._position.GetVec3();
+   if (x < 0) {
+      auto delta = static_cast<float>(MaxAlpha) / static_cast<float>(_owner._width);
+      _owner._alpha += static_cast<int>(delta) * MoveSpeed;
+      _owner._position = AppFrame::Math::Vector4(x + MoveSpeed, y, z);
+   }
+   else {
+      _owner._stateServer->GoToState("Stop");
+   }
 }
 
 void CheckUpTips::StateFadeIn::Exit() {
-
+   _owner._alpha = MaxAlpha;
 }
 
 void CheckUpTips::StateJudge::Enter() {
@@ -48,13 +66,20 @@ void CheckUpTips::StateJudge::Enter() {
 }
 
 void CheckUpTips::StateJudge::Input(InputManager& input) {
+   if (input.GetXJoypad().AClick()) {
 
+   }
 }
 
 void CheckUpTips::StateFadeOut::Enter() {
-
+   _owner._alpha = MaxAlpha;
 }
 
 void CheckUpTips::StateFadeOut::Update() {
-
+   auto [x, y, z] = _owner._position.GetVec3();
+   if (x > -static_cast<double>(_owner._width)) {
+      auto delta = MaxAlpha / static_cast<float>(_owner._width);
+      _owner._alpha -= static_cast<int>(delta) * MoveSpeed;
+      _owner._position = AppFrame::Math::Vector4(x - MoveSpeed, y, z);
+   }
 }

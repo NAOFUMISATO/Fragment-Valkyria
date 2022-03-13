@@ -28,7 +28,7 @@ void ModeLoading::Update() {
          GetModeServer().GoToMode("Poor", 'L');
       }
       else {
-         GetModeServer().GoToMode("Movie", 'L');
+         GetModeServer().GoToMode("Boss", 'L');
       }
    }
 }

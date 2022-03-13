@@ -228,9 +228,6 @@
     <ClInclude Include="ModePoor.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="ModeMovie.h">
-      <Filter>ヘッダー ファイル\Mode</Filter>
-    </ClInclude>
     <ClInclude Include="SpawnRecord.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
@@ -459,9 +456,6 @@
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="ModePoor.cpp">
-      <Filter>ソース ファイル\Mode</Filter>
-    </ClCompile>
-    <ClCompile Include="ModeMovie.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="EffectObjectFall.cpp">

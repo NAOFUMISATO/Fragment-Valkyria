@@ -19,7 +19,6 @@
 #include "ModeTeam.h"
 #include "ModeLoading.h"
 #include "ModePoor.h"
-#include "ModeMovie.h"
 #include "ModeClearResult.h"
 #include "ModeGameOver.h"
 #include "ModeMissionFailed.h"
@@ -75,7 +74,6 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
    SetUseASyncLoadFlag(true);
    _modeServer->Register("Tutorial", std::make_shared<Mode::ModeTutorial>(*this));
    _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>(*this));
-   _modeServer->Register("Movie", std::make_shared<Mode::ModeMovie>(*this));
    _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
    _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));
    _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>(*this));
