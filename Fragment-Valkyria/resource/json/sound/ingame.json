@@ -1,18 +1,26 @@
 {
 	"ingame": [
 		{
-			"keyname": "PoorBattle",
-			"filename": "PoorBattle.wav",
+			"keyname": "PoorBattleBgm",
+			"filename": "PoorBattleBgm.wav",
 			"isload": true,
 			"volume": 50,
 			"is3Dsound":false,
          	"radius":0.0
 		},
 		{
-			"keyname": "BossBattle",
-			"filename": "BossBattle.wav",
+			"keyname": "BossBattleBgm",
+			"filename": "BossBattleBgm.wav",
 			"isload": true,
-			"volume": 150,
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
+		},
+		{
+			"keyname": "TutorialBgm",
+			"filename": "BossBattleBgm.wav",
+			"isload": true,
+			"volume": 50,
 			"is3Dsound":false,
          	"radius":0.0
 		},
@@ -44,7 +52,7 @@
 			"keyname": "PlayerShoot",
 			"filename": "PlayerShoot.wav",
 			"isload": true,
-			"volume": 255,
+			"volume": 120,
 			"is3Dsound":false,
          	"radius":0.0
 		},
@@ -52,7 +60,23 @@
 			"keyname": "PlayerShootReady",
 			"filename": "PlayerShootReady.wav",
 			"isload": true,
-			"volume": 255,
+			"volume": 120,
+			"is3Dsound":false,
+         	"radius":0.0
+		},
+		{
+			"keyname": "WeakShootReady",
+			"filename": "WeakShootReady.wav",
+			"isload": true,
+			"volume": 100,
+			"is3Dsound":false,
+         	"radius":0.0
+		},
+		{
+			"keyname": "Reload",
+			"filename": "Reload.wav",
+			"isload": true,
+			"volume": 120,
 			"is3Dsound":false,
          	"radius":0.0
 		},
@@ -63,7 +87,7 @@
 			"volume": 100,
 			"is3Dsound":true,
          	"radius":3000.0
-		},
+		}, 
 		{
 			"keyname": "BossGatling",
 			"filename": "BossGatling.wav",

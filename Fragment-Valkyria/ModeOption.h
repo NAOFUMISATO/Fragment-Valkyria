@@ -58,9 +58,7 @@ namespace FragmentValkyria {
          std::pair<int, int> _aimCusorPos{ 0,0 };                   //!< エイム感度バーカーソル座標
          std::pair<int, int> _deadzoneCusorPos{ 0,0 };              //!< デッドゾーンバーカーソル座標
          std::pair<int, int> _selectCusorPos{ 0,0 };                //!< 選択エフェクト画像の座標
-         std::tuple<int, int, int, int, int, int, int> _grHandles{  //!< 画像ハンドル群
-            -1,-1,-1,-1,-1,-1,-1
-         };
+         std::unordered_map<std::string,int> _handleMap;            //!< 画像ハンドルマップ
 
       public:
          /**

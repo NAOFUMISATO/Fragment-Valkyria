@@ -53,14 +53,14 @@ ModeOption::ModeOption(Game::GameMain& gameMain) : ModeBase { gameMain }{
 void ModeOption::Init() {
    GetLoadJson().LoadTextures("option");
    auto& resServer = GetResServer();
-   _grHandles = {
-      resServer.GetTexture("AdjustmentBar"),
-      resServer.GetTexture("AimSensivity"),
-      resServer.GetTexture("BarCusor"),
-      resServer.GetTexture("CameraSensivity"),
-      resServer.GetTexture("OptionCusor"),
-      resServer.GetTexture("DeadZone"),
-      resServer.GetTexture("Return")
+   _handleMap = {
+      {"AdjustmentBar",  resServer.GetTexture("AdjustmentBar")},
+      {"AimSensivity",   resServer.GetTexture("AimSensivity")},
+      {"BarCusor",       resServer.GetTexture("BarCusor")},
+      {"CameraSensivity",resServer.GetTexture("CameraSensivity")},
+      {"OptionCusor",    resServer.GetTexture("OptionCusor")},
+      {"DeadZone",       resServer.GetTexture("DeadZone")},
+      {"Return",         resServer.GetTexture("Return")}
    };
 
    _stateServer = std::make_unique<AppFrame::State::StateServer>("CameraSencivitySelect", std::make_shared <StateCameraSencivitySelect>(*this));
@@ -93,8 +93,8 @@ void ModeOption::Render() {
 
 void ModeOption::StateBase::Update() {
    auto [cameraSencivity, aimSencivity, deadZone] = _owner._gameMain.sensitivity();
-   auto& ajustHandle = std::get<0>(_owner._grHandles);
-   auto& cusorHandle = std::get<2>(_owner._grHandles);
+   auto& ajustHandle = _owner._handleMap["AdjustmentBar"];
+   auto& cusorHandle = _owner._handleMap["BarCusor"];
    int ajustWidth, ajustHeight;
    int cusorWidth, cusorHeight;
    GetGraphSize(ajustHandle, &ajustWidth, &ajustHeight);
@@ -118,22 +118,22 @@ void ModeOption::StateBase::Draw() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, BgAlpha);
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   auto [ajustmentHandle, aimHandle, barCusorHandle, cameraHandle, cusorHandle, deadHandle, returnHandle] = _owner._grHandles;
-   _owner.GetTexComponent().DrawTexture(CameraSensPosX, CameraSensPosY, DefaultGraphScale, DefaultGraphAngle, cameraHandle);
-   _owner.GetTexComponent().DrawTexture(CameraBarPosX, CameraBarPosY, DefaultGraphScale, DefaultGraphAngle, ajustmentHandle);
-   _owner.GetTexComponent().DrawTexture(AimSensPosX, AimSensPosY, DefaultGraphScale, DefaultGraphAngle, aimHandle);
-   _owner.GetTexComponent().DrawTexture(AimBarPosX, AimBarPosY, DefaultGraphScale, DefaultGraphAngle, ajustmentHandle);
-   _owner.GetTexComponent().DrawTexture(DeadZonePosX, DeadZonePosY, DefaultGraphScale, DefaultGraphAngle, deadHandle);
-   _owner.GetTexComponent().DrawTexture(DeadZoneBarPosX, DeadZoneBarPosY, DefaultGraphScale, DefaultGraphAngle, ajustmentHandle);
-   _owner.GetTexComponent().DrawTexture(ReturnPosX, ReturnPosY, DefaultGraphScale, DefaultGraphAngle, returnHandle);
+   auto handleMap = _owner._handleMap;
+   _owner.GetTexComponent().DrawTexture(CameraSensPosX, CameraSensPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["CameraSensivity"]);
+   _owner.GetTexComponent().DrawTexture(CameraBarPosX, CameraBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(AimSensPosX, AimSensPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AimSensivity"]);
+   _owner.GetTexComponent().DrawTexture(AimBarPosX, AimBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(DeadZonePosX, DeadZonePosY, DefaultGraphScale, DefaultGraphAngle, handleMap["DeadZone"]);
+   _owner.GetTexComponent().DrawTexture(DeadZoneBarPosX, DeadZoneBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(ReturnPosX, ReturnPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["Return"]);
    auto [cameraCusorPosX, cameraCusorPosY] = _owner._cameraCusorPos;
    auto [aimCusorPosX, aimCusorPosY] = _owner._aimCusorPos;
    auto [deadzoneCusorPosX, deadzoneCusorPosY] = _owner._deadzoneCusorPos;
-   _owner.GetTexComponent().DrawTexture(cameraCusorPosX, cameraCusorPosY, DefaultGraphScale, DefaultGraphAngle, barCusorHandle);
-   _owner.GetTexComponent().DrawTexture(aimCusorPosX, aimCusorPosY, DefaultGraphScale, DefaultGraphAngle, barCusorHandle);
-   _owner.GetTexComponent().DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY, DefaultGraphScale, DefaultGraphAngle, barCusorHandle);
+   _owner.GetTexComponent().DrawTexture(cameraCusorPosX, cameraCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
+   _owner.GetTexComponent().DrawTexture(aimCusorPosX, aimCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
+   _owner.GetTexComponent().DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
    auto [selectCusorPosX, selectCusorPosY] = _owner._selectCusorPos;
-   _owner.GetTexComponent().DrawTexture(selectCusorPosX, selectCusorPosY, DefaultGraphScale, DefaultGraphAngle, cusorHandle);
+   _owner.GetTexComponent().DrawTexture(selectCusorPosX, selectCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["OptionCusor"]);
 }
 
 void ModeOption::StateCameraSencivitySelect::Enter() {
@@ -142,15 +142,19 @@ void ModeOption::StateCameraSencivitySelect::Enter() {
 
 void ModeOption::StateCameraSencivitySelect::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("ReturnSelect");
    }
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("AimSencivitySelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._cameraSens < SensivityMax) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._cameraSens += SensivityMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._cameraSens > SensivityMin) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._cameraSens -= SensivityMin;
    }
 }
@@ -161,15 +165,19 @@ void ModeOption::StateAimSencivitySelect::Enter() {
 
 void ModeOption::StateAimSencivitySelect::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("CameraSencivitySelect");
    }
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("DeadZoneSelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._aimSens < SensivityMax) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._aimSens += SensivityMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._aimSens > SensivityMin) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._aimSens -= SensivityMin;
    }
 }
@@ -180,15 +188,19 @@ void ModeOption::StateDeadZoneSelect::Enter() {
 
 void ModeOption::StateDeadZoneSelect::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("AimSencivitySelect");
    }
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("ReturnSelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._deadZone < DeadZoneMax) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._deadZone += DeadZoneMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._deadZone > DeadZoneMin) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._deadZone -= DeadZoneMin;
    }
 }
@@ -199,12 +211,15 @@ void ModeOption::StateReturnSelect::Enter() {
 
 void ModeOption::StateReturnSelect::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("DeadZoneSelect");
    }
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("CameraSencivitySelect");
    }
    if (input.GetXJoypad().AClick()) {
+      _owner.GetSoundComponent().Play("SystemDecision");
       _owner.GetModeServer().PopBack();
    }
 }

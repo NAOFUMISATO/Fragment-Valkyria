@@ -65,10 +65,12 @@ void ModeTutorialSelect::StateYes::Enter() {
 
 void ModeTutorialSelect::StateYes::Input(InputManager& input) {
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("No");
    }
    if (input.GetXJoypad().AClick()) {
       _owner._gameMain.isTutorialClear(true);
+      _owner.GetSoundComponent().Play("SystemDecision");
       _owner.GetModeServer().GoToMode("Loading", 'S');
    }
 }
@@ -80,9 +82,11 @@ void ModeTutorialSelect::StateNo::Enter() {
 
 void ModeTutorialSelect::StateNo::Input(InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("Yes");
    }
    if (input.GetXJoypad().AClick()) {
+      _owner.GetSoundComponent().Play("SystemDecision");
       _owner.GetModeServer().GoToMode("Loading",'S');
    }
 }

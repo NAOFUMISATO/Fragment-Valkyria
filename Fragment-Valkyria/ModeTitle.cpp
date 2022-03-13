@@ -44,7 +44,7 @@ ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 }
 
 void ModeTitle::Init() {
-   GetLoadJson().LoadSounds("title");
+   GetLoadJson().LoadSounds("outgame");
 
    auto& resServer = GetResServer();
    
@@ -72,7 +72,7 @@ void ModeTitle::Init() {
 }
 
 void ModeTitle::Enter() {
-   GetSoundComponent().Play("TitleBgm");
+   GetSoundComponent().PlayLoop("TitleBgm");
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
@@ -127,6 +127,7 @@ void ModeTitle::StateAnyButton::Enter() {
 
 void ModeTitle::StateAnyButton::Input(InputManager& input){
    if (input.GetXJoypad().XClick()|| input.GetXJoypad().YClick()|| input.GetXJoypad().AClick()|| input.GetXJoypad().BClick()) {
+      _owner.GetSoundComponent().Play("SystemDecision");
       _owner._stateServer->GoToState("StartSelect");
    }
 }
@@ -144,10 +145,12 @@ void ModeTitle::StateStartSelect::Enter() {
 void ModeTitle::StateStartSelect::Input(InputManager& input) {
    auto frameCount = _owner.GetModeServer().frameCount() - _owner._firstInputCnt;
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
    if (frameCount > FirstInputFrame) {
       if (input.GetXJoypad().AClick()) {
+         _owner.GetSoundComponent().Play("SystemDecision");
          _owner.GetModeServer().GoToMode("TutorialSelect", 'S');
       }
    }
@@ -163,12 +166,15 @@ void ModeTitle::StateOptionSelect::Enter() {
 
 void ModeTitle::StateOptionSelect::Input(InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("StartSelect");
    }
    if (input.GetXJoypad().DDownClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("EndSelect");
    }
    if (input.GetXJoypad().AClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner.GetModeServer().PushBack("Option");
    }
 }
@@ -183,9 +189,11 @@ void ModeTitle::StateEndSelect::Enter() {
 
 void ModeTitle::StateEndSelect::Input(InputManager& input) {
    if (input.GetXJoypad().DUpClick()) {
+      _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
    if (input.GetXJoypad().AClick()) {
+      _owner.GetSoundComponent().Play("SystemDecision");
       _owner._gameMain.ShutDown();
    }
 }

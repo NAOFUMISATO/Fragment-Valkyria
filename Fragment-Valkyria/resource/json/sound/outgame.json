@@ -1,0 +1,28 @@
+{
+   "outgame": [
+      {
+         "keyname": "TitleBgm",
+         "filename": "TitleBgm.wav",
+         "isload": true,
+         "volume": 30,
+         "is3Dsound":false,
+         "radius":0.0
+      },
+      {
+         "keyname": "SystemDecision",
+         "filename": "SystemDecision.wav",
+         "isload": true,
+         "volume": 50,
+         "is3Dsound":false,
+         "radius":0.0
+      },
+      {
+         "keyname": "SystemSelect",
+         "filename": "SystemSelect.wav",
+         "isload": true,
+         "volume": 30,
+         "is3Dsound":false,
+         "radius":0.0
+      }
+   ]
+}

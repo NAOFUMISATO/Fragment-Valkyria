@@ -972,7 +972,7 @@ void Player::StateWeakShootReady::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
-   _owner.GetSoundComponent().Play("PlayerShootReady");
+   _owner.GetSoundComponent().Play("WeakShootReady");
    // 遠隔弱攻撃のクールタイムを0に設定
    _coolTime = 0;
    // エイム中と設定
@@ -1042,6 +1042,7 @@ void Player::StateReload::Enter() {
    _reloadCnt = 0;
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
+   _owner.GetSoundComponent().Play("Reload");
 }
 
 void Player::StateReload::Update() {

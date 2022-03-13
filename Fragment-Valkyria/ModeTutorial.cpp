@@ -64,6 +64,8 @@ void ModeTutorial::Enter() {
    objServer.Add(std::move(player));
    _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
    _born = true;
+   GetSoundComponent().Stop("TitleBgm");
+   GetSoundComponent().PlayLoop("TutorialBgm");
    ModeInGameBase::Enter();
 }
 
