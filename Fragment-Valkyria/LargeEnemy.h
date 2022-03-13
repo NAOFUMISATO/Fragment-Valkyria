@@ -163,6 +163,27 @@ namespace FragmentValkyria {
             int _stateCnt{ 0 };   //!< 各状態へ入った時のフレームカウント保存用
          };
          /**
+         * \class 落下状態クラス
+         * \brief 落下状態の処理を回す
+         */
+         class StateFall : public StateBase
+         {
+         public:
+            /**
+             * \brief コンストラクタ
+             * \param owner ラージエネミーの参照
+             */
+            StateFall(LargeEnemy& owner) : StateBase{ owner } {};
+            /**
+             * \brief 入口処理
+             */
+            void Enter() override;
+            /**
+             * \brief 更新処理
+             */
+            void Update() override;
+         };
+         /**
          * \class 待機状態クラス
          * \brief 待機状態の処理を回す
          */

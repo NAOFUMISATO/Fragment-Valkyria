@@ -34,19 +34,35 @@ namespace {
       { "fallobject_range", "ply_radius", "ply_capsule_pos1",
        "ply_capsule_pos2", "gatling_radius", "fallobject_drum_capsule_pos1",
       "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius",
-      "bullet_radius", "clearobject_radius"});
+      "bullet_radius", "clearobject_radius", "weak_object_damage",
+      "normal_object_damage", "weak_bullet_damage",
+      "normal_bullet_damage", "poorenemy_object_damage",
+      "poorenemy_bullet_damage", "player_object_damage",
+      "player_laser_damage", "player_largeenemy_damage",
+      "player_gatling_damage", "player_poorenemy_damage"});
 
-   const double FallObjectRange = paramMap["fallobject_range"];                           //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
-   const double PlayerRadius = paramMap["ply_radius"];                                    //!< プレイヤーのカプセルの半径
-   const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];                         //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];                         //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double GatlingRadius = paramMap["gatling_radius"];                               //!< ガトリングの半径
-   const double FallObjectCapsulePos1 = paramMap["fallobject_drum_capsule_pos1"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectCapsulePos2 = paramMap["fallobject_drum_capsule_pos2"];         //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectRadius = paramMap["fallobject_drum_radius"];                    //!< フォールオブジェクトのカプセルの半径
-   const double LaserRadius = paramMap["laser_radius"];                                   //!< レーザーのカプセルの半径
-   const double BulletRadius = paramMap["bullet_radius"];                                 //!< 弱攻撃の半径
-   const double ClearObjectRadius = paramMap["clearobject_radius"];                       //!< クリアオブジェクトを形成するカプセルの半径
+   const double FallObjectRange = paramMap["fallobject_range"];                                                    //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
+   const double PlayerRadius = paramMap["ply_radius"];                                                             //!< プレイヤーのカプセルの半径
+   const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];                                                  //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+   const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];                                                  //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
+   const double GatlingRadius = paramMap["gatling_radius"];                                                        //!< ガトリングの半径
+   const double FallObjectCapsulePos1 = paramMap["fallobject_drum_capsule_pos1"];                                  //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+   const double FallObjectCapsulePos2 = paramMap["fallobject_drum_capsule_pos2"];                                  //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
+   const double FallObjectRadius = paramMap["fallobject_drum_radius"];                                             //!< フォールオブジェクトのカプセルの半径
+   const double LaserRadius = paramMap["laser_radius"];                                                            //!< レーザーのカプセルの半径
+   const double BulletRadius = paramMap["bullet_radius"];                                                          //!< 弱攻撃の半径
+   const double ClearObjectRadius = paramMap["clearobject_radius"];                                                //!< クリアオブジェクトを形成するカプセルの半径
+   const double WeakObjectDamage = paramMap["weak_object_damage"];                                                 //!< 落下オブジェクトが弱点に当たった時のダメージ量
+   const double ObjectDamage = paramMap["normal_object_damage"];                                                   //!< 落下オブジェクトが顔に当たった時のダメージ量
+   const double WeakBulletDamage = paramMap["weak_bullet_damage"];                                                 //!< 遠隔弱攻撃の弾が弱点に当たった時のダメージ量
+   const double BulletDamage = paramMap["normal_bullet_damage"];                                                   //!< 遠隔弱攻撃の弾が顔に当たった時のダメージ量
+   const double PoorEnemyObjectDamage = paramMap["poorenemy_object_damage"];                                       //!< 落下オブジェクトが雑魚敵に当たった時のダメージ量
+   const double PoorEnemyBulletDamage = paramMap["poorenemy_bullet_damage"];                                       //!< 遠隔弱攻撃の弾が雑魚敵に当たった時のダメージ量
+   const double PlayerObjectDamage = paramMap["player_object_damage"];                                             //!< 落下オブジェクトがプレイヤーに当たった時のダメージ量
+   const double PlayerLaserDamage = paramMap["player_laser_damage"];                                               //!< オブジェクトがプレイヤーに当たった時のダメージ量
+   const double PlayerLargeenemyDamage = paramMap["player_largeenemy_damage"];                                     //!< オブジェクトがプレイヤーに当たった時のダメージ量
+   const double PlayerGatlingDamage = paramMap["player_gatling_damage"];                                           //!< オブジェクトがプレイヤーに当たった時のダメージ量
+   const double PlayerPoorEnemyDamage = paramMap["player_poorenemy_damage"];                                       //!< 雑魚敵がプレイヤーに当たった時のダメージ量
 
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
       "clearobject_pos" });
@@ -183,7 +199,7 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
       // カプセルの半径
       auto radian = static_cast<float>(PlayerRadius);
       // カプセルとモデルの当たり判定をとる
-      auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(plyPos), AppFrame::Math::ToDX(plyPos), radian);
+      auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(plyPos), radian);
       // 当たり判定の結果が当たっているか確認
       if (result.HitNum > 0) {
          // 当たっていた場合落下か確認
@@ -197,7 +213,7 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
             // プレイヤーの当たり判定の結果に落下するオブジェクトのモデルと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromFallObject);
             // ダメージを20.0に設定
-            object->collisionComponent().damage(20.0);
+            object->collisionComponent().damage(PlayerObjectDamage);
          }
          else {
             // 落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
@@ -273,7 +289,7 @@ void CollisionComponent::GatlingFromPlayer() {
          // プレイヤー側の当たり判定の結果をガトリングと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromGatling);
          // ダメージの設定
-         _owner.collisionComponent().damage(20.0);
+         _owner.collisionComponent().damage(PlayerGatlingDamage);
          // プレイヤーの当たった位置にガトリングの位置を設定
          _owner.collisionComponent().hitPos(object->position());
       }
@@ -308,7 +324,7 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
          // 当たっていたらラージエネミーの当たり判定結果を落下するオブジェクトと当たっていると設定
          object->collisionComponent().report().id(ReportId::HitFromFallObject);
          // ダメージの設定
-         object->collisionComponent().damage(1000.0);
+         object->collisionComponent().damage(WeakObjectDamage);
          // 落下するオブジェクトの当たり判定結果をラージエネミーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
          // for文を抜ける
@@ -325,7 +341,7 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
             // 当たっていたらラージエネミーの当たり判定結果を落下するオブジェクトと当たっていると設定
             object->collisionComponent().report().id(ReportId::HitFromFallObject);
             // ダメージの設定
-            object->collisionComponent().damage(100.0);
+            object->collisionComponent().damage(ObjectDamage);
             // 落下するオブジェクトの当たり判定結果をラージエネミーと当たったと設定
             _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
             // for文を抜ける
@@ -375,7 +391,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
          // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromBullet);
          // ダメージ量の設定
-         object->collisionComponent().damage(100.0);
+         object->collisionComponent().damage(WeakBulletDamage);
          // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
          // for文を抜ける
@@ -392,7 +408,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
             // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromBullet);
             // ダメージ量の設定
-            object->collisionComponent().damage(50.0);
+            object->collisionComponent().damage(BulletDamage);
             // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
             _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
             // for文を抜ける
@@ -500,7 +516,7 @@ void CollisionComponent::PlayerFromLaser() {
          // 当たっていた場合プレイヤーの当たり判定の結果をレーザーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLaser);
          // ダメージの設定
-         _owner.collisionComponent().damage(20.0);
+         _owner.collisionComponent().damage(PlayerLaserDamage);
          // 当たった位置にレーザーの位置を設定
          _owner.collisionComponent().hitPos(laser.position());
       }
@@ -544,7 +560,7 @@ void CollisionComponent::LargeEnemyFromPlayer() {
          //当たった位置にラージエネミーの位置を設定
          player.collisionComponent().hitPos(_owner.position());
          //ダメージの設定
-         player.collisionComponent().damage(20.0);
+         player.collisionComponent().damage(PlayerLargeenemyDamage);
       }
    }
 }
@@ -613,7 +629,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
          //当たっていたら遠隔弱攻撃の弾の当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
          //ダメージの設定
-         _owner.collisionComponent().damage(10.0);
+         _owner.collisionComponent().damage(PoorEnemyBulletDamage);
          //ガトリング攻撃をしてくる雑魚敵の当たり判定結果を遠隔弱攻撃の弾と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromBullet);
       }
@@ -648,7 +664,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          //ガトリング攻撃をしてくる雑魚敵の当たり判定結果を落下するオブジェクトと当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromFallObject);
          //ダメージの設定
-         object->collisionComponent().damage(20.0);
+         object->collisionComponent().damage(PoorEnemyObjectDamage);
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
       }

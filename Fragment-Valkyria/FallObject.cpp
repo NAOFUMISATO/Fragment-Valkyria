@@ -238,9 +238,9 @@ void FallObject::SetCapsulePos() {
    world.RotateZ(rz, false);
    world.RotateX(rx, false);
    world.RotateY(ry, false);
-   if (_collisionName == "steel_frame_large_c") {
+   /*if (_collisionName == "drum_red_c" || _collisionName == "drum_green_c" || _collisionName == "drum_blue_c") {
 
-   }
+   }*/
    // カプセルの位置の設定
    _capsulePos1 = _position + Vector4(0.0, DrumCapsulePos1, 0.0) * world;
    _capsulePos2 = _position + Vector4(0.0, DrumCapsulePos2, 0.0) * world;
