@@ -470,7 +470,7 @@ void LargeEnemy::StateFall::Update() {
    if (_owner._position.GetY() <= 0.0) {
       // ˆÊ’u‚ÌY¬•ª‚ð0‚É‚·‚é
       auto [x, y, z] = _owner._position.GetVec3();
-      _owner._position = Vector4(x, 0.0, y);
+      _owner._position = Vector4(x, 0.0, z);
       // ‘Ò‹@ó‘Ô‚Ö
       _owner._stateServer->GoToState("Idle");
    }
