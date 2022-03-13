@@ -176,7 +176,7 @@
     <ClInclude Include="EffectBossCharge.h" />
     <ClInclude Include="EffectBossDieAfter.h" />
     <ClInclude Include="EffectBossStan.h" />
-    <ClInclude Include="EffectBossWalk.h" />
+    <ClInclude Include="EffectBossFall.h" />
     <ClInclude Include="EffectGatlingBullet.h" />
     <ClInclude Include="EffectGatlingMuzzleFlash.h" />
     <ClInclude Include="EffectHeal.h" />
@@ -224,6 +224,7 @@
     <ClInclude Include="PoorEnemyBase.h" />
     <ClInclude Include="PoorEnemyMelee.h" />
     <ClInclude Include="PoorEnemyMeleeCreator.h" />
+    <ClInclude Include="EffectPreliminaryLight.h" />
     <ClInclude Include="RemainingPortion.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="SpawnRecord.h" />
@@ -253,7 +254,7 @@
     <ClCompile Include="EffectBossBeam.cpp" />
     <ClCompile Include="EffectBossDieAfter.cpp" />
     <ClCompile Include="EffectBossStan.cpp" />
-    <ClCompile Include="EffectBossWalk.cpp" />
+    <ClCompile Include="EffectBossFall.cpp" />
     <ClCompile Include="EffectGatlingBullet.cpp" />
     <ClCompile Include="EffectGatlingMuzzleFlash.cpp" />
     <ClCompile Include="EffectHeal.cpp" />
@@ -301,6 +302,7 @@
     <ClCompile Include="PoorEnemyBase.cpp" />
     <ClCompile Include="PoorEnemyMelee.cpp" />
     <ClCompile Include="PoorEnemyMeleeCreator.cpp" />
+    <ClCompile Include="EffectPreliminaryLight.cpp" />
     <ClCompile Include="RemainingPortion.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="SpriteServer.cpp" />

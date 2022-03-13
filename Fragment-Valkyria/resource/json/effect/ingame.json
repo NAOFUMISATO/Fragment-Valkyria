@@ -49,9 +49,9 @@
 			"speed":2.0
 		},
 		{
-			"keyname": "BossWalk",
-			"filename": "BossWalk.efkefc",
-			"scale": 10.0,
+			"keyname": "BossFall",
+			"filename": "BossFall.efkefc",
+			"scale": 80.0,
 			"speed":2.0
 		},
 		{
@@ -77,6 +77,13 @@
 			"filename": "BossBeam.efkefc",
 			"scale": 140.0,
 			"speed":1.5
+		},
+		{
+			"keyname": "PreliminaryLight",
+			"filename": "PreliminaryLight.efkefc",
+			"scale": 100.0,
+			"speed":1.5
 		}
+
 	]
 }

@@ -312,7 +312,7 @@
     <ClInclude Include="EffectBossDieAfter.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="EffectBossWalk.h">
+    <ClInclude Include="EffectBossFall.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="ClearScore.h">
@@ -329,6 +329,9 @@
     </ClInclude>
     <ClInclude Include="CheckUpTips.h">
       <Filter>ヘッダー ファイル\Clear</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPreliminaryLight.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -530,7 +533,7 @@
     <ClCompile Include="EffectBossStan.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="EffectBossWalk.cpp">
+    <ClCompile Include="EffectBossFall.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="EffectBossDieAfter.cpp">
@@ -550,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="CheckUpTips.cpp">
       <Filter>ソース ファイル\Clear</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectPreliminaryLight.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

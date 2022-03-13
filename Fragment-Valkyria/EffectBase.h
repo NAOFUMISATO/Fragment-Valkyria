@@ -49,10 +49,10 @@ namespace FragmentValkyria {
             BossCharge,         //!< ボスビームチャージ
             BossStan,           //!< ボスのスタン
             BossDieAfter,       //!< ボスの死亡後
-            BossWalk,           //!< ボス歩き
+            BossFall,           //!< ボス落下
             ObjectUp,           //!< オブジェクト上昇
-            PoorCrash           //!< 雑魚敵の破壊
-            
+            PoorCrash,          //!< 雑魚敵の破壊
+            PreliminaryLight    //!< 予備動作
          };
          /**
           * \brief コンストラクタ

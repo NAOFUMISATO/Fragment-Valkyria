@@ -182,6 +182,10 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+            /**
+             * \brief 描画処理
+             */
+            void Exit()override;
          };
          /**
          * \class 待機状態クラス
@@ -248,8 +252,9 @@ namespace FragmentValkyria {
              * \brief 落下オブジェクトの生成
              */
             void CreateFallObject();
-
+            
             int _fallObjectNum{ 0 };            //!< 落下オブジェクトを生成する数
+            bool _cntInit{ true };
          };
          /**
          * \class ガトリング攻撃状態クラス

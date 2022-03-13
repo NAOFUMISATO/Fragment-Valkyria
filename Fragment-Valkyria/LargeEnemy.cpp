@@ -19,6 +19,8 @@
 #include "EffectBossCharge.h"
 #include "EffectBossStan.h"
 #include "EffectBossDieAfter.h"
+#include "EffectBossFall.h"
+#include "EffectPreliminaryLight.h"
 
 namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -463,10 +465,10 @@ void LargeEnemy::StateBase::Draw() {
 }
 
 void LargeEnemy::StateFall::Enter() {
-   // この状態に入った時のモードサーバーのフレームカウントを保存
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("idle", true);
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   
 }
 
 void LargeEnemy::StateFall::Update() {
@@ -482,8 +484,16 @@ void LargeEnemy::StateFall::Update() {
       auto [x, y, z] = _owner._position.GetVec3();
       _owner._position = Vector4(x, 0.0, z);
       // 待機状態へ
-      _owner._stateServer->GoToState("Idle");
+      _owner._stateServer->GoToState("Consecutive");
    }
+}
+
+void LargeEnemy::StateFall::Exit() {
+   auto efcFall = std::make_unique<Effect::EffectBossFall>(_owner._gameMain,"BossFall");
+   efcFall->position(_owner._position);
+   _owner.GetEfcServer().Add(std::move(efcFall));
+   _owner._cameraComponent->SetVibValue(0.0);
+   _owner.GetSoundComponent().PlayLoop("BossBattleBgm");
 }
 
 void LargeEnemy::StateIdle::Enter() {
@@ -905,20 +915,30 @@ void LargeEnemy::StateStun::Exit() {
 }
 
 void LargeEnemy::StateConsecutiveFallObject::Enter() {
-   // この状態になった時のゲームのフレームカウントの保存
-   _stateCnt = _owner.gameMain().modeServer().frameCount();
+   // モデルのアニメーションの設定
+   _owner._modelAnimeComponent->ChangeAnime("object_attack", false, 1.0); 
    // 落下オブジェクトを生成する数を既定の値に設定
    _fallObjectNum = ConsecutiveNum;
+   auto efcPreliminary = std::make_unique<Effect::EffectPreliminaryLight>(_owner._gameMain, "PreliminaryLight");
+   // ボスの向きの取得(ボスのZ座標が逆の為、反転させておく)
+   auto bossDir = _owner.GetForward() * -1.0;
+   // エフェクト生成位置に近いフレームの取得
+   auto rootFramePos = _owner.modelAnimeComponent().GetFrameChildPosion("root", "root1");
+   // 指定座標分ずらす
+   auto efcPos = rootFramePos + bossDir * 300.0;
+   efcPreliminary->position(efcPos);
+   _owner.GetEfcServer().Add(std::move(efcPreliminary));
+   _cntInit = true;
 }
 
 void LargeEnemy::StateConsecutiveFallObject::Update() {
    // この状態に入ってからの経過フレーム数の取得
+   if (_owner._modelAnimeComponent->repeatedCount() > 0&& _cntInit) {
+      _stateCnt = _owner.gameMain().modeServer().frameCount();
+      _cntInit = false;
+   }
    auto count = _owner.gameMain().modeServer().frameCount() - _stateCnt;
-   if (count % ConsecutiveFallObjectFrame == 0) {
-      // モデルのアニメーションの設定
-      _owner._modelAnimeComponent->ChangeAnime("object_attack", true, 1.0);
-      // アニメーションを始める時間の設定
-      _owner._modelAnimeComponent->playTime(60.0);
+   if (!_cntInit && count % ConsecutiveFallObjectFrame == 0) {
       // 落下オブジェクトの生成
       CreateFallObject();
       // カメラを振動させるためにカメラの振動に使うYの位置を0.0に設定
