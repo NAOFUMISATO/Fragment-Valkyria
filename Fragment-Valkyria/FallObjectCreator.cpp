@@ -25,7 +25,8 @@ FallObjectCreator::FallObjectCreator(Game::GameMain& gameMain) : CreatorBase{ ga
 }
 
 std::unique_ptr<Object::ObjectBase> FallObjectCreator::Create() {
-   auto random = AppFrame::Math::Utility::GetRandom(0, _fallObjectModels.size() - 1);
+   // 0から落下オブジェクトのモデルの名前の動的配列の個数を-1した数まででランダムに値をとる
+   auto random = AppFrame::Math::Utility::GetRandom(0, static_cast<int>(_fallObjectModels.size()) - 1);
    // 落下オブジェクトの生成
    auto fallObject = std::make_unique<Enemy::FallObject>(_gameMain);
 

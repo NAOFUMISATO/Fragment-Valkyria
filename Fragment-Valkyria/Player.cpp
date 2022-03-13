@@ -22,7 +22,8 @@ namespace {
     auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
        "knockback_animespeed","run_speed","recovery_rate", "max_hp","max_bullet", "max_portion",
-       "rotate_rate", "walk_speed", "walk_dead_zone_range", "wait_frame","invincible_frame" ,"blinking_frame" });
+       "rotate_rate", "walk_speed", "walk_dead_zone_range", "wait_frame","invincible_frame" ,
+       "blinking_frame", "cooltime"});
     const double IdleAnimeSpeed = playerParamMap["idle_animespeed"];                //!< 待機状態のアニメーションスピード
     const double WalkAnimeSpeed = playerParamMap["walk_animespeed"];                //!< 歩き状態のアニメーションスピード
     const double RunAnimeSpeed = playerParamMap["run_animespeed"];                  //!< 走り状態のアニメーションスピード
@@ -40,6 +41,7 @@ namespace {
     const int WaitFrame = playerParamMap["wait_frame"];                             //!< 左スティックの入力を待つフレーム数
     const int InvincibleFrame = playerParamMap["invincible_frame"];                 //!< 無敵フレーム
     const int BlinkingFrame = playerParamMap["blinking_frame"];                     //!< 無敵時の点滅フレーム
+    const int CoolTime = playerParamMap["cooltime"];                                //!< 遠隔弱攻撃のクールタイムのフレーム数
 
     auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "ply_radius",
        "ply_capsule_pos1","ply_capsule_pos2" });
@@ -346,7 +348,7 @@ void Player::HitCheckFromPoorEnemy() {
       // カメラのズームをしないと設定
       _cameraComponent->SetZoom(false);
       // ノックバック状態へ
-      _stateServer->PushBack("KnockBack");
+      _stateServer->GoToState("KnockBack");
    }
 }
 
@@ -488,6 +490,8 @@ void Player::StateIdle::Update() {
    _owner.HitCheckFromGatling();
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -651,6 +655,8 @@ void Player::StateWalk::Update() {
    _owner.HitCheckFromGatling();
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -833,6 +839,8 @@ void Player::StateRun::Update() {
    _owner.HitCheckFromGatling();
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -891,6 +899,8 @@ void Player::StateShootReady::Update() {
    _owner.HitCheckFromGatling();
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -942,6 +952,8 @@ void Player::StateKnockBack::Update() {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }
+   // クールタイムの更新
+   --_owner._coolTime;
 }
 
 void Player::StateDie::Enter() {
@@ -973,8 +985,6 @@ void Player::StateWeakShootReady::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
    _owner.GetSoundComponent().Play("PlayerShootReady");
-   // 遠隔弱攻撃のクールタイムを0に設定
-   _coolTime = 0;
    // エイム中と設定
    _owner._isAim = true;
    // オブジェクトを持ち上げられないと設定
@@ -983,7 +993,7 @@ void Player::StateWeakShootReady::Enter() {
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
    // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があるか確認
-   if (input.GetXJoypad().RBClick() && _coolTime <= 0 && _owner._gameMain.playerBullet() > 0) {
+   if (input.GetXJoypad().RBClick() && _owner._coolTime <= 0 && _owner._gameMain.playerBullet() > 0) {
       // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があった場合
       // 遠隔弱攻撃処理
       _owner.WeakAttack();
@@ -994,7 +1004,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
       // 遠隔弱攻撃の残り弾数を減らす
       _owner._gameMain.playerBullet(_owner._gameMain.playerBullet() - 1);
       // クールタイムの設定
-      _coolTime = 60 * 1;
+      _owner._coolTime = CoolTime;
    }
    // LBボタンが押されたら待機状態へ
    if (input.GetXJoypad().LBClick()) {
@@ -1024,7 +1034,7 @@ void Player::StateWeakShootReady::Update() {
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
    // クールタイムの更新
-   --_coolTime;
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -1068,6 +1078,8 @@ void Player::StateReload::Update() {
    _owner.HitCheckFromLaser();
    // リロード状態のカウントの更新
    ++_reloadCnt;
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }
@@ -1121,6 +1133,8 @@ void Player::StateRecovery::Update() {
    _owner.HitCheckFromLaser();
    // 回復状態のカウントの更新
    ++_recoveryCnt;
+   // クールタイムの更新
+   --_owner._coolTime;
    // 無敵時間更新
    --_owner._invincibleCnt;
 }

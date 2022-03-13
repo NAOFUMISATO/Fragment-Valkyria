@@ -40,7 +40,7 @@ void PoorEnemyBase::Init() {
    // フレーム1をナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collNum, 1, 1, 1);
    _actionList.emplace_back("SideStep");
-   _hp = 20.0;
+   _hp = 100.0;
 }
 
 void PoorEnemyBase::Update() {

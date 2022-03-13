@@ -149,6 +149,7 @@ namespace FragmentValkyria {
          int _portionStock{ 3 };                    //!< ポーションの数
          int _stateCnt{ 0 };                        //!< 各状態に入った時のモードサーバーのフレームカウント数
          int _invincibleModeCnt{ 0 };               //!< 無敵状態に入った時のモードサーバーのフレームカウント数
+         int _coolTime{ 0 };                        //!< 遠隔弱攻撃のクールタイム
          int _blendMode{ DX_BLENDMODE_ALPHA };      //!< ブレンドモード
          bool _isAim{ false };                      //!< エイム中か
          bool _isDeadMotion{ false };               //!< 死亡モーション中か
@@ -376,9 +377,6 @@ namespace FragmentValkyria {
               * \brief 出口処理
               */
              void Exit() override;
-
-         private:
-             int _coolTime{ 0 };    //!< 遠隔弱攻撃のクールタイム
          };
          /**
           * \class 装填状態クラス
