@@ -172,17 +172,19 @@ void Player::HitCheckFromIdleFallObject(std::string_view state) {
     // 当たり判定結果の確認
     if (report.id() == Collision::CollisionComponent::ReportId::HitFromIdleFallObject) {
         // 待機状態の落下オブジェクトと当たっていたら
-        // 当たったポリゴンの法線を取得
-        auto normal = _collisionComponent->hitPos();
+        // 落下オブジェクトからプレイヤーの位置までのベクトルの取得
+        auto fromFallObject = _position - _collisionComponent->hitPos();
+        // 単位化する
+        fromFallObject.Normalized();
         // 走り状態の場合
         if ("Run" == state) {
-           // 法線に移動の速さをかけたベクトル分位置をずらす
-           _position = _position + normal * RunSpeed;
+           // 落下オブジェクトからプレイヤーの位置までのベクトルに移動の速さをかけたベクトル分位置をずらす
+           _position = _position + fromFallObject * RunSpeed;
         }
         // 歩き状態の場合
         else if ("Walk" == state) {
-           // 法線に移動の速さをかけたベクトル分位置をずらす
-           _position = _position + normal * WalkSpeed;
+           // 落下オブジェクトからプレイヤーの位置までのベクトルに移動の速さをかけたベクトル分位置をずらす
+           _position = _position + fromFallObject * WalkSpeed;
         }
         // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);

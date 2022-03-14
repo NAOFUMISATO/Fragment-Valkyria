@@ -465,10 +465,10 @@ void LargeEnemy::StateBase::Draw() {
 }
 
 void LargeEnemy::StateFall::Enter() {
+   // この状態になった時のゲームのフレームカウントの保存
+   _stateCnt = _owner._gameMain.modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("idle", true);
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
-   
 }
 
 void LargeEnemy::StateFall::Update() {
@@ -486,6 +486,8 @@ void LargeEnemy::StateFall::Update() {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
 }
 
 void LargeEnemy::StateFall::Exit() {
@@ -538,6 +540,8 @@ void LargeEnemy::StateFallObject::Update() {
       _owner.CreateFallObject();
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
@@ -594,6 +598,8 @@ void LargeEnemy::StateGatling::Update() {
    if (_owner._gatlingCnt <= 0) {
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
@@ -793,6 +799,8 @@ void LargeEnemy::StateLaser::Update() {
          _owner._attack = false;
       }
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
@@ -879,6 +887,8 @@ void LargeEnemy::StateFanGatling::Update() {
    if (_owner._gatlingCnt <= 0) {
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
@@ -903,6 +913,8 @@ void LargeEnemy::StateStun::Update() {
    if (repeated >= 1) {
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
    // 落下オブジェクトと当たったか確認
    _owner.HitCheckFromFallObject();
    // 遠隔弱攻撃の弾と当たっているか確認
@@ -948,6 +960,12 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
    if (_fallObjectNum <= 0) {
       _owner._stateServer->GoToState("Idle");
    }
+   // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
+   _owner._collisionComponent->LargeEnemyFromPlayer();
+   // 落下オブジェクトと当たったか確認
+   _owner.HitCheckFromFallObject();
+   // 遠隔弱攻撃の弾と当たっているか確認
+   _owner.HitCheckFromBullet();
    // スタン値の更新と確認
    _owner.StunCheck();
 }
