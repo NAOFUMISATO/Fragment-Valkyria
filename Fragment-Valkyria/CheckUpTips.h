@@ -71,14 +71,9 @@ namespace FragmentValkyria {
          public:
             StateJudge(CheckUpTips& owner) : StateBase{ owner } {};
             /**
-             * \brief 入口処理
-             */
-            void Enter() override;
-            /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
+            * \brief 更新処理
+            */
+            void Update()override;
 
          };
 

@@ -1,9 +1,10 @@
 #include "CheckUpTips.h"
-
-
+#include "GameMain.h"
+#include "ObjectServer.h"
+#include "LargeEnemy.h"
 namespace {
    constexpr auto MaxAlpha = 255;
-   constexpr auto MoveSpeed = 3;
+   constexpr auto MoveSpeed = 4;
 }
 
 using namespace FragmentValkyria::Clear;
@@ -13,7 +14,7 @@ CheckUpTips::CheckUpTips(Game::GameMain& gameMain) :Sprite::SpriteBase{gameMain}
 
 void CheckUpTips::Init() {
 
-   _grHandle = GetResServer().GetTexture("");
+   _grHandle = GetResServer().GetTexture("CheckUp");
    _stateServer = std::make_unique<AppFrame::State::StateServer>("FadeIn", std::make_shared <StateFadeIn>(*this));
    _stateServer->Register("Judge", std::make_shared<StateJudge>(*this));
    _stateServer->Register("FadeOut", std::make_shared<StateFadeOut>(*this));
@@ -61,13 +62,14 @@ void CheckUpTips::StateFadeIn::Exit() {
    _owner._alpha = MaxAlpha;
 }
 
-void CheckUpTips::StateJudge::Enter() {
-
-}
-
-void CheckUpTips::StateJudge::Input(InputManager& input) {
-   if (input.GetXJoypad().AClick()) {
-
+void CheckUpTips::StateJudge::Update() {
+   for (auto& object : _owner._gameMain.objServer().runObjects()) {
+      if (object->GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
+         auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(*object);
+         if (!largeEnemy.ClearObjectHitCheckFromPlayer()) {
+            _owner._stateServer->GoToState("FadeOut");
+         }
+      }
    }
 }
 
@@ -81,5 +83,8 @@ void CheckUpTips::StateFadeOut::Update() {
       auto delta = MaxAlpha / static_cast<float>(_owner._width);
       _owner._alpha -= static_cast<int>(delta) * MoveSpeed;
       _owner._position = AppFrame::Math::Vector4(x - MoveSpeed, y, z);
+   }
+   else {
+      _owner.SetDead();
    }
 }

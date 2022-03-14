@@ -69,7 +69,7 @@ void ModePoor::Enter() {
 }
 
 void ModePoor::Input(AppFrame::Input::InputManager& input) {
-#include _DEBUG
+#ifdef _DEBUG
    if (input.GetXJoypad().BackClick()) {
       _gameMain.isPoorClear(true);
       GetSoundComponent().Stop("PoorBattleBgm");

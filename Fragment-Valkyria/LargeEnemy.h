@@ -60,6 +60,11 @@ namespace FragmentValkyria {
           */
          void CreateLaser();
          /**
+          * \brief プレイヤーがオブジェクトと当たっているか
+          * \return 当たっていればtrue,でなければfalse
+          */
+         bool ClearObjectHitCheckFromPlayer();
+         /**
           * \brief ボスの体力の取得
           * \return ボスの体力
           */
@@ -69,6 +74,11 @@ namespace FragmentValkyria {
           * \return 行っていればtrue,でなければfalse
           */
          bool isLaser() { return _isLaser; }
+         /**
+          * \brief ボスは倒れているか
+          * \return 倒れていればtrue,でなければfalse
+          */
+         bool isDeadMotion() { return _isDeadMotion; }
 
       private:
          /**
@@ -87,10 +97,6 @@ namespace FragmentValkyria {
           * \brief プレイヤーの遠隔弱攻撃の弾に当たったか確認
           */
          void HitCheckFromBullet();
-         /**
-          * \brief クリアオブジェクトにプレイヤーが当たっているか確認
-          */
-         void ClearObjectHitCheckFromPlayer(InputManager& input);
          /**
           * \brief 移動処理
           * \param moved 移動量のベクトル
@@ -130,6 +136,7 @@ namespace FragmentValkyria {
          bool _rotating{ false };                                   //!< 回転処理をするか
          bool _attack{ false };                                     //!< 攻撃をしているか
          bool _isLaser{ false };                                    //!< レーザー攻撃を行っているか
+         bool _isDeadMotion{ false };                               //!< ボスは倒れているか
          double _fanAngle{ 0.0 };                                   //!< 扇状ガトリング攻撃をするときの向きを取得するときベクトルを回転させる角度
          double _rotateDot{ 0.0 };                                  //!< 向かせたい方向のベクトルとフォワードベクトルを90度回転させたベクトルの内積の結果
          double _addRotate{ 0.0 };                                  //!< 角速度
@@ -327,6 +334,7 @@ namespace FragmentValkyria {
 
          private:
             bool _efcBorn{ true };
+            bool _tipsBorn{ false };
          };
          /**
          * \class 移動状態クラス
