@@ -21,6 +21,8 @@
 #include "EffectBossDieAfter.h"
 #include "EffectBossFall.h"
 #include "EffectPreliminaryLight.h"
+#include "SpriteServer.h"
+#include "CheckUpTips.h"
 
 namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -79,6 +81,7 @@ void LargeEnemy::Init() {
    MV1SetupCollInfo(modelHandle, _faceCollision, 3, 2, 1);
    // ヒットポイントの設定
    _hp = MaxHitPoint;
+   _isDeadMotion = false;
    // 行動に追加する状態の文字列の動的配列を作成
    _actionList.emplace_back("FallObject");
    _actionList.emplace_back("Gatling");
@@ -301,19 +304,14 @@ void LargeEnemy::HitCheckFromBullet() {
    }
 }
 
-void LargeEnemy::ClearObjectHitCheckFromPlayer(InputManager& input) {
+bool LargeEnemy::ClearObjectHitCheckFromPlayer() {
    // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
    // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
-      // Aボタンを押したなら
-      if (input.GetXJoypad().AClick()) {
-         // クリアオブジェクトがプレイヤーに当たっていたら
-         GetSoundComponent().Stop("BossBattleBgm");
-         // モードサーバーにゲームクリアモードを挿入
-         gameMain().modeServer().PushBack("MissionCompleted");
-      }
+      return true;
    }
+   return false;
 }
 
 void LargeEnemy::Move(const Vector4& moved) {
@@ -612,11 +610,28 @@ void LargeEnemy::StateDie::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("dead", false);
    _efcBorn = true;
+   _tipsBorn = true;
 }
 
 void LargeEnemy::StateDie::Input(InputManager& input) {
 // クリアオブジェクトにプレイヤーが当たっているか確認
-_owner.ClearObjectHitCheckFromPlayer(input);
+   if (_owner.ClearObjectHitCheckFromPlayer()) {
+      if (_tipsBorn) {
+         auto tips = std::make_unique<Clear::CheckUpTips>(_owner._gameMain);
+         _owner._gameMain.sprServer().Add(std::move(tips));
+         _tipsBorn = false;
+      }
+      // Aボタンを押したなら
+      if (input.GetXJoypad().AClick()) {
+         // クリアオブジェクトがプレイヤーに当たっていたら
+         _owner.GetSoundComponent().Stop("BossBattleBgm");
+         // モードサーバーにゲームクリアモードを挿入
+         _owner._gameMain.modeServer().PushBack("MissionCompleted");
+      }
+   }
+   else {
+      _tipsBorn = true;
+   }
 }
 
 void LargeEnemy::StateDie::Update() {

@@ -166,7 +166,6 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletCreator.h" />
     <ClInclude Include="CameraComponent.h" />
-    <ClInclude Include="CheckUpTips.h" />
     <ClInclude Include="ClearScore.h" />
     <ClInclude Include="ClearTime.h" />
     <ClInclude Include="CollisionComponent.h" />
@@ -241,7 +240,6 @@
     <ClInclude Include="TutorialTips.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CheckUpTips.cpp" />
     <ClCompile Include="ClearScore.cpp" />
     <ClCompile Include="EffectBossCharge.cpp" />
     <ClCompile Include="Bullet.cpp" />

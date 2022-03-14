@@ -327,9 +327,6 @@
     <ClInclude Include="TutorialTips.h">
       <Filter>ヘッダー ファイル\Tutorial</Filter>
     </ClInclude>
-    <ClInclude Include="CheckUpTips.h">
-      <Filter>ヘッダー ファイル\Clear</Filter>
-    </ClInclude>
     <ClInclude Include="EffectPreliminaryLight.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
@@ -550,9 +547,6 @@
     </ClCompile>
     <ClCompile Include="TutorialTips.cpp">
       <Filter>ソース ファイル\Tutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="CheckUpTips.cpp">
-      <Filter>ソース ファイル\Clear</Filter>
     </ClCompile>
     <ClCompile Include="EffectPreliminaryLight.cpp">
       <Filter>ソース ファイル\Effect</Filter>
