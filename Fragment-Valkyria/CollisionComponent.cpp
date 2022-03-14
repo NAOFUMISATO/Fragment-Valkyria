@@ -217,7 +217,7 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
          }
          else {
             // 落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
-            object->collisionComponent().hitPos(AppFrame::Math::ToMath(result.Dim[0].Normal));
+            object->collisionComponent().hitPos(_owner.position());
             // プレイヤーの当たり判定の結果に待機状態の落下するオブジェクトと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
          }
