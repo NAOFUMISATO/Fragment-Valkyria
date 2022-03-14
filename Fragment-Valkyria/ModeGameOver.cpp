@@ -70,6 +70,9 @@ void ModeGameOver::StateContinue::Input(InputManager& input){
    }
    if (input.GetXJoypad().AClick()) {
       _owner._gameMain.isPoorClear(false);
+      _owner.GetSoundComponent().Stop("TutorialBgm");
+      _owner.GetSoundComponent().Stop("PoorBattleBgm");
+      _owner.GetSoundComponent().Stop("BossBattleBgm");
       _owner.GetModeServer().GoToMode("Loading",'S');
    }
 }
@@ -87,6 +90,9 @@ void ModeGameOver::StateExit::Input(InputManager& input) {
       _owner._stateServer->GoToState("Continue");
    }
    if (input.GetXJoypad().AClick()) {
+      _owner.GetSoundComponent().Stop("TutorialBgm");
+      _owner.GetSoundComponent().Stop("PoorBattleBgm");
+      _owner.GetSoundComponent().Stop("BossBattleBgm");
       _owner.GetModeServer().GoToMode("Title");
    }
 }

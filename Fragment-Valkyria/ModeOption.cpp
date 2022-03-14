@@ -13,7 +13,7 @@ namespace {
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("option",{"default_camera_sens","default_aim_sens",
       "default_deadzone","sensivity_min","sensivity_max","deadzone_min","deadzone_max","aimsens_x" ,"aimsens_y" ,
       "aimbar_x","aimbar_y","camerasens_x","camerasens_y","camerabar_x","camerabar_y","deadzone_x" ,"deadzone_y" ,
-      "deadzonebar_x","deadzonebar_y","return_x" ,"return_y" });
+      "deadzonebar_x","deadzonebar_y","return_x" ,"return_y" ,"bg_alpha" });
    const int DefaultCameraSens = paramMap["default_camera_sens"];
    const int DefaultAimSens = paramMap["default_aim_sens"];
    const int DefaultDeadZone = paramMap["default_deadzone"];
@@ -35,8 +35,7 @@ namespace {
    const int DeadZoneBarPosY = paramMap["deadzonebar_y"];
    const int ReturnPosX = paramMap["return_x"];
    const int ReturnPosY = paramMap["return_y"];
-
-   constexpr auto BgAlpha = 150;
+   const int BgAlpha = paramMap["bg_alpha"];
    constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
    constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
    constexpr auto DefaultGraphScale = 1.0;

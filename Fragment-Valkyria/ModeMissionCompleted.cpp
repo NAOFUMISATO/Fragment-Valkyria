@@ -9,7 +9,11 @@
 #include "ModeMissionCompleted.h"
 
 namespace {
-   constexpr auto BgAlpha = 150;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", {"missioncomp_x","missioncomp_y","missioncomp_animespeed","bg_alpha" });
+   const int MissionCompX = paramMap["missioncomp_x"];
+   const int MissionCompY = paramMap["missioncomp_y"];
+   const int MissionCompAnimeSpeed = paramMap["missioncomp_animespeed"];
+   const int BgAlpha= paramMap["bg_alpha"];
    constexpr auto BoxWidth = 1920;
    constexpr auto BoxHeight = 1080;
    constexpr auto DefaultGraphScale = 1.0;
@@ -36,13 +40,9 @@ void ModeMissionCompleted::Input(AppFrame::Input::InputManager& input) {
    }
 }
 
-void ModeMissionCompleted::Update() {
-
-}
-
 void ModeMissionCompleted::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, BgAlpha);
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle, _grHandles, 2);
+   GetTexComponent().DrawTexture(MissionCompX, MissionCompY, DefaultGraphScale, DefaultGraphAngle, _grHandles, MissionCompAnimeSpeed);
 }

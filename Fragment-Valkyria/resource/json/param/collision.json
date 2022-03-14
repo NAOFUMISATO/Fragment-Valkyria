@@ -13,16 +13,16 @@
 			"bullet_radius":20.0,
 			"clearobject_radius": 50.0,
 			"weak_object_damage": 100.0,
-			"normal_object_damage": 75.0,
-			"weak_bullet_damage": 50.0,
+			"normal_object_damage": 70.0,
+			"weak_bullet_damage": 25.0,
 			"normal_bullet_damage": 10.0,
 			"poorenemy_object_damage": 100.0,
 			"poorenemy_bullet_damage": 40.0,
-			"player_object_damage": 20.0,
-			"player_laser_damage": 20.0,
+			"player_object_damage": 15.0,
+			"player_laser_damage": 35.0,
 			"player_largeenemy_damage": 20.0,
-			"player_gatling_damage": 20.0,
-			"player_poorenemy_damage": 20.0
+			"player_gatling_damage": 15.0,
+			"player_poorenemy_damage": 10.0
 		}
 	],
 	"collision_vec": [

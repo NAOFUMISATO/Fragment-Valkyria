@@ -10,7 +10,11 @@
 #include "GameMain.h"
 
 namespace {
-   constexpr auto BgAlpha = 150;
+   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("over", { "missionfailed_x","missionfailed_y","missionfailed_animespeed","bg_alpha" });
+   const int MissionFailedX = paramMap["missionfailed_x"];
+   const int MissionFailedY = paramMap["missionfailed_y"];
+   const int MissionFailedAnimeSpeed = paramMap["missionfailed_animespeed"];
+   const int BgAlpha = paramMap["bg_alpha"];
    constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
    constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
    constexpr auto DefaultGraphScale = 1.0;
@@ -57,5 +61,5 @@ void ModeMissionFailed::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA,BgAlpha);
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   DrawGraph(0, 0, _grHandles[_animeNo], true);
+   DrawGraph(MissionFailedX, MissionFailedY, _grHandles[_animeNo], true);
 }

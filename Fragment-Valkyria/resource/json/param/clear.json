@@ -1,11 +1,15 @@
 {
 	"clear": [
 		{
+			"missioncomp_x":520,
+			"missioncomp_y":200,
+			"missioncomp_animespeed":2,
+			"bg_alpha":150,
 			"number_diffx":150.0,
-			"s_scoresec":20,
-			"a_scoresec":30,
-			"b_scoresec":40,
-			"c_scoresec":50
+			"s_scoresec":360,
+			"a_scoresec":420,
+			"b_scoresec":480,
+			"c_scoresec":539
 		}	
 	],
 	"clear_vec": [

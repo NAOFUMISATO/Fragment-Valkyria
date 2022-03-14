@@ -71,6 +71,7 @@ void ModeTutorialSelect::StateYes::Input(InputManager& input) {
    if (input.GetXJoypad().AClick()) {
       _owner._gameMain.isTutorialClear(true);
       _owner.GetSoundComponent().Play("SystemDecision");
+      _owner.GetSoundComponent().Stop("TitleBgm");
       _owner.GetModeServer().GoToMode("Loading", 'S');
    }
 }
@@ -87,6 +88,7 @@ void ModeTutorialSelect::StateNo::Input(InputManager& input) {
    }
    if (input.GetXJoypad().AClick()) {
       _owner.GetSoundComponent().Play("SystemDecision");
+      _owner.GetSoundComponent().Stop("TitleBgm"); 
       _owner.GetModeServer().GoToMode("Loading",'S');
    }
 }

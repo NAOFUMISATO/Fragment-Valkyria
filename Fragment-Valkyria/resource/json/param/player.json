@@ -18,7 +18,7 @@
 			"wait_frame": 5,
 			"invincible_frame":120,
 			"blinking_frame":5,
-			"cooltime": 60
+			"cooltime": 45
 		}
 	],
 	"player_vec": [

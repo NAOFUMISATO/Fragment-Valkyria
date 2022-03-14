@@ -21,7 +21,8 @@
 			"deadzonebar_x":610,
 			"deadzonebar_y":658,
 			"return_x":650,
-			"return_y":980
+			"return_y":980,
+			"bg_alpha":150
 		}	
 	]	
 }

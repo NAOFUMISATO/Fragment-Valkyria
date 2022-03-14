@@ -23,6 +23,10 @@
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
 
+namespace {
+   constexpr auto MaxWave = 1;
+}
+
 using namespace FragmentValkyria::Mode;
 
 ModeBoss::ModeBoss(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
@@ -40,7 +44,12 @@ void ModeBoss::Enter() {
    objFactory.Register("Laser", std::make_unique<Create::LaserCreator>(_gameMain));
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
 
-   objFactory.LoadSpawnTables("boss", { "bosswave1","bosswave2" ,"bosswave3" ,"bosswave4" });
+   std::vector<std::string> spawnTableNames;
+   for (int i = 1; MaxWave >= i; i++) {
+      std::string tableName = "bosswave" + std::to_string(i);
+      spawnTableNames.emplace_back(tableName);
+   }
+   objFactory.LoadSpawnTables("boss",  spawnTableNames );
 
    objFactory.SetSpawnTable("bosswave1");
 
@@ -52,16 +61,13 @@ void ModeBoss::Enter() {
    GetSoundComponent().Stop("PoorBattleBgm");
    ModeInGameBase::Enter();
    _red = 0.1f;
+   _lighting->SetDifColor(_red, 0.1f, 0.1f);
+   _lighting->SetAmbColor(_red, 0.1f, 0.1f);
    _flag = false;
    _lightOnCount = 0;
 }
 
 void ModeBoss::Input(AppFrame::Input::InputManager& input) {
-   //-----------‰¼--------------
-   if (input.GetMouse().LeftClick()) {
-      GetModeServer().GoToMode("ClearResult", 'S');
-   }
-   //-----------‰¼--------------
    ModeInGameBase::Input(input);
 }
 

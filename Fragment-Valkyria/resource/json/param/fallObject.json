@@ -3,7 +3,7 @@
 		{
 			"gravity": 0.01,
             "shoot_speed": 50.0,
-            "up_speed": 2.0,
+            "up_speed": 4.0,
             "rotate_angle": 270.0,
             "updown_range": 1.0,
 			"right_hand_up_value": 100.0,

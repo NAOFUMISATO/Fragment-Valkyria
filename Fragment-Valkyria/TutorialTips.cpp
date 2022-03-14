@@ -33,7 +33,7 @@ void TutorialTips::Init() {
    };
 
    _stateServer = std::make_unique<AppFrame::State::StateServer>("FadeIn", std::make_shared <StateFadeIn>(*this));
-   _stateServer->Register("Stop", std::make_shared<StateJudge>(*this));
+   _stateServer->Register("Judge", std::make_shared<StateJudge>(*this));
    _stateServer->Register("FadeOut", std::make_shared<StateFadeOut>(*this));
 
    int height;
@@ -71,7 +71,7 @@ void TutorialTips::StateFadeIn::Update() {
       _owner._position = AppFrame::Math::Vector4(x + MoveSpeed, y, z);
    }
    else {
-      _owner._stateServer->GoToState("Stop");
+      _owner._stateServer->GoToState("Judge");
    }
 }
 

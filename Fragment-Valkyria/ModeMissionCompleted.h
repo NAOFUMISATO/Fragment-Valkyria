@@ -40,10 +40,6 @@ namespace FragmentValkyria {
           */
          void Input(AppFrame::Input::InputManager& input)override;
          /**
-          * \brief XVˆ—
-          */
-         void Update() override;
-         /**
           * \brief •`‰æˆ—
           */
          void Render() override;
