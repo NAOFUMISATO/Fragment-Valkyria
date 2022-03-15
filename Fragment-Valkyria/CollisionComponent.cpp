@@ -34,7 +34,7 @@ namespace {
       { "fallobject_range", "ply_radius", "ply_capsule_pos1",
        "ply_capsule_pos2", "gatling_radius", "fallobject_drum_capsule_pos1",
       "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius",
-      "bullet_radius", "clearobject_radius", "weak_object_damage",
+      "bullet_radius", "weak_object_damage",
       "normal_object_damage", "weak_bullet_damage",
       "normal_bullet_damage", "poorenemy_object_damage",
       "poorenemy_bullet_damage", "player_object_damage",
@@ -51,7 +51,6 @@ namespace {
    const double FallObjectRadius = paramMap["fallobject_drum_radius"];                                             //!< フォールオブジェクトのカプセルの半径
    const double LaserRadius = paramMap["laser_radius"];                                                            //!< レーザーのカプセルの半径
    const double BulletRadius = paramMap["bullet_radius"];                                                          //!< 弱攻撃の半径
-   const double ClearObjectRadius = paramMap["clearobject_radius"];                                                //!< クリアオブジェクトを形成するカプセルの半径
    const double WeakObjectDamage = paramMap["weak_object_damage"];                                                 //!< 落下オブジェクトが弱点に当たった時のダメージ量
    const double ObjectDamage = paramMap["normal_object_damage"];                                                   //!< 落下オブジェクトが顔に当たった時のダメージ量
    const double WeakBulletDamage = paramMap["weak_bullet_damage"];                                                 //!< 遠隔弱攻撃の弾が弱点に当たった時のダメージ量
@@ -63,10 +62,6 @@ namespace {
    const double PlayerLargeenemyDamage = paramMap["player_largeenemy_damage"];                                     //!< オブジェクトがプレイヤーに当たった時のダメージ量
    const double PlayerGatlingDamage = paramMap["player_gatling_damage"];                                           //!< オブジェクトがプレイヤーに当たった時のダメージ量
    const double PlayerPoorEnemyDamage = paramMap["player_poorenemy_damage"];                                       //!< 雑魚敵がプレイヤーに当たった時のダメージ量
-
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
-      "clearobject_pos" });
-   const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
 }
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
@@ -667,34 +662,6 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          object->collisionComponent().damage(PoorEnemyObjectDamage);
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
-      }
-   }
-}
-
-void CollisionComponent::PlayerFromClearObject() {
-   auto clearObjectSphere = std::make_tuple(ClearObjectPos, ClearObjectRadius);
-   // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
-      // プレイヤーじゃなかったら何もしない
-      if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
-         continue;
-      }
-      // プレイヤーの位置の取得
-      auto plyPos = object->position();
-      // 球とモデルの当たり判定の結果を取得
-      auto result = AppFrame::Math::Utility::CollisionSpherePoint(plyPos, clearObjectSphere);
-      // 当たり判定の結果が当たっているか確認
-      if (result) {
-         // 当たっている場合
-         // ラージエネミーの当たり判定の結果にプレイヤーと当たったと設定
-         _owner.collisionComponent().report().id(ReportId::HitFromPlayer);
-         break;
-      }
-      // 当たっていない場合
-      else {
-         // ラージエネミーの当たり判定の結果に当たっていないと設定
-         _owner.collisionComponent().report().id(ReportId::None);
-         break;
       }
    }
 }

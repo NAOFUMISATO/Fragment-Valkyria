@@ -60,11 +60,6 @@ namespace FragmentValkyria {
           */
          void CreateLaser();
          /**
-          * \brief プレイヤーがオブジェクトと当たっているか
-          * \return 当たっていればtrue,でなければfalse
-          */
-         bool ClearObjectHitCheckFromPlayer();
-         /**
           * \brief ボスの体力の取得
           * \return ボスの体力
           */
@@ -74,11 +69,6 @@ namespace FragmentValkyria {
           * \return 行っていればtrue,でなければfalse
           */
          bool isLaser() { return _isLaser; }
-         /**
-          * \brief ボスは倒れているか
-          * \return 倒れていればtrue,でなければfalse
-          */
-         bool isDeadMotion() { return _isDeadMotion; }
 
       private:
          /**
@@ -136,7 +126,6 @@ namespace FragmentValkyria {
          bool _rotating{ false };                                   //!< 回転処理をするか
          bool _attack{ false };                                     //!< 攻撃をしているか
          bool _isLaser{ false };                                    //!< レーザー攻撃を行っているか
-         bool _isDeadMotion{ false };                               //!< ボスは倒れているか
          double _fanAngle{ 0.0 };                                   //!< 扇状ガトリング攻撃をするときの向きを取得するときベクトルを回転させる角度
          double _rotateDot{ 0.0 };                                  //!< 向かせたい方向のベクトルとフォワードベクトルを90度回転させたベクトルの内積の結果
          double _addRotate{ 0.0 };                                  //!< 角速度
@@ -173,8 +162,7 @@ namespace FragmentValkyria {
          * \class 落下状態クラス
          * \brief 落下状態の処理を回す
          */
-         class StateFall : public StateBase
-         {
+         class StateFall : public StateBase{
          public:
             /**
              * \brief コンストラクタ
@@ -323,18 +311,9 @@ namespace FragmentValkyria {
              */
             void Enter() override;
             /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
-            /**
              * \brief 更新処理
              */
-            void Update() override;
-
-         private:
-            bool _efcBorn{ true };
-            bool _tipsBorn{ false };
+            void Update()override;
          };
          /**
          * \class 移動状態クラス
@@ -363,7 +342,7 @@ namespace FragmentValkyria {
             void FootStepSound();
             bool _footRightStep{ false };       //!< 足音処理のフラグ
             bool _footLeftStep{ false };        //!< 足音処理のフラグ
-            int _footCnt{ 0 };                  //!< 
+            int _footCnt{ 0 };                  //!< 足音処理のフレーム
             bool _endGetplyPos{ true };         //!< 移動後にプレイヤーへの向きのベクトルを取得するか
          };
          /**
@@ -421,9 +400,6 @@ namespace FragmentValkyria {
              * \brief 出口処理
              */
             void Exit()override;
-
-         private:
-            
          };
       };
    }

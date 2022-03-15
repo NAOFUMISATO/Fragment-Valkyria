@@ -11,7 +11,6 @@
 			"fallobject_drum_radius": 50.0,
 			"laser_radius": 500.0,
 			"bullet_radius":20.0,
-			"clearobject_radius": 50.0,
 			"weak_object_damage": 100.0,
 			"normal_object_damage": 70.0,
 			"weak_bullet_damage": 25.0,
@@ -24,16 +23,5 @@
 			"player_gatling_damage": 15.0,
 			"player_poorenemy_damage": 10.0
 		}
-	],
-	"collision_vec": [
-	    {
-			"clearobject_pos":[
-				{
-					"x": 0.0,
-					"y": 0.0,
-					"z": 2217.0
-				}
-			]
-	    }	
 	]
 }

@@ -52,6 +52,7 @@ namespace FragmentValkyria {
             BossFall,           //!< ƒ{ƒX—Ž‰º
             ObjectUp,           //!< ƒIƒuƒWƒFƒNƒgã¸
             PoorCrash,          //!< ŽG‹›“G‚Ì”j‰ó
+            BossCrash,          //!< ƒ{ƒX‚Ì”j‰ó
             PreliminaryLight    //!< —\”õ“®ì
          };
          /**

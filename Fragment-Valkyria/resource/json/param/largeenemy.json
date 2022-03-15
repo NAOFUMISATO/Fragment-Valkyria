@@ -11,19 +11,10 @@
 			"consecutive_fall_object_frame": 30,
 			"consecutive_num": 5,
 			"action_cooltime": 60,
-			"object_max_num": 6
-
-		}
-	],
-	"largeenemy_vec": [
-		{
-			"init_pos": [
-				{
-					"x": 10.0,
-					"y": 10.0,
-					"z": 10.0
-				}
-			]
+			"object_max_num": 6,
+			"crasheffect_count":6,
+			"crasheffect_distance":500.0,
+			"crasheffect_frame":50
 		}
 	]
 }

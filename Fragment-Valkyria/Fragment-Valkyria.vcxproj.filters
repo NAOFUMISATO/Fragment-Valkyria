@@ -330,6 +330,9 @@
     <ClInclude Include="EffectPreliminaryLight.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="EffectBossCrash.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -549,6 +552,9 @@
       <Filter>ソース ファイル\Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="EffectPreliminaryLight.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectBossCrash.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
   </ItemGroup>

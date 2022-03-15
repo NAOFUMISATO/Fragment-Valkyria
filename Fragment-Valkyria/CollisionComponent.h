@@ -117,10 +117,6 @@ namespace FragmentValkyria {
           */
          void PoorEnemyGatlingFromObjectModel();
          /**
-          * \brief プレイヤーがクリアオブジェクトに当たっているか確認
-          */
-         void PlayerFromClearObject();
-         /**
           * \brief プレイヤーがノックバックしているか確認
           */
          void PlayerKnockBack();

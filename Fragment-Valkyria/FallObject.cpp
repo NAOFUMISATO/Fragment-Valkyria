@@ -21,7 +21,7 @@ namespace {
    auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
       { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
       "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
-   const double Gravity = fallParamMap["gravity"];                             
+   const double Gravity = fallParamMap["gravity"];
    const double ShootSpeed = fallParamMap["shoot_speed"];
    const double UpSpeed = fallParamMap["up_speed"];
    const double RotateAngle = fallParamMap["rotate_angle"];

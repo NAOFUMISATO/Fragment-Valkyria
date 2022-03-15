@@ -173,6 +173,7 @@
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectBossBeam.h" />
     <ClInclude Include="EffectBossCharge.h" />
+    <ClInclude Include="EffectBossCrash.h" />
     <ClInclude Include="EffectBossDieAfter.h" />
     <ClInclude Include="EffectBossStan.h" />
     <ClInclude Include="EffectBossFall.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
     <ClCompile Include="EffectBossBeam.cpp" />
+    <ClCompile Include="EffectBossCrash.cpp" />
     <ClCompile Include="EffectBossDieAfter.cpp" />
     <ClCompile Include="EffectBossStan.cpp" />
     <ClCompile Include="EffectBossFall.cpp" />

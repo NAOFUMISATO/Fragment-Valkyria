@@ -21,8 +21,7 @@
 #include "EffectBossDieAfter.h"
 #include "EffectBossFall.h"
 #include "EffectPreliminaryLight.h"
-#include "SpriteServer.h"
-#include "CheckUpTips.h"
+#include "EffectBossCrash.h"
 
 namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
@@ -41,13 +40,6 @@ namespace {
    const int ActionCoolTime = largeEnemyParamMap["action_cooltime"];                                               //!< 行動を行うクールタイム
    const int MaxNum = largeEnemyParamMap["object_max_num"];                                                        //!< 落下オブジェクトの最大数
 
-   auto collisionParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", {
-      "clearobject_radius"});
-   const double ClearObjectCapsuleRadius = collisionParamMap["clearobject_radius"];
-
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("collision", {
-      "clearobject_pos" });
-   const auto ClearObjectPos = vecParamMap["clearobject_pos"];                                                     //!< クリアオブジェクトの位置
                                                                                                                    
    constexpr auto FootStepHeight = 40.0;                                                                           //!< 走り状態時の足音発生高さ
    constexpr auto LaserDiffPos = 150.0;                                                                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
@@ -81,7 +73,6 @@ void LargeEnemy::Init() {
    MV1SetupCollInfo(modelHandle, _faceCollision, 3, 2, 1);
    // ヒットポイントの設定
    _hp = MaxHitPoint;
-   _isDeadMotion = false;
    // 行動に追加する状態の文字列の動的配列を作成
    _actionList.emplace_back("FallObject");
    _actionList.emplace_back("Gatling");
@@ -304,16 +295,6 @@ void LargeEnemy::HitCheckFromBullet() {
    }
 }
 
-bool LargeEnemy::ClearObjectHitCheckFromPlayer() {
-   // 当たり判定結果クラスの参照の取得
-   auto report = _collisionComponent->report();
-   // 当たり判定結果の確認
-   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPlayer) {
-      return true;
-   }
-   return false;
-}
-
 void LargeEnemy::Move(const Vector4& moved) {
    // 移動量のベクトルの成分を分解
    auto [x, y, z] = moved.GetVec3();
@@ -454,12 +435,6 @@ void LargeEnemy::StunCheck() {
 void LargeEnemy::StateBase::Draw() {
    // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
-
-#ifdef _DEBUG
-   auto spherePos = ClearObjectPos;
-   auto radius = static_cast<float>(ClearObjectCapsuleRadius);
-   DrawSphere3D(AppFrame::Math::ToDX(spherePos), radius, 10, AppFrame::Math::Utility::GetColorCode(128, 0, 128), AppFrame::Math::Utility::GetColorCode(0, 0, 0), FALSE);
-#endif
 }
 
 void LargeEnemy::StateFall::Enter() {
@@ -507,7 +482,7 @@ void LargeEnemy::StateIdle::Update() {
    // ゲームのフレームカウントの取得
    auto gameCount = _owner.gameMain().modeServer().frameCount();
    // この状態に入ってからの経過フレーム数の取得
-   auto count = gameCount - _stateCnt;
+   auto count = static_cast<int>(gameCount) - _stateCnt;
    // 一定フレーム数たったら行動をする
    if (count >= ActionCoolTime) {
       _owner.Action();
@@ -608,48 +583,14 @@ void LargeEnemy::StateGatling::Update() {
 
 void LargeEnemy::StateDie::Enter() {
    // モデルのアニメーションの設定
-   _owner._modelAnimeComponent->ChangeAnime("dead", false);
-   _efcBorn = true;
-   _tipsBorn = true;
-}
-
-void LargeEnemy::StateDie::Input(InputManager& input) {
-// クリアオブジェクトにプレイヤーが当たっているか確認
-   if (_owner.ClearObjectHitCheckFromPlayer()) {
-      if (_tipsBorn) {
-         auto tips = std::make_unique<Clear::CheckUpTips>(_owner._gameMain);
-         _owner._gameMain.sprServer().Add(std::move(tips));
-         _tipsBorn = false;
-      }
-      // Aボタンを押したなら
-      if (input.GetXJoypad().AClick()) {
-         // クリアオブジェクトがプレイヤーに当たっていたら
-         _owner.GetSoundComponent().Stop("BossBattleBgm");
-         // モードサーバーにゲームクリアモードを挿入
-         _owner._gameMain.modeServer().PushBack("MissionCompleted");
-      }
-   }
-   else {
-      _tipsBorn = true;
-   }
+   _owner._modelAnimeComponent->ChangeAnime("dead", false, 0.5);
+   auto efcCrash = std::make_unique<Effect::EffectBossCrash>(_owner._gameMain, "BossCrash");
+   _owner.GetEfcServer().Add(std::move(efcCrash));
 }
 
 void LargeEnemy::StateDie::Update() {
-   // アニメーション時間の取得
-   auto playTime = _owner._modelAnimeComponent->playTime();
-   // アニメーションが既定の時間経過しているか確認
-   if (playTime >= 160.0f) {
-      if (_efcBorn) {
-         auto efcDieAfter = std::make_unique<Effect::EffectBossDieAfter>(_owner._gameMain, "BossDieAfter");
-         auto efcPosition = _owner._position;
-         efcPosition.SetY(_owner._position.GetY() + 350.0);
-         efcDieAfter->position(efcPosition);
-         _owner.GetEfcServer().Add(std::move(efcDieAfter));
-         _efcBorn = false;
-      }
-      // アニメーションが既定の時間経過していたら
-      // 当たり判定処理を行うクラスでプレイヤーがクリアオブジェクトと当たっているか確認
-      _owner.collisionComponent().PlayerFromClearObject();
+   if (_owner._modelAnimeComponent->repeatedCount() > 0) {
+      _owner._gameMain.modeServer().PushBack("MissionCompleted");
    }
 }
 
