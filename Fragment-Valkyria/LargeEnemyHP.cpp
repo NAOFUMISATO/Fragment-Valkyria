@@ -20,10 +20,10 @@ namespace {
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("bossui", { "hp_pos" });
    const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
 
-   constexpr auto OffSetLeft = 15;   //!< オフセット位置左
-   constexpr auto OffSetTop = 11;    //!< オフセット位置上
-   constexpr auto OffSetRight = 1790; //!< オフセット位置右
-   constexpr auto OffSetBottom = 93; //!< オフセット位置下
+   constexpr auto OffSetLeft = 50;   //!< オフセット位置左
+   constexpr auto OffSetTop = 57;    //!< オフセット位置上
+   constexpr auto OffSetRight = 948;//!< オフセット位置右
+   constexpr auto OffSetBottom = 87; //!< オフセット位置下
    constexpr auto MaxRate = 1.0;     //!< バー減少値の最大値
 
 }

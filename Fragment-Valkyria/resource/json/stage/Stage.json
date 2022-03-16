@@ -1,5 +1,7 @@
 {
 "Stage":[
-{"filename":"stage","tx":0,"ty":0,"tz":-0,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
+{"filename":"stage","tx":0,"ty":0,"tz":-0,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
+{"filename":"container_green","tx":183.872,"ty":0,"tz":-2728.464,"rx":-0,"ry":-44.313,"rz":0,"sx":1,"sy":1,"sz":1},
+{"filename":"container_red","tx":-179.114,"ty":0,"tz":-2627.703,"rx":-0,"ry":-18.111,"rz":0,"sx":1,"sy":1,"sz":1}
    ]
 }
