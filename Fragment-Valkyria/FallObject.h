@@ -227,10 +227,6 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
-            /**
-             * \brief 出口処理
-             */
-            void Exit() override;
          };
          /**
           * \class 浮く状態のクラス
@@ -256,10 +252,6 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
-            /**
-             * \brief 出口処理
-             */
-            void Exit()override;
          };
          /**
           * \class 発射状態のクラス
@@ -276,11 +268,6 @@ namespace FragmentValkyria {
              * \brief 入口処理
              */
             void Enter() override;
-            /**
-             * \brief 入力処理
-             * \param input 入力一括管理クラスの参照
-             */
-            void Input(InputManager& input) override;
             /**
              * \brief 更新処理
              */

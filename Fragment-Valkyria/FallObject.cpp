@@ -336,6 +336,13 @@ void FallObject::StateFall::Draw() {
 void FallObject::StateUp::Enter() {
    // 残留オブジェクトでないと設定
    _owner.residual(false);
+   _owner._efcUp = std::make_unique<Effect::EffectObjectUp>(_owner._gameMain, "ObjectUp");
+   auto efcPos = _owner._position;
+   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
+   _owner._efcUp->position(efcPos);
+   _owner._efcUp->Init();
+   // 更新処理
+   Update();
 }
 
 void FallObject::StateUp::Update() {
@@ -347,10 +354,10 @@ void FallObject::StateUp::Update() {
    _owner._collisionComponent->PlayerKnockBack();
    // プレイヤーがノックバックしているか確認
    _owner.CheckPlayerKnockBack();
-}
-
-void FallObject::StateUp::Exit() {
-
+   auto efcPos = _owner._position;
+   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
+   _owner._efcUp->position(efcPos);
+   _owner._efcUp->Update();
 }
 
 void FallObject::StateSave::Enter() {
@@ -366,13 +373,6 @@ void FallObject::StateSave::Enter() {
       player.objectShoot(true);
       break;
    }
-   _owner._efcUp = std::make_unique<Effect::EffectObjectUp>(_owner._gameMain, "ObjectUp");
-   auto efcPos = _owner._position;
-   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
-   _owner._efcUp->position(efcPos);
-   _owner._efcUp->Init();
-   // 更新処理
-   Update();
 }
 
 void FallObject::StateSave::Input(InputManager& input) {
@@ -396,19 +396,11 @@ void FallObject::StateSave::Update() {
    _owner._efcUp->Update();
 }
 
-void FallObject::StateSave::Exit() {
-   _owner._efcUp->StopEffect();
-}
-
 void FallObject::StateShoot::Enter() {
    // カメラの注視点へのベクトルを設定
    _owner._shootVec = _owner.GetObjServer().GetVecData("CamTarget") - _owner._position;
    // 単位化する
    _owner._shootVec.Normalized();
-}
-
-void FallObject::StateShoot::Input(InputManager& input) {
-
 }
 
 void FallObject::StateShoot::Update() {
@@ -432,9 +424,14 @@ void FallObject::StateShoot::Update() {
    _owner.HitCheckFromPoorEnemyGatling();
    // ステージ外にいるか確認
    _owner.OutStageCheck();
+   auto efcPos = _owner._position;
+   efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
+   _owner._efcUp->position(efcPos);
+   _owner._efcUp->Update();
 }
 
 void FallObject::StateDie::Update() {
    // 死亡状態に設定
+   _owner._efcUp->StopEffect();
    _owner.SetDead();
 }
