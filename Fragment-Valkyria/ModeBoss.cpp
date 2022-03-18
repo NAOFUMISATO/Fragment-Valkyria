@@ -24,7 +24,7 @@
 #include "LoadStageFromJson.h"
 
 namespace {
-   constexpr auto MaxWave = 1;
+   constexpr auto MaxWave = 4;
 }
 
 using namespace FragmentValkyria::Mode;

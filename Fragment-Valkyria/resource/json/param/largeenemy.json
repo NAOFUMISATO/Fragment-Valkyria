@@ -14,7 +14,9 @@
 			"object_max_num": 6,
 			"crasheffect_count":6,
 			"crasheffect_distance":500.0,
-			"crasheffect_frame":50
+			"crasheffect_frame":50,
+			"max_wave":4,
+			"max_poorenemy":2
 		}
 	]
 }

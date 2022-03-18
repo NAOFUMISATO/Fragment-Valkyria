@@ -221,6 +221,9 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
+
+         private:
+            void SetPoorSpawn();
          };
          /**
          * \class オブジェクト連続落下状態クラス

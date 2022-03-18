@@ -341,6 +341,7 @@ void FallObject::StateUp::Enter() {
    efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
    _owner._efcUp->position(efcPos);
    _owner._efcUp->Init();
+   _owner._efcBorn = true;
    // XVˆ—
    Update();
 }
@@ -431,7 +432,9 @@ void FallObject::StateShoot::Update() {
 }
 
 void FallObject::StateDie::Update() {
+   if (_owner._efcBorn) {
+      _owner._efcUp->StopEffect();
+   }
    // Ž€–Só‘Ô‚ÉÝ’è
-   _owner._efcUp->StopEffect();
    _owner.SetDead();
 }

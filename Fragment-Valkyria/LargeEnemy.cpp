@@ -14,6 +14,7 @@
 #include "ModelAnimeComponent.h"
 #include "PoorEnemyGatling.h"
 #include "ObjectServer.h"
+#include "ObjectFactory.h"
 #include "FallObject.h"
 #include "EffectServer.h"
 #include "EffectBossCharge.h"
@@ -27,7 +28,7 @@ namespace {
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
       "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",
-      "consecutive_num", "action_cooltime", "object_max_num"});
+      "consecutive_num", "action_cooltime", "object_max_num","max_wave","max_poorenemy" });
    const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
    const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
    const double StunDecrease = largeEnemyParamMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
@@ -39,11 +40,13 @@ namespace {
    const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
    const int ActionCoolTime = largeEnemyParamMap["action_cooltime"];                                               //!< 行動を行うクールタイム
    const int MaxNum = largeEnemyParamMap["object_max_num"];                                                        //!< 落下オブジェクトの最大数
+   const int MaxWave= largeEnemyParamMap["max_wave"];                                                              //!< 最大ウェイブ数
+   const int MaxPoorEnemy = largeEnemyParamMap["max_poorenemy"];                                                   //!< 雑魚敵の最大数
 
-                                                                                                                   
    constexpr auto FootStepHeight = 40.0;                                                                           //!< 走り状態時の足音発生高さ
    constexpr auto LaserDiffPos = 150.0;                                                                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
    constexpr auto LaserIrradiationTime = 155.f;                                                                    //!< アニメーション始まってからのレーザーの照射時間
+   constexpr auto MinWave = 2;
 }
 
 using namespace FragmentValkyria::Enemy;
@@ -511,6 +514,7 @@ void LargeEnemy::StateFallObject::Update() {
       _owner._cameraComponent->SetVibValue(0.0);
       // 落下オブジェクトの生成
       _owner.CreateFallObject();
+      SetPoorSpawn();
       _owner._stateServer->GoToState("Idle");
    }
    // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
@@ -924,6 +928,20 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
    _owner.HitCheckFromBullet();
    // スタン値の更新と確認
    _owner.StunCheck();
+}
+
+void LargeEnemy::StateFallObject::SetPoorSpawn() {
+   auto&& runObjects = _owner.GetObjServer().runObjects();
+   auto activePoorEnemyCount = std::count_if(runObjects.begin(), runObjects.end(),
+      [](std::unique_ptr<Object::ObjectBase>& obj) {
+         // 生存状態の雑魚敵は何体いるか
+         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
+   // 生存状態の雑魚敵が一定未満なら
+   if (activePoorEnemyCount <= MaxPoorEnemy) {
+      // ランダムなスポーンテーブルを割り当てる
+      auto random = AppFrame::Math::Utility::GetRandom(MinWave, MaxWave);
+      _owner._gameMain.objFactory().SetSpawnTable("bosswave" + std::to_string(random));
+   }
 }
 
 void LargeEnemy::StateMove::FootStepSound() {

@@ -130,6 +130,7 @@ namespace FragmentValkyria {
          bool _saveFlag{ false };                                  //!< ふわふわ浮かせるか
          bool _isFall{ true };                                     //!< 落下状態かどうか
          bool _residual{ true };                                   //!< 残留オブジェクトか
+         bool _efcBorn{ false };                                   //!< エフェクトは出現したか
          int _collision{ 0 };                                      //!< モデルのコリジョンフレーム番号
          Vector4 _shootVec{ Vector4(0.0, 0.0, 0.0) };              //!< 打った時の注視点へ向かうベクトル
          Vector4 _plyRightHandVec{ Vector4(0.0, 0.0, 0.0) };       //!< 打った時の注視点へ向かうベクトル
