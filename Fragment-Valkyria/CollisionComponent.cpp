@@ -123,6 +123,8 @@ void CollisionComponent::PlayerFromObjectRange() {
                player.collisionComponent().report().id(ReportId::HitFromObjectRange);
                // 落下するオブジェクトの当たり判定の結果にプレイヤーに当たっていると設定
                object->collisionComponent().report().id(ReportId::HitFromPlayer);
+               // 処理をスキップして戻る
+               return;
             }
             else {
                // 当たっていなかったらプレイヤーの当たり判定の結果に当たっていないと設定
@@ -130,8 +132,6 @@ void CollisionComponent::PlayerFromObjectRange() {
                // 落下するオブジェクトの当たり判定の結果に当たっていないと設定
                object->collisionComponent().report().id(ReportId::None);
             }
-            // 処理をスキップして戻る
-            return;
          }
       }
       // 落下するオブジェクトの位置を取得
@@ -236,6 +236,7 @@ void CollisionComponent::GatlingFromObjectModel() {
       // ガトリング側の球を設定
       auto gatlingPos = object->position();
       auto radian = static_cast<float>(GatlingRadius);
+      auto gatlingSphere = std::make_tuple(gatlingPos, radian);
       // 球とモデルの当たり判定の結果を取得
       auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
       // 当たり判定の結果が当たっているか確認

@@ -878,6 +878,8 @@ void Player::StateShootReady::Input(InputManager& input) {
 }
 
 void Player::StateShootReady::Update() {
+   // 状態の基底クラスの更新処理
+   StateBase::Update();
    // 最初のアニメーションを1回再生していてアニメーションを変えていない場合次のアニメーションを設定
    if (_owner._modelAnimeComponent->repeatedCount() >= 1 && !_changeAnim) {
       // モデルのアニメーションの設定

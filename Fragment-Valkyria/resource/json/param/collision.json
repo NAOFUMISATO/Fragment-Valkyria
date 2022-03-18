@@ -5,7 +5,7 @@
 			"ply_radius": 17.0,
             "ply_capsule_pos1": 20.0,
             "ply_capsule_pos2": 120.0,
-			"gatling_radius": 30.0,
+			"gatling_radius": 15.0,
 			"fallobject_drum_capsule_pos1": 30.0,
 			"fallobject_drum_capsule_pos2": 60.0,
 			"fallobject_drum_radius": 50.0,

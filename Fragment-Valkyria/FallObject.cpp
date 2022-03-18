@@ -238,9 +238,6 @@ void FallObject::SetCapsulePos() {
    world.RotateZ(rz, false);
    world.RotateX(rx, false);
    world.RotateY(ry, false);
-   /*if (_collisionName == "drum_red_c" || _collisionName == "drum_green_c" || _collisionName == "drum_blue_c") {
-
-   }*/
    // カプセルの位置の設定
    _capsulePos1 = _position + Vector4(0.0, DrumCapsulePos1, 0.0) * world;
    _capsulePos2 = _position + Vector4(0.0, DrumCapsulePos2, 0.0) * world;
@@ -279,10 +276,10 @@ void FallObject::StateIdle::Input(InputManager& input) {
 void FallObject::StateIdle::Update() {
    // カプセルの位置の設定
    _owner.SetCapsulePos();
-   // 当たり判定処理を行うクラスでプレイヤーが落下オブジェクトのモデルと当たっているか確認
-   _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
    // 当たり判定処理を行うクラスでオブジェクトを持ち上げられる範囲にプレイヤーがいるか確認
    _owner._collisionComponent->PlayerFromObjectRange();
+   // 当たり判定処理を行うクラスでプレイヤーが落下オブジェクトのモデルと当たっているか確認
+   _owner._collisionComponent->PlayerFromFallObjectModel(_owner._isFall);
    // 当たり判定処理を行うクラスでオブジェクトのモデルにガトリングが当たっているか確認
    _owner._collisionComponent->GatlingFromObjectModel();
    // 当たり判定処理を行うクラスでレーザーが落下するオブジェクトに当たっているか確認
