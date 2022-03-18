@@ -186,6 +186,11 @@ void Player::HitCheckFromIdleFallObject(std::string_view state) {
            // 落下オブジェクトからプレイヤーの位置までのベクトルに移動の速さをかけたベクトル分位置をずらす
            _position = _position + fromFallObject * WalkSpeed;
         }
+        // ノックバック状態の場合
+        else if ("KnockBack" == state) {
+           // 落下オブジェクトからプレイヤーの位置までのベクトルに移動の速さをかけたベクトル分位置をずらす
+           _position = _position + fromFallObject * 10.0;
+        }
         // 当たり判定の結果を当たっていないと設定
         _collisionComponent->report().id(Collision::CollisionComponent::ReportId::None);
     }
@@ -290,7 +295,7 @@ void Player::HitCheckFromLaser() {
         // 単位化する
         knockBackDelta.Normalized();
         // ノックバック量のベクトルを設定
-        _knockBack = knockBackDelta * 20.0;
+        _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
         _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
@@ -674,6 +679,7 @@ void Player::StateRun::Enter() {
    // この状態へ入った時のゲームのフレームカウントの
    _footCnt = count;
 }
+
 void Player::StateRun::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Run");
@@ -927,6 +933,8 @@ void Player::StateKnockBack::Enter() {
 }
 
 void Player::StateKnockBack::Update() {
+   // 待機状態の落下オブジェクトと当たっているか確認
+   _owner.HitCheckFromIdleFallObject("KnockBack");
    // ノックバックする時間中か確認
    if (_owner._freezeTime > 0) {
       // ノックバック処理

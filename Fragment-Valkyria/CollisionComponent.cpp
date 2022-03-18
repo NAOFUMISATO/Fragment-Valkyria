@@ -235,10 +235,10 @@ void CollisionComponent::GatlingFromObjectModel() {
       }
       // ガトリング側の球を設定
       auto gatlingPos = object->position();
-      auto radian = static_cast<float>(GatlingRadius);
-      auto gatlingSphere = std::make_tuple(gatlingPos, radian);
+      auto radius = static_cast<float>(15.0/*GatlingRadius*/);
+      auto gatlingSphere = std::make_tuple(gatlingPos, radius);
       // 球とモデルの当たり判定の結果を取得
-      auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radian);
+      auto result = MV1CollCheck_Sphere(objectModel, collision, AppFrame::Math::ToDX(gatlingPos), radius);
       // 当たり判定の結果が当たっているか確認
       if (result.HitNum > 0) {
          // ガトリングの当たり判定結果に待機状態の落下するオブジェクトと当たったと設定
@@ -263,21 +263,28 @@ void CollisionComponent::GatlingFromPlayer() {
    // カプセルの二つ目の位置
    auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
    // カプセルの半径
-   auto casuleRadian = PlayerRadius;
+   auto casuleRadius = PlayerRadius;
    // 自前のカプセルを定義
-   AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadian);
+   AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadius);
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       // ガトリングじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
          continue;
       }
+      // ガトリングの参照型にキャスト
+      auto& gatling = dynamic_cast<Enemy::Gatling&>(*object);
+      // ガトリングが待機状態の落下オブジェクトと当たっていたら
+      if (gatling.collisionComponent().report().id() == ReportId::HitFromIdleFallObject) {
+         // 処理をスキップしてfor文を回す
+         continue;
+      }
       // ガトリングの位置の取得
-      auto gatling = object->position();
+      auto gatlingPos = gatling.position();
       // ガトリングの半径の設定
-      auto gatlingRadian = GatlingRadius;
+      auto gatlingRadius = 15.0/*GatlingRadius*/;
       // 自前の球を定義
-      AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatling, gatlingRadian);
+      AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatlingPos, gatlingRadius);
       // カプセルと球で当たり判定をとる
       if (AppFrame::Math::Utility::CollisionCapsuleSphere(playerCapsule, gatlingSphere)) {
          // 当たっていたらガトリング側の当たり判定の結果をプレイヤーと当たったと設定
