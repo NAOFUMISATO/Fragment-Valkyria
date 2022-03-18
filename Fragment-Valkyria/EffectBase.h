@@ -53,7 +53,8 @@ namespace FragmentValkyria {
             ObjectUp,           //!< オブジェクト上昇
             PoorCrash,          //!< 雑魚敵の破壊
             BossCrash,          //!< ボスの破壊
-            PreliminaryLight    //!< 予備動作
+            PreliminaryLight,   //!< 予備動作
+            ObjectHit           //!< オブジェクト衝突
          };
          /**
           * \brief コンストラクタ

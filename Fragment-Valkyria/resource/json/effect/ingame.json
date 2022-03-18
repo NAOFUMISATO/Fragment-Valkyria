@@ -83,6 +83,12 @@
 			"filename": "Crash.efkefc",
 			"scale": 40.0,
 			"speed":1.0
+		},
+		{
+			"keyname": "ObjectHit",
+			"filename": "ObjectHit.efkefc",
+			"scale": 40.0,
+			"speed":0.6
 		}
 	]
 }

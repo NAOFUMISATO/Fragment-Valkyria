@@ -1,7 +1,7 @@
 {
 	"poorenemy": [
 		{
-			"max_wave":8,
+			"max_wave":7,
 			"gravity": -0.01,
             "rotate_speed": 10.0,
 			"step_distance":1000.0,

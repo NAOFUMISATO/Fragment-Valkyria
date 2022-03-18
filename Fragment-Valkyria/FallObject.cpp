@@ -14,6 +14,7 @@
 #include "EffectObjectFall.h"
 #include "ObjectServer.h"
 #include "EffectServer.h"
+#include "EffectObjectHit.h"
 
 using namespace FragmentValkyria::Enemy;
 
@@ -99,6 +100,9 @@ void FallObject::HitCheckFromLargeEnemy() {
    // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
       // ラージエネミーと当たっていたら死亡状態へ
+      auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
+      efcHit->position(_position);
+      GetEfcServer().Add(std::move(efcHit));
       _stateServer->GoToState("Die");
    }
 }
@@ -113,11 +117,14 @@ void FallObject::HitCheckFromLaser() {
    }
 }
 
-void FallObject::HitCheckFromPoorEnemyGatling() {
+void FallObject::HitCheckFromPoorEnemy() {
    // 当たり判定結果クラスの参照の取得
    auto report = _collisionComponent->report();
    // 当たり判定結果の確認
-   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemy) {
+      auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
+      efcHit->position(_position);
+      GetEfcServer().Add(std::move(efcHit));
       // 雑魚敵と当たったら死亡状態へ
       _stateServer->GoToState("Die");
    }
@@ -422,7 +429,7 @@ void FallObject::StateShoot::Update() {
    // レーザーと当たっているか確認
    _owner.HitCheckFromLaser();
    // 雑魚敵と当たっているか確認
-   _owner.HitCheckFromPoorEnemyGatling();
+   _owner.HitCheckFromPoorEnemy();
    // ステージ外にいるか確認
    _owner.OutStageCheck();
    auto efcPos = _owner._position;

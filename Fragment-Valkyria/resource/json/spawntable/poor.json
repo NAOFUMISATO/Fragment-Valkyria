@@ -5,18 +5,10 @@
             {"progress":0,"type":"PoorEnemyMelee","position":[{"x":0.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
          ],
          "poorwave2":[
-            {"progress":0,"type":"PoorEnemyMelee","position":[{"x":0.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"PoorEnemyMelee","position":[{"x":500.0,"y":500.0,"z":500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"PoorEnemyMelee","position":[{"x":-500.0,"y":500.0,"z":500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"FallObject","position":[{"x":800.0,"y":500.0,"z":800.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"FallObject","position":[{"x":0.0,"y":500.0,"z":-500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"FallObject","position":[{"x":-800.0,"y":500.0,"z":800.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
-         ],
-         "poorwave3":[
-            {"progress":0,"type":"PoorEnemyGatling","position":[{"x":0.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"FallObject","position":[{"x":0.0,"y":500.0,"z":250.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
+            {"progress":0,"type":"PoorEnemyGatling","position":[{"x":250.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
+            {"progress":0,"type":"FallObject","position":[{"x":-250.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
           ],
-         "poorwave4":[
+         "poorwave3":[
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":0.0,"y":500.0,"z":-200.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":800.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":-800.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
@@ -24,29 +16,29 @@
             {"progress":0,"type":"FallObject","position":[{"x":0.0,"y":500.0,"z":1000.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"FallObject","position":[{"x":-1500.0,"y":500.0,"z":-1000.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
          ],
-         "poorwave5":[
+         "poorwave4":[
             {"progress":0,"type":"PoorEnemyMelee","position":[{"x":100.0,"y":500.0,"z":100.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyMelee","position":[{"x":-100.0,"y":500.0,"z":100.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":0.0,"y":500.0,"z":-1000.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":10,"type":"FallObject","position":[{"x":500.0,"y":500.0,"z":250.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"FallObject","position":[{"x":-500.0,"y":500.0,"z":-250.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]} 
          ],
-         "poorwave6":[
+         "poorwave5":[
             {"progress":0,"type":"PoorEnemyMelee","position":[{"x":0.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":400.0,"y":500.0,"z":150.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":-400.0,"y":500.0,"z":150.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":0.0,"y":500.0,"z":-200.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":10,"type":"FallObject","position":[{"x":200.0,"y":500.0,"z":-200.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"FallObject","position":[{"x":-200.0,"y":500.0,"z":-200.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
-            {"progress":0,"type":"FallObject","position":[{"x":0.0,"y":500.0,"z":1500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
+            {"progress":0,"type":"FallObject","position":[{"x":0.0,"y":500.0,"z":1800.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
          ],
-         "poorwave7":[
+         "poorwave6":[
             {"progress":0,"type":"PoorEnemyAlmighty","position":[{"x":100.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyAlmighty","position":[{"x":-100.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"FallObject","position":[{"x":-500.0,"y":500.0,"z":250.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"FallObject","position":[{"x":500.0,"y":500.0,"z":-250.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]}
          ],
-         "poorwave8":[
+         "poorwave7":[
             {"progress":0,"type":"PoorEnemyMelee","position":[{"x":0.0,"y":500.0,"z":400.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyGatling","position":[{"x":0.0,"y":500.0,"z":0.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},
             {"progress":0,"type":"PoorEnemyAlmighty","position":[{"x":-1500.0,"y":500.0,"z":500.0}],"rotation":[{"x":0.0,"y":0.0,"z":0.0}]},

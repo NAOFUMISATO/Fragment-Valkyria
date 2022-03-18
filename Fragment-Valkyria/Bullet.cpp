@@ -63,7 +63,7 @@ void Bullet::HitCheckFromPoorEnemyGatling() {
    // “–‚½‚è”»’èŒ‹‰ÊƒNƒ‰ƒX‚ÌŽQÆ‚ÌŽæ“¾
    auto report = _collisionComponent->report();
    // “–‚½‚è”»’èŒ‹‰Ê‚ªƒKƒgƒŠƒ“ƒOUŒ‚‚ð‚µ‚Ä‚­‚éŽG‹›“G‚Æ“–‚½‚Á‚Ä‚¢‚½‚çŽ€–Só‘Ô‚Ö
-   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemyGatling) {
+   if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemy) {
       // ‚±‚±‚ÅŽ€–Só‘Ô‚ÉÝ’è‚·‚é‚±‚Æ‚Å’e‚ª•¡”“–‚½‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð’¼‚¹‚½
       SetDead();
       _efcBullet->StopEffect();

@@ -630,7 +630,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
       //当たり判定の結果を確認
       if (result.HitNum > 0) {
          //当たっていたら遠隔弱攻撃の弾の当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
-         object->collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+         object->collisionComponent().report().id(ReportId::HitFromPoorEnemy);
          //ダメージの設定
          _owner.collisionComponent().damage(PoorEnemyBulletDamage);
          //ガトリング攻撃をしてくる雑魚敵の当たり判定結果を遠隔弱攻撃の弾と当たったと設定
@@ -669,7 +669,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          //ダメージの設定
          object->collisionComponent().damage(PoorEnemyObjectDamage);
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
-         _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemyGatling);
+         _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemy);
       }
    }
 }

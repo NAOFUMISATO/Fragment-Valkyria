@@ -98,7 +98,7 @@ namespace FragmentValkyria {
          /**
           * \brief ガトリング攻撃をしてくる雑魚敵と当たっているか確認
           */
-         void HitCheckFromPoorEnemyGatling();
+         void HitCheckFromPoorEnemy();
          /**
           * \brief ステージ外にいるか確認
           */

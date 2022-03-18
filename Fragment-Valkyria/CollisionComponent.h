@@ -40,7 +40,6 @@ namespace FragmentValkyria {
             HitFromPoorEnemy,          //!< ŽG‹›“G‚Æ“–‚½‚Á‚½
             HitFromBullet,             //!< ‰“ŠuŽãUŒ‚‚Ì’e‚Æ“–‚½‚Á‚½
             HitFromLaser,              //!< ƒŒ[ƒU[‚Æ“–‚½‚Á‚½
-            HitFromPoorEnemyGatling,   //!< ƒKƒgƒŠƒ“ƒOUŒ‚‚ð‚µ‚Ä‚­‚éŽG‹›“G‚Æ“–‚½‚Á‚½
             OutStage,                  //!< ƒXƒe[ƒW‚ÌŠO‚É‚¢‚é
          };
          /**
