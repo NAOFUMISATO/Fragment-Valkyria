@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   RemainingPortion.cpp
+ * \brief  残回復アイテム
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "RemainingPortion.h"
 #include "GameMain.h"
 #include "ObjectServer.h"

@@ -19,7 +19,7 @@ namespace AppFrame {
    namespace Math {
       static constexpr double DEGREES_180 = 180.0;                                                //!< 度数法180°
       static constexpr double PI = std::numbers::pi;                                              //!< 円周率
-      static constexpr double RADIAN_1 = std::numbers::pi / DEGREES_180;
+      static constexpr double RADIAN_1 = std::numbers::pi / DEGREES_180;                          //!< 弧度法での180°
 
       class Vector4;
 

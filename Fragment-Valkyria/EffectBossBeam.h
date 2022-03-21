@@ -1,8 +1,24 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectBossBeam.h
+ * \brief  ボスのビームエフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief エフェクト関係
+    */
    namespace Effect {
+      /**
+       * \class ボスのビームエフェクトクラス
+       * \brief ボスのビームエフェクトを再生する
+       */
       class EffectBossBeam :public EffectBase {
       public:
          /**
@@ -21,12 +37,9 @@ namespace FragmentValkyria {
          void Update()override;
          /**
           * \brief エフェクトの種類を返す
-          * \return 種別:ガトリング弾
+          * \return 種別:ボスビーム攻撃
           */
-         virtual EffectType GetEfcType() const override { return EffectType::GatlingBullet; }
-
-      private:
-         int _playCount{ 0 };
+         virtual EffectType GetEfcType() const override { return EffectType::BossBeam; }
       };
    }
 }

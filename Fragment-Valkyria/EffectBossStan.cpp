@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectBossStan.cpp
+ * \brief  ボスのスタンエフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBossStan.h"
 #include "GameMain.h"
 

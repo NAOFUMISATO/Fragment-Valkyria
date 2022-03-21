@@ -20,6 +20,9 @@ namespace AppFrame {
    namespace Input {
       class InputManager;
    }
+   /**
+    * \brief ó‘ÔŠÖŒW
+    */
    namespace State {
       class StateBaseRoot;
       /**

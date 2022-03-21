@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectObjectUp.cpp
+ * \brief  オブジェクト衝突エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectObjectUp.h"
 #include "GameMain.h"
 

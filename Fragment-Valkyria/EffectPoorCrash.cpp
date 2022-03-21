@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectPoorCrash.cpp
+ * \brief  雑魚破壊エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectPoorCrash.h"
 #include "GameMain.h"
 

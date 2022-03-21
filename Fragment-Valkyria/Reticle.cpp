@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   Reticle.cpp
+ * \brief  ƒŒƒeƒBƒNƒ‹
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "Reticle.h"
 #include "GameMain.h"
 #include "Player.h"

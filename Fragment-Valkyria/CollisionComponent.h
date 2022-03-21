@@ -40,7 +40,7 @@ namespace FragmentValkyria {
             HitFromPoorEnemy,          //!< 雑魚敵と当たった
             HitFromBullet,             //!< 遠隔弱攻撃の弾と当たった
             HitFromLaser,              //!< レーザーと当たった
-            OutStage,                  //!< ステージの外にいる
+            OutStage                   //!< ステージの外にいる
          };
          /**
           * \brief 当たり判定結果を管理するクラス

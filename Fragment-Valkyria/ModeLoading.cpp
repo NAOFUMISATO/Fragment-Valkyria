@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeLoading.cpp
+ * \brief  ÉÇÅ[Éhì«Ç›çûÇ›
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeLoading.h"
 #include "GameMain.h"
 

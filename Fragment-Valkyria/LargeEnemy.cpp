@@ -19,7 +19,6 @@
 #include "EffectServer.h"
 #include "EffectBossCharge.h"
 #include "EffectBossStan.h"
-#include "EffectBossDieAfter.h"
 #include "EffectBossFall.h"
 #include "EffectPreliminaryLight.h"
 #include "EffectBossCrash.h"

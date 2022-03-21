@@ -70,8 +70,8 @@ namespace FragmentValkyria {
           */
          void OutCheckFromStage();
 
-         std::unique_ptr<Effect::EffectWeakBullet> _efcBullet;
-         Vector4 _moved{ Vector4() };     //!< 移動量のベクトル
+         std::unique_ptr<Effect::EffectWeakBullet> _efcBullet;  //!< 弾エフェクトのポインタ
+         Vector4 _moved{ Vector4() };                           //!< 移動量のベクトル
 
       public:
          /**

@@ -1,8 +1,24 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectPoorCrash.h
+ * \brief  雑魚敵の破壊エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief エフェクト関係
+    */
    namespace Effect {
+      /**
+       * \class 雑魚敵の破壊エフェクトクラス
+       * \brief 雑魚敵の破壊エフェクトの発生
+       */
       class EffectPoorCrash :public EffectBase {
       public:
          /**

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeTutorialSelect.cpp
+ * \brief  モードチュートリアル選択
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeTutorialSelect.h"
 #include "GameMain.h"
 

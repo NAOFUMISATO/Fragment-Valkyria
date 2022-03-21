@@ -1,15 +1,35 @@
 #pragma once
+/*****************************************************************//**
+ * \file   ModeTutorialSelect.h
+ * \brief  モードチュートリアル選択クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
    // 二重インクルード防止
    namespace Game {
       class GameMain;
    }
+   /**
+    * \brief モード関係
+    */
    namespace Mode {
+      /**
+       * \class モードチュートリアル選択クラス
+       * \brief チュートリアルを行うかどうか選択する
+       */
       class ModeTutorialSelect :public ModeBase {
          using InputManager = AppFrame::Input::InputManager;
       public:
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体クラスの参照
+          */
          ModeTutorialSelect(Game::GameMain& gameMain);
          /**
           * \brief 初期化処理
@@ -34,8 +54,8 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _cusorX{ 0 };
-         int _cusorY{ 0 };
+         int _cusorX{ 0 };                                            //!< カーソルX位置
+         int _cusorY{ 0 };                                            //!< カーソルY位置
          std::unique_ptr<AppFrame::State::StateServer> _stateServer;  //!< 状態一括管理クラスのポインタ
          std::unordered_map<std::string, int> _handleMap;             //!< 画像ハンドルを保存する連想配列
 

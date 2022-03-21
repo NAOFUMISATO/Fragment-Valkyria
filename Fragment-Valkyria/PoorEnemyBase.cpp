@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   PoorEnemyBase.cpp
+ * \brief  ŽG‹›“G‚ÌŠî’êƒNƒ‰ƒX
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "PoorEnemyBase.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"

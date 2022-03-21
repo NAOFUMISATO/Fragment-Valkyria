@@ -49,14 +49,17 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
+         /**
+          * \brief ライティングによる演出を行う
+          */
          void LightStaging();
-         bool _flag{ false };
-         bool _plus{ true };
-         int _lightOnCount{0};
-         int _lightCnt{ 0 };
-         float _red{0.1f};
-         float green{ 0 };
-         float blue{ 0 };
+         bool _cntInit{ false }; //!< フレームカウント初期化フラグ
+         bool _plus{ true };     //!< ライティングの赤要素を上昇させるかのフラグ
+         int _lightOnCount{0};   //!< 何度点滅させるか
+         int _lightCnt{ 0 };     //!< フレームカウント保存用
+         float _red{0.1f};       //!< 赤
+         float green{ 0 };       //!< 緑
+         float blue{ 0 };        //!< 青
       };
    }
 }

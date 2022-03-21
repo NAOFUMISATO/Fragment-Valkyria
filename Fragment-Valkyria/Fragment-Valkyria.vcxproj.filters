@@ -309,9 +309,6 @@
     <ClInclude Include="EffectBossStan.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="EffectBossDieAfter.h">
-      <Filter>ヘッダー ファイル\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="EffectBossFall.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
@@ -537,9 +534,6 @@
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="EffectBossFall.cpp">
-      <Filter>ソース ファイル\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectBossDieAfter.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="ClearScore.cpp">

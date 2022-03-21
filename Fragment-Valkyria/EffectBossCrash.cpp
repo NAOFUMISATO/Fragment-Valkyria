@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectBossCrash.cpp
+ * \brief  ボスの破壊エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBossCrash.h"
 #include "GameMain.h" 
 #include "ObjectServer.h"

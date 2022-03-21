@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   FallObjectCreator.cpp
- * \brief  
+ * \brief  落下オブジェクトの生成
  * 
  * \author AHMD2000
  * \date   January 2022

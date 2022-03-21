@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectObjectHit.cpp
+ * \brief  オブジェクト衝突エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectObjectHit.h"
 
 using namespace FragmentValkyria::Effect;

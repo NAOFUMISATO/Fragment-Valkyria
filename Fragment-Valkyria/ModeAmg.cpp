@@ -1,9 +1,13 @@
+
+/*****************************************************************//**
+ * \file   ModeAmg.cpp
+ * \brief  ÉÇÅ[ÉhAMGÉçÉS
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeAmg.h"
 #include "GameMain.h"
-
-namespace{
-
-}
 
 using namespace FragmentValkyria::Mode;
 

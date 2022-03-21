@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   LargeEnemyCreator.cpp
- * \brief  ラージエネミー生成クラス
+ * \brief  ラージエネミー生成
  * 
  * \author AHMD2000
  * \date   January 2022

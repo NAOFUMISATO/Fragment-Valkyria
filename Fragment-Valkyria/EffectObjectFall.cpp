@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectObjectFall.cpp
+ * \brief  オブジェクト落下エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectObjectFall.h"
 #include "GameMain.h"
 

@@ -20,9 +20,11 @@
 
 namespace {
    constexpr auto CountMax = 4294967295;   //!< _frameCountの型unsigned intの範囲
-   constexpr auto DrawFPSPosX = 0;
-   constexpr auto DrawFPSPosY = 0;
-   constexpr auto DrawFPSColor = 255;
+#ifdef _DEBUG
+   constexpr auto DrawFPSPosX = 0;         //!< デバッグ描画するFPSのX座標
+   constexpr auto DrawFPSPosY = 0;         //!< デバッグ描画するFPSのY座標
+   constexpr auto DrawFPSColor = 255;      //!< デバッグ描画するFPSの色
+#endif
 }
  /**
   * \brief アプリケーションフレーム

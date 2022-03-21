@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectWeakBullet.cpp
+ * \brief  プレイヤー弱攻撃エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectWeakBullet.h"
 #include "GameMain.h"
 

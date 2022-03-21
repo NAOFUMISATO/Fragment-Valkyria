@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectBossFall.h
+ * \brief  ボスの落下エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
 /**
  * \brief プロジェクト名
@@ -9,8 +16,8 @@ namespace FragmentValkyria {
     */
    namespace Effect {
       /**
-       * \class ボスの歩きエフェクトクラス
-       * \brief ボスの歩きエフェクトの発生
+       * \class ボスの落下エフェクトクラス
+       * \brief ボスの落下エフェクトの発生
        */
       class EffectBossFall :public EffectBase {
       public:
@@ -30,7 +37,7 @@ namespace FragmentValkyria {
          void Update()override;
          /**
           * \brief エフェクトの種別を返す
-          * \return 種別:ボスの歩き
+          * \return 種別:ボスの落下
           */
          virtual EffectType GetEfcType() const override { return EffectType::BossFall; }
       };

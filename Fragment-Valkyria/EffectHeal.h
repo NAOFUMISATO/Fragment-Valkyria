@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectHeal.h
+ * \brief  回復エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
 /**
  * \brief プロジェクト名
@@ -9,7 +16,7 @@ namespace FragmentValkyria {
     */
    namespace Effect {
       /**
-       * \class回復エフェクトクラス
+       * \class 回復エフェクトクラス
        * \brief 回復エフェクトの発生
        */
       class EffectHeal :public EffectBase {

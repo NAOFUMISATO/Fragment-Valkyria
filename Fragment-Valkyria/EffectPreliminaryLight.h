@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectPreliminaryLight.h
+ * \brief  ボスの予備動作エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
 /**
  * \brief プロジェクト名
@@ -8,7 +15,10 @@ namespace FragmentValkyria {
     * \brief エフェクト関係
     */
    namespace Effect {
-    
+     /**
+      * \class ボスの予備動作エフェクトクラス
+      * \brief ボスの予備動作エフェクトの発生
+      */
       class EffectPreliminaryLight :public EffectBase {
       public:
          /**

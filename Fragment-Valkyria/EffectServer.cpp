@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   EffectServer.cpp
- * \brief   エフェクトサーバー
+ * \brief  エフェクトサーバー
  *
  * \author NAOFUMISATO
  * \date   February 2022

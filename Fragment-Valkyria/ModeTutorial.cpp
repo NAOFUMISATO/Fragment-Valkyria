@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ModeTutorial.cpp
+ * \brief  モードチュートリアル
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeTutorial.h"
 #include "GameMain.h"
 #include "ObjectServer.h"

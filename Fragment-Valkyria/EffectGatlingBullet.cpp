@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectGatlingBullet.cpp
+ * \brief  敵のガトリング弾エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectGatlingBullet.h"
 #include "GameMain.h"
 

@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   ModePoor.cpp
+ * \brief  ÉÇÅ[ÉhéGãõêÌ
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModePoor.h"
 #include <stdexcept>
 #include "BulletCreator.h"

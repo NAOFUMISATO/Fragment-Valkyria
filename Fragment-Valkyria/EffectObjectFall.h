@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectObjectFall.h
+ * \brief  オブジェクト落下エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
  /**
   * \brief プロジェクト名
@@ -9,7 +16,7 @@ namespace FragmentValkyria {
     */
    namespace Effect {
       /**
-       * \classオブジェクト落下エフェクトクラス
+       * \class オブジェクト落下エフェクトクラス
        * \brief 落下エフェクトの発生
        */
       class EffectObjectFall :public EffectBase {

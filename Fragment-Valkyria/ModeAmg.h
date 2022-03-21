@@ -1,8 +1,24 @@
 #pragma once
+/*****************************************************************//**
+ * \file   ModeAmg.h
+ * \brief  モードAMGロゴクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief モード関係
+    */
    namespace Mode {
+      /**
+       * \class モードAMGロゴクラス
+       * \brief AMGロゴの描画を行う
+       */
       class ModeAmg :public ModeBase {
       public:
          /**
@@ -28,9 +44,9 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _grHandle{ -1 };
-         int _fadeCnt{ -1 };
-         bool _cntInit{ false }; 
+         int _grHandle{ -1 };    //!< 画像ハンドル
+         int _fadeCnt{ -1 };     //!< フレームカウント保存用
+         bool _cntInit{ false }; //!< フレームカウント初期化フラグ
       };
    }
 }

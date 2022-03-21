@@ -1,11 +1,31 @@
 #pragma once
+/*****************************************************************//**
+ * \file   PoorEnemyAlmighty.h
+ * \brief  全ての攻撃を行う雑魚敵クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "PoorEnemyBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief 敵関係
+    */
    namespace Enemy {
+      /**
+       * \class 全ての攻撃を行う雑魚敵クラス
+       * \brief 全ての攻撃を行う雑魚敵の処理を行う
+       */
       class PoorEnemyAlmighty :public PoorEnemyBase {
          using Vector4 = AppFrame::Math::Vector4;
       public:
+         /**
+          * \brief コンストラクタ
+          * \param gameMain ゲーム本体クラスの参照
+          */
          PoorEnemyAlmighty(Game::GameMain& gameMain);
          /**
           * \brief 初期化処理

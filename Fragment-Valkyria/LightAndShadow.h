@@ -39,8 +39,21 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render();
+         /**
+          * \brief ライティングの拡散光色の設定
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          */
          void SetDifColor(float red,float green,float blue);
+         /**
+          * \brief ライティングの環境光色の設定
+          * \param red 赤
+          * \param green 緑
+          * \param blue 青
+          */
          void SetAmbColor(float red, float green, float blue);
+
       private:
          Game::GameMain& _gameMain;       //!< ゲーム本体クラスの参照
          int _lightHandle{ -1 };          //!< 光源ハンドルのペア型

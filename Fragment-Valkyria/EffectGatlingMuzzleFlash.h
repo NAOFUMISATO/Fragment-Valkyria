@@ -1,4 +1,11 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectGatlingMuzzleFlash.h
+ * \brief  ガトリングの発火炎エフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
 /**
  * \brief プロジェクト名
@@ -9,8 +16,8 @@ namespace FragmentValkyria {
     */
    namespace Effect {
       /**
-       * \class ボスのガトリング攻撃エフェクトクラス
-       * \brief ガトリング攻撃エフェクトの発生
+       * \class ガトリングの発火炎エフェクトクラス
+       * \brief ガトリングの発火炎エフェクトの発生
        */
       class EffectGatlingMuzzleFlash :public EffectBase {
       public:

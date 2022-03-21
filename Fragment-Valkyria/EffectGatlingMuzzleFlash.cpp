@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectGatlingMuzzleFlash.cpp
+ * \brief  ガトリングの発火炎エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectGatlingMuzzleFlash.h"
 #include "GameMain.h"
 

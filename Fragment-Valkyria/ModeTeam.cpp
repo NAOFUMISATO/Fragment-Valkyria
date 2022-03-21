@@ -1,9 +1,13 @@
+
+/*****************************************************************//**
+ * \file   ModeTeam.cpp
+ * \brief  モードチームロゴ
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "ModeTeam.h"
 #include "GameMain.h"
-
-namespace {
-
-}
 
 using namespace FragmentValkyria::Mode;
 

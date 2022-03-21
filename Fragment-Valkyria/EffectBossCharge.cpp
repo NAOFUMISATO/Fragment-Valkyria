@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectBossCharge.cpp
+ * \brief  ボスのビームチャージエフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBossCharge.h"
 #include "GameMain.h"
 #include "ObjectServer.h"

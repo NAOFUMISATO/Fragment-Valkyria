@@ -1,8 +1,24 @@
 #pragma once
+/*****************************************************************//**
+ * \file   EffectObjectUp.h
+ * \brief  オブジェクト上昇時のエフェクトクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBase.h"
-
+/**
+ * \brief プロジェクト名
+ */
 namespace FragmentValkyria {
+   /**
+    * \brief エフェクト関係
+    */
    namespace Effect {
+      /**
+       * \class オブジェクト上昇時のエフェクトクラス
+       * \brief オブジェクト上昇時のエフェクトの発生
+       */
       class EffectObjectUp :public EffectBase {
       public:
          /**

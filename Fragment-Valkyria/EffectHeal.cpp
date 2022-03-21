@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectHeal.cpp
+ * \brief  回復エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectHeal.h"
 #include "GameMain.h"
 

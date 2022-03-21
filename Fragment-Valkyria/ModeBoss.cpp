@@ -25,6 +25,14 @@
 
 namespace {
    constexpr auto MaxWave = 4;
+   constexpr auto LightOnMaxCount = 4;
+   constexpr auto DefaultDifRed = 0.6f;
+   constexpr auto DefaultDifGreen = 0.6f;
+   constexpr auto DefaultDifBlue = 0.7f;
+   constexpr auto DefaultAmbRed = 0.5f;
+   constexpr auto DefaultAmbGreen = 0.5f;
+   constexpr auto DefaultAmbBlue = 0.5f;
+   constexpr auto PlaySoundFrame = 169;
 }
 
 using namespace FragmentValkyria::Mode;
@@ -63,7 +71,7 @@ void ModeBoss::Enter() {
    _red = 0.1f;
    _lighting->SetDifColor(_red, 0.1f, 0.1f);
    _lighting->SetAmbColor(_red, 0.1f, 0.1f);
-   _flag = false;
+   _cntInit = false;
    _lightOnCount = 0;
 }
 
@@ -72,9 +80,9 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeBoss::Update() {
-   if (!_flag) {
+   if (!_cntInit) {
       _lightCnt = GetModeServer().frameCount();
-      _flag = true;
+      _cntInit = true;
       
    }
    LightStaging();
@@ -113,10 +121,10 @@ void ModeBoss::LightStaging() {
       _lighting->SetAmbColor(_red, 0.1f, 0.1f);
    }
    else{
-      _lighting->SetDifColor(0.6f, 0.6f, 0.7f);
-      _lighting->SetAmbColor(0.5f, 0.5f, 0.5f);
+      _lighting->SetDifColor(DefaultDifRed, DefaultDifGreen, DefaultDifBlue);
+      _lighting->SetAmbColor(DefaultAmbRed, DefaultAmbGreen, DefaultAmbBlue);
    }
-   if (frame == 160) {
+   if (frame == PlaySoundFrame) {
       GetSoundComponent().Play("LightOn");
    }
 }

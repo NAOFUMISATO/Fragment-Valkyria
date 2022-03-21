@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   PoorEnemyMeleeCreator.cpp
+ * \brief  ‹ßÚUŒ‚‚µ‚Ä‚­‚éG‹›“G‚Ì¶¬
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "PoorEnemyMeleeCreator.h"
 #include "PoorEnemyMelee.h"
 #include "ModelAnimeComponent.h"

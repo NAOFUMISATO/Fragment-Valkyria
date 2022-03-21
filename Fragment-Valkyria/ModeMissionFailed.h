@@ -49,9 +49,9 @@ namespace FragmentValkyria {
          void Render() override;
 
       private:
-         int _animeNo{ 0 };
-         int _animeCnt{ 0 };
-         bool _cntInit{ true };
+         int _animeNo{ 0 };                   //!< アニメーション番号
+         int _animeCnt{ 0 };                  //!< フレームカウント保存用
+         bool _cntInit{ true };               //!< フレームカウント初期化フラグ
          std::vector<int> _grHandles{ -1 };   //!< 画像ハンドル
       };
    }

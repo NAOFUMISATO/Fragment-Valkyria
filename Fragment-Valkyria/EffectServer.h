@@ -11,7 +11,7 @@
 #include <vector>
 #include <memory>
  /**
-  * \brief アプリケーションフレーム
+  * \brief プロジェクト名
   */
 namespace FragmentValkyria {
    /**

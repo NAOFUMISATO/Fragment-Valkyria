@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   CreatorBase.cpp
+ * \brief  ¶¬ŠÇ—ƒNƒ‰ƒX‚ÌŠî’ê
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "CreatorBase.h"
 #include "GameMain.h"
 

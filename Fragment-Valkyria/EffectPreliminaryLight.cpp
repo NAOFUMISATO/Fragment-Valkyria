@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   EffectPreliminaryLight.cpp
+ * \brief  ボスの予備動作エフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectPreliminaryLight.h"
 #include "GameMain.h"
 

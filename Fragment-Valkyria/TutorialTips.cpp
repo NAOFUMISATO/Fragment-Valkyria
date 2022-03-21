@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   TutorialTips.cpp
+ * \brief  チュートリアルのテキスト表示
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "TutorialTips.h"
 #include "GameMain.h"
 #include "ObjectServer.h"

@@ -1,7 +1,7 @@
 
 /*****************************************************************//**
  * \file   GatlingCreator.cpp
- * \brief  
+ * \brief  ƒKƒgƒŠƒ“ƒO¶¬
  * 
  * \author AHMD2000
  * \date   January 2022

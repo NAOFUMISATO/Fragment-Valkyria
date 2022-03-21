@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   EffectBossBeam.cpp
+ * \brief  ボスのビームエフェクト
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "EffectBossBeam.h"
 #include "GameMain.h"
 

@@ -67,7 +67,11 @@ namespace FragmentValkyria {
           * \return ステージの参照
           */
          inline Stage::Stage& GetStage() { return *_stage; }
+         /**
+          * \brief 残留するエフェクトの消去を行う
+          */
          void IndividualEffectClear();
+
       protected:
          std::unique_ptr<Stage::Stage> _stage;                 //!< ステージクラスのユニークポインタ
          std::unique_ptr<Lighting::LightAndShadow> _lighting;  //!< ライティングクラスのユニークポインタ
