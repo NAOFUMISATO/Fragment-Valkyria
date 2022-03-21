@@ -57,6 +57,5 @@ void PoorEnemyGatling::StateGatling::Update() {
    }
    _owner._collisionComponent->BulletFromPoorEnemy();
    _owner._collisionComponent->PoorEnemyFromPlayer();
-   _owner.HitCheckFromBullet();
-   _owner.HitCheckFromFallObject();
+   StateBase::Update();
 }

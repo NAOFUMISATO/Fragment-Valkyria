@@ -67,6 +67,7 @@ void PoorEnemyAlmighty::StateRush::Update() {
    else {
       _owner._stateServer->GoToState("Idle");
    }
+   StateBase::Update();
 }
 
 void PoorEnemyAlmighty::StateGatling::Enter() {
@@ -87,6 +88,5 @@ void PoorEnemyAlmighty::StateGatling::Update() {
    }
    _owner._collisionComponent->BulletFromPoorEnemy();
    _owner._collisionComponent->PoorEnemyFromPlayer();
-   _owner.HitCheckFromBullet();
-   _owner.HitCheckFromFallObject();
+   StateBase::Update();
 }

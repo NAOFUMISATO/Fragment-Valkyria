@@ -79,9 +79,13 @@ namespace FragmentValkyria {
              */
             StateBase(PoorEnemyBase& owner) : _owner{ owner } {};
             /**
+             * \brief 更新処理
+             */
+            void Update() override;
+            /**
              * \brief 描画処理
              */
-            virtual void Draw() override;
+            void Draw() override;
 
          protected:
             PoorEnemyBase& _owner;   //!< 雑魚敵基底クラスの参照

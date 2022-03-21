@@ -56,8 +56,6 @@ void PoorEnemyBase::Update() {
    MV1RefreshCollInfo(_modelAnimeComponent->modelHandle(), _collNum);
    _collisionComponent->BulletFromPoorEnemy();
    _collisionComponent->PoorEnemyFromPlayer();
-   HitCheckFromBullet();
-   HitCheckFromFallObject();
    DamageExpression();
    // 状態の更新
    _stateServer->Update();
@@ -126,6 +124,11 @@ void PoorEnemyBase::DamageExpression() {
    }
 }
 
+void PoorEnemyBase::StateBase::Update() {
+   _owner.HitCheckFromBullet();
+   _owner.HitCheckFromFallObject();
+}
+
 void PoorEnemyBase::StateBase::Draw() {
    _owner._modelAnimeComponent->Draw();
 }
@@ -136,6 +139,7 @@ void PoorEnemyBase::StateIdle::Enter() {
 }
 
 void PoorEnemyBase::StateIdle::Update() {
+   StateBase::Update();
    auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
    _owner.Rotate();
    // 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
@@ -155,6 +159,7 @@ void PoorEnemyBase::StateSideStep::Enter() {
 }
 
 void PoorEnemyBase::StateSideStep::Update() {
+   StateBase::Update();
    auto length = (_moveOnPos - _owner._position).Lenght();
    if (length <= StepDistanceLimit){
       _owner._stateServer->GoToState("Idle");
@@ -168,6 +173,7 @@ void PoorEnemyBase::StateFall::Enter() {
 }
 
 void PoorEnemyBase::StateFall::Update() {
+   StateBase::Update();
    auto y = 0.5 * Gravity * _stateCnt * _stateCnt;
    _owner._position.Add(Vector4(0.0, y, 0.0));
    _owner.Rotate();
@@ -186,6 +192,7 @@ void PoorEnemyBase::StateDie::Enter() {
    auto efcCrash = std::make_unique<Effect::EffectPoorCrash>(_owner._gameMain, "PoorCrash");
    efcCrash->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcCrash));
+   _owner.GetSoundComponent().Play("PoorCrash",_owner._position);
 }
 
 void PoorEnemyBase::StateDie::Update() {

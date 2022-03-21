@@ -31,6 +31,7 @@ void ModeMissionCompleted::Init() {
 }
 
 void ModeMissionCompleted::Enter() {
+   GetSoundComponent().Play("ClearResult");
 }
 
 void ModeMissionCompleted::Input(AppFrame::Input::InputManager& input) {

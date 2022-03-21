@@ -135,6 +135,46 @@
 			"volume": 100,
 			"is3Dsound": false,
 			"radius": 0.0
+		},
+		{
+			"keyname": "ObjectFall",
+			"filename": "ObjectFall.wav",
+			"isload": true,
+			"volume": 150,
+			"is3Dsound": false,
+			"radius": 3000.0
+		},
+		{
+			"keyname": "ObjectHit",
+			"filename": "ObjectHit.wav",
+			"isload": true,
+			"volume": 250,
+			"is3Dsound": true,
+			"radius": 3000.0
+		},
+		{
+			"keyname": "PoorCrash",
+			"filename": "PoorCrash.wav",
+			"isload": true,
+			"volume": 150,
+			"is3Dsound": true,
+			"radius": 3000.0
+		},
+		{
+			"keyname": "GameOver",
+			"filename": "GameOver.wav",
+			"isload": true,
+			"volume": 100,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "ClearResult",
+			"filename": "ClearResult.wav",
+			"isload": true,
+			"volume": 100,
+			"is3Dsound": false,
+			"radius": 0.0
 		}
 	]
 }

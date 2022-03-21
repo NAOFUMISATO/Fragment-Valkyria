@@ -57,4 +57,5 @@ void PoorEnemyMelee::StateRush::Update() {
    else {
       _owner._stateServer->GoToState("Idle");
    }
+   StateBase::Update();
 }

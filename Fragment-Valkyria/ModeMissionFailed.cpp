@@ -48,6 +48,7 @@ void ModeMissionFailed::Update() {
    if (!_cntInit) {
       _animeCnt = _gameMain.modeServer().frameCount();
       _cntInit = true;
+      GetSoundComponent().Play("GameOver");
    }
    auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
    auto frame = gameCount - _animeCnt;

@@ -1,4 +1,11 @@
 
+/*****************************************************************//**
+ * \file   LargeEnemyHP.cpp
+ * \brief  ラージエネミーの体力描画クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   March 2022
+ *********************************************************************/
 #include "LargeEnemyHP.h"
 #include "GameMain.h"
 #include "ObjectServer.h"

@@ -16,10 +16,10 @@
 
 namespace {
    auto gatParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",{ "speed" });
-   const double Speed = gatParamMap["speed"];
+   const double Speed = gatParamMap["speed"];            //!< スピード
 
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "gatling_radius" });
-   const double Radius = collParamMap["gatling_radius"];
+   const double Radius = collParamMap["gatling_radius"]; //!< ガトリングの半径
 }
 
 using namespace FragmentValkyria::Enemy;

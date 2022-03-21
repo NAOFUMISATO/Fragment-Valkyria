@@ -9,15 +9,14 @@
 #include "Color.h"
 #include <string>
 #include <array>
+/**
+ * \brief アプリケーションフレーム
+ */
 namespace AppFrame {
+   /**
+    * \brief データ関係
+    */
    namespace Data {
-      Color::Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a) :
-         _red(r), _green(g), _blue(b), _alpha(a) {
-      };
-      Color::Color(unsigned char r, unsigned char g, unsigned char b) :
-         _red(r), _green(g), _blue(b) {
-      };
-
       unsigned int Color::GetColorCode() {
          std::array<unsigned char, 3> color = { _red,_green,_blue };
          std::string redCode;

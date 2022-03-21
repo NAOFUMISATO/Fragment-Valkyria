@@ -28,14 +28,18 @@ namespace AppFrame {
           * \param b 青値
           * \param a 透明値
           */
-         Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+         Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a) :
+            _red(r), _green(g), _blue(b), _alpha(a) {
+         };
          /**
           * \brief コンストラクタ(透明値除く)
           * \param r 赤値
           * \param g 緑値
           * \param b 青値
           */
-         Color(unsigned char r, unsigned char g, unsigned char b);
+         Color(unsigned char r, unsigned char g, unsigned char b) :
+            _red(r), _green(g), _blue(b) {
+         };
          /**
           * \brief 空のコンストラクタ
           */

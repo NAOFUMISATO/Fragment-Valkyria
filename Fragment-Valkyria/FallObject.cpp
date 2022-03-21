@@ -103,6 +103,7 @@ void FallObject::HitCheckFromLargeEnemy() {
       auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
       efcHit->position(_position);
       GetEfcServer().Add(std::move(efcHit));
+      GetSoundComponent().Play("ObjectHit", _position);
       _stateServer->GoToState("Die");
    }
 }
@@ -125,6 +126,7 @@ void FallObject::HitCheckFromPoorEnemy() {
       auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
       efcHit->position(_position);
       GetEfcServer().Add(std::move(efcHit));
+      GetSoundComponent().Play("ObjectHit",_position);
       // 雑魚敵と当たったら死亡状態へ
       _stateServer->GoToState("Die");
    }
@@ -322,6 +324,7 @@ void FallObject::StateFall::Update() {
       // 残留オブジェクトの場合待機状態へ
       else {
          _owner._stateServer->GoToState("Idle");
+         _owner.GetSoundComponent().Play("ObjectFall",_owner._position);
       }
    }
    // カプセルの位置の設定
@@ -390,7 +393,7 @@ void FallObject::StateSave::Input(InputManager& input) {
 }
 
 void FallObject::StateSave::Update() {
-    // 浮かせながら回転させる
+   // 浮かせながら回転させる
    _owner.Save();
    // カプセルの位置の設定
    _owner.SetCapsulePos();
