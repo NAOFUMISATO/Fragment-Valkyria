@@ -11,8 +11,10 @@
 #include "ObjectServer.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "portion_diff_x" });
    const double DiffX = paramMap["portion_diff_x"];
+   // Jsonファイルから各Vector4データを取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "portion_pos" });
    const auto PortionPos = vecParamMap["portion_pos"];
    constexpr auto ThirdMultRate = 2.0;

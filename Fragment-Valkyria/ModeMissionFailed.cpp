@@ -10,13 +10,14 @@
 #include "GameMain.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("over", { "missionfailed_x","missionfailed_y","missionfailed_animespeed","bg_alpha" });
    const int MissionFailedX = paramMap["missionfailed_x"];
    const int MissionFailedY = paramMap["missionfailed_y"];
    const int MissionFailedAnimeSpeed = paramMap["missionfailed_animespeed"];
    const int BgAlpha = paramMap["bg_alpha"];
-   constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
-   constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
+   constexpr auto BoxWidth = 1920;
+   constexpr auto BoxHeight = 1080;
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
    constexpr auto FailedAnimeSpeed = 1;

@@ -34,19 +34,23 @@ namespace AppFrame {
 
       void CurrentPathServer::RegistCurrentPath(const CurrentPathMap& pathMap) {
          for (auto&& [key, path] : pathMap) {
+            // 登録しようとしたキーがあれば古いキーは削除する
             if (_currentPaths.contains(key.data())) {
                _currentPaths.erase(key.data());
             }
+            // パスマップに登録する
             _currentPaths.emplace(key, path);
          }
       }
 
       std::filesystem::path CurrentPathServer::GetCurrentPath(std::string_view key) {
 #ifndef _DEBUG
+         // 指定のキーが無ければ空の文字列を返す
          if (!_currentPaths.contains(key.data())) {
             return "";
          }
 #else
+         // 指定のキーが無ければ、エラーメッセージを出力する
          try {
             if (!_currentPaths.contains(key.data())) {
                std::string message = key.data();
@@ -57,6 +61,7 @@ namespace AppFrame {
             OutputDebugString(error.what());
          }
 #endif
+         // 指定のキーのファイルパスを返す
          return _currentPaths[key.data()];
       }
    }

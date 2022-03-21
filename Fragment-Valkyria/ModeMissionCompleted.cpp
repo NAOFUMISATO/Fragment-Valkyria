@@ -9,6 +9,7 @@
 #include "ModeMissionCompleted.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", {"missioncomp_x","missioncomp_y","missioncomp_animespeed","bg_alpha" });
    const int MissionCompX = paramMap["missioncomp_x"];
    const int MissionCompY = paramMap["missioncomp_y"];

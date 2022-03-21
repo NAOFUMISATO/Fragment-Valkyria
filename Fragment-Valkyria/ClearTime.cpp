@@ -10,9 +10,10 @@
 #include "GameMain.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", { "number_diffx" });
    const double NumberDiffX = paramMap["number_diffx"];
-
+   // Jsonファイルから各Vector4データを取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "time_pos" });
    const auto TimePos = vecParamMap["time_pos"];
 

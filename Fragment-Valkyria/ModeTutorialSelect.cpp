@@ -16,8 +16,6 @@ namespace {
    constexpr auto YesY = 500;
    constexpr auto NoX = 860;
    constexpr auto NoY = 700;
-
-
 }
 
 using namespace FragmentValkyria::Mode;

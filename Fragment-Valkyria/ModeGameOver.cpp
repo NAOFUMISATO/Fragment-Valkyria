@@ -11,6 +11,7 @@
 using namespace FragmentValkyria::Mode;
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("over", {"continue_x","continue_y","exit_x","exit_y"});
    const int ContinuePosX = paramMap["continue_x"];
    const int ContinuePosY = paramMap["continue_y"];

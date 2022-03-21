@@ -13,8 +13,10 @@
 #include "PlayerHP.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", {"reticle_animespeed"});
    const int ReticleAnimeSpeed = paramMap["reticle_animespeed"];
+   // Jsonファイルから各Vector4データを取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "reticle_pos" });
    const auto ReticlePos = vecParamMap["reticle_pos"];
 

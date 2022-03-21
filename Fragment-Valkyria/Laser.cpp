@@ -14,6 +14,7 @@
 #include "LargeEnemy.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
       { "laser_radius" });
    const double Radius = paramMap["laser_radius"];

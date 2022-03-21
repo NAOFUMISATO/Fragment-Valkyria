@@ -30,11 +30,12 @@
 #include "TutorialTips.h"
 
 namespace {
-   constexpr auto MaxWave = 3;
+   // Jsonファイルから各値を取得する
    auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp","max_bullet","max_portion" });
    const double MaxHp = playerParamMap["max_hp"];
    const int MaxBullet = playerParamMap["max_bullet"];
    const int MaxPortion = playerParamMap["max_portion"];
+   constexpr auto MaxWave = 3;
 }
 
 using namespace FragmentValkyria::Mode;

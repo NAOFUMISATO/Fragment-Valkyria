@@ -15,9 +15,10 @@
 #include "EffectServer.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto gatParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",{ "speed" });
    const double Speed = gatParamMap["speed"];            //!< スピード
-
+   // Jsonファイルから各値を取得する
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "gatling_radius" });
    const double Radius = collParamMap["gatling_radius"]; //!< ガトリングの半径
 }

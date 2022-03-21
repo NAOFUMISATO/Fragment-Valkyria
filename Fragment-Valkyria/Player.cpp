@@ -19,6 +19,7 @@
 #include "EffectServer.h"
 
 namespace {
+    // Jsonファイルから各値を取得する
     auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player",{
        "idle_animespeed","walk_animespeed","run_animespeed","shootready_animespeed","shoot_animespeed",
        "knockback_animespeed","run_speed","recovery_rate", "max_hp","max_bullet", "max_portion",
@@ -42,7 +43,7 @@ namespace {
     const int InvincibleFrame = playerParamMap["invincible_frame"];                 //!< 無敵フレーム
     const int BlinkingFrame = playerParamMap["blinking_frame"];                     //!< 無敵時の点滅フレーム
     const int CoolTime = playerParamMap["cooltime"];                                //!< 遠隔弱攻撃のクールタイムのフレーム数
-
+    // Jsonファイルから各Vector4データを取得する
     auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "ply_radius",
        "ply_capsule_pos1","ply_capsule_pos2" });
     const double CapsuleRadius = collParamMap["ply_radius"];                        //!< カプセルの半径

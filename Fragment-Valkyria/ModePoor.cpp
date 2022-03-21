@@ -27,10 +27,11 @@
 #include "ModelAnimeComponent.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto poorParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
       { "max_wave" });
    const int MaxWave = poorParamMap["max_wave"];
-
+   // Jsonファイルから各値を取得する
    auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp","max_bullet","max_portion" });
    const double MaxHp = playerParamMap["max_hp"];
    const int MaxBullet = playerParamMap["max_bullet"];

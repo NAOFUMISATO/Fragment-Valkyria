@@ -10,6 +10,7 @@
 #include "GameMain.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("option",{"default_camera_sens","default_aim_sens",
       "default_deadzone","sensivity_min","sensivity_max","deadzone_min","deadzone_max","aimsens_x" ,"aimsens_y" ,
       "aimbar_x","aimbar_y","camerasens_x","camerasens_y","camerabar_x","camerabar_y","deadzone_x" ,"deadzone_y" ,

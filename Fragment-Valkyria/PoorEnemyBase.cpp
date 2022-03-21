@@ -18,6 +18,7 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
       { "gravity", "rotate_speed" ,"step_distance","step_speed","idle_animespeed",
       "walk_animespeed","fall_animespeed","die_animespeed","white_frame" });

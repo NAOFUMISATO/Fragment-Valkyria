@@ -24,6 +24,7 @@
 #include "EffectBossCrash.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
       "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
       "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",

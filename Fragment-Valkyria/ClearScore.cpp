@@ -10,13 +10,14 @@
 #include "GameMain.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", {
       "s_scoresec","a_scoresec","b_scoresec","c_scoresec" });
    const int SScoreSec = paramMap["s_scoresec"];
    const int AScoreSec = paramMap["a_scoresec"];
    const int BScoreSec = paramMap["b_scoresec"];
    const int CScoreSec = paramMap["c_scoresec"];
-
+   // Jsonファイルから各Vector4データを取得する
    auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "score_pos" });
    const auto ScorePos = vecParamMap["score_pos"];
 

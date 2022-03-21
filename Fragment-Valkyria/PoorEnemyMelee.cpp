@@ -14,6 +14,7 @@
 #include "ObjectServer.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
       { "rush_speed", "rush_frame","rush_animespeed" });
 

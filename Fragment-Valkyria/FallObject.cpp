@@ -19,6 +19,7 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
       { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
       "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
@@ -31,8 +32,8 @@ namespace {
    const double UpValue = fallParamMap["up_value"];
    const double FallPointPosY = fallParamMap["fallpoint_pos_y"];
    const double FallPointScale = fallParamMap["fallpoint_scale"];
-   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];       
-
+   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];
+   
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_drum_capsule_pos1",
       "fallobject_drum_capsule_pos2", "fallobject_drum_radius" });
    const double Range = collParamMap["fallobject_range"];                        //!< オブジェクトを持ち上げられる範囲を形成する球の半径

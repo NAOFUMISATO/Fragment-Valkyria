@@ -29,7 +29,7 @@ namespace AppFrame {
     * \brief ÉÇÅ[Éhä÷åWñºëOãÛä‘
     */
    namespace Mode {
-      ModeFadeBase::ModeFadeBase(Game::GameBase& appBase) : ModeBaseRoot(appBase){
+      ModeFadeBase::ModeFadeBase(Game::GameBase& gameBase) : ModeBaseRoot(gameBase){
       }
 
       void ModeFadeBase::Render() {

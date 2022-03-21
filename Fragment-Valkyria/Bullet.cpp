@@ -11,9 +11,10 @@
 #include "ObjectServer.h"
 
 namespace {
+   // Jsonファイルから各値を取得する
    auto bulletParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("weakbullet", { "speed" });
    const double Speed = bulletParamMap["speed"];        //!< 移動の速さ
-
+   // Jsonファイルから各値を取得する
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "bullet_radius" });
    const double Radius = collParamMap["bullet_radius"]; //!< 球の半径
 }
