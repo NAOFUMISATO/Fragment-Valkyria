@@ -26,13 +26,13 @@ CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} 
 }
 
 void CameraComponent::Init() {
-    //プレイヤーからのカメラの注視点へのベクトルを作成
+    // プレイヤーからのカメラの注視点へのベクトルを作成
     _firstPlyToTarget = _target - _plyPos;
-    //プレイヤーからのカメラの位置へのベクトルを作成
+    // プレイヤーからのカメラの位置へのベクトルを作成
     _firstPlyToPos = _position - _plyPos;
-    //ベクトルを90度回転させるマトリクスの作成
+    // ベクトルを90度回転させるマトリクスの作成
     _anyAxisMatrix.RotateY(90.0, true);
-    //カメラの位置から注視点へのベクトルの作成
+    // カメラの位置から注視点へのベクトルの作成
     auto posToTarget = _target - _position;
     posToTarget.Normalized();
     _posToTarget = posToTarget * 300.0;
@@ -41,19 +41,19 @@ void CameraComponent::Init() {
 }
 
 void CameraComponent::Input(AppFrame::Input::InputManager& input) {
-    //各状態の入力処理を回す
+    // 各状態の入力処理を回す
     _stateServer->Input(input);
 }
 
 void CameraComponent::Update() {
-    //各状態の更新処理を回す
+    // 各状態の更新処理を回す
     _stateServer->Update();
 
-    //ビュー行列の設定
+    // ビュー行列の設定
     auto cameraMatrix = GetCameraViewMatrix(_position, _target, _up);
     SetCameraViewMatrix(ToDX(cameraMatrix));
 
-    //投影行列の設定
+    // 投影行列の設定
     auto [cameraNear, cameraFar, fov] = _nearFarFov;
     auto projectionMatrix = GetCameraProjectionMatrix(cameraNear, cameraFar, fov);
     SetupCamera_ProjectionMatrix(ToDX(projectionMatrix));
@@ -80,29 +80,33 @@ AppFrame::Math::Matrix44 CameraComponent::GetCameraProjectionMatrix(double camer
 }
 
 void CameraComponent::Rotate() {
-    //プレイヤーの位置からの注視点へのベクトルを作成
+    // プレイヤーの位置からの注視点へのベクトルを作成
     _plyToTarget = _firstPlyToTarget * _rotateMatrix;
-    //ズーム率をサインの値から算出
+    // ズーム率をサインの値から算出
     auto sinValue = std::sin(_zoomRateRadian);
     _zoomRate = _posToTarget * sinValue;
-    //プレイヤーからカメラの位置へのベクトルを作成
+    // プレイヤーからカメラの位置へのベクトルを作成
     _plyToPos = (_firstPlyToPos + _zoomRate) * _rotateMatrix;
 }
 
 void CameraComponent::Placement() {
-    //プレイヤーの位置からカメラの注視点を設定する
+    // プレイヤーの位置からカメラの注視点を設定する
     _target = _plyPos + _plyToTarget;
-    //プレイヤーの位置からカメラの位置を設定する
+    // プレイヤーの位置からカメラの位置を設定する
     _position = _plyPos + _plyToPos;
     _position.Add(0.0, _vibrationValue, 0.0);
 }
 
 void CameraComponent::Vibration() {
-    for (auto i = 0.0; i < DivideT; ++i) {
-        _vibrationValue += _vibrationVelocity / DivideT;
-        _vibrationVelocity += (-SpringK * (_vibrationValue - CenterHeight)) / DivideT;
-    }
-    _vibrationVelocity *= 0.9;
+   // オイラー法の時間の分割数分for文を回す
+   for (auto i = 0.0; i < DivideT; ++i) {
+      // 時間の分割数で割った速度をYの位置に足していく
+      _vibrationValue += _vibrationVelocity / DivideT;
+      // 速度に時間の分割数で割ったYの位置から自然長を引いたものにばね定数を掛けたものを足していく
+      _vibrationVelocity += (-SpringK * (_vibrationValue - CenterHeight)) / DivideT;
+   }
+   // 速度を減衰させる
+   _vibrationVelocity *= 0.9;
 }
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
@@ -309,18 +313,21 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
 }
 
 void CameraComponent::StateNormal::Update() {
-    _owner.Rotate();
-    _owner.Vibration();
-    _owner.Placement();
-    // ズームする場合はズーム状態へ
-    if (_owner._zoom) {
-        _owner._stateServer->PushBack("ZoomIn");
-    }
+   // 回転処理
+   _owner.Rotate();
+   // 振動処理
+   _owner.Vibration();
+   // 移動処理
+   _owner.Placement();
+   // ズームする場合はズーム状態へ
+   if (_owner._zoom) {
+      _owner._stateServer->PushBack("ZoomIn");
+   }
 }
 
 void CameraComponent::StateZoomIn::Enter() {
-    // ズームの割合のサインの値を取るラジアンの0.0に
-    _owner._zoomRateRadian = 0.0;
+   // ズームの割合のサインの値を取るラジアンを0.0に
+   _owner._zoomRateRadian = 0.0;
 }
 
 void CameraComponent::StateZoomIn::Update() {
@@ -331,8 +338,11 @@ void CameraComponent::StateZoomIn::Update() {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("ShootReady");
     }
+    // 回転処理
     _owner.Rotate();
+    // 振動処理
     _owner.Vibration();
+    // 移動処理
     _owner.Placement();
 }
 
@@ -540,8 +550,11 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
 }
 
 void CameraComponent::StateShootReady::Update() {
+   // 回転処理
     _owner.Rotate();
+    // 振動処理
     _owner.Vibration();
+    // 移動処理
     _owner.Placement();
     // ズームしない場合ズームアウト状態へ
     if (!_owner._zoom) {
@@ -558,7 +571,10 @@ void CameraComponent::StateZoomOut::Update() {
         _owner._stateServer->PopBack();
         _owner._stateServer->PushBack("Normal");
     }
+    // 回転処理
     _owner.Rotate();
+    // 振動処理
     _owner.Vibration();
+    // 移動処理
     _owner.Placement();
 }

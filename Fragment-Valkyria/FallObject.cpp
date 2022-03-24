@@ -23,16 +23,16 @@ namespace {
    auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
       { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
       "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
-   const double Gravity = fallParamMap["gravity"];
-   const double ShootSpeed = fallParamMap["shoot_speed"];
-   const double UpSpeed = fallParamMap["up_speed"];
-   const double RotateAngle = fallParamMap["rotate_angle"];
-   const double UpDownRange = fallParamMap["updown_range"];
-   const double RightHandUpValue = fallParamMap["right_hand_up_value"];
-   const double UpValue = fallParamMap["up_value"];
-   const double FallPointPosY = fallParamMap["fallpoint_pos_y"];
-   const double FallPointScale = fallParamMap["fallpoint_scale"];
-   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];
+   const double Gravity = fallParamMap["gravity"];                               //!< 重力
+   const double ShootSpeed = fallParamMap["shoot_speed"];                        //!< 注視点に向かって進む速度
+   const double UpSpeed = fallParamMap["up_speed"];                              //!< 上に上がるスピード
+   const double RotateAngle = fallParamMap["rotate_angle"];                      //!< オブジェクトを回転させる角度の範囲
+   const double UpDownRange = fallParamMap["updown_range"];                      //!< 上下にふわふわさせる範囲
+   const double RightHandUpValue = fallParamMap["right_hand_up_value"];          //!< プレイヤーの右手に向かっていく速度
+   const double UpValue = fallParamMap["up_value"];                              //!< 上に上げていく処理の高さの最大値
+   const double FallPointPosY = fallParamMap["fallpoint_pos_y"];                 //!< 落ちる場所のビルボードの高さ
+   const double FallPointScale = fallParamMap["fallpoint_scale"];                //!< 落ちる場所のビルボードの大きさ
+   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];         //!< 落ちる場所のビルボードのアニメーションの速度
    
    auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_drum_capsule_pos1",
       "fallobject_drum_capsule_pos2", "fallobject_drum_radius" });
@@ -41,9 +41,8 @@ namespace {
    const double DrumCapsulePos2 = collParamMap["fallobject_drum_capsule_pos2"];  //!< ドラム缶のカプセルの二つ目の位置までの位置からの高さ
    const double DrumCapsuleRadius = collParamMap["fallobject_drum_radius"];      //!< ドラム缶のカプセルの半径
 
-   constexpr auto DefaultPointScale = 1.0;
-   constexpr auto DefaultPointAngle = 0.0;
-   constexpr auto UpEffectDiffY = 20.0;
+   constexpr auto DefaultPointAngle = 0.0;                                       //!< 落ちる場所のビルボードの回転角度
+   constexpr auto UpEffectDiffY = 20.0;                                          //!< エフェクトの高さ
 }
 
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
