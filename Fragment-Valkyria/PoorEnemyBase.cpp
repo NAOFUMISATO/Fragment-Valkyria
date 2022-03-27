@@ -94,7 +94,7 @@ void PoorEnemyBase::HitCheckFromBullet() {
          _stateServer->GoToState("Die");
       }
       else {
-         _damageCnt = _gameMain.modeServer().frameCount() - _damageCnt;
+         _damageCnt = _gameMain.modeServer().frameCount();
       }
    }
 }
@@ -116,12 +116,12 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 void PoorEnemyBase::DamageExpression() {
    auto frame = static_cast<int>(_gameMain.modeServer().frameCount() - _damageCnt);
    if (frame < WhiteFrame) {
-      _modelAnimeComponent->SetEmiColor(0, 1.0f, 1.0f, 1.0f);
-      _modelAnimeComponent->SetEmiColor(1, 1.0f, 1.0f, 1.0f);
+      _modelAnimeComponent->SetBlendModeAdd(0);
+      _modelAnimeComponent->SetBlendModeAdd(1);
    }
    else {
-      _modelAnimeComponent->SetEmiColor(0, 0.0f, 0.0f, 0.0f);
-      _modelAnimeComponent->SetEmiColor(1, 0.0f, 0.0f, 0.0f);
+      _modelAnimeComponent->SetBlendModeAlpha(0);
+      _modelAnimeComponent->SetBlendModeAlpha(1);
    }
 }
 

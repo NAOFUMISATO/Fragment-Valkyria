@@ -860,6 +860,7 @@ void Player::StateShootReady::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true, ShootReadyAnimeSpeed);
    // 鳴らすサウンドの設定
    _owner.GetSoundComponent().Play("PlayerShootReady");
+   _owner.GetSoundComponent().Play("PlayerObjectUpVoice");
    // アニメーションは変えていないと設定
    _changeAnim = false;
    // エイム中と設定
@@ -877,6 +878,7 @@ void Player::StateShootReady::Input(InputManager& input) {
       _owner._stateServer->GoToState("Idle");
       // 鳴らすサウンドの設定
       _owner.GetSoundComponent().Play("PlayerShoot");
+      _owner.GetSoundComponent().Play("PlayerObjectShootVoice");
       // モデルのアニメーションの設定
       _owner._modelAnimeComponent->ChangeAnime("H_attack_attack",false, ShootAnimeSpeed);
       // カメラのズームをしないと設定
@@ -927,6 +929,7 @@ void Player::StateKnockBack::Enter() {
    _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner.modelAnimeComponent().ChangeAnime("damaged", false, KnockBackAnimeSpeed);
+   _owner.GetSoundComponent().Play("PlayerDamageVoice");
    // ノックバックする時間の設定
    _owner._freezeTime = 30;
    // オブジェクトを持ち上げられないと設定

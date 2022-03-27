@@ -54,7 +54,7 @@ namespace FragmentValkyria {
           */
          void WaveProcess();
          int _wave{ 0 };   //!< 雑魚戦ウェーブ数
-         bool _playSound{ false };
+         bool _playSound{ true };
       };
    }
 }

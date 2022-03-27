@@ -96,6 +96,7 @@ void ModeTitle::Render() {
 
 void ModeTitle::LogoAnimation() {
    if (!_cntInit) {
+      GetSoundComponent().Play("TitleVoice");
       _logoCnt = _gameMain.modeServer().frameCount();
       _cntInit = true;
    }

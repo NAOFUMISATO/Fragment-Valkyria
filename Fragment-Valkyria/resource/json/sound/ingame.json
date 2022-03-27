@@ -100,7 +100,7 @@
 			"keyname": "BossStan",
 			"filename": "BossStan.wav",
 			"isload": true,
-			"volume": 255,
+			"volume": 150,
 			"is3Dsound": false,
 			"radius": 0.0
 		},
@@ -108,17 +108,17 @@
 			"keyname": "BossBeam",
 			"filename": "BossBeam.wav",
 			"isload": true,
-			"volume": 50,
+			"volume": 70,
 			"is3Dsound": true,
-			"radius": 3000.0
+			"radius": 6000.0
 		},
 		{
 			"keyname": "BossCharge",
 			"filename": "BossCharge.wav",
 			"isload": true,
-			"volume": 50,
+			"volume": 70,
 			"is3Dsound": true,
-			"radius": 3000.0
+			"radius": 6000.0
 		},
 		{
 			"keyname": "LightOn",
@@ -148,7 +148,7 @@
 			"keyname": "ObjectHit",
 			"filename": "ObjectHit.wav",
 			"isload": true,
-			"volume": 250,
+			"volume": 150,
 			"is3Dsound": true,
 			"radius": 3000.0
 		},
@@ -173,6 +173,78 @@
 			"filename": "ClearResult.wav",
 			"isload": true,
 			"volume": 100,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "BossBattleStartVoice",
+			"filename": "BossBattleStartVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "GameClearVoice",
+			"filename": "GameClearVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "GameOverVoice",
+			"filename": "GameOverVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "PlayerObjectShootVoice",
+			"filename": "PlayerObjectShootVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "PlayerObjectUpVoice",
+			"filename": "PlayerObjectUpVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "PlayerDamageVoice",
+			"filename": "PlayerDamageVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "PoorBattleStartVoice",
+			"filename": "PoorBattleStartVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "PoorBattleEndVoice",
+			"filename": "PoorBattleEndVoice.wav",
+			"isload": true,
+			"volume": 80,
+			"is3Dsound": false,
+			"radius": 0.0
+		},
+		{
+			"keyname": "TitleVoice",
+			"filename": "TitleVoice.wav",
+			"isload": true,
+			"volume": 80,
 			"is3Dsound": false,
 			"radius": 0.0
 		}

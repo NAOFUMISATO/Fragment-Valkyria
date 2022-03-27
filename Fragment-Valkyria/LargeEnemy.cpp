@@ -471,6 +471,7 @@ void LargeEnemy::StateFall::Exit() {
    efcFall->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcFall));
    _owner._cameraComponent->SetVibValue(0.0);
+   _owner.GetSoundComponent().Play("BossBattleStartVoice");
    _owner.GetSoundComponent().PlayLoop("BossBattleBgm");
 }
 

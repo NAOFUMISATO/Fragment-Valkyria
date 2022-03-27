@@ -32,6 +32,7 @@ void ModeMissionCompleted::Init() {
 }
 
 void ModeMissionCompleted::Enter() {
+   GetSoundComponent().Play("GameClearVoice");
    GetSoundComponent().Play("ClearResult");
 }
 

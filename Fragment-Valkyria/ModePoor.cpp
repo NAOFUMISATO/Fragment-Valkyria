@@ -71,6 +71,7 @@ void ModePoor::Enter() {
    objServer.Add(std::move(player));
    GetSoundComponent().PlayLoop("PoorBattleBgm");
    _wave = 1;
+   _playSound = true;
    _gameMain.ingameTimer(0);
    _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
    ModeInGameBase::Enter();
@@ -88,6 +89,10 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModePoor::Update() {
+   if (_playSound) {
+      GetSoundComponent().Play("PoorBattleStartVoice");
+      _playSound = false;
+   }
    ModeInGameBase::Update();
    WaveProcess();
 }
@@ -108,6 +113,7 @@ void ModePoor::WaveProcess() {
    if (!isActiveEnemy) {
       // 最大waveに達したならモード遷移を行う
       if (_wave >= MaxWave) {
+         GetSoundComponent().Play("PoorBattleEndVoice");
          _gameMain.isPoorClear(true);
          GetModeServer().GoToMode("Loading", 'S');
       }
