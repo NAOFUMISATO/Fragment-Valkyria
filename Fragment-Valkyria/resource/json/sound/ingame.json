@@ -100,9 +100,9 @@
 			"keyname": "BossStan",
 			"filename": "BossStan.wav",
 			"isload": true,
-			"volume": 150,
-			"is3Dsound": false,
-			"radius": 0.0
+			"volume": 200,
+			"is3Dsound": true,
+			"radius": 6000.0
 		},
 		{
 			"keyname": "BossBeam",

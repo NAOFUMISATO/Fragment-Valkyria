@@ -864,6 +864,7 @@ void LargeEnemy::StateStun::Enter() {
    auto efcStan = std::make_unique<Effect::EffectBossStan>(_owner._gameMain, "BossStan");
    efcStan->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcStan));
+   _owner.GetSoundComponent().Play("BossStan");
 
 }
 
