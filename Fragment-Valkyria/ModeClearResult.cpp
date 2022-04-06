@@ -28,6 +28,7 @@ void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
    GetSprServer().Input(input);
    if (input.GetXJoypad().AClick()) {
       GetSoundComponent().Stop("BossBattleBgm");
+      GetSoundComponent().Stop("ClearResult");
       GetModeServer().GoToMode("Title");
    }
 }

@@ -74,6 +74,7 @@ void ModeGameOver::StateContinue::Input(InputManager& input){
       _owner.GetSoundComponent().Stop("TutorialBgm");
       _owner.GetSoundComponent().Stop("PoorBattleBgm");
       _owner.GetSoundComponent().Stop("BossBattleBgm");
+      _owner.GetSoundComponent().Stop("GameOver");
       _owner.GetModeServer().GoToMode("Loading",'S');
    }
 }
@@ -94,6 +95,7 @@ void ModeGameOver::StateExit::Input(InputManager& input) {
       _owner.GetSoundComponent().Stop("TutorialBgm");
       _owner.GetSoundComponent().Stop("PoorBattleBgm");
       _owner.GetSoundComponent().Stop("BossBattleBgm");
+      _owner.GetSoundComponent().Stop("GameOver");
       _owner.GetModeServer().GoToMode("Title");
    }
 }
