@@ -17,7 +17,7 @@ namespace {
    const int DeadZoneDivideValue = paramMap["dead_zone_divide_value"];     //!< パッドのスティックの一定方向の入力範囲を一定の分割数で割った数
    const double CenterHeight = paramMap["center_height"];                  //!< ばねの動きを始める位置までの高さ
    const double SpringK = paramMap["spring_k"];                            //!< ばね定数
-   const double DivideT = paramMap["divide_t"];                            //!< オイラー法の時間の分割数
+   const double DivideT = paramMap["divide_t"];                            //!< オイラー法の時間分割精度
 }
 
 using namespace FragmentValkyria::Camera;

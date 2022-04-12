@@ -140,15 +140,12 @@ void LargeEnemy::CreateFallObject() {
    using Matrix44 = AppFrame::Math::Matrix44;
    // 生成する数を生成されている落下オブジェクトの数に設定
    _createNum = 3;
-   // オブジェクトサーバーの各オブジェクトの取得
-   for (auto&& object : _gameMain.objServer().runObjects()) {
-      // 落下オブジェクトじゃなかったら処理をスキップして戻る
-      if (object->GetObjType() != Object::ObjectBase::ObjectType::FallObject) {
-         continue;
-      }
-      // 落下オブジェクトだったら生成されている落下オブジェクトの数を増やす
-      ++_createNum;
-   }
+   // 存在している落下オブジェクトの数を取得
+   auto& runObjects = _gameMain.objServer().runObjects();
+   auto fallObjectNum = std::count_if(runObjects.begin(), runObjects.end(),
+      [](std::unique_ptr<FragmentValkyria::Object::ObjectBase>& object) {return object->GetObjType() == Object::ObjectBase::ObjectType::FallObject; });
+   // 生成されている落下オブジェクトの総数を計算
+   _createNum += static_cast<int>(fallObjectNum);
    // 生成されている落下オブジェクトの数が落下オブジェクトの最大数より大きいか確認
    if (_createNum > MaxNum) {
       // 生成されている落下オブジェクトの数が落下オブジェクトの最大数より大きかったらオブジェクトサーバーの各オブジェクトを取得
