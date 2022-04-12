@@ -132,6 +132,9 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>ソース ファイル\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="ParamBase.cpp">
+      <Filter>ソース ファイル\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h">
@@ -219,6 +222,9 @@
       <Filter>ヘッダー ファイル\Data</Filter>
     </ClInclude>
     <ClInclude Include="SoundData.h">
+      <Filter>ヘッダー ファイル\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamBase.h">
       <Filter>ヘッダー ファイル\Resource</Filter>
     </ClInclude>
   </ItemGroup>

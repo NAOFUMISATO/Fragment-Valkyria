@@ -60,8 +60,7 @@ namespace AppFrame {
          //•`‰ææ‚ğ— ‰æ–Ê‚ÉƒZƒbƒg
          SetDrawScreen(DX_SCREEN_BACK);
          // Effekseer‚Ì‰Šú‰»
-         if (Effekseer_Init(8000) == -1)
-         {
+         if (Effekseer_Init(8000) == -1){
             DxLib_End();
             return -1;
          }

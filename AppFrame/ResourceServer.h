@@ -22,7 +22,7 @@ namespace AppFrame {
       class GameBase;
    }
    /**
-    * @brief リソース関係
+    * \brief リソース関係
     */
    namespace Resource {
       /**

@@ -175,6 +175,7 @@
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="CurrentPathServer.h" />
     <ClInclude Include="LoadResourceJson.h" />
+    <ClInclude Include="ParamBase.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="ResourceServer.h" />
     <ClInclude Include="SoundData.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="ModeFade.cpp" />
     <ClCompile Include="CurrentPathServer.cpp" />
     <ClCompile Include="LoadResourceJson.cpp" />
+    <ClCompile Include="ParamBase.cpp" />
     <ClCompile Include="ResourceServer.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />

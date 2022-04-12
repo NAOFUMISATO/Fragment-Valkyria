@@ -70,6 +70,14 @@ namespace AppFrame {
          void LoadEffects(const std::filesystem::path jsonName);
 
       private:
+         /**
+          * \brief jsonファイルを開き、コピーしたオブジェクトを返す
+          * \param pathName ゲーム本体側で定義したファイルパスのキー名
+          * \param jsonName jsonファイル名
+          * \return nlohmann::json型のオブジェクト
+          */
+         nlohmann::json JsonSetUp(const std::string_view pathName, const std::filesystem::path jsonName);
+
          Game::GameBase& _gameBase;   //!< ゲームベースの参照
       };
    }
