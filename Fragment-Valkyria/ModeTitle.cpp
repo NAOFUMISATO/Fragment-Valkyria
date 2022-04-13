@@ -7,44 +7,26 @@
  * \date   December 2021
  *********************************************************************/
 #include "ModeTitle.h"
+#include "ParamModeTitle.h"
 #include "GameMain.h"
 using namespace FragmentValkyria::Mode;
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("title",
-      { "bg_x","bg_y","title_x","title_y","title_animespeed","anybutton_x" ,"anybutton_y","anybutton_animespeed",
-      "start_x","start_y","start_animespeed","option_x","option_y","option_animespeed","end_x","end_y","end_animespeed" });
-   const int TitleBgPosX = paramMap["bg_x"];                        //!< タイトル背景X位置
-   const int TitleBgPosY = paramMap["bg_y"];                        //!< タイトル背景Y位置
-   const int GameTitlePosX = paramMap["title_x"];                   //!< ゲームタイトルX位置
-   const int GameTitlePosY = paramMap["title_y"];                   //!< ゲームタイトルY位置
-   const int GameTitleAnimeSpeed = paramMap["title_animespeed"];    //!< ゲームタイトルアニメーション速度
-   const int AnyButtonPosX = paramMap["anybutton_x"];               //!< プレスエニイボタンX位置
-   const int AnyButtonPosY = paramMap["anybutton_y"];               //!< プレスエニイボタンY位置
-   const int AnyButtonAnimeSpeed = paramMap["anybutton_animespeed"];//!< プレスエニイボタンアニメーション速度
-   const int GameStartPosX = paramMap["start_x"];                   //!< ゲーム開始セレクトX位置
-   const int GameStartPosY = paramMap["start_y"];                   //!< ゲーム開始セレクトY位置
-   const int GameStartAnimeSpeed = paramMap["start_animespeed"];    //!< ゲーム開始アニメーション速度
-   const int OptionPosX = paramMap["option_x"];                     //!< オプションセレクトX位置
-   const int OptionPosY = paramMap["option_y"];                     //!< オプションセレクトY位置
-   const int OptionAnimeSpeed = paramMap["option_animespeed"];      //!< オプションアニメーション速度
-   const int GameEndPosX = paramMap["end_x"];                       //!< ゲーム終了セレクトX位置
-   const int GameEndPosY = paramMap["end_y"];                       //!< ゲーム終了セレクトY位置
-   const int GameEndAnimeSpeed = paramMap["end_animespeed"];        //!< ゲーム終了アニメーション速度
-
-   constexpr auto DefaultAnimeSpeed = 1;                            //!< 各画像アニメーション速度
-   constexpr auto TitleBgCX = 0;                                    //!< タイトル背景画像X基準点
-   constexpr auto TitleBgCY = 0;                                    //!< タイトル背景画像Y基準点
-   constexpr auto DefaultGraphScale = 1.0;                          //!< 各画像拡大率
-   constexpr auto DefaultGraphAngle = 0.0;                          //!< 各画像角度
-   constexpr auto FirstInputFrame = 120;                            //!< エニイボタンから移行後、ゲーム開始を受け付けないフレーム数
+   constexpr auto DefaultAnimeSpeed = 1;   //!< 各画像アニメーション速度
+   constexpr auto TitleBgCX = 0;           //!< タイトル背景画像X基準点
+   constexpr auto TitleBgCY = 0;           //!< タイトル背景画像Y基準点
+   constexpr auto DefaultGraphScale = 1.0; //!< 各画像拡大率
+   constexpr auto DefaultGraphAngle = 0.0; //!< 各画像角度
+   constexpr auto FirstInputFrame = 120;   //!< エニイボタンから移行後、ゲーム開始を受け付けないフレーム数
 }
 
 ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
 }
 
 void ModeTitle::Init() {
+
+   _param = std::make_unique<Param::ParamModeTitle>(_gameMain, "title");
+
    GetLoadJson().LoadSounds("outgame");
 
    auto& resServer = GetResServer();
@@ -103,23 +85,37 @@ void ModeTitle::LogoAnimation() {
    auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
    auto frame = gameCount - _logoCnt;
    auto allNum = std::get<0>(GetResServer().GetTextureInfo("TitleLogo").GetDivParams());
-   if (frame < allNum * GameTitleAnimeSpeed) {
-      _logoHandle = _handleMap["TitleLogo"][(frame / GameTitleAnimeSpeed) % allNum];
+   auto titleAnimeSpeed = _param->GetIntParam("title_animespeed");
+   if (frame < allNum * titleAnimeSpeed) {
+      _logoHandle = _handleMap["TitleLogo"][(frame / titleAnimeSpeed) % allNum];
    }
 }
 
 void ModeTitle::StateBase::Draw() {
    auto handleMap = _owner._handleMap;
-   _owner.GetTexComponent().TransDrawTexture(TitleBgPosX, TitleBgPosY, TitleBgCX, TitleBgCY,
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+
+   _owner.GetTexComponent().TransDrawTexture(_IntParam("bg_x"), _IntParam("bg_y"), TitleBgCX, TitleBgCY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["TitleBg"], DefaultAnimeSpeed, false, false);
-   DrawGraph(GameTitlePosX, GameTitlePosY, _owner._logoHandle, true);
+   DrawGraph(_IntParam("title_x"), _IntParam("title_y"), _owner._logoHandle, true);
    if (!_owner._pushAnyButton) {
-      _owner.GetTexComponent().DrawTexture(AnyButtonPosX, AnyButtonPosX, DefaultGraphScale, DefaultGraphAngle, handleMap["AnyButton"], AnyButtonAnimeSpeed);
+      _owner.GetTexComponent().DrawTexture(_IntParam("anybutton_x"), _IntParam("anybutton_y"), 
+         DefaultGraphScale, DefaultGraphAngle, handleMap["AnyButton"], _IntParam("anybutton_animespeed"));
    }
    if (_owner._pushAnyButton) {
-      _owner.GetTexComponent().DrawTexture(GameStartPosX, GameStartPosY, DefaultGraphScale, DefaultGraphAngle, _owner._startDrawHandles, GameStartAnimeSpeed);
-      _owner.GetTexComponent().DrawTexture(OptionPosX, OptionPosY, DefaultGraphScale, DefaultGraphAngle, _owner._optionDrawHandles, OptionAnimeSpeed);
-      _owner.GetTexComponent().DrawTexture(GameEndPosX, GameEndPosY, DefaultGraphScale, DefaultGraphAngle, _owner._endDrawHandles, GameEndAnimeSpeed);
+      _owner.GetTexComponent().DrawTexture(_IntParam("start_x"), _IntParam("start_y"), 
+         DefaultGraphScale, DefaultGraphAngle, _owner._startDrawHandles, _IntParam("start_animespeed"));
+      _owner.GetTexComponent().DrawTexture(_IntParam("option_x"), _IntParam("option_y"), 
+         DefaultGraphScale, DefaultGraphAngle, _owner._optionDrawHandles, _IntParam("option_animespeed"));
+      _owner.GetTexComponent().DrawTexture(_IntParam("end_x"), _IntParam("end_y"), 
+         DefaultGraphScale, DefaultGraphAngle, _owner._endDrawHandles, _IntParam("end_animespeed"));
    }
 }
 
@@ -128,7 +124,25 @@ void ModeTitle::StateAnyButton::Enter() {
 }
 
 void ModeTitle::StateAnyButton::Input(InputManager& input){
-   if (input.GetXJoypad().XClick()|| input.GetXJoypad().YClick()|| input.GetXJoypad().AClick()|| input.GetXJoypad().BClick()) {
+   /**
+    * \brief 入力情報の有無を返す
+    * \param inputArray 入力情報の配列
+    * \return 入力情報配列が一つでもtrueならtrueを返す
+    */
+   auto _IsInput = [](std::vector<bool> inputArray) {
+      for (auto&& iArray : inputArray) {
+         if (iArray) {
+            return true;
+         }
+      }
+      return  false;
+   };
+   auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
+   auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
+
+   if (_IsInput({ joypad.XClick(), joypad.YClick(),joypad.AClick(),joypad.BClick(),
+      keyboard.UpClick(),keyboard.DownClick(),keyboard.RightClick(),
+      keyboard.LeftClick(),keyboard.SpaceClick() })) {
       _owner.GetSoundComponent().Play("SystemDecision");
       _owner._stateServer->GoToState("StartSelect");
    }
@@ -145,13 +159,25 @@ void ModeTitle::StateStartSelect::Enter() {
 }
 
 void ModeTitle::StateStartSelect::Input(InputManager& input) {
-   auto frameCount = _owner.GetModeServer().frameCount() - _owner._firstInputCnt;
-   if (input.GetXJoypad().DDownClick()) {
+   /**
+    * \brief 入力情報の有無を返す
+    * \param a 入力情報1
+    * \param b 入力情報2
+    * \return 入力したならtrue,でないならばfalse
+    */
+   auto _IsInput = [](bool a, bool b) {
+      return a || b;
+   };
+   auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
+   auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
+
+   if (_IsInput(joypad.DDownClick(), keyboard.DownClick())) {
       _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
+   auto frameCount = _owner.GetModeServer().frameCount() - _owner._firstInputCnt;
    if (frameCount > FirstInputFrame) {
-      if (input.GetXJoypad().AClick()) {
+      if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
          _owner.GetSoundComponent().Play("SystemDecision");
          _owner.GetModeServer().GoToMode("TutorialSelect", 'S');
       }
@@ -167,15 +193,27 @@ void ModeTitle::StateOptionSelect::Enter() {
 }
 
 void ModeTitle::StateOptionSelect::Input(InputManager& input) {
-   if (input.GetXJoypad().DUpClick()) {
+   /**
+    * \brief 入力情報の有無を返す
+    * \param a 入力情報1
+    * \param b 入力情報2
+    * \return 入力したならtrue,でないならばfalse
+    */
+   auto _IsInput = [](bool a, bool b) {
+      return a || b;
+   };
+   auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
+   auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
+
+   if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
       _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("StartSelect");
    }
-   if (input.GetXJoypad().DDownClick()) {
+   if (_IsInput(joypad.DDownClick(), keyboard.DownClick())) {
       _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("EndSelect");
    }
-   if (input.GetXJoypad().AClick()) {
+   if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
       _owner.GetSoundComponent().Play("SystemSelect");
       _owner.GetModeServer().PushBack("Option");
    }
@@ -190,11 +228,23 @@ void ModeTitle::StateEndSelect::Enter() {
 }
 
 void ModeTitle::StateEndSelect::Input(InputManager& input) {
-   if (input.GetXJoypad().DUpClick()) {
+   /**
+    * \brief 入力情報の有無を返す
+    * \param a 入力情報1
+    * \param b 入力情報2
+    * \return 入力したならtrue,でないならばfalse
+    */
+   auto _IsInput = [](bool a, bool b) {
+      return a || b;
+   };
+   auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
+   auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
+
+   if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
       _owner.GetSoundComponent().Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
-   if (input.GetXJoypad().AClick()) {
+   if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
       _owner.GetSoundComponent().Play("SystemDecision");
       _owner._gameMain.ShutDown();
    }

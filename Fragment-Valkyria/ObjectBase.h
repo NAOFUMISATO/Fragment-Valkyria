@@ -246,16 +246,17 @@ namespace FragmentValkyria {
           */
          inline void objState(ObjectState state) { _objState = state; }
 
-         ObjectState _objState{ ObjectState::Active };                       //!< オブジェクトの種別変数
+         Game::GameMain& _gameMain;                                          //!< ゲーム本体クラスの参照
+         const std::unique_ptr<AppFrame::Param::ParamBase> _param;       //!< 値管理用クラスのポインタ
          std::unique_ptr<StateServer> _stateServer;                          //!< 状態の一括管理クラスのポインタ
+         std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent;   //!< モデルのアニメーション管理クラスのポインタ
+         std::shared_ptr<Camera::CameraComponent> _cameraComponent;          //!< カメラ管理クラスのシェアードポインタ
+         std::shared_ptr<Collision::CollisionComponent> _collisionComponent; //!< 衝突判定管理クラスのシェアードポインタ
+         ObjectState _objState{ ObjectState::Active };                       //!< オブジェクトの種別変数
          Matrix44 _worldTransform{ Matrix44() };                             //!< ワ－ルド行列
          Vector4 _position{ 0,0,0 };                                         //!< 位置
          Vector4 _rotation{ 0,0,0 };                                         //!< 回転
          Vector4 _scale{ 1,1,1 };                                            //!< 拡大率
-         Game::GameMain& _gameMain;                                          //!< ゲーム本体クラスの参照
-         std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent;   //!< モデルのアニメーション管理クラスのポインタ
-         std::shared_ptr<Camera::CameraComponent> _cameraComponent;          //!< カメラ管理クラスのシェアードポインタ
-         std::shared_ptr<Collision::CollisionComponent> _collisionComponent; //!< 衝突判定管理クラスのシェアードポインタ
       };
    }
 }

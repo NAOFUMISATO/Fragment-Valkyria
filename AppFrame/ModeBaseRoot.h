@@ -7,6 +7,7 @@
  * \date   October 2021
  *********************************************************************/
 #include <memory>
+#include "ParamBase.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -116,8 +117,9 @@ namespace AppFrame {
          inline void fadeType(char fadeType) { _fadeType = fadeType; };
 
       protected:
-         Game::GameBase& _gameBase;     //!< ゲームベースの参照
-         char _fadeType{ 'M' };         //!< フェード時間を指定する文字
+         Game::GameBase& _gameBase;                         //!< ゲームベースの参照
+         std::unique_ptr<Param::ParamBase> _param;          //!< 値管理用クラスのポインタ
+         char _fadeType{ 'M' };                             //!< フェード時間を指定する文字
       };
    }
 }

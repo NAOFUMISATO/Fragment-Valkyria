@@ -7,7 +7,6 @@
  * \date   December 2021
  *********************************************************************/
 #pragma once
-#include <DxLib.h>
 #include <unordered_map>
 #include <utility>
 #include <vector>

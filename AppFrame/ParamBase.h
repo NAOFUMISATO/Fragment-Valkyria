@@ -6,7 +6,14 @@
  * \author NAOFUMISATO
  * \date   April 2022
  *********************************************************************/
+#include <unordered_map>
+#include <utility>
+#include <vector>
+#include <string_view>
+#include <filesystem>
+#include <fstream>
 #include <nlohmann/json.hpp>
+#include "Vector4.h"
 /**
  * \brief アプリケーションフレーム
  */
@@ -19,14 +26,15 @@ namespace AppFrame {
       class Vector4;
    }
    /**
-    * \brief リソース関係
+    * \brief 値管理関係
     */
-   namespace Resource {
+   namespace Param {
       /**
        * \class 各値の管理を行う基底クラス
        * \brief 各値をjsonファイルから読み込み、取得する
        */
       class ParamBase {
+         public:
          /**
           * \brief コンストラクタ
           * \param gameBase ゲームベースの参照
@@ -63,7 +71,7 @@ namespace AppFrame {
           */
          Math::Vector4 GetVecParam(std::string_view paramName);
 
-      private:
+      protected:
          /**
           * \brief int型の値をjsonファイルから読み込み、連想配列に登録する
           * \param paramNames 値名

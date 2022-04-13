@@ -7,15 +7,16 @@
  * \date   April 2022
  *********************************************************************/
 #include "ParamBase.h"
-#include <fstream>
 #include "GameBase.h"
-#include "Vector4.h"
 #include "CurrentPathServer.h"
 
-namespace AppFrame{
-   namespace Resource {
+namespace AppFrame {
+   /**
+    * \brief 値管理関係
+    */
+   namespace Param {
       ParamBase::ParamBase(Game::GameBase& gameBase, std::string_view key) :
-         _gameBase{ gameBase }, _key{key} {
+         _gameBase{ gameBase }, _key{ key } {
       }
 
       int ParamBase::GetIntParam(std::string_view paramName) {
@@ -50,7 +51,7 @@ namespace AppFrame{
          try {
             if (!_floatMap.contains(paramName.data())) {
                std::string message = paramName.data();
-               throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
+               throw std::logic_error("----------キー[" + message + "]が値コンテナに存在しませんでした。----------\n");
             }
          }
          catch (std::logic_error& error) {
@@ -71,7 +72,7 @@ namespace AppFrame{
          try {
             if (!_doubleMap.contains(paramName.data())) {
                std::string message = paramName.data();
-               throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
+               throw std::logic_error("----------キー[" + message + "]が値コンテナに存在しませんでした。----------\n");
             }
          }
          catch (std::logic_error& error) {
@@ -92,7 +93,7 @@ namespace AppFrame{
          try {
             if (!_boolMap.contains(paramName.data())) {
                std::string message = paramName.data();
-               throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
+               throw std::logic_error("----------キー[" + message + "]が値コンテナに存在しませんでした。----------\n");
             }
          }
          catch (std::logic_error& error) {
@@ -113,7 +114,7 @@ namespace AppFrame{
          try {
             if (!_vecMap.contains(paramName.data())) {
                std::string message = paramName.data();
-               throw std::logic_error("----------キー[" + message + "]がパスコンテナに存在しませんでした。----------\n");
+               throw std::logic_error("----------キー[" + message + "]が値コンテナに存在しませんでした。----------\n");
             }
          }
          catch (std::logic_error& error) {

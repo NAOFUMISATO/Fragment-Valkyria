@@ -103,6 +103,12 @@
     <Filter Include="ソース ファイル\Tutorial">
       <UniqueIdentifier>{3c04f80c-d726-4305-bad8-5f79e3b53c21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Param">
+      <UniqueIdentifier>{9927a249-1441-4c82-93aa-f7aa31ec38a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Param">
+      <UniqueIdentifier>{c12ed28b-7725-4410-86ea-f9e6fc982e76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeBoss.h">
@@ -333,6 +339,9 @@
     <ClInclude Include="EffectObjectHit.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="ParamModeTitle.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -556,6 +565,9 @@
     </ClCompile>
     <ClCompile Include="EffectObjectHit.cpp">
       <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamModeTitle.cpp">
+      <Filter>ソース ファイル\Param</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

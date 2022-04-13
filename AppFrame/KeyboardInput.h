@@ -31,20 +31,40 @@ namespace AppFrame {
           */
          inline bool DownPress() const { return _key & PAD_INPUT_DOWN; }
          /**
+          * \brief キーボードの下矢印キーのトリガ判定を返す
+          * \return 下矢印キーの押下判定
+          */
+         inline bool DownClick() const { return _trg & PAD_INPUT_DOWN; }
+         /**
           * \brief キーボードの左矢印キーの押下判定を返す
           * \return 左矢印キーの押下判定
           */
          inline bool LeftPress() const { return _key & PAD_INPUT_LEFT; }
+         /**
+          * \brief キーボードの左矢印キーのトリガ判定を返す
+          * \return 左矢印キーの押下判定
+          */
+         inline bool LeftClick() const { return _trg & PAD_INPUT_LEFT; }
          /**
           * \brief キーボードの右矢印キーの押下判定を返す
           * \return 右矢印キーの押下判定
           */
          inline bool RightPress() const { return _key & PAD_INPUT_RIGHT; }
          /**
+          * \brief キーボードの右矢印キーのトリガ判定を返す
+          * \return 右矢印キーの押下判定
+          */
+         inline bool RightClick() const { return _trg & PAD_INPUT_RIGHT; }
+         /**
           * \brief キーボードの上矢印キーの押下判定を返す
           * \return 上矢印キーの押下判定
           */
          inline bool UpPress() const { return _key & PAD_INPUT_UP; }
+         /**
+          * \brief キーボードの上矢印キーのトリガ判定を返す
+          * \return 上矢印キーの押下判定
+          */
+         inline bool UpClick() const { return _trg & PAD_INPUT_UP; }
          /**
           * \brief キーボードのZキーのトリガ判定を返す
           * \return Zキーのトリガ判定
