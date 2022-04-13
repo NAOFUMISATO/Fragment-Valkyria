@@ -320,7 +320,6 @@ void Player::HitCheckFromLargeEnemy() {
         auto hitPos = _collisionComponent->hitPos();
         // ノックバックさせる向きの取得
         auto knockBackVec = _position - hitPos;
-        // 単位化する
         knockBackVec.Normalized();
         // ノックバック量のベクトルを設定
         _knockBack = knockBackVec * 10.0;
@@ -345,7 +344,6 @@ void Player::HitCheckFromPoorEnemy() {
       auto hitPos = _collisionComponent->hitPos();
       // ノックバックさせる向きの取得
       auto knockBackVec = _position - hitPos;
-      // 単位化する
       knockBackVec.Normalized();
       // ノックバック量のベクトルを設定
       _knockBack = knockBackVec * 10.0;
@@ -480,9 +478,7 @@ void Player::StateIdle::Input(InputManager& input) {
 }
 
 void Player::StateIdle::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
-   // 回転処理
    _owner.Rotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
@@ -643,11 +639,8 @@ void Player::StateWalk::Input(InputManager& input) {
 }
 
 void Player::StateWalk::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
-   // 移動処理
    _owner.Move(_owner._moved);
-   // 回転処理
    _owner.Rotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
@@ -827,12 +820,9 @@ void Player::StateRun::Input(InputManager& input) {
 }
 
 void Player::StateRun::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
    FootStepSound();
-   // 移動処理
    _owner.Move(_owner._moved);
-   // 回転処理
    _owner.Rotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
@@ -887,7 +877,6 @@ void Player::StateShootReady::Input(InputManager& input) {
 }
 
 void Player::StateShootReady::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
    // 最初のアニメーションを1回再生していてアニメーションを変えていない場合次のアニメーションを設定
    if (_owner._modelAnimeComponent->repeatedCount() >= 1 && !_changeAnim) {
@@ -896,7 +885,6 @@ void Player::StateShootReady::Update() {
       // アニメーションを変えたと設定
       _changeAnim = true;
    }
-   // 射撃状態の回転処理
    _owner.ShootRotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
@@ -1036,9 +1024,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
 }
 
 void Player::StateWeakShootReady::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
-   // 射撃状態の回転処理
    _owner.ShootRotate();
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
    _owner._collisionComponent->GatlingFromPlayer();
@@ -1077,7 +1063,6 @@ void Player::StateReload::Enter() {
 }
 
 void Player::StateReload::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
    // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
    if (_reloadCnt > 60 * 2) {
@@ -1121,7 +1106,6 @@ void Player::StateRecovery::Enter() {
 }
 
 void Player::StateRecovery::Update() {
-   // 状態の基底クラスの更新処理
    StateBase::Update();
    // 回復状態のカウントが既定の値よりも大きいか確認
    if (_recoveryCnt > 60 * 1) {

@@ -690,7 +690,9 @@ void CollisionComponent::PlayerKnockBack() {
 }
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
+   // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+      // プレイヤーだった場合
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          // プレイヤーが死亡モーションならば返す
@@ -699,21 +701,24 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
          };
       }
    }
+   // ステージのモデルハンドルと当たり判定のフレーム番号の取得
    auto modeBase = _owner.gameMain().modeServer().GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
-    
    auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
-
+   // 移動後の位置の取得
    auto newPos = pos + moved;
+   // 移動後の位置がステージと当たっているか確認
    auto start = newPos + Vector4(0.0, 50.0, 0.0);
    auto end = newPos + Vector4(0.0, -10000.0, 0.0);
    auto result = MV1CollCheck_Line(handle, collision, AppFrame::Math::ToDX(start), AppFrame::Math::ToDX(end));
    if (result.HitFlag != 0) {
+      // 移動後の位置がステージと当たっている場合移動後の位置を返す
       newPos = AppFrame::Math::ToMath(result.HitPosition);
       return newPos;
    }
    else {
+      // 移動後の位置がステージと当たっていない場合移動前の位置を返す
       return pos;
    }
 }
