@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "SpriteBase.h"
+#include "ParamPlayer.h"
 /**
  * \brief プロジェクト名
  */
@@ -52,19 +53,20 @@ namespace FragmentValkyria {
           * \param count ゲームのフレームカウント
           */
          void BarShake(unsigned int count);
-         double _hp{ 100.0 };              //!< ボスHP
-         double _hpRange{ 100.0 };         //!< ボス最大HP
-         double _rate{ 0.0 };              //!< 背面バーの増減速度
-         double _oldFrontHP{ 0.0 };        //!< 1フレーム前の前面バーのボスHP
-         double _oldBackHP{ 0.0 };         //!< 1フレーム前の背面バーのボスHP
-         bool _rateReset{ true };          //!< 背面バーの増減速度をリセットするか
-         bool _shake{ false };             //!< HPバーを振動させるか
-         unsigned int _shakeCnt{0};        //!< HPバー振幅フレームの保存
-         Color _frontColor{ 255,255,255 }; //!< 前面バーのカラー
-         Rect _frontBar{ 0,0,0,0 };        //!< 前面バー矩形
-         Color _backColor{ 255,255,255 };  //!< 背面バーのカラー
-         Rect _backBar{ 0,0,0,0 };         //!< 背面バー矩形
-         Rect _offSet{ 0,0,0,0 };          //!< 矩形描画のオフセット
+         std::unique_ptr<Param::ParamPlayer> _playerParam;  //!< プレイヤークラスの値管理クラスのポインタ
+         double _hp{ 100.0 };                               //!< ボスHP
+         double _hpRange{ 100.0 };                          //!< ボス最大HP
+         double _rate{ 0.0 };                               //!< 背面バーの増減速度
+         double _oldFrontHP{ 0.0 };                         //!< 1フレーム前の前面バーのボスHP
+         double _oldBackHP{ 0.0 };                          //!< 1フレーム前の背面バーのボスHP
+         bool _rateReset{ true };                           //!< 背面バーの増減速度をリセットするか
+         bool _shake{ false };                              //!< HPバーを振動させるか
+         unsigned int _shakeCnt{0};                         //!< HPバー振幅フレームの保存
+         Color _frontColor{ 255,255,255 };                  //!< 前面バーのカラー
+         Rect _frontBar{ 0,0,0,0 };                         //!< 前面バー矩形
+         Color _backColor{ 255,255,255 };                   //!< 背面バーのカラー
+         Rect _backBar{ 0,0,0,0 };                          //!< 背面バー矩形
+         Rect _offSet{ 0,0,0,0 };                           //!< 矩形描画のオフセット
       };
    }
 }

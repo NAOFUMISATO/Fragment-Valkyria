@@ -21,6 +21,7 @@ BulletCreator::BulletCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain }
 
 std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
    auto bullet = std::make_unique<Player::Bullet>(_gameMain);
+
    for (auto&& object : _gameMain.objServer().runObjects()) {
 
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {

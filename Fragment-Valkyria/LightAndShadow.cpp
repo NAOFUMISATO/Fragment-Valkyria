@@ -74,7 +74,6 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
    const auto _VecParam = [&](std::string paramName) {
       return _param->GetVecParam(paramName);
    };
-   namespace AppMath = AppFrame::Math;
 #ifdef _DEBUG
    // マテリアルのライティング情報の設定
    MATERIALPARAM material;
@@ -108,6 +107,7 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
    // 光源位置の初期化
    _lightPosition = _VecParam("fixedlight_pos");
    // 光源の位置、影響範囲及び距離減衰率を設定し、ポイント光源を生成、ライトハンドルに情報を保存する
+   namespace AppMath = AppFrame::Math;
    _lightHandle = CreatePointLightHandle(AppMath::ToDX(_lightPosition),
       _FloatParam("fixedlight_area"), _FloatParam("fixedlight_atten_first"),
       _FloatParam("fixedlight_atten_second"), _FloatParam("fixedlight_atten_third"));
@@ -126,7 +126,9 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
    auto shadowMaxArea = _VecParam("shadow_maxarea");
    auto shadowMinArea = _VecParam("shadow_minarea");
    // シャドウマップの影響範囲を設定
-   SetShadowMapDrawArea(_shadowHandle, AppMath::ToDX(shadowMinArea), AppMath::ToDX(shadowMaxArea));
+   SetShadowMapDrawArea(_shadowHandle,
+      AppMath::ToDX(shadowMinArea), 
+      AppMath::ToDX(shadowMaxArea));
 }
 
 void LightAndShadow::Update() {
@@ -136,7 +138,7 @@ void LightAndShadow::Update() {
    // プレイヤー頭座標から固定光源座標へのベクトルを求め正規化し、シャドウマップの向きとする
    auto shadowDirection = (playerHeadPos - _lightPosition).Normalize();
    // シャドウマップの向きを更新
-   SetShadowMapLightDirection(_shadowHandle, AppMath::ToDX(shadowDirection));
+   SetShadowMapLightDirection(_shadowHandle, AppFrame::Math::ToDX(shadowDirection));
 }
 
 void LightAndShadow::Render() {
@@ -162,10 +164,12 @@ void LightAndShadow::Render() {
 }
 
 void LightAndShadow::SetDifColor(float red, float green, float blue) {
-   SetLightDifColorHandle(_lightHandle, GetColorF(red, green, blue, _param->GetFloatParam("fixedlight_difalpha")));
+   SetLightDifColorHandle(_lightHandle, GetColorF(red, green, blue, 
+      _param->GetFloatParam("fixedlight_difalpha")));
 }
 
 void LightAndShadow::SetAmbColor(float red, float green, float blue) {
-   SetLightAmbColorHandle(_lightHandle, GetColorF(red, green, blue, _param->GetFloatParam("fixedlight_ambalpha")));
+   SetLightAmbColorHandle(_lightHandle, GetColorF(red, green, blue, 
+      _param->GetFloatParam("fixedlight_ambalpha")));
 }
 

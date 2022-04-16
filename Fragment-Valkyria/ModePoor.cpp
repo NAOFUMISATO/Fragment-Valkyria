@@ -25,25 +25,24 @@
 #include "ObjectBase.h"
 #include "LoadStageFromJson.h"
 #include "ModelAnimeComponent.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto poorParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
-      { "max_wave" });
-   const int MaxWave = poorParamMap["max_wave"];
-   // Jsonファイルから各値を取得する
-   auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp","max_bullet","max_portion" });
-   const double MaxHp = playerParamMap["max_hp"];
-   const int MaxBullet = playerParamMap["max_bullet"];
-   const int MaxPortion= playerParamMap["max_portion"];
-}
+#include "ParamPoorEnemy.h"
 
 using namespace FragmentValkyria::Mode;
 
 ModePoor::ModePoor(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain, "poorenemy");
+   _playerParam = std::make_unique<Param::ParamPlayer>(_gameMain, "player");
 }
 
 void ModePoor::Enter() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _playerParam->GetIntParam(paramName);
+   };
    using Vector4 = AppFrame::Math::Vector4;
 
    auto& objFactory = GetObjFactory();
@@ -56,7 +55,7 @@ void ModePoor::Enter() {
    objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>(_gameMain));
 
    std::vector<std::string> spawnTableNames;
-   for (int i = 1; MaxWave >= i; i++) {
+   for (int i = 1; _param->GetIntParam("max_wave") >= i; i++) {
       std::string tableName = "poorwave" + std::to_string(i);
       spawnTableNames.emplace_back(tableName);
    }
@@ -73,7 +72,8 @@ void ModePoor::Enter() {
    _wave = 1;
    _playSound = true;
    _gameMain.ingameTimer(0);
-   _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
+   _gameMain.playerStatus(_playerParam->GetDoubleParam("max_hp"),
+      _IntParam("max_bullet"), _IntParam("max_portion"));
    ModeInGameBase::Enter();
 }
 
@@ -105,14 +105,14 @@ void ModePoor::WaveProcess() {
    // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
    auto&& runObjects = GetObjServer().runObjects();
    // 動的配列に一致する要素があるか判定を行う
-   auto isActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
+   auto _IsActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の雑魚敵はいるか
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
    // 生存状態の雑魚敵がいないか
-   if (!isActiveEnemy) {
+   if (!_IsActiveEnemy) {
       // 最大waveに達したならモード遷移を行う
-      if (_wave >= MaxWave) {
+      if (_wave >= _param->GetIntParam("max_wave")) {
          GetSoundComponent().Play("PoorBattleEndVoice");
          _gameMain.isPoorClear(true);
          GetModeServer().GoToMode("Loading", 'S');

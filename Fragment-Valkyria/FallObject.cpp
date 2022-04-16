@@ -267,7 +267,7 @@ void FallObject::StateBase::Draw() {
     * \return 文字列により指定された値
     */
    const auto _DoubleParam = [&](std::string paramName) {
-      return _owner._param->GetDoubleParam(paramName);
+      return _owner._collParam->GetDoubleParam(paramName);
    };
    // 自作のベクトルクラスの位置をDxLibのVECTOR型に変換
    auto pos = AppFrame::Math::ToDX(_owner._position);

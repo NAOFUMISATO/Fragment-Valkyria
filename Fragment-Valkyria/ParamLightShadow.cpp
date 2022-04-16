@@ -15,5 +15,5 @@ ParamLightShadow::ParamLightShadow(Game::GameMain& gameMain, std::string_view ke
       "fixedlight_spcalpha","fixedlight_ambred","fixedlight_ambgreen","fixedlight_ambblue",
       "fixedlight_ambalpha" });
    LoadBoolParam({ "fog_enuble","alllight_enuble"});
-   LoadVecParam({ "fixedlight_pos" ,"shaodw_minarea" ,"shaodw_maxarea" });
+   LoadVecParam({ "fixedlight_pos" ,"shadow_minarea" ,"shadow_maxarea" });
 }

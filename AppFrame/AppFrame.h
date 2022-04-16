@@ -26,7 +26,6 @@
 #include "InputManager.h"
 #include "LoadResourceJson.h"
 #include "Singleton.h"
-#include "LoadParamJson.h"
 #include "TextureComponent.h"
 #include "ParamBase.h"
 #include "Rect.h"

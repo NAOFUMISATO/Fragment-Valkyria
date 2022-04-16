@@ -7,20 +7,13 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectBossCrash.h"
-#include "GameMain.h" 
+#include "GameMain.h"
 #include "ObjectServer.h"
-
-namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", { 
-      "crasheffect_count" ,"crasheffect_distance" ,"crasheffect_frame" });
-   const int CrashCount = paramMap["crasheffect_count"];
-   const int CrashFrame = paramMap["crasheffect_frame"];
-   const double CrashDistance = paramMap["crasheffect_distance"];
-}
 
 using namespace FragmentValkyria::Effect;
 
 EffectBossCrash::EffectBossCrash(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+   _param = std::make_unique<Param::ParamLargeEnemy>(_gameMain,"largeenemy");
    SetEffectLoadHandle(key);
 }
 
@@ -30,10 +23,19 @@ void EffectBossCrash::Init() {
 }
 
 void EffectBossCrash::Update() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _param->GetIntParam(paramName);
+   };
    auto frame = _gameMain.modeServer().frameCount() - _efcCnt;
-   if (frame % CrashFrame == 0) {
-      for (int i = 0; i < CrashCount; i++) {
+   if (frame % _IntParam("crasheffect_frame") == 0) {
+      for (int i = 0; i < _IntParam("crasheffect_count"); i++) {
          auto largeEnemyPos = _gameMain.objServer().GetVecData("LargeEnemyPos");
+         const auto CrashDistance = _param->GetDoubleParam("crasheffect_distance");
          auto randomX = AppFrame::Math::Utility::GetRandom(-CrashDistance, CrashDistance);
          auto randomY = AppFrame::Math::Utility::GetRandom(0.0, CrashDistance);
          auto randomZ = AppFrame::Math::Utility::GetRandom(-CrashDistance, CrashDistance);

@@ -7,6 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ModeInGameBase.h"
+#include "ParamPlayer.h"
 /**
  * \brief プロジェクト名
  */
@@ -53,8 +54,10 @@ namespace FragmentValkyria {
           * \brief 雑魚戦ウェーブ処理
           */
          void WaveProcess();
-         int _wave{ 0 };   //!< 雑魚戦ウェーブ数
-         bool _playSound{ true };
+
+         std::unique_ptr<Param::ParamPlayer> _playerParam;  //!< プレイヤークラスの値管理クラス
+         int _wave{ 0 };                                    //!< 雑魚戦ウェーブ数
+         bool _playSound{ true };                           //!< サウンド再生フラグ
       };
    }
 }

@@ -7,6 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectBase.h"
+#include "ParamLargeEnemy.h"
 /**
  * \brief プロジェクト名
  */
@@ -43,8 +44,9 @@ namespace FragmentValkyria {
          virtual EffectType GetEfcType() const override { return EffectType::BossCrash; }
 
       private:
-         int _efcCnt{ 0 };                      //!< フレームカウント保存用
-         std::vector<Vector4> _bornPositions;   //!< エフェクト生成位置の動的配列
+         std::unique_ptr<Param::ParamLargeEnemy> _param; //!< ボスクラスの値管理クラス
+         int _efcCnt{ 0 };                               //!< フレームカウント保存用
+         std::vector<Vector4> _bornPositions;            //!< エフェクト生成位置の動的配列
       };
    }
 }
