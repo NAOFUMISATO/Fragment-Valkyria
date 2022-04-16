@@ -28,19 +28,16 @@
 #include "LoadStageFromJson.h"
 #include "SpriteServer.h"
 #include "TutorialTips.h"
+#include "ParamPlayer.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp","max_bullet","max_portion" });
-   const double MaxHp = playerParamMap["max_hp"];
-   const int MaxBullet = playerParamMap["max_bullet"];
-   const int MaxPortion = playerParamMap["max_portion"];
    constexpr auto MaxWave = 3;
 }
 
 using namespace FragmentValkyria::Mode;
 
 ModeTutorial::ModeTutorial(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPlayer>(_gameMain,"player");
 }
 
 void ModeTutorial::Init() {
@@ -49,6 +46,14 @@ void ModeTutorial::Init() {
 }
 
 void ModeTutorial::Enter() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _param->GetIntParam(paramName);
+   };
    using Vector4 = AppFrame::Math::Vector4;
 
    auto& objFactory = GetObjFactory();
@@ -71,7 +76,8 @@ void ModeTutorial::Enter() {
    auto& objServer = GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   _gameMain.playerStatus(MaxHp, MaxBullet, MaxPortion);
+   _gameMain.playerStatus(_param->GetBoolParam("max_hp"), 
+      _IntParam("max_bullet"), _IntParam("max_portion"));
    _born = true;
    GetSoundComponent().Stop("TitleBgm");
    GetSoundComponent().PlayLoop("TutorialBgm");

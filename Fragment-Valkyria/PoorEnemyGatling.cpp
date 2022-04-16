@@ -12,19 +12,12 @@
 #include "ObjectFactory.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
-      { "max_gatling","gatling_rate","gatling_animespeed" });
-   const int MaxGatling = paramMap["max_gatling"];
-   const int GatlingRate = paramMap["gatling_rate"];
-   const double GatlingAnimeSpeed = paramMap["gatling_animespeed"];
-}
+#include "ParamPoorEnemy.h"
 
 using namespace FragmentValkyria::Enemy;
 
 PoorEnemyGatling::PoorEnemyGatling(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain, "poorenemy");
 }
 
 void PoorEnemyGatling::Init() {
@@ -41,15 +34,16 @@ void PoorEnemyGatling::CreateGatling() {
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("attack", true, GatlingAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("attack", true,
+      _owner._param->GetDoubleParam("gatling_animespeed"));
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _stateCnt = _owner._gameMain.modeServer().frameCount();
-   _remainingGatiling = MaxGatling;
+   _remainingGatiling = _owner._param->GetIntParam("max_gatling");
 }
 
 void PoorEnemyGatling::StateGatling::Update() {
    auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame % GatlingRate == 0) {
+   if (frame % _owner._param->GetIntParam("gatling_rate") == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;
       if (_remainingGatiling <= 0) {

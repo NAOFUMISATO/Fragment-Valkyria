@@ -132,9 +132,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>ソース ファイル\Data</Filter>
     </ClCompile>
-    <ClCompile Include="LoadParamJson.cpp">
-      <Filter>ソース ファイル\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>ソース ファイル\Texture</Filter>
     </ClCompile>
@@ -211,9 +208,6 @@
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>ヘッダー ファイル\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadParamJson.h">
-      <Filter>ヘッダー ファイル\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>ヘッダー ファイル\Temp</Filter>

@@ -197,8 +197,29 @@ namespace AppFrame {
       }
 
       void ParamBase::LoadVecParam(std::vector<std::string_view> paramNames) {
-         // jsonファイルを開き、オブジェクトを取り出す
-         auto vecArray = JsonSetUp();
+         // 値情報を格納しているjsonフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
+         auto jsonDirectory = _gameBase.pathServer().GetCurrentPath("ParamJson");
+         auto jsonPath = (jsonDirectory / _key).generic_string() + ".json";
+         // 指定したjsonファイルを読み取り専用で開く
+         std::ifstream reading(jsonPath, std::ios::in);
+#ifdef _DEBUG
+         // 指定したファイルを開くのに失敗したならlogic_errorを検出し、デバッガに出力する
+         try {
+            if (reading.fail()) {
+               throw std::logic_error("----------" + jsonPath + "ファイルが開けませんでした。----------\n");
+            }
+         }
+         catch (std::logic_error& e) {
+            OutputDebugString(e.what());
+         }
+#endif
+         nlohmann::json value;
+         // ファイルの中身を取り出す
+         reading >> value;
+         // ファイルを閉じる
+         reading.close();
+         // トップレベルの配列のキーを引数から指定し、jsonオブジェクトとして返す
+         auto vecArray = value[_key + "_vec"];
          // 引数に指定した文字列の動的配列を全て回す
          for (auto i = 0; i < paramNames.size(); i++) {
             // トップレベルの配列を全て回し、引数の文字列に一致する格納している各Vector4データを全て取り出す

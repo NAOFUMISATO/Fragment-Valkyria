@@ -39,11 +39,11 @@ namespace AppFrame {
          /**
           * \brief 初期化処理
           */
-         virtual void Init();
+         void Init();
          /**
           * \brief コンテナの解放
           */
-         virtual void Clear();
+         void Clear();
          /**
           * \brief ファイルパスの一括登録
           * \param pathMap ファイルパスマップ

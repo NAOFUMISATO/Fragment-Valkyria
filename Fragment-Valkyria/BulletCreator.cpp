@@ -21,6 +21,7 @@ BulletCreator::BulletCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain }
 
 std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
    auto bullet = std::make_unique<Player::Bullet>(_gameMain);
+
    for (auto&& object : _gameMain.objServer().runObjects()) {
 
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
@@ -29,7 +30,6 @@ std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
       auto rightHandFramePos = object->modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
       bullet->position(rightHandFramePos);
    }
-   bullet->Init();
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Shoot", std::make_shared<Player::Bullet::StateShoot>(*bullet));
    bullet->stateServer(std::move(state));

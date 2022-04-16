@@ -12,17 +12,12 @@
 #include "EffectServer.h"
 #include "ObjectServer.h"
 #include "LargeEnemy.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
-      { "laser_radius" });
-   const double Radius = paramMap["laser_radius"];
-}
+#include "ParamCollision.h"
 
 using namespace FragmentValkyria::Enemy;
 
 Laser::Laser(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
+   _param = std::make_unique<Param::ParamCollision>(_gameMain,"collision");
 }
 
 void Laser::Update() {
@@ -37,7 +32,7 @@ void Laser::StateBase::Draw() {
 #ifdef _DEBUG
    auto firstPos = AppFrame::Math::ToDX(_owner._position);
    auto secondPos = AppFrame::Math::ToDX(_owner._end);
-   auto radius = static_cast<float>(Radius);
+   auto radius = static_cast<float>(_owner._param->GetDoubleParam("laser_radius"));
    DrawCapsule3D(firstPos, secondPos, radius, 5, 
       AppFrame::Math::Utility::GetColorCode(255, 255, 0), 
       AppFrame::Math::Utility::GetColorCode(255, 255, 255), FALSE);

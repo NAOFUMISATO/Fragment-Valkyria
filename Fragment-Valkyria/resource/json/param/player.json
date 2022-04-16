@@ -20,16 +20,5 @@
 			"blinking_frame":5,
 			"cooltime": 45
 		}
-	],
-	"player_vec": [
-		{
-			"init_pos": [
-				{
-					"x": 10.0,
-					"y": 10.0,
-					"z": 10.0
-				}
-			]
-		}
 	]
 }

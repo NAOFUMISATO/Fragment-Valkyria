@@ -247,7 +247,7 @@ namespace FragmentValkyria {
          inline void objState(ObjectState state) { _objState = state; }
 
          Game::GameMain& _gameMain;                                          //!< ゲーム本体クラスの参照
-         const std::unique_ptr<AppFrame::Param::ParamBase> _param;       //!< 値管理用クラスのポインタ
+         std::unique_ptr<AppFrame::Param::ParamBase> _param;                 //!< 値管理用クラスのポインタ
          std::unique_ptr<StateServer> _stateServer;                          //!< 状態の一括管理クラスのポインタ
          std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent;   //!< モデルのアニメーション管理クラスのポインタ
          std::shared_ptr<Camera::CameraComponent> _cameraComponent;          //!< カメラ管理クラスのシェアードポインタ

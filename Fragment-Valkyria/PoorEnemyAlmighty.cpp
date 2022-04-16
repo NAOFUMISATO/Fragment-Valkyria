@@ -12,22 +12,12 @@
 #include "ObjectFactory.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy", {
-      "max_gatling","gatling_rate","gatling_animespeed","rush_speed", "rush_frame","rush_animespeed" });
-   const int MaxGatling = paramMap["max_gatling"];
-   const int GatlingRate = paramMap["gatling_rate"];
-   const double GatlingAnimeSpeed = paramMap["gatling_animespeed"];
-   const double RushSpeed = paramMap["rush_speed"];
-   const int RushFrame = paramMap["rush_frame"];
-   const double RushAnimeSpeed = paramMap["rush_animespeed"];
-}
+#include "ParamPoorEnemy.h"
 
 using namespace FragmentValkyria::Enemy;
 
 PoorEnemyAlmighty::PoorEnemyAlmighty(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain, "poorenemy");
 }
 
 void PoorEnemyAlmighty::Init() {
@@ -53,16 +43,24 @@ void PoorEnemyAlmighty::CreateGatling() {
 }
 
 void PoorEnemyAlmighty::StateRush::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true, RushAnimeSpeed);
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _owner._param->GetDoubleParam(paramName);
+   };
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
-   _moved = _moved * RushSpeed;
+   _moved = _moved * _DoubleParam("rush_speed");
 }
 
 void PoorEnemyAlmighty::StateRush::Update() {
    auto frame = static_cast<int>(_owner._gameMain.modeServer().frameCount() - _stateCnt);
-   if (frame <= RushFrame) {
+   if (frame <= _owner._param->GetIntParam("rush_frame")) {
       _owner.Rush(_moved);
    }
    else {
@@ -72,15 +70,16 @@ void PoorEnemyAlmighty::StateRush::Update() {
 }
 
 void PoorEnemyAlmighty::StateGatling::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("attack", true, GatlingAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("attack", true, 
+      _owner._param->GetDoubleParam("gatling_animespeed"));
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _stateCnt = _owner._gameMain.modeServer().frameCount();
-   _remainingGatiling = MaxGatling;
+   _remainingGatiling = _owner._param->GetIntParam("max_gatling");
 }
 
 void PoorEnemyAlmighty::StateGatling::Update() {
    auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
-   if (frame % GatlingRate == 0) {
+   if (frame % _owner._param->GetIntParam("gatling_rate") == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;
       if (_remainingGatiling <= 0) {

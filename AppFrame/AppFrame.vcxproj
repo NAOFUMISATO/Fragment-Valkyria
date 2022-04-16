@@ -165,7 +165,6 @@
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardInput.h" />
-    <ClInclude Include="LoadParamJson.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="ModeBaseRoot.h" />
     <ClInclude Include="ModeFadeBase.h" />
@@ -195,7 +194,6 @@
     <ClCompile Include="DxUtility.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="LoadParamJson.cpp" />
     <ClCompile Include="Matrix44.cpp" />
     <ClCompile Include="ModeBaseRoot.cpp" />
     <ClCompile Include="ModeFade.cpp" />

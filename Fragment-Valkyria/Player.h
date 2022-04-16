@@ -7,6 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include "ObjectBase.h"
+#include "ParamCollision.h"
  /**
   * \brief プロジェクト名
   */
@@ -143,26 +144,27 @@ namespace FragmentValkyria {
           */
          void WeakAttack();
 
-         int _freezeTime{ 0 };                      //!< ノックバックする時間
-         int _bulletStock{ 5 };                     //!< 遠隔弱攻撃の残り弾数
-         int _invincibleCnt{ 0 };                   //!< 無敵時間
-         int _portionStock{ 3 };                    //!< ポーションの数
-         int _stateCnt{ 0 };                        //!< 各状態に入った時のモードサーバーのフレームカウント数
-         int _invincibleModeCnt{ 0 };               //!< 無敵状態に入った時のモードサーバーのフレームカウント数
-         int _coolTime{ 0 };                        //!< 遠隔弱攻撃のクールタイム
-         int _blendMode{ DX_BLENDMODE_ALPHA };      //!< ブレンドモード
-         bool _isAim{ false };                      //!< エイム中か
-         bool _isDeadMotion{ false };               //!< 死亡モーション中か
-         bool _isLift{ true };                      //!< オブジェクトを持ち上げられるか
-         bool _objectShoot{ false };                //!< オブジェクトを打てるか
-         double _hp{ 100.0 };                       //!< ヒットポイント
-         Vector4 _moved{ Vector4() };               //!< 移動量のベクトル
-         Vector4 _knockBack{ Vector4() };           //!< ノックバック量のベクトル
-         Vector4 _direction{ Vector4() };           //!< 前進方向のベクトル
-         Vector4 _rotateDir{ Vector4() };           //!< プレイヤーの向かせたい向き
-         Matrix44 _rightRotation{ Matrix44() };     //!< ベクトルを90度回転させるマトリクス
-         Matrix44 _leftRotation{ Matrix44() };      //!< ベクトルを-90度回転させるマトリクス
-         Matrix44 _backRotation{ Matrix44() };      //!< ベクトルを180度回転させるマトリクス
+         std::unique_ptr<Param::ParamCollision> _collParam; //!< 当たり判定クラスの値管理クラスのポインタ
+         int _freezeTime{ 0 };                              //!< ノックバックする時間
+         int _bulletStock{ 5 };                             //!< 遠隔弱攻撃の残り弾数
+         int _invincibleCnt{ 0 };                           //!< 無敵時間
+         int _portionStock{ 3 };                            //!< ポーションの数
+         int _stateCnt{ 0 };                                //!< 各状態に入った時のモードサーバーのフレームカウント数
+         int _invincibleModeCnt{ 0 };                       //!< 無敵状態に入った時のモードサーバーのフレームカウント数
+         int _coolTime{ 0 };                                //!< 遠隔弱攻撃のクールタイム
+         int _blendMode{ DX_BLENDMODE_ALPHA };              //!< ブレンドモード
+         bool _isAim{ false };                              //!< エイム中か
+         bool _isDeadMotion{ false };                       //!< 死亡モーション中か
+         bool _isLift{ true };                              //!< オブジェクトを持ち上げられるか
+         bool _objectShoot{ false };                        //!< オブジェクトを打てるか
+         double _hp{ 100.0 };                               //!< ヒットポイント
+         Vector4 _moved{ Vector4() };                       //!< 移動量のベクトル
+         Vector4 _knockBack{ Vector4() };                   //!< ノックバック量のベクトル
+         Vector4 _direction{ Vector4() };                   //!< 前進方向のベクトル
+         Vector4 _rotateDir{ Vector4() };                   //!< プレイヤーの向かせたい向き
+         Matrix44 _rightRotation{ Matrix44() };             //!< ベクトルを90度回転させるマトリクス
+         Matrix44 _leftRotation{ Matrix44() };              //!< ベクトルを-90度回転させるマトリクス
+         Matrix44 _backRotation{ Matrix44() };              //!< ベクトルを180度回転させるマトリクス
       public:
          /**
           * \class プレイヤー状態の基底クラス

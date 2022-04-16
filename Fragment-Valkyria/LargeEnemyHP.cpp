@@ -9,24 +9,9 @@
 #include "LargeEnemyHP.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "ParamLargeEnemyUI.h"
 
 namespace {
-   // jsonファイルから値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("bossui", { "frontcolor_red" ,
-      "frontcolor_green" ,"frontcolor_blue", "backcolor_red" ,"backcolor_green",
-      "backcolor_blue" ,"redbar_speed","max_hp" });
-   const unsigned char FrontColorRed = paramMap["frontcolor_red"];     //!< 前面バーの初期カラー赤値
-   const unsigned char FrontColorGreen = paramMap["frontcolor_green"]; //!< 前面バーの初期カラー緑値
-   const unsigned char FrontColorBlue = paramMap["frontcolor_blue"];   //!< 前面バーの初期カラー青値
-   const unsigned char BackColorRed = paramMap["backcolor_red"];       //!< 背面バーの初期カラー赤値
-   const unsigned char BackColorGreen = paramMap["backcolor_green"];   //!< 背面バーの初期カラー緑値
-   const unsigned char BackColorBlue = paramMap["backcolor_blue"];     //!< 背面バーの初期カラー青値
-   const double RedBarSpeed = paramMap["redbar_speed"];                //!< 背面バーの減少速度
-   const double MaxHp = paramMap["max_hp"];                            //!< ボス最大HP
-   // jsonファイルからVector4の値を取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("bossui", { "hp_pos" });
-   const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
-
    constexpr auto OffSetLeft = 50;   //!< オフセット位置左
    constexpr auto OffSetTop = 57;    //!< オフセット位置上
    constexpr auto OffSetRight = 948;//!< オフセット位置右
@@ -38,20 +23,44 @@ namespace {
 using namespace FragmentValkyria::Enemy;
 
 LargeEnemyHP::LargeEnemyHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
+   _param = std::make_unique<Param::ParamLargeEnemyUI>(_gameMain, "bossui");
 }
 
 void LargeEnemyHP::Init() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return static_cast<unsigned char>(_param->GetIntParam(paramName));
+   };
+   _hp = _param->GetDoubleParam("max_hp");
    // 画像ハンドルをResourceServerから取得する
-   _hp = 1000.0;
    _grHandle = GetResServer().GetTexture("BossHP");
-   _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
-   _oldFrontHP = OffSetRight;                                      // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化
-   _frontColor = { FrontColorRed,FrontColorGreen,FrontColorBlue }; // 前面バーカラーを初期化
-   _backColor = { BackColorRed,BackColorGreen,BackColorBlue };     // 背面バーカラーを初期化
-   _position = DefalutPos;                                         // バーフレームの初期化
+   // オフセット位置初期化
+   _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };
+   // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化
+   _oldFrontHP = OffSetRight;
+   // 前面バーカラーを初期化
+   _frontColor = { _IntParam("frontcolor_red"),
+      _IntParam("frontcolor_green"),_IntParam("frontcolor_blue") };
+   // 背面バーカラーを初期化
+   _backColor = { _IntParam("backcolor_red"),
+      _IntParam("backcolor_green"),_IntParam("backcolor_blue") };
+   // バーフレームの初期化
+   _position = _param->GetVecParam("hp_pos");
 }
 
 void LargeEnemyHP::Update() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    using Utility = AppFrame::Math::Utility;
    // ゲームのフレームカウントをModeServerから取得
    auto count = _gameMain.modeServer().frameCount();
@@ -59,7 +68,7 @@ void LargeEnemyHP::Update() {
    _hp = _gameMain.objServer().GetDoubleData("LargeEnemyHP");
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
-   auto frontHP = std::lerp(right, (right - left) * _hp / MaxHp + left, MaxRate);
+   auto frontHP = std::lerp(right, (right - left) * _hp / _DoubleParam("max_hp") + left, MaxRate);
    // 背面バー減少中の処理
    if (frontHP < _oldBackHP) {
       // 現在のHPバー右座標を保存
@@ -70,7 +79,7 @@ void LargeEnemyHP::Update() {
          _rateReset = false; // 背面バー減少フラグをOFF
       }
       // 背面バー減少値を進める
-      _rate += RedBarSpeed;
+      _rate += _DoubleParam("redbar_speed");
    }
    // 背面バー右座標が前面バー右座標より同一座標以下の処理
    else {

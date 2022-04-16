@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ObjectBase.h"
 #include "EffectGatlingBullet.h"
+#include "ParamCollision.h"
 /**
  * \brief プロジェクト名
  */
@@ -71,9 +72,10 @@ namespace FragmentValkyria {
           */
          void OutStageCheck();
 
+         std::unique_ptr<Param::ParamCollision> _collParam;         //!< 当たり判定クラスの値管理クラスのポインタ
+         std::unique_ptr<Effect::EffectGatlingBullet> _efcGatling;  //!< エフェクトガトリング弾のユニークポインタ
          Vector4 _moved{ Vector4(0.0, 0.0, 0.0) };                  //!< 移動量のベクトル
          Vector4 _moveDirection{ Vector4(0.0, 0.0, 0.0) };          //!< 移動する方向のベクトル
-         std::unique_ptr<Effect::EffectGatlingBullet> _efcGatling;   //!< エフェクトガトリング弾のユニークポインタ
 
       public:
          /**

@@ -9,20 +9,10 @@
 #include "CameraComponent.h"
 #include "GameMain.h"
 
-namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("cameracomponent", {
-      "dead_zone_divide_value", "center_height", "spring_k",
-      "divide_t" });
-
-   const int DeadZoneDivideValue = paramMap["dead_zone_divide_value"];     //!< パッドのスティックの一定方向の入力範囲を一定の分割数で割った数
-   const double CenterHeight = paramMap["center_height"];                  //!< ばねの動きを始める位置までの高さ
-   const double SpringK = paramMap["spring_k"];                            //!< ばね定数
-   const double DivideT = paramMap["divide_t"];                            //!< オイラー法の時間分割精度
-}
-
 using namespace FragmentValkyria::Camera;
 
 CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
+   _param = std::make_unique<Param::ParamCameraComponent>(_gameMain, "cameracomponent");
 }
 
 void CameraComponent::Init() {
@@ -98,12 +88,21 @@ void CameraComponent::Placement() {
 }
 
 void CameraComponent::Vibration() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
+   const auto DivideT = _DoubleParam("divide_t");
    // オイラー法の時間の分割数分for文を回す
    for (auto i = 0.0; i < DivideT; ++i) {
       // 時間の分割数で割った速度をYの位置に足していく
       _vibrationValue += _vibrationVelocity / DivideT;
       // 速度に時間の分割数で割ったYの位置から自然長を引いたものにばね定数を掛けたものを足していく
-      _vibrationVelocity += (-SpringK * (_vibrationValue - CenterHeight)) / DivideT;
+      _vibrationVelocity += (-_DoubleParam("spring_k") * (_vibrationValue - _DoubleParam("center_height"))) / DivideT;
    }
    // 速度を減衰させる
    _vibrationVelocity *= 0.9;
@@ -113,7 +112,7 @@ void CameraComponent::StateNormal::Input(InputManager& input) {
    // ゲーム内感度の取得
    auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
    // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
-   auto deadZoneMulti = DeadZoneDivideValue / deadZone;
+   auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
    // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
    // デッドゾーン以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
    if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {
@@ -350,7 +349,7 @@ void CameraComponent::StateShootReady::Input(InputManager& input) {
    // 感度の取得
     auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
     // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
-    auto deadZoneMulti = DeadZoneDivideValue / deadZone;
+    auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
     // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
    // デッドゾーンより以上でパッドのスティックの入力範囲を分割した範囲の最初の範囲内だった場合
     if (input.GetXJoypad().RightStickY() >= deadZone && input.GetXJoypad().RightStickY() < deadZone * deadZoneMulti) {

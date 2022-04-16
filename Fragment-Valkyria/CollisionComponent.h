@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "AppFrame.h"
+#include "ParamCollision.h"
 /**
  * \brief プロジェクト名
  */
@@ -190,13 +191,15 @@ namespace FragmentValkyria {
           * \return ノックバックしているか
           */
          bool knockBack() { return _knockBack; }
+
       private:
 
-         Object::ObjectBase& _owner;              //!< オブジェクトの参照
-         std::unique_ptr<Report> _report;         //!< 当たり判定結果を管理するポインタ
-         double _damage{ 0.0 };                   //!< ダメージ量
-         bool _knockBack{ false };                //!< プレイヤーがノックバックしているか
-         Vector4 _hitPos;                         //!< 当たった位置
+         Object::ObjectBase& _owner;                     //!< オブジェクトの参照
+         std::unique_ptr<Param::ParamCollision> _param;  //!< 当たり判定処理を行うクラスの値管理クラス
+         std::unique_ptr<Report> _report;                //!< 当たり判定結果を管理するポインタ
+         double _damage{ 0.0 };                          //!< ダメージ量
+         bool _knockBack{ false };                       //!< プレイヤーがノックバックしているか
+         Vector4 _hitPos;                                //!< 当たった位置
 
       };
 

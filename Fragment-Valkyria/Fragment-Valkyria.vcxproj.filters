@@ -342,6 +342,48 @@
     <ClInclude Include="ParamModeTitle.h">
       <Filter>ヘッダー ファイル\Param</Filter>
     </ClInclude>
+    <ClInclude Include="ParamPlayer.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamCollision.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamPlayerUI.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamLargeEnemy.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamGatling.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamModeGameOver.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamLargeEnemyUI.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamBullet.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamModeClear.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamCameraComponent.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamOption.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamLightShadow.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamFallObject.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamPoorEnemy.h">
+      <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -567,6 +609,48 @@
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="ParamModeTitle.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamPlayer.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamCollision.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamModeGameOver.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamPlayerUI.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamGatling.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamLargeEnemy.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamLargeEnemyUI.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamBullet.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamModeClear.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamCameraComponent.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamOption.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamLightShadow.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamFallObject.cpp">
+      <Filter>ソース ファイル\Param</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamPoorEnemy.cpp">
       <Filter>ソース ファイル\Param</Filter>
     </ClCompile>
   </ItemGroup>

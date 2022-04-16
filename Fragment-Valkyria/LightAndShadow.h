@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "AppFrame.h"
+#include "ParamLightShadow.h"
 /**
  * \brief プロジェクト名
  */
@@ -55,10 +56,11 @@ namespace FragmentValkyria {
          void SetAmbColor(float red, float green, float blue);
 
       private:
-         Game::GameMain& _gameMain;       //!< ゲーム本体クラスの参照
-         int _lightHandle{ -1 };          //!< 光源ハンドルのペア型
-         Vector4 _lightPosition{ 0,0,0 }; //!< 光源ハンドル位置のペア型
-         int _shadowHandle{ -1 };         //!< 落ち影ハンドル
+         std::unique_ptr<Param::ParamLightShadow> _param;//!< ライティング処理を行うクラスの値管理クラス
+         Game::GameMain& _gameMain;                      //!< ゲーム本体クラスの参照
+         int _lightHandle{ -1 };                         //!< 光源ハンドルのペア型
+         int _shadowHandle{ -1 };                        //!< 落ち影ハンドル
+         Vector4 _lightPosition{ 0,0,0 };                //!< 光源ハンドル位置のペア型
       };
    }
 

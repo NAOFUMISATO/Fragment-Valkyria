@@ -22,6 +22,7 @@
 #include "ObjectBase.h"
 #include "ObjectServer.h"
 #include "Player.h"
+#include "GameMain.h"
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
@@ -29,42 +30,8 @@
 
 using namespace FragmentValkyria::Collision;
 
-namespace {
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision",
-      { "fallobject_range", "ply_radius", "ply_capsule_pos1",
-       "ply_capsule_pos2", "gatling_radius", "fallobject_drum_capsule_pos1",
-      "fallobject_drum_capsule_pos2", "fallobject_drum_radius", "laser_radius",
-      "bullet_radius", "weak_object_damage",
-      "normal_object_damage", "weak_bullet_damage",
-      "normal_bullet_damage", "poorenemy_object_damage",
-      "poorenemy_bullet_damage", "player_object_damage",
-      "player_laser_damage", "player_largeenemy_damage",
-      "player_gatling_damage", "player_poorenemy_damage"});
-
-   const double FallObjectRange = paramMap["fallobject_range"];                                                    //!< 落下するオブジェクトを持ち上げられる範囲の球の半径
-   const double PlayerRadius = paramMap["ply_radius"];                                                             //!< プレイヤーのカプセルの半径
-   const double PlayerCapsulePos1 = paramMap["ply_capsule_pos1"];                                                  //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double PlayerCapsulePos2 = paramMap["ply_capsule_pos2"];                                                  //!< プレイヤーのカプセルを形成する2点中の一点の座標までのプレイヤーの位置からの距離
-   const double GatlingRadius = paramMap["gatling_radius"];                                                        //!< ガトリングの半径
-   const double FallObjectCapsulePos1 = paramMap["fallobject_drum_capsule_pos1"];                                  //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectCapsulePos2 = paramMap["fallobject_drum_capsule_pos2"];                                  //!< フォールオブジェクトのカプセルを形成する2点中の一点の座標までのフォールオブジェクトの位置からの距離
-   const double FallObjectRadius = paramMap["fallobject_drum_radius"];                                             //!< フォールオブジェクトのカプセルの半径
-   const double LaserRadius = paramMap["laser_radius"];                                                            //!< レーザーのカプセルの半径
-   const double BulletRadius = paramMap["bullet_radius"];                                                          //!< 弱攻撃の半径
-   const double WeakObjectDamage = paramMap["weak_object_damage"];                                                 //!< 落下オブジェクトが弱点に当たった時のダメージ量
-   const double ObjectDamage = paramMap["normal_object_damage"];                                                   //!< 落下オブジェクトが顔に当たった時のダメージ量
-   const double WeakBulletDamage = paramMap["weak_bullet_damage"];                                                 //!< 遠隔弱攻撃の弾が弱点に当たった時のダメージ量
-   const double BulletDamage = paramMap["normal_bullet_damage"];                                                   //!< 遠隔弱攻撃の弾が顔に当たった時のダメージ量
-   const double PoorEnemyObjectDamage = paramMap["poorenemy_object_damage"];                                       //!< 落下オブジェクトが雑魚敵に当たった時のダメージ量
-   const double PoorEnemyBulletDamage = paramMap["poorenemy_bullet_damage"];                                       //!< 遠隔弱攻撃の弾が雑魚敵に当たった時のダメージ量
-   const double PlayerObjectDamage = paramMap["player_object_damage"];                                             //!< 落下オブジェクトがプレイヤーに当たった時のダメージ量
-   const double PlayerLaserDamage = paramMap["player_laser_damage"];                                               //!< オブジェクトがプレイヤーに当たった時のダメージ量
-   const double PlayerLargeenemyDamage = paramMap["player_largeenemy_damage"];                                     //!< オブジェクトがプレイヤーに当たった時のダメージ量
-   const double PlayerGatlingDamage = paramMap["player_gatling_damage"];                                           //!< オブジェクトがプレイヤーに当たった時のダメージ量
-   const double PlayerPoorEnemyDamage = paramMap["player_poorenemy_damage"];                                       //!< 雑魚敵がプレイヤーに当たった時のダメージ量
-}
-
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
+   _param = std::make_unique<Param::ParamCollision>(_owner.gameMain(),"collision");
    //当たり判定の結果を管理するクラスのポインタ作成
    _report = std::make_unique<Report>();
 }
@@ -94,6 +61,8 @@ void CollisionComponent::PlayerFromObjectRange() {
       }
       // プレイヤーの参照型にキャストする
       auto& player = dynamic_cast<Player::Player&>(*object);
+      // 落下するオブジェクトを持ち上げられる範囲の球の半径
+      const auto FallObjectRange = _param->GetDoubleParam("fallobject_range");
       // オブジェクトサーバーの各オブジェクトを取得
       for (auto&& object : _owner.GetObjServer().runObjects()) {
          // 当たり判定の結果がプレイヤーと当たっているか確認
@@ -111,10 +80,8 @@ void CollisionComponent::PlayerFromObjectRange() {
             }
             // 落下するオブジェクトの位置を取得
             auto objectPos = object->position();
-            // 落下するオブジェクトを持ち上げられる範囲の球の半径
-            auto objectRadian = FallObjectRange;
             // 自前の球を定義
-            AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+            AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, FallObjectRange);
             // プレイヤーの位置取得
             auto plyPoint = player.position();
             // 球と点の当たり判定をとる
@@ -136,10 +103,8 @@ void CollisionComponent::PlayerFromObjectRange() {
       }
       // 落下するオブジェクトの位置を取得
       auto objectPos = _owner.position();
-      // 落下するオブジェクトを持ち上げられる範囲の球の半径
-      auto objectRadian = FallObjectRange;
       // 自前の球を定義
-      AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, objectRadian);
+      AppFrame::Math::Sphere objectRange = std::make_tuple(objectPos, FallObjectRange);
       // プレイヤーの位置取得
       auto plyPoint = player.position();
       // プレイヤーがオブジェクトを持ち上げられない場合落下するオブジェクトの当たり判定の結果に当たっていないと設定
@@ -165,6 +130,14 @@ void CollisionComponent::PlayerFromObjectRange() {
 }
 
 void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 落下オブジェクトの参照型にキャスト
    auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのモデルのハンドル取得
@@ -188,11 +161,11 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
       // プレイヤー側のカプセルを設定
       auto plyPos = object->position();
       // カプセルの一つ目の位置
-      auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, PlayerCapsulePos1, 0.0);
+      auto pos1 = plyPos + AppFrame::Math::Vector4(0.0, _DoubleParam("ply_capsule_pos1"), 0.0);
       // カプセルの二つ目の位置
-      plyPos.Add(0.0, PlayerCapsulePos2, 0.0);
+      plyPos.Add(0.0, _DoubleParam("ply_capsule_pos2"), 0.0);
       // カプセルの半径
-      auto radian = static_cast<float>(PlayerRadius);
+      auto radian = static_cast<float>(_DoubleParam("ply_radius"));
       // カプセルとモデルの当たり判定をとる
       auto result = MV1CollCheck_Capsule(objectModel, collision, AppFrame::Math::ToDX(pos1), AppFrame::Math::ToDX(plyPos), radian);
       // 当たり判定の結果が当たっているか確認
@@ -208,7 +181,7 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
             // プレイヤーの当たり判定の結果に落下するオブジェクトのモデルと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromFallObject);
             // ダメージを20.0に設定
-            object->collisionComponent().damage(PlayerObjectDamage);
+            object->collisionComponent().damage(_DoubleParam("player_object_damage"));
          }
          else {
             // 落下中じゃない場合当たった位置に当たったポリゴンの法線を設定
@@ -248,6 +221,14 @@ void CollisionComponent::GatlingFromObjectModel() {
 }
 
 void CollisionComponent::GatlingFromPlayer() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // プレイヤーの参照型にキャスト
    auto& player = dynamic_cast<Player::Player&>(_owner);
    // 無敵時間の取得
@@ -263,7 +244,7 @@ void CollisionComponent::GatlingFromPlayer() {
    // カプセルの二つ目の位置
    auto capsulePos2 = playerPos + Vector4(0.0, 60.0, 0.0);
    // カプセルの半径
-   auto casuleRadius = PlayerRadius;
+   auto casuleRadius = _DoubleParam("ply_radius");
    // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadius);
    // オブジェクトサーバーの各オブジェクトを取得
@@ -282,7 +263,7 @@ void CollisionComponent::GatlingFromPlayer() {
       // ガトリングの位置の取得
       auto gatlingPos = gatling.position();
       // ガトリングの半径の設定
-      auto gatlingRadius = 15.0/*GatlingRadius*/;
+      auto gatlingRadius = _DoubleParam("gatling_radius");
       // 自前の球を定義
       AppFrame::Math::Sphere gatlingSphere = std::make_tuple(gatlingPos, gatlingRadius);
       // カプセルと球で当たり判定をとる
@@ -292,7 +273,7 @@ void CollisionComponent::GatlingFromPlayer() {
          // プレイヤー側の当たり判定の結果をガトリングと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromGatling);
          // ダメージの設定
-         _owner.collisionComponent().damage(PlayerGatlingDamage);
+         _owner.collisionComponent().damage(_DoubleParam("player_gatling_damage"));
          // プレイヤーの当たった位置にガトリングの位置を設定
          _owner.collisionComponent().hitPos(object->position());
       }
@@ -300,6 +281,14 @@ void CollisionComponent::GatlingFromPlayer() {
 }
 
 void CollisionComponent::LargeEnemyFromObjectModel() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 落下オブジェクトの参照型にキャスト
    auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのカプセルを作成
@@ -309,7 +298,7 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
    // カプセルの二つ目の位置
    auto capsulePos2 = fallObject.capsulePos2();
    // カプセルの半径
-   auto capsuleRadian = static_cast<float>(FallObjectRadius);
+   auto capsuleRadian = static_cast<float>(_DoubleParam("fallobject_drum_radius"));
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       // ラージエネミーじゃない場合何もしない
@@ -327,7 +316,7 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
          // 当たっていたらラージエネミーの当たり判定結果を落下するオブジェクトと当たっていると設定
          object->collisionComponent().report().id(ReportId::HitFromFallObject);
          // ダメージの設定
-         object->collisionComponent().damage(WeakObjectDamage);
+         object->collisionComponent().damage(_DoubleParam("weak_object_damage"));
          // 落下するオブジェクトの当たり判定結果をラージエネミーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
          // for文を抜ける
@@ -344,7 +333,7 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
             // 当たっていたらラージエネミーの当たり判定結果を落下するオブジェクトと当たっていると設定
             object->collisionComponent().report().id(ReportId::HitFromFallObject);
             // ダメージの設定
-            object->collisionComponent().damage(ObjectDamage);
+            object->collisionComponent().damage(_DoubleParam("normal_object_damage"));
             // 落下するオブジェクトの当たり判定結果をラージエネミーと当たったと設定
             _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
             // for文を抜ける
@@ -373,10 +362,18 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
 }
 
 void CollisionComponent::LargeEnemyFromBullet() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 遠隔弱攻撃の弾の位置を取得
    auto bulletPos = _owner.position();
    // 遠隔弱攻撃の弾の半径を設定
-   auto bulletRadius = static_cast<float>(BulletRadius);
+   auto bulletRadius = static_cast<float>(_DoubleParam("bullet_radius"));
    // オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()){
       // ラージエネミーじゃなかったら何もしない
@@ -394,7 +391,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
          // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromBullet);
          // ダメージ量の設定
-         object->collisionComponent().damage(WeakBulletDamage);
+         object->collisionComponent().damage(_DoubleParam("weak_bullet_damage"));
          // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
          // for文を抜ける
@@ -411,7 +408,7 @@ void CollisionComponent::LargeEnemyFromBullet() {
             // 当たっていたらラージエネミーの当たり判定結果を遠隔弱攻撃の弾と当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromBullet);
             // ダメージ量の設定
-            object->collisionComponent().damage(BulletDamage);
+            object->collisionComponent().damage(_DoubleParam("normal_bullet_damage"));
             // 遠隔弱攻撃の弾の当たり判定結果をラージエネミーと当たったと設定
             _owner.collisionComponent().report().id(ReportId::HitFromLargeEnemy);
             // for文を抜ける
@@ -440,6 +437,14 @@ void CollisionComponent::LargeEnemyFromBullet() {
 }
 
 void CollisionComponent::FallObjectFromLaser() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 落下オブジェクトの参照型にキャスト
    auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    // 落下するオブジェクトのカプセルの作成
@@ -449,7 +454,7 @@ void CollisionComponent::FallObjectFromLaser() {
    // カプセルの二つ目の位置
    auto fallObjectCapsulePos2 = fallObject.capsulePos2();
    // カプセルの半径
-   auto fallObjectRadius = FallObjectRadius;
+   auto fallObjectRadius = _DoubleParam("fallobject_drum_radius");
    // 自前のカプセルを定義
    auto fallObjectCapsule = std::make_tuple(fallObjectCapsulePos1, fallObjectCapsulePos2, fallObjectRadius);
    // オブジェクトサーバーの各オブジェクトを取得
@@ -466,7 +471,7 @@ void CollisionComponent::FallObjectFromLaser() {
       // カプセルの二つ目の位置
       auto laserCapsulePos2 = laser.end();
       // カプセルの半径
-      auto laserRadius = LaserRadius;
+      auto laserRadius = _DoubleParam("laser_radius");
       // 自前のカプセルを定義
       auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
       // カプセルとカプセルの当たり判定を取る
@@ -479,6 +484,14 @@ void CollisionComponent::FallObjectFromLaser() {
 }
 
 void CollisionComponent::PlayerFromLaser() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // プレイヤーの参照型の取得
    auto& player = dynamic_cast<Player::Player&>(_owner);
    // 無敵時間の取得
@@ -490,11 +503,11 @@ void CollisionComponent::PlayerFromLaser() {
    // プレイヤーのカプセルの作成
    auto playerPos = _owner.position();
    // カプセルの一つ目の位置
-   auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+   auto plyCapsulePos1 = Vector4(0.0, _DoubleParam("ply_capsule_pos1"), 0.0) + playerPos;
    // カプセルの二つ目の位置
-   auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+   auto plyCapsulePos2 = Vector4(0.0, _DoubleParam("ply_capsule_pos2"), 0.0) + playerPos;
    // カプセルの半径
-   auto playerCapsuleRadius = PlayerRadius;
+   auto playerCapsuleRadius = _DoubleParam("ply_radius");
    // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCapsuleRadius);
    // オブジェクトサーバーの各オブジェクトを取得
@@ -511,7 +524,7 @@ void CollisionComponent::PlayerFromLaser() {
       // カプセルの二つ目の位置
       auto laserCapsulePos2 = laser.end();
       // カプセルの半径
-      auto laserRadius = LaserRadius;
+      auto laserRadius = _DoubleParam("laser_radius");
       // 自前のカプセルを定義
       auto laserCapsule = std::make_tuple(laserCapsulePos1, laserCapsulePos2, laserRadius);
       // カプセルとカプセルの当たり判定を取る
@@ -519,7 +532,7 @@ void CollisionComponent::PlayerFromLaser() {
          // 当たっていた場合プレイヤーの当たり判定の結果をレーザーと当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromLaser);
          // ダメージの設定
-         _owner.collisionComponent().damage(PlayerLaserDamage);
+         _owner.collisionComponent().damage(_DoubleParam("player_laser_damage"));
          // 当たった位置にレーザーの位置を設定
          _owner.collisionComponent().hitPos(laser.position());
       }
@@ -528,6 +541,14 @@ void CollisionComponent::PlayerFromLaser() {
 }
 
 void CollisionComponent::LargeEnemyFromPlayer() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    //ラージエネミーのモデルのハンドルの取得
    auto largeEnemyModel = _owner.modelAnimeComponent().modelHandle();
    //ラージエネミーのモデルのコリジョンフレーム番号の取得
@@ -549,11 +570,11 @@ void CollisionComponent::LargeEnemyFromPlayer() {
       //プレイヤーのカプセルの作成
       auto playerPos = player.position();
       //カプセルの一つ目の位置
-      auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+      auto plyCapsulePos1 = Vector4(0.0, _DoubleParam("ply_capsule_pos1"), 0.0) + playerPos;
       //カプセルの二つ目の位置
-      auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+      auto plyCapsulePos2 = Vector4(0.0, _DoubleParam("ply_capsule_pos2"), 0.0) + playerPos;
       //カプセルの半径
-      auto playerCapsuleRadius = static_cast<float>(PlayerRadius);
+      auto playerCapsuleRadius = static_cast<float>(_DoubleParam("ply_radius"));
       //モデルとカプセルの当たり判定を取る
       auto result = MV1CollCheck_Capsule(largeEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCapsuleRadius);
       //当たり判定の結果を確認
@@ -563,12 +584,20 @@ void CollisionComponent::LargeEnemyFromPlayer() {
          //当たった位置にラージエネミーの位置を設定
          player.collisionComponent().hitPos(_owner.position());
          //ダメージの設定
-         player.collisionComponent().damage(PlayerLargeenemyDamage);
+         player.collisionComponent().damage(_DoubleParam("player_largeenemy_damage"));
       }
    }
 }
 
 void CollisionComponent::PoorEnemyFromPlayer() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    //ラージエネミーのモデルのハンドルの取得
    auto poorEnemyModel = _owner.modelAnimeComponent().modelHandle();
    //ラージエネミーのモデルのコリジョンフレーム番号の取得
@@ -590,11 +619,11 @@ void CollisionComponent::PoorEnemyFromPlayer() {
       //プレイヤーのカプセルの作成
       auto playerPos = player.position();
       //カプセルの一つ目の位置
-      auto plyCapsulePos1 = Vector4(0.0, PlayerCapsulePos1, 0.0) + playerPos;
+      auto plyCapsulePos1 = Vector4(0.0, _DoubleParam("ply_capsule_pos1"), 0.0) + playerPos;
       //カプセルの二つ目の位置
-      auto plyCapsulePos2 = Vector4(0.0, PlayerCapsulePos2, 0.0) + playerPos;
+      auto plyCapsulePos2 = Vector4(0.0, _DoubleParam("ply_capsule_pos2"), 0.0) + playerPos;
       //カプセルの半径
-      auto playerCapsuleRadius = static_cast<float>(PlayerRadius);
+      auto playerCapsuleRadius = static_cast<float>(_DoubleParam("ply_radius"));
       //モデルとカプセルの当たり判定を取る
       auto result = MV1CollCheck_Capsule(poorEnemyModel, collision, AppFrame::Math::ToDX(plyCapsulePos1), AppFrame::Math::ToDX(plyCapsulePos2), playerCapsuleRadius);
       //当たり判定の結果を確認
@@ -604,12 +633,20 @@ void CollisionComponent::PoorEnemyFromPlayer() {
          //当たった位置にラージエネミーの位置を設定
          player.collisionComponent().hitPos(_owner.position());
          //ダメージの設定
-         player.collisionComponent().damage(PlayerPoorEnemyDamage);
+         player.collisionComponent().damage(_DoubleParam("player_poorenemy_damage"));
       }
    }
 }
 
 void CollisionComponent::BulletFromPoorEnemy() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    //ガトリング攻撃をしてくる雑魚敵のモデルハンドルの取得
    auto poorEnemyGatlingModel = _owner.modelAnimeComponent().modelHandle();
    //モデルのコリジョンフレームの取得
@@ -624,7 +661,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
       //球の位置
       auto bullet = object->position();
       //球の半径
-      auto bulletRadius = static_cast<float>(BulletRadius);
+      auto bulletRadius = static_cast<float>(_DoubleParam("bullet_radius"));
       //モデルと球の当たり判定を取る
       auto result = MV1CollCheck_Sphere(poorEnemyGatlingModel, collision, AppFrame::Math::ToDX(bullet), bulletRadius);
       //当たり判定の結果を確認
@@ -632,7 +669,7 @@ void CollisionComponent::BulletFromPoorEnemy() {
          //当たっていたら遠隔弱攻撃の弾の当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromPoorEnemy);
          //ダメージの設定
-         _owner.collisionComponent().damage(PoorEnemyBulletDamage);
+         _owner.collisionComponent().damage(_DoubleParam("poorenemy_bullet_damage"));
          //ガトリング攻撃をしてくる雑魚敵の当たり判定結果を遠隔弱攻撃の弾と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromBullet);
       }
@@ -640,6 +677,14 @@ void CollisionComponent::BulletFromPoorEnemy() {
 }
 
 void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 落下オブジェクトの参照型にキャスト
    auto& fallObject = dynamic_cast<Enemy::FallObject&>(_owner);
    //落下するオブジェクトのカプセルの作成
@@ -649,7 +694,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
    //カプセルの二つ目の位置
    auto capsulePos2 = fallObject.capsulePos2();
    //カプセルの半径
-   auto capsuleRadian = static_cast<float>(FallObjectRadius);
+   auto capsuleRadian = static_cast<float>(_DoubleParam("fallobject_drum_radius"));
    //オブジェクトサーバーの各オブジェクトを取得
    for (auto&& object : _owner.GetObjServer().runObjects()) {
       //ガトリング攻撃をしてくる雑魚敵じゃなければ何もしない
@@ -667,7 +712,7 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
          //ガトリング攻撃をしてくる雑魚敵の当たり判定結果を落下するオブジェクトと当たったと設定
          object->collisionComponent().report().id(ReportId::HitFromFallObject);
          //ダメージの設定
-         object->collisionComponent().damage(PoorEnemyObjectDamage);
+         object->collisionComponent().damage(_DoubleParam("poorenemy_object_damage"));
          //落下するオブジェクトの当たり判定結果をガトリング攻撃をしてくる雑魚敵と当たったと設定
          _owner.collisionComponent().report().id(ReportId::HitFromPoorEnemy);
       }

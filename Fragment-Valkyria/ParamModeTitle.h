@@ -6,7 +6,7 @@ namespace FragmentValkyria {
       class GameMain;
    }
    namespace Param {
-      class ParamModeTitle :public AppFrame::Param::ParamBase {
+      const class ParamModeTitle :public AppFrame::Param::ParamBase {
       public:
          ParamModeTitle(Game::GameMain& gameMain,std::string_view key);
       };

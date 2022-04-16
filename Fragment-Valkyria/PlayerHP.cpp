@@ -9,29 +9,9 @@
 #include "PlayerHP.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "ParamPlayerUI.h"
 
 namespace {
-   // jsonファイルから値を取得する
-   auto hpParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "frontcolor_red" ,
-      "frontcolor_green" ,"frontcolor_blue", "backcolor_red" ,"backcolor_green",
-      "backcolor_blue" ,"shake_frame","shake_width","redbar_speed" });
-   const unsigned char FrontColorRed = hpParamMap["frontcolor_red"];     //!< 前面バーの初期カラー赤値
-   const unsigned char FrontColorGreen = hpParamMap["frontcolor_green"]; //!< 前面バーの初期カラー緑値
-   const unsigned char FrontColorBlue = hpParamMap["frontcolor_blue"];   //!< 前面バーの初期カラー青値
-   const unsigned char BackColorRed = hpParamMap["backcolor_red"];       //!< 背面バーの初期カラー赤値
-   const unsigned char BackColorGreen = hpParamMap["backcolor_green"];   //!< 背面バーの初期カラー緑値
-   const unsigned char BackColorBlue = hpParamMap["backcolor_blue"];     //!< 背面バーの初期カラー青値
-   const unsigned char ShakeFrame= hpParamMap["shake_frame"];            //!< 振幅フレーム
-   const double ShakeWidth = hpParamMap["shake_width"];                  //!< 振幅の大きさ
-   const double RedBarSpeed = hpParamMap["redbar_speed"];                //!< 背面バーの減少速度
-
-   auto playerParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("player", { "max_hp" });
-   const double MaxHp= playerParamMap["max_hp"];                         //!< プレイヤー最大HP
-
-   // jsonファイルからVector4の値を取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "hp_pos" });
-   const auto DefalutPos = vecParamMap["hp_pos"];                      //!< バーフレーム位置(左上座標)
-
    constexpr auto OffSetLeft = 5;   //!< オフセット位置左
    constexpr auto OffSetTop = 7;    //!< オフセット位置上
    constexpr auto OffSetRight = 457; //!< オフセット位置右
@@ -43,16 +23,34 @@ namespace {
 using namespace FragmentValkyria::Player;
 
 PlayerHP::PlayerHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
+   _playerParam = std::make_unique < Param::ParamPlayer>(_gameMain, "player");
 }
 
 void PlayerHP::Init() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return static_cast<unsigned char>(_param->GetIntParam(paramName));
+   };
+   _hp = _gameMain.playerHp();
    // 画像ハンドルをResourceServerから取得する
    _grHandle = GetResServer().GetTexture("PlayerHP");
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
-   _oldFrontHP = OffSetRight;                                      // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化
-   _frontColor = { FrontColorRed,FrontColorGreen,FrontColorBlue }; // 前面バーカラーを初期化
-   _backColor = { BackColorRed,BackColorGreen,BackColorBlue };     // 背面バーカラーを初期化
-   _position = DefalutPos;                                         // バーフレームの初期化
+   auto [left, top, right, bottom] = _offSet.GetRectParams();
+   // 1フレーム前の前面バーのプレイヤーHPを線形補間により座標を求め初期化
+   _oldFrontHP = std::lerp(right, (right - left) * _hp /
+      _playerParam->GetDoubleParam("max_hp") + left, MaxRate);
+   _frontColor = { _IntParam("frontcolor_red"),
+      _IntParam("frontcolor_green"),_IntParam("frontcolor_blue") }; // 前面バーカラーを初期化
+   _backColor = { _IntParam("backcolor_red"),
+      _IntParam("backcolor_green"),_IntParam("backcolor_blue") };   // 背面バーカラーを初期化
+   _position = _param->GetVecParam("hp_pos");                       // バーフレームの初期化
+   _shake = false;                                                  // 振動フラグOFF
+   _rateReset = false;                                              // 背面バー減少フラグをOFF
 }
 
 void PlayerHP::Update() {
@@ -65,7 +63,8 @@ void PlayerHP::Update() {
    _hp = _gameMain.playerHp();
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
-   auto frontHP = std::lerp(right, (right - left) * _hp / MaxHp + left, MaxRate);
+   auto frontHP = std::lerp(right, (right - left) * _hp / 
+      _playerParam->GetDoubleParam("max_hp") + left, MaxRate);
    // HP減少を検知した際の処理
    if (frontHP < _oldFrontHP) {
       // 振動フラグON
@@ -83,7 +82,7 @@ void PlayerHP::Update() {
          _rateReset = false; // 背面バー減少フラグをOFF
       }
       // 背面バー減少値を進める
-      _rate += RedBarSpeed;
+      _rate += _param->GetDoubleParam("redbar_speed");
    }
    // 背面バー右座標が前面バー右座標より同一座標以下の処理
    else {
@@ -135,6 +134,9 @@ void PlayerHP::BarShake(unsigned int count) {
    // HPバー振動の処理
    if (_shake) {
       // 振動し始めてから指定フレーム以内の処理
+      const auto ShakeFrame = _param->GetIntParam("shake_frame");
+      const auto DefalutPos = _param->GetVecParam("hp_pos");
+      const auto ShakeWidth = _param->GetDoubleParam("shake_width");
       if (count - _shakeCnt <= ShakeFrame) {
          auto [posX, posY] = DefalutPos.GetVec2();
          // Utilityクラスから等確率分布の乱数を指定範囲内で取得

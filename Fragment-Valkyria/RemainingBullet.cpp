@@ -9,14 +9,9 @@
 #include "RemainingBullet.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "ParamPlayerUI.h"
 
 namespace{
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "bullet_diff_x" });
-   const double DiffX = paramMap["bullet_diff_x"];
-   // Jsonファイルから各Vector4データを取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "bullet_pos" });
-   const auto PortionPos = vecParamMap["bullet_pos"];
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
@@ -27,12 +22,14 @@ namespace{
 using namespace FragmentValkyria::Player;
 
 RemainingBullet::RemainingBullet(Game::GameMain& gameMain) :Sprite::SpriteBase{gameMain} {
+   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
 }
 
 void RemainingBullet::Init() {
    _grHandles = GetResServer().GetTextures("RemainingBullet");
-   _position = PortionPos;
+   _position = _param->GetVecParam("bullet_pos");
    auto [x,y] = _position.GetVec2();
+   const auto DiffX = _param->GetIntParam("bullet_diff_x");
    _xPositions = { 
       static_cast<int>(x),
       static_cast<int>(x + DiffX),

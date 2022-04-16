@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ObjectBase.h"
 #include "EffectWeakBullet.h"
+#include "ParamCollision.h"
 /**
  * \brief プロジェクト名
  */
@@ -70,8 +71,12 @@ namespace FragmentValkyria {
           */
          void OutCheckFromStage();
 
+         std::unique_ptr<Param::ParamCollision> _collParam;     //!< 当たり判定クラスの値管理クラスのポインタ
          std::unique_ptr<Effect::EffectWeakBullet> _efcBullet;  //!< 弾エフェクトのポインタ
          Vector4 _moved{ Vector4() };                           //!< 移動量のベクトル
+#ifdef _DEBUG
+         double _radius;                                        //!< デバッグ描画を行う弾の当たり判定
+#endif
 
       public:
          /**

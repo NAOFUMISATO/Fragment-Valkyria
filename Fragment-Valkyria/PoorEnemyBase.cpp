@@ -14,25 +14,11 @@
 #include "ObjectServer.h"
 #include "EffectPoorCrash.h"
 #include "EffectServer.h"
+#include "ParamPoorEnemy.h"
 
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
-      { "gravity", "rotate_speed" ,"step_distance","step_speed","idle_animespeed",
-      "walk_animespeed","fall_animespeed","die_animespeed","white_frame" });
-
-   const double Gravity = paramMap["gravity"];
-   const double RotateSpeed = paramMap["rotate_speed"];
-   const double StepDistance = paramMap["step_distance"];
-   const double StepSpeed = paramMap["step_speed"];
-   const double IdleAnimeSpeed = paramMap["idle_animespeed"];
-   const double WalkAnimeSpeed = paramMap["walk_animespeed"];
-   const double FallAnimeSpeed = paramMap["fall_animespeed"];
-   const double DieAnimeSpeed = paramMap["die_animespeed"];
-   const int WhiteFrame = paramMap["white_frame"];
-
    constexpr auto OneFrame = 60;
    constexpr auto DegreeQuarter = 90;
    constexpr auto StepDistanceLimit = 100.0;
@@ -41,6 +27,7 @@ namespace {
 }
 
 PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain,"poorenemy");
 }
 
 void PoorEnemyBase::Init() {
@@ -79,7 +66,7 @@ void PoorEnemyBase::Rotate() {
 
    auto forward = Vector4(0.0, 0.0, -1.0) * rotate;
    auto addRotate = 0.5 * forward.Cross(toPlayer).GetY();
-   _rotation.Add(Vector4(0.0, addRotate * RotateSpeed, 0.0));
+   _rotation.Add(Vector4(0.0, addRotate * _param->GetDoubleParam("rotate_speed"), 0.0));
 }
 
 void PoorEnemyBase::HitCheckFromBullet() {
@@ -115,7 +102,7 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 
 void PoorEnemyBase::DamageExpression() {
    auto frame = static_cast<int>(_gameMain.modeServer().frameCount() - _damageCnt);
-   if (frame < WhiteFrame) {
+   if (frame < _param->GetIntParam("white_frame")) {
       _modelAnimeComponent->SetBlendModeAdd(0);
       _modelAnimeComponent->SetBlendModeAdd(1);
    }
@@ -135,7 +122,8 @@ void PoorEnemyBase::StateBase::Draw() {
 }
 
 void PoorEnemyBase::StateIdle::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true, IdleAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true,
+      _owner._param->GetDoubleParam("idle_animespeed"));
    _stateCnt = _owner._gameMain.modeServer().frameCount();
 }
 
@@ -155,7 +143,8 @@ void PoorEnemyBase::StateIdle::Update() {
 }
 
 void PoorEnemyBase::StateSideStep::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true, WalkAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, 
+      _owner._param->GetDoubleParam("walk_animespeed"));
    SideStepDecide();
 }
 
@@ -165,17 +154,19 @@ void PoorEnemyBase::StateSideStep::Update() {
    if (length <= StepDistanceLimit){
       _owner._stateServer->GoToState("Idle");
    }
-   _owner._position = _owner._position + _moveOnDir * StepSpeed;
+   _owner._position = 
+      _owner._position + _moveOnDir * _owner._param->GetDoubleParam("step_speed");
 }
 
 void PoorEnemyBase::StateFall::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true, FallAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true, 
+      _owner._param->GetDoubleParam("fall_animespeed"));
    _stateCnt = 0;
 }
 
 void PoorEnemyBase::StateFall::Update() {
    StateBase::Update();
-   auto y = 0.5 * Gravity * _stateCnt * _stateCnt;
+   auto y = 0.5 * _owner._param->GetDoubleParam("gravity") * _stateCnt * _stateCnt;
    _owner._position.Add(Vector4(0.0, y, 0.0));
    _owner.Rotate();
 
@@ -187,7 +178,8 @@ void PoorEnemyBase::StateFall::Update() {
  }
 
 void PoorEnemyBase::StateDie::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("idle", true, DieAnimeSpeed);
+   _owner._modelAnimeComponent->ChangeAnime("idle", true,
+      _owner._param->GetDoubleParam("die_animespeed"));
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _opacityRate = MaxOpacityRate;
    auto efcCrash = std::make_unique<Effect::EffectPoorCrash>(_owner._gameMain, "PoorCrash");
@@ -222,6 +214,7 @@ void PoorEnemyBase::StateSideStep::SideStepDecide() {
    quarterLeft.RotateY(-DegreeQuarter, false);
    auto rightDir = moved * quarterRight;
    auto leftDir = moved * quarterLeft;
+   const auto StepDistance = _owner._param->GetDoubleParam("step_distance");
    auto rightPos = _owner._position + rightDir * StepDistance;
    auto leftPos = _owner._position + leftDir * StepDistance;
    auto isRightSafeZone = _owner._collisionComponent->IsLineFromStage(rightPos);

@@ -21,11 +21,10 @@ namespace {
 }
 
 ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
+   _param = std::make_unique<Param::ParamModeTitle>(_gameMain, "title");
 }
 
 void ModeTitle::Init() {
-
-   _param = std::make_unique<Param::ParamModeTitle>(_gameMain, "title");
 
    GetLoadJson().LoadSounds("outgame");
 
@@ -85,9 +84,9 @@ void ModeTitle::LogoAnimation() {
    auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
    auto frame = gameCount - _logoCnt;
    auto allNum = std::get<0>(GetResServer().GetTextureInfo("TitleLogo").GetDivParams());
-   auto titleAnimeSpeed = _param->GetIntParam("title_animespeed");
-   if (frame < allNum * titleAnimeSpeed) {
-      _logoHandle = _handleMap["TitleLogo"][(frame / titleAnimeSpeed) % allNum];
+   const int TitleAnimeSpeed = _param->GetIntParam("title_animespeed");
+   if (frame < allNum * TitleAnimeSpeed) {
+      _logoHandle = _handleMap["TitleLogo"][(frame / TitleAnimeSpeed) % allNum];
    }
 }
 
@@ -98,7 +97,7 @@ void ModeTitle::StateBase::Draw() {
     * \param paramName 値を指定する文字列
     * \return 文字列により指定された値
     */
-   auto _IntParam = [&](std::string paramName) {
+   const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
 
@@ -140,9 +139,9 @@ void ModeTitle::StateAnyButton::Input(InputManager& input){
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
 
-   if (_IsInput({ joypad.XClick(), joypad.YClick(),joypad.AClick(),joypad.BClick(),
-      keyboard.UpClick(),keyboard.DownClick(),keyboard.RightClick(),
-      keyboard.LeftClick(),keyboard.SpaceClick() })) {
+   if (_IsInput({ joypad.XClick(), joypad.YClick(),joypad.AClick(),
+      joypad.BClick(),keyboard.UpClick(),keyboard.DownClick(),
+      keyboard.RightClick(),keyboard.LeftClick(),keyboard.SpaceClick() })) {
       _owner.GetSoundComponent().Play("SystemDecision");
       _owner._stateServer->GoToState("StartSelect");
    }
