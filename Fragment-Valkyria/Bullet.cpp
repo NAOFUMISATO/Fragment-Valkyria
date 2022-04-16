@@ -9,20 +9,13 @@
 #include "Bullet.h"
 #include "CollisionComponent.h"
 #include "ObjectServer.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto bulletParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("weakbullet", { "speed" });
-   const double Speed = bulletParamMap["speed"];        //!< 移動の速さ
-   // Jsonファイルから各値を取得する
-   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "bullet_radius" });
-   const double Radius = collParamMap["bullet_radius"]; //!< 球の半径
-}
+#include "ParamBullet.h"
 
 using namespace FragmentValkyria::Player;
 
 Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-
+   _param = std::make_unique<Param::ParamBullet>(_gameMain,"weakbullet");
+   _collParam = std::make_unique < Param::ParamCollision>(_gameMain, "collision");
 }
 
 void Bullet::Init() {
@@ -46,7 +39,7 @@ void Bullet::Draw() {
 
 void Bullet::Move() {
    // 位置の更新
-   _position = _position + _moved * Speed;
+   _position = _position + _moved * _param->GetDoubleParam("speed");
 }
 
 void Bullet::HitCheckFromLargeEnemy() {
@@ -87,7 +80,7 @@ void Bullet::StateBase::Draw() {
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体へ変換
    auto pos = AppFrame::Math::ToDX(_owner._position);
    // 半径をfloat型にキャスト
-   auto radius = static_cast<float>(Radius);
+   auto radius = static_cast<float>(_owner._collParam->GetDoubleParam("bullet_radius"));
    // DxLibによる球の描画
    DrawSphere3D(pos, radius, 20, GetColor(0, 0, 255), GetColor(0, 0, 0), FALSE);
 #endif

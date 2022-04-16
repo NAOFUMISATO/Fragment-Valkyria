@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ObjectBase.h"
 #include "EffectObjectUp.h"
+#include "ParamCollision.h"
 /**
  * \brief プロジェクト名
  */
@@ -124,6 +125,8 @@ namespace FragmentValkyria {
           */
          void SetCapsulePos();
 
+         std::unique_ptr<Param::ParamCollision> _collParam;        //!< 当たり判定クラスの値管理クラスのポインタ
+         std::unique_ptr<Effect::EffectObjectUp> _efcUp;           //!< オブジェクト上昇クラスのポインタ
          double _fallTimer{ 0.0 };                                 //!< 落下状態の進捗
          double _upDownAngle{ 0.0 };                               //!< ふわふわさせる時のサインの値を取るときの角度
          double _rotateAngle{ 0.0 };                               //!< 不規則な回転さをせる時のサインの値を取るときの角度
@@ -138,7 +141,6 @@ namespace FragmentValkyria {
          Vector4 _capsulePos2{ Vector4(0.0, 0.0, 0.0) };           //!< カプセルを形成する二つ目の位置
          std::string_view _collisionName{ "" };                    //!< モデルのコリジョンフレームの名前
          std::vector<int> _fallPointHandles{ -1 };                 //!< 落下地点ビルボード画像ハンドル
-         std::unique_ptr<Effect::EffectObjectUp> _efcUp;           //!< オブジェクト上昇クラスのポインタ
 
       public:
          /**

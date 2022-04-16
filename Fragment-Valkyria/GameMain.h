@@ -78,8 +78,16 @@ namespace FragmentValkyria {
           * \param poorClear 雑魚戦をクリアしたかの判定
           */
          inline void isPoorClear(bool poorClear) { _isPoorClear = poorClear; }
+         /**
+          * \brief チュートリアルのクリア判定を返す
+          * \return クリアしていればtrue、でなければfalse
+          */
          inline bool isTutorialClear() { return _isTutorialClear; }
-         inline void isTutorialClear(bool tutorialEnd) { _isTutorialClear = tutorialEnd; }
+         /**
+          * \brief チュートリアルのクリア判定を設定する
+          * \param tutorialClear 設定するクリア判定
+          */
+         inline void isTutorialClear(bool tutorialClear) { _isTutorialClear = tutorialClear; }
          /**
           * \brief 計測時間の取得
           * \return インゲームで計測している時間
@@ -189,6 +197,15 @@ namespace FragmentValkyria {
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
 
       private:
+         /**
+          * \brief ファイルへのカレントパスを登録する
+          */
+         void CurrentPathRegist();
+         /**
+          * \brief モードを登録する
+          */
+         void ModeRegist();
+
          bool _isPoorClear{ false };                            //!< 雑魚戦をクリアしたか
          bool _isTutorialClear{ false };                          //!< チュートリアルを終了またはスキップしたか
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー

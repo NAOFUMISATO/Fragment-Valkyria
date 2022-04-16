@@ -15,38 +15,18 @@
 #include "ObjectServer.h"
 #include "EffectServer.h"
 #include "EffectObjectHit.h"
+#include "ParamFallObject.h"
 
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto fallParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("fallobject",
-      { "gravity", "shoot_speed", "up_speed", "rotate_angle","updown_range", "right_hand_up_value", 
-      "up_value","fallpoint_pos_y","fallpoint_scale","fallpoint_animespeed" });
-   const double Gravity = fallParamMap["gravity"];                               //!< 重力
-   const double ShootSpeed = fallParamMap["shoot_speed"];                        //!< 注視点に向かって進む速度
-   const double UpSpeed = fallParamMap["up_speed"];                              //!< 上に上がるスピード
-   const double RotateAngle = fallParamMap["rotate_angle"];                      //!< オブジェクトを回転させる角度の範囲
-   const double UpDownRange = fallParamMap["updown_range"];                      //!< 上下にふわふわさせる範囲
-   const double RightHandUpValue = fallParamMap["right_hand_up_value"];          //!< プレイヤーの右手に向かっていく速度
-   const double UpValue = fallParamMap["up_value"];                              //!< 上に上げていく処理の高さの最大値
-   const double FallPointPosY = fallParamMap["fallpoint_pos_y"];                 //!< 落ちる場所のビルボードの高さ
-   const double FallPointScale = fallParamMap["fallpoint_scale"];                //!< 落ちる場所のビルボードの大きさ
-   const int FallPointAnimeSpeed = fallParamMap["fallpoint_animespeed"];         //!< 落ちる場所のビルボードのアニメーションの速度
-   
-   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "fallobject_range" ,"fallobject_drum_capsule_pos1",
-      "fallobject_drum_capsule_pos2", "fallobject_drum_radius" });
-   const double Range = collParamMap["fallobject_range"];                        //!< オブジェクトを持ち上げられる範囲を形成する球の半径
-   const double DrumCapsulePos1 = collParamMap["fallobject_drum_capsule_pos1"];  //!< ドラム缶のカプセルの一つ目の位置までの位置からの高さ
-   const double DrumCapsulePos2 = collParamMap["fallobject_drum_capsule_pos2"];  //!< ドラム缶のカプセルの二つ目の位置までの位置からの高さ
-   const double DrumCapsuleRadius = collParamMap["fallobject_drum_radius"];      //!< ドラム缶のカプセルの半径
-
    constexpr auto DefaultPointAngle = 0.0;                                       //!< 落ちる場所のビルボードの回転角度
    constexpr auto UpEffectDiffY = 20.0;                                          //!< エフェクトの高さ
 }
 
 FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-
+   _param = std::make_unique<Param::ParamFallObject>(_gameMain,"fallobject");
+   _collParam = std::make_unique<Param::ParamCollision>(_gameMain, "collision");
 }
 
 void FallObject::Init() {
@@ -152,6 +132,14 @@ void FallObject::CheckPlayerKnockBack() {
 }
 
 void FallObject::Save() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // 不規則な回転をさせるために使うサインの値を取得するために使う角度の更新
    _rotateAngle += 1.0;
    // 角度をラジアンにする
@@ -159,7 +147,7 @@ void FallObject::Save() {
    // サインの値を取得
    auto sinValue = std::sin(radian);
    // 既定の角度の-1倍から1倍の範囲で角度を決める
-   auto xyz = RotateAngle * sinValue;
+   auto xyz = _DoubleParam("rotate_angle") * sinValue;
    // 回転のベクトルを設定
    _rotation = Vector4(xyz, xyz, xyz);
    // オブジェクト一括管理クラスのオブジェクトの取得
@@ -180,7 +168,7 @@ void FallObject::Save() {
       auto [x, y, z] = toRightHand.GetVec3();
       auto moveVec = Vector4(x, 0.0, z);
       // 位置を高さを無くしたプレイヤーの右手の座標へ近づける
-      _position = _position + moveVec * UpSpeed;
+      _position = _position + moveVec * _DoubleParam("up_speed");
       // for文を抜ける
       break;
    }
@@ -191,12 +179,20 @@ void FallObject::Save() {
    // サインの値を取得
    auto upDownSinValue = std::sin(upDownRadian);
    // 既定の値の-1倍から1倍の範囲で足していく高さを決める
-   auto y = UpDownRange * upDownSinValue;
+   auto y = _DoubleParam("updown_range") * upDownSinValue;
    // 高さの更新
    _position.Add(0.0, y, 0.0);
 }
 
 void FallObject::Up() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // オブジェクト一括管理クラスのオブジェクトの取得
    for (auto&& object : GetObjServer().runObjects()) {
       // プレイヤーじゃない場合処理をスキップしてfor文を回す
@@ -210,10 +206,11 @@ void FallObject::Up() {
       // for文を抜ける
       break;
    }
+   const auto UpSpeed = _DoubleParam("up_speed");
    // 位置の高さが既定の値より大きい場合
-   if (_position.GetY() >= UpValue) {
+   if (_position.GetY() >= _DoubleParam("up_value")) {
       // プレイヤーの右手の座標のY成分に既定の値足す
-      _plyRightHandVec.Add(0.0, RightHandUpValue, 0.0);
+      _plyRightHandVec.Add(0.0, _DoubleParam("right_hand_up_value"), 0.0);
       // プレイヤーの右手の座標に既定の値高さを足した位置へのベクトルの取得
       auto moveVec = _plyRightHandVec - _position;
       // 単位化する
@@ -235,12 +232,20 @@ void FallObject::Up() {
 
 void FallObject::Shoot() {
    // 移動量の設定
-   auto move = _shootVec * ShootSpeed;
+   auto move = _shootVec * _param->GetDoubleParam("shoot_speed");
    // 位置の更新
    _position = _position + move;
 }
 
 void FallObject::SetCapsulePos() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // モデルの回転のマトリクスを作成
    auto [rx, ry, rz] = _rotation.GetVec3();
    auto world = AppFrame::Math::Matrix44();
@@ -248,22 +253,30 @@ void FallObject::SetCapsulePos() {
    world.RotateX(rx, false);
    world.RotateY(ry, false);
    // カプセルの位置の設定
-   _capsulePos1 = _position + Vector4(0.0, DrumCapsulePos1, 0.0) * world;
-   _capsulePos2 = _position + Vector4(0.0, DrumCapsulePos2, 0.0) * world;
+   _capsulePos1 = _position + Vector4(0.0, _DoubleParam("fallobject_drum_capsule_pos1"), 0.0) * world;
+   _capsulePos2 = _position + Vector4(0.0, _DoubleParam("fallobject_drum_capsule_pos2"), 0.0) * world;
 }
 
 void FallObject::StateBase::Draw() {
    // モデルの描画処理を回す
    _owner._modelAnimeComponent->Draw();
 #ifdef _DEBUG
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _owner._param->GetDoubleParam(paramName);
+   };
    // 自作のベクトルクラスの位置をDxLibのVECTOR型に変換
    auto pos = AppFrame::Math::ToDX(_owner._position);
    // float型にキャスト
-   auto radian = static_cast<float>(Range);
+   auto radian = static_cast<float>(_DoubleParam("fallobject_range"));
    // 球の描画
    DrawSphere3D(pos, radian, 10, GetColor(0, 0, 0), GetColor(0, 0, 0), FALSE);
    // float型にキャスト
-   radian = static_cast<float>(DrumCapsuleRadius);
+   radian = static_cast<float>(_DoubleParam("fallobject_drum_radius"));
    // カプセルの描画
    DrawCapsule3D(AppFrame::Math::ToDX(_owner._capsulePos1), AppFrame::Math::ToDX(_owner._capsulePos2), radian, 20, GetColor(0, 255, 0), GetColor(0, 0, 0), FALSE);
 #endif
@@ -304,7 +317,7 @@ void FallObject::StateFall::Enter() {
 
 void FallObject::StateFall::Update() {
    // Y座標の位置の変化量の取得
-   auto posY = (0.5 * Gravity * _owner._fallTimer * _owner._fallTimer);
+   auto posY = (0.5 * _owner._param->GetDoubleParam("gravity") * _owner._fallTimer * _owner._fallTimer);
    // 位置の更新
    _owner._position.Add(0.0, -posY, 0.0);
    // Y座標が地面より小さくなったら
@@ -336,11 +349,20 @@ void FallObject::StateFall::Update() {
 }
 
 void FallObject::StateFall::Draw() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _owner._param->GetDoubleParam(paramName);
+   };
    // 状態の基底クラスの描画処理
    FallObject::StateBase::Draw();
    auto pointPosition = _owner._position;
-   pointPosition.SetY(FallPointPosY);
-   _owner.GetTexComponent().DrawBillBoard(pointPosition, FallPointScale,DefaultPointAngle, _owner._fallPointHandles, FallPointAnimeSpeed);
+   pointPosition.SetY(_DoubleParam("fallpoint_pos_y"));
+   _owner.GetTexComponent().DrawBillBoard(pointPosition, _DoubleParam("fallpoint_scale"),
+      DefaultPointAngle, _owner._fallPointHandles, _owner._param->GetIntParam("fallpoint_animespeed"));
 }
 
 void FallObject::StateUp::Enter() {

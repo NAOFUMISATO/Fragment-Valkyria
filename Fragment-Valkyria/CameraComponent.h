@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "AppFrame.h"
 #include <tuple>
+#include "ParamCameraComponent.h"
  /**
   * \brief プロジェクト名
   */
@@ -133,6 +134,9 @@ namespace FragmentValkyria {
           * \brief カメラの振動
           */
          void Vibration();
+
+         std::unique_ptr<Param::ParamCameraComponent> _param;               //!< カメラ管理クラスの値管理クラスのポインタ
+         std::unique_ptr<StateServer> _stateServer;                         //!< 状態の一括管理クラスのポインタ
          bool _zoom{ false };                                               //!< ズームするか
          Vector4 _position{ 0, 0, 0 };                                      //!< 位置
          Vector4 _target{ 0, 0, 0 };                                        //!< 注視点
@@ -154,7 +158,6 @@ namespace FragmentValkyria {
          double _vibrationVelocity{ 0.0 };                                  //!< 振動させるときに使う速度
          double _vibrationValue{ 60.0 };                                    //!< 振動した時のYの位置
          std::tuple<double, double, double> _nearFarFov{ 0.0,0.0,0.0 };     //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
-         std::unique_ptr<StateServer> _stateServer;                         //!< 状態の一括管理クラスのポインタ
 
       public:
          /**

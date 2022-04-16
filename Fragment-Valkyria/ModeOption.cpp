@@ -8,49 +8,36 @@
  *********************************************************************/
 #include "ModeOption.h"
 #include "GameMain.h"
+#include "ParamOption.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("option",{"default_camera_sens","default_aim_sens",
-      "default_deadzone","sensivity_min","sensivity_max","deadzone_min","deadzone_max","aimsens_x" ,"aimsens_y" ,
-      "aimbar_x","aimbar_y","camerasens_x","camerasens_y","camerabar_x","camerabar_y","deadzone_x" ,"deadzone_y" ,
-      "deadzonebar_x","deadzonebar_y","return_x" ,"return_y" ,"bg_alpha" });
-   const int DefaultCameraSens = paramMap["default_camera_sens"];
-   const int DefaultAimSens = paramMap["default_aim_sens"];
-   const int DefaultDeadZone = paramMap["default_deadzone"];
-   const int SensivityMin = paramMap["sensivity_min"];
-   const int SensivityMax= paramMap["sensivity_max"];
-   const int DeadZoneMin = paramMap["deadzone_min"];
-   const int DeadZoneMax = paramMap["deadzone_max"];
-   const int CameraSensPosX = paramMap["camerasens_x"];
-   const int CameraSensPosY = paramMap["camerasens_y"];
-   const int CameraBarPosX = paramMap["camerabar_x"];
-   const int CameraBarPosY = paramMap["camerabar_y"];
-   const int AimSensPosX = paramMap["aimsens_x"];
-   const int AimSensPosY = paramMap["aimsens_y"];
-   const int AimBarPosX = paramMap["aimbar_x"];
-   const int AimBarPosY = paramMap["aimbar_y"];
-   const int DeadZonePosX = paramMap["deadzone_x"];
-   const int DeadZonePosY = paramMap["deadzone_y"];
-   const int DeadZoneBarPosX = paramMap["deadzonebar_x"];
-   const int DeadZoneBarPosY = paramMap["deadzonebar_y"];
-   const int ReturnPosX = paramMap["return_x"];
-   const int ReturnPosY = paramMap["return_y"];
-   const int BgAlpha = paramMap["bg_alpha"];
    constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox横サイズ
    constexpr auto BoxHeight = 1080;     //!< DxLib::DrawBox縦サイズ
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
-   const int SensitivityDivNum = SensivityMax / SensivityMin - 1;
-   const int DeadZoneDivNum = DeadZoneMax / DeadZoneMin - 1;
+   constexpr auto SensivityMax = 10.0;
+   constexpr auto DeadZoneMax = 100.0;
+   constexpr auto SensivityMin = 1.0;
+   constexpr auto DeadZoneMin = 10;
+   constexpr auto SensitivityDivNum = SensivityMax / SensivityMin - 1;
+   constexpr auto DeadZoneDivNum = DeadZoneMax / DeadZoneMin - 1;
 }
 
 using namespace FragmentValkyria::Mode;
 
 ModeOption::ModeOption(Game::GameMain& gameMain) : ModeBase { gameMain }{
+   _param = std::make_unique<Param::ParamOption>(_gameMain,"option");
 }
 
 void ModeOption::Init() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    GetLoadJson().LoadTextures("option");
    auto& resServer = GetResServer();
    _handleMap = {
@@ -68,9 +55,9 @@ void ModeOption::Init() {
    _stateServer->Register("DeadZoneSelect", std::make_shared<StateDeadZoneSelect>(*this));
    _stateServer->Register("ReturnSelect", std::make_shared<StateReturnSelect>(*this));
    
-   _cameraSens = static_cast<double>(DefaultCameraSens);
-   _aimSens = static_cast<double>(DefaultAimSens);
-   _deadZone = DefaultDeadZone;
+   _cameraSens = _DoubleParam("default_camera_sens");
+   _aimSens = _DoubleParam("default_aim_sens");
+   _deadZone =_param->GetIntParam("default_deadzone");
    _gameMain.sensitivity(_cameraSens, _aimSens, _deadZone);
 }
 
@@ -92,6 +79,14 @@ void ModeOption::Render() {
 }
 
 void ModeOption::StateBase::Update() {
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
    auto [cameraSencivity, aimSencivity, deadZone] = _owner._gameMain.sensitivity();
    auto& ajustHandle = _owner._handleMap["AdjustmentBar"];
    auto& cusorHandle = _owner._handleMap["BarCusor"];
@@ -103,41 +98,68 @@ void ModeOption::StateBase::Update() {
    auto cusorOffsetY = -cusorHeight / 2;
    auto sensDivOne = (static_cast<double>(ajustWidth) / SensitivityDivNum);
    auto deadDivOne = ajustWidth / DeadZoneDivNum;
-   auto cameraCusorX = (CameraBarPosX + (sensDivOne * (cameraSencivity / SensivityMin)) - sensDivOne)+ cusorOffsetX;
-   auto cameraCusorY = (CameraBarPosY + ajustHeight / 2) + cusorOffsetY;
-   auto aimCusorX = (AimBarPosX + (sensDivOne * (aimSencivity / SensivityMin)) - sensDivOne)+ cusorOffsetX;
-   auto aimCusorY = (AimBarPosY + ajustHeight / 2) + cusorOffsetY;
-   auto deadZoneCusorX = (DeadZoneBarPosX + (deadDivOne * (deadZone / DeadZoneMin)) - deadDivOne)+ cusorOffsetX;
-   auto deadZoneCusorY = (DeadZoneBarPosY + ajustHeight / 2) + cusorOffsetY;
+   auto cameraCusorX = (_IntParam("camerabar_x") + (sensDivOne * (cameraSencivity / SensivityMin)) - sensDivOne)+ cusorOffsetX;
+   auto cameraCusorY = (_IntParam("camerabar_y") + ajustHeight / 2) + cusorOffsetY;
+   auto aimCusorX = (_IntParam("aimbar_x") + (sensDivOne * (aimSencivity / SensivityMin)) - sensDivOne)+ cusorOffsetX;
+   auto aimCusorY = (_IntParam("aimbar_y") + ajustHeight / 2) + cusorOffsetY;
+   auto deadZoneCusorX = (_IntParam("deadzonebar_x") + (deadDivOne * (deadZone / DeadZoneMin)) - deadDivOne) + cusorOffsetX;
+   auto deadZoneCusorY = (_IntParam("deadzonebar_y") + ajustHeight / 2) + cusorOffsetY;
    _owner._cameraCusorPos = { static_cast<int>(cameraCusorX) , static_cast<int>(cameraCusorY) };
    _owner._aimCusorPos = { static_cast<int>(aimCusorX) , static_cast<int>(aimCusorY) };
    _owner._deadzoneCusorPos = { static_cast<int>(deadZoneCusorX) , static_cast<int>(deadZoneCusorY) };
 }
 
 void ModeOption::StateBase::Draw() {
-   SetDrawBlendMode(DX_BLENDMODE_ALPHA, BgAlpha);
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   SetDrawBlendMode(DX_BLENDMODE_ALPHA, _IntParam("bg_alpha"));
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
    auto handleMap = _owner._handleMap;
-   _owner.GetTexComponent().DrawTexture(CameraSensPosX, CameraSensPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["CameraSensivity"]);
-   _owner.GetTexComponent().DrawTexture(CameraBarPosX, CameraBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(AimSensPosX, AimSensPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AimSensivity"]);
-   _owner.GetTexComponent().DrawTexture(AimBarPosX, AimBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(DeadZonePosX, DeadZonePosY, DefaultGraphScale, DefaultGraphAngle, handleMap["DeadZone"]);
-   _owner.GetTexComponent().DrawTexture(DeadZoneBarPosX, DeadZoneBarPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(ReturnPosX, ReturnPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["Return"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("camerasens_x"), _IntParam("camerasens_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["CameraSensivity"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("camerabar_x"), _IntParam("camerabar_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("aimsens_x"), _IntParam("aimsens_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["AimSensivity"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("aimbar_x"), _IntParam("aimbar_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("deadzone_x"), _IntParam("deadzone_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["DeadZone"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("deadzonebar_x"), _IntParam("deadzonebar_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("return_x"), _IntParam("return_y"),
+      DefaultGraphScale, DefaultGraphAngle, handleMap["Return"]);
    auto [cameraCusorPosX, cameraCusorPosY] = _owner._cameraCusorPos;
    auto [aimCusorPosX, aimCusorPosY] = _owner._aimCusorPos;
    auto [deadzoneCusorPosX, deadzoneCusorPosY] = _owner._deadzoneCusorPos;
-   _owner.GetTexComponent().DrawTexture(cameraCusorPosX, cameraCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
-   _owner.GetTexComponent().DrawTexture(aimCusorPosX, aimCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
-   _owner.GetTexComponent().DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
+   _owner.GetTexComponent().DrawTexture(cameraCusorPosX, cameraCusorPosY,
+      DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
+   _owner.GetTexComponent().DrawTexture(aimCusorPosX, aimCusorPosY,
+      DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
+   _owner.GetTexComponent().DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY,
+      DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
    auto [selectCusorPosX, selectCusorPosY] = _owner._selectCusorPos;
-   _owner.GetTexComponent().DrawTexture(selectCusorPosX, selectCusorPosY, DefaultGraphScale, DefaultGraphAngle, handleMap["OptionCusor"]);
+   _owner.GetTexComponent().DrawTexture(selectCusorPosX, selectCusorPosY, 
+      DefaultGraphScale, DefaultGraphAngle, handleMap["OptionCusor"]);
 }
 
 void ModeOption::StateCameraSencivitySelect::Enter() {
-   _owner._selectCusorPos = { CameraSensPosX ,CameraSensPosY };
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   _owner._selectCusorPos = { _IntParam("camerasens_x") ,_IntParam("camerasens_y") };
 }
 
 void ModeOption::StateCameraSencivitySelect::Input(AppFrame::Input::InputManager& input) {
@@ -160,7 +182,15 @@ void ModeOption::StateCameraSencivitySelect::Input(AppFrame::Input::InputManager
 }
 
 void ModeOption::StateAimSencivitySelect::Enter() {
-   _owner._selectCusorPos = { AimSensPosX ,AimSensPosY };
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   _owner._selectCusorPos = { _IntParam("aimsens_x") ,_IntParam("aimsens_y") };
 }
 
 void ModeOption::StateAimSencivitySelect::Input(AppFrame::Input::InputManager& input) {
@@ -183,7 +213,15 @@ void ModeOption::StateAimSencivitySelect::Input(AppFrame::Input::InputManager& i
 }
 
 void ModeOption::StateDeadZoneSelect::Enter() {
-   _owner._selectCusorPos = { DeadZonePosX ,DeadZonePosY };
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   _owner._selectCusorPos = { _IntParam("deadzone_x") ,_IntParam("deadzone_y") };
 }
 
 void ModeOption::StateDeadZoneSelect::Input(AppFrame::Input::InputManager& input) {
@@ -206,7 +244,15 @@ void ModeOption::StateDeadZoneSelect::Input(AppFrame::Input::InputManager& input
 }
 
 void ModeOption::StateReturnSelect::Enter() {
-   _owner._selectCusorPos = { ReturnPosX ,ReturnPosY };
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   _owner._selectCusorPos = { _IntParam("return_x") ,_IntParam("return_y") };
 }
 
 void ModeOption::StateReturnSelect::Input(AppFrame::Input::InputManager& input) {

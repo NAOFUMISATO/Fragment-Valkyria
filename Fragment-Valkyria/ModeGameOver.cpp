@@ -8,20 +8,17 @@
  *********************************************************************/
 #include "ModeGameOver.h"
 #include "GameMain.h"
-using namespace FragmentValkyria::Mode;
+#include "ParamModeGameOver.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("over", {"continue_x","continue_y","exit_x","exit_y"});
-   const int ContinuePosX = paramMap["continue_x"];
-   const int ContinuePosY = paramMap["continue_y"];
-   const int ExitPosX = paramMap["exit_x"];
-   const int ExitPosY = paramMap["exit_y"];
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
 }
 
+using namespace FragmentValkyria::Mode;
+
 ModeGameOver::ModeGameOver(Game::GameMain& gameMain) :ModeBase{ gameMain } {
+   _param = std::make_unique<Param::ParamModeGameOver>(_gameMain,"over");
 }
 
 void ModeGameOver::Init() {
@@ -56,9 +53,20 @@ void ModeGameOver::Render() {
 }
 
 void ModeGameOver::StateBase::Draw() {
-   _owner.GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle, _owner._handleMap["OverBg"][0]);
-   _owner.GetTexComponent().DrawTexture(ContinuePosX, ContinuePosY, DefaultGraphScale, DefaultGraphAngle, _owner._continueDrawHandles, 2);
-   _owner.GetTexComponent().DrawTexture(ExitPosX, ExitPosY, DefaultGraphScale, DefaultGraphAngle, _owner._exitDrawHandles, 2);
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _owner._param->GetIntParam(paramName);
+   };
+   _owner.GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle,
+      _owner._handleMap["OverBg"][0]);
+   _owner.GetTexComponent().DrawTexture(_IntParam("continue_x"), _IntParam("continue_y"), 
+      DefaultGraphScale, DefaultGraphAngle, _owner._continueDrawHandles, 2);
+   _owner.GetTexComponent().DrawTexture(_IntParam("exit_x"), _IntParam("exit_y"),
+      DefaultGraphScale, DefaultGraphAngle, _owner._exitDrawHandles, 2);
 }
 
 void ModeGameOver::StateContinue::Enter() {

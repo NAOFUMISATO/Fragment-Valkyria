@@ -156,20 +156,20 @@ namespace FragmentValkyria {
           */
          inline void sprState(SpriteState state) { _sprState = state; }
 
-         Game::GameMain& _gameMain;                                   //!< ゲーム本体クラスの参照
-         const std::unique_ptr<AppFrame::Param::ParamBase> _param;//!< 値管理用クラスのポインタ
-         std::unique_ptr<StateServer> _stateServer;                   //!< 状態の一括管理クラスのポインタ
-         SpriteState _sprState{ SpriteState::Active };                //!< オブジェクトの状態
-         int _grHandle{ -1 };                                         //!< 画像ハンドル
-         int _cx{ 0 };                                                //!< 画像のX基準点
-         int _cy{ 0 };                                                //!< 画像のY基準点
-         int _alpha{ 255 };                                           //!< 透明度
-         bool _transFlag{ true };                                     //!< 背景透過フラグ
-         bool _turnFlag{ false };                                     //!< 反転判定
-         double _scale{ 1.0 };                                        //!< 拡大率
-         double _angle{ 0.0 };                                        //!< 角度
-         Vector4 _position{ 0,0,0 };                                  //!< 位置
-         std::vector<int> _grHandles;                                 //!< 画像ハンドル配列
+         Game::GameMain& _gameMain;                           //!< ゲーム本体クラスの参照
+         std::unique_ptr<AppFrame::Param::ParamBase> _param;  //!< 値管理用クラスのポインタ
+         std::unique_ptr<StateServer> _stateServer;           //!< 状態の一括管理クラスのポインタ
+         SpriteState _sprState{ SpriteState::Active };        //!< オブジェクトの状態
+         int _grHandle{ -1 };                                 //!< 画像ハンドル
+         int _cx{ 0 };                                        //!< 画像のX基準点
+         int _cy{ 0 };                                        //!< 画像のY基準点
+         int _alpha{ 255 };                                   //!< 透明度
+         bool _transFlag{ true };                             //!< 背景透過フラグ
+         bool _turnFlag{ false };                             //!< 反転判定
+         double _scale{ 1.0 };                                //!< 拡大率
+         double _angle{ 0.0 };                                //!< 角度
+         Vector4 _position{ 0,0,0 };                          //!< 位置
+         std::vector<int> _grHandles;                         //!< 画像ハンドル配列
       };
    }
 }

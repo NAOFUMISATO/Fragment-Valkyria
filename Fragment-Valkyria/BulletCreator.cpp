@@ -29,7 +29,6 @@ std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
       auto rightHandFramePos = object->modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_RightFingerBase");
       bullet->position(rightHandFramePos);
    }
-   bullet->Init();
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Shoot", std::make_shared<Player::Bullet::StateShoot>(*bullet));
    bullet->stateServer(std::move(state));

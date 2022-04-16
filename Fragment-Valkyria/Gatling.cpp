@@ -13,20 +13,13 @@
 #include "EffectGatlingMuzzleFlash.h"
 #include "EffectGatlingBullet.h"
 #include "EffectServer.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto gatParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("gatling",{ "speed" });
-   const double Speed = gatParamMap["speed"];            //!< スピード
-   // Jsonファイルから各値を取得する
-   auto collParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("collision", { "gatling_radius" });
-   const double Radius = collParamMap["gatling_radius"]; //!< ガトリングの半径
-}
+#include "ParamGatling.h"
 
 using namespace FragmentValkyria::Enemy;
 
 Gatling::Gatling(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-
+   _param = std::make_unique<Param::ParamGatling>(_gameMain,"gatling");
+   _collParam = std::make_unique<Param::ParamCollision>(_gameMain, "collision");
 }
 
 void Gatling::Init() {
@@ -55,7 +48,7 @@ void Gatling::Draw() {
 
 void Gatling::Move() {
    // 移動量のベクトルの設定
-   _moved = _moveDirection * Speed;
+   _moved = _moveDirection * _param->GetDoubleParam("speed");
    // 位置の設定
    _position = _position + _moved;
 }
@@ -93,7 +86,7 @@ void Gatling::StateBase::Draw() {
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体への変換
    auto position = AppFrame::Math::ToDX(_owner._position);
    // 半径をfloat型にキャスト
-   auto radian = static_cast<float>(Radius);
+   auto radian = static_cast<float>(_owner._collParam->GetDoubleParam("gatling_radius"));
    // DxLibによる球の描画
    DrawSphere3D(position, radian, 10, GetColor(255, 0, 0), GetColor(0, 0, 0), FALSE);
 #endif
@@ -134,7 +127,7 @@ void Gatling::StateDie::Draw() {
    // 位置を自作のVector4クラスからDxLib::VECTOR構造体への変換
    auto position = AppFrame::Math::ToDX(_owner._position);
    // 半径をfloat型にキャスト
-   auto radian = static_cast<float>(Radius);
+   auto radian = static_cast<float>(_owner._collParam->GetDoubleParam("gatling_radius"));
    // ブレンドモードをαブレンドに設定
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
    // DxLibによる球の描画

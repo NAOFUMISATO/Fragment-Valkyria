@@ -93,7 +93,7 @@ void ModeBoss::Update() {
 void ModeBoss::Render() {
    ModeInGameBase::Render();
 #ifdef _DEBUG
-   auto bossHp = GetObjServer().GetDoubleData("BossHP");
+   auto bossHp = GetObjServer().GetDoubleData("LargeEnemyHP");
    DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),"É{ÉXHP : %f", bossHp);
 #endif
 }

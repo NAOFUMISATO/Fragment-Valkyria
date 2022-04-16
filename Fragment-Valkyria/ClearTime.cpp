@@ -8,15 +8,9 @@
  *********************************************************************/
 #include "ClearTime.h"
 #include "GameMain.h"
+#include "ParamModeClear.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", { "number_diffx" });
-   const double NumberDiffX = paramMap["number_diffx"];
-   // Jsonファイルから各Vector4データを取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "time_pos" });
-   const auto TimePos = vecParamMap["time_pos"];
-
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
@@ -27,12 +21,14 @@ namespace {
 using namespace FragmentValkyria::Clear;
 
 ClearTime::ClearTime(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
+   _param = std::make_unique<Param::ParamModeClear>(_gameMain,"clear");
 }
 
 void ClearTime::Init() {
    _grHandles = GetResServer().GetTextures("NumberAndColon");
-   _position = TimePos;
+   _position = _param->GetVecParam("time_pos");
    auto [x, y] = _position.GetVec2();
+   const auto NumberDiffX= _param->GetIntParam("number_diffx");
    _xPositions = {
       static_cast<int>(x),
       static_cast<int>(x + NumberDiffX),
@@ -57,10 +53,15 @@ void ClearTime::Draw(){
    auto [x, y] = _position.GetVec2();
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
    auto [firstNo, secondNo, thirdNo, fourthNo, fifthNo] = _animeNos;
-   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthNo]);
-   GetTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthNo]);
-   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdNo]);
-   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondNo]);
-   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstNo]);
+   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), 
+      DefalutScale, DefalutAngle, _grHandles[fifthNo]);
+   GetTexComponent().DrawTexture(secondX, static_cast<int>(y),
+      DefalutScale, DefalutAngle, _grHandles[fourthNo]);
+   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), 
+      DefalutScale, DefalutAngle, _grHandles[thirdNo]);
+   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), 
+      DefalutScale, DefalutAngle, _grHandles[secondNo]);
+   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y),
+      DefalutScale, DefalutAngle, _grHandles[firstNo]);
 }
 

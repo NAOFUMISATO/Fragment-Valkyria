@@ -11,15 +11,9 @@
 #include "Player.h"
 #include "ObjectServer.h"
 #include "PlayerHP.h"
+#include "ParamPlayerUI.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", {"reticle_animespeed"});
-   const int ReticleAnimeSpeed = paramMap["reticle_animespeed"];
-   // Jsonファイルから各Vector4データを取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "reticle_pos" });
-   const auto ReticlePos = vecParamMap["reticle_pos"];
-
    constexpr auto DefaultScale = 1.0;
    constexpr auto DefaultAngle = 0.0;
 }
@@ -27,12 +21,12 @@ namespace {
 using namespace FragmentValkyria::Player;
 
 Reticle::Reticle(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
-
+   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain,"playerui");
 }
 
 void Reticle::Init() {
    _grHandles = GetResServer().GetTextures("Reticle");
-   _position = ReticlePos;
+   _position = _param->GetVecParam("reticle_pos");
 }
 
 void Reticle::Update() {
@@ -47,6 +41,7 @@ void Reticle::Update() {
 void Reticle::Draw() {
    if (_isAim) {
       auto [x, y, z] = _position.GetVec3();
-      GetTexComponent().DrawTexture(static_cast<int>(x), static_cast<int>(y), DefaultScale, DefaultAngle, _grHandles, ReticleAnimeSpeed);
+      GetTexComponent().DrawTexture(static_cast<int>(x), static_cast<int>(y),
+         DefaultScale, DefaultAngle, _grHandles, _param->GetIntParam("reticle_animespeed"));
    }
 }

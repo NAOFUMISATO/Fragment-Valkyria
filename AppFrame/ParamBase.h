@@ -13,6 +13,7 @@
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <typeinfo>
 #include "Vector4.h"
 /**
  * \brief アプリケーションフレーム
@@ -33,7 +34,7 @@ namespace AppFrame {
        * \class 各値の管理を行う基底クラス
        * \brief 各値をjsonファイルから読み込み、取得する
        */
-      class ParamBase {
+      const class ParamBase {
          public:
          /**
           * \brief コンストラクタ

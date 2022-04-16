@@ -12,21 +12,12 @@
 #include "ObjectFactory.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
-
-namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("poorenemy",
-      { "rush_speed", "rush_frame","rush_animespeed" });
-
-   const double RushSpeed = paramMap["rush_speed"];
-   const int RushFrame = paramMap["rush_frame"];
-   const double RushAnimeSpeed = paramMap["rush_animespeed"];
-}
+#include "ParamPoorEnemy.h"
 
 using namespace FragmentValkyria::Enemy;
 
 PoorEnemyMelee::PoorEnemyMelee(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
-
+   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain,"poorenemy");
 }
 
 void PoorEnemyMelee::Init() {
@@ -43,16 +34,24 @@ void PoorEnemyMelee::Rush(const Vector4& moved) {
 }
 
 void PoorEnemyMelee::StateRush::Enter() {
-   _owner._modelAnimeComponent->ChangeAnime("walk", true, RushAnimeSpeed);
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _owner._param->GetDoubleParam(paramName);
+   };
+   _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
    _stateCnt = _owner._gameMain.modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
-   _moved = _moved * RushSpeed;
+   _moved = _moved * _DoubleParam("rush_speed");
 }
 
 void PoorEnemyMelee::StateRush::Update() {
    auto frame = static_cast<int>(_owner._gameMain.modeServer().frameCount() - _stateCnt);
-   if (frame <= RushFrame) {
+   if (frame <= _owner._param->GetIntParam("rush_frame")) {
       _owner.Rush(_moved);
    }
    else {

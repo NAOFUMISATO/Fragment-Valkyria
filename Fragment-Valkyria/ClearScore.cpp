@@ -8,31 +8,34 @@
  *********************************************************************/
 #include "ClearScore.h"
 #include "GameMain.h"
+#include "ParamModeClear.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("clear", {
-      "s_scoresec","a_scoresec","b_scoresec","c_scoresec" });
-   const int SScoreSec = paramMap["s_scoresec"];
-   const int AScoreSec = paramMap["a_scoresec"];
-   const int BScoreSec = paramMap["b_scoresec"];
-   const int CScoreSec = paramMap["c_scoresec"];
-   // Jsonファイルから各Vector4データを取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("clear", { "score_pos" });
-   const auto ScorePos = vecParamMap["score_pos"];
-
    constexpr auto OneSecFrame = 60;
 }
 
 using namespace FragmentValkyria::Clear;
 
 ClearScore::ClearScore(Game::GameMain& gameMain) :SpriteBase{ gameMain } {
+   _param = std::make_unique < Param::ParamModeClear >(_gameMain,"clear");
 }
 
 void ClearScore::Init() {
-   _position = ScorePos;
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _param->GetIntParam(paramName);
+   };
+   _position = _param->GetVecParam("score_pos");
    auto handles = GetResServer().GetTextures("ClearScore");
    auto timer = static_cast<int>(_gameMain.ingameTimer());
+   const auto CScoreSec = _IntParam("c_scoresec");
+   const auto BScoreSec = _IntParam("b_scoresec");
+   const auto AScoreSec = _IntParam("a_scoresec");
+   const auto SScoreSec = _IntParam("s_scoresec");
    if (timer >= OneSecFrame * CScoreSec) {
       _grHandle = handles[3];
    }

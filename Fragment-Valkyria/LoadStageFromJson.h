@@ -34,10 +34,6 @@ namespace FragmentValkyria{
           */
          LoadStageFromJson(Game::GameMain& gameMain);
          /**
-          * \brief デストラクタ
-          */
-         ~LoadStageFromJson()=default;
-         /**
           * \brief ステージ情報の連想配列
           */
          void ClearStageModels();

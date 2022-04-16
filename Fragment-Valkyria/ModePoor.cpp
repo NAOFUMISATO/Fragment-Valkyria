@@ -116,6 +116,7 @@ void ModePoor::WaveProcess() {
          GetSoundComponent().Play("PoorBattleEndVoice");
          _gameMain.isPoorClear(true);
          GetModeServer().GoToMode("Loading", 'S');
+         return;
       }
       // 次のwaveのスポーンテーブルを設定する
       GetObjFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));

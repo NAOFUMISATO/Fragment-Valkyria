@@ -9,14 +9,9 @@
 #include "RemainingPortion.h"
 #include "GameMain.h"
 #include "ObjectServer.h"
+#include "ParamPlayerUI.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("playerui", { "portion_diff_x" });
-   const double DiffX = paramMap["portion_diff_x"];
-   // Jsonファイルから各Vector4データを取得する
-   auto vecParamMap = AppFrame::Resource::LoadParamJson::GetVecParamMap("playerui", { "portion_pos" });
-   const auto PortionPos = vecParamMap["portion_pos"];
    constexpr auto ThirdMultRate = 2.0;
    constexpr auto FourthMultRate = 3.0;
    constexpr auto FifthMultRate = 4.0;
@@ -27,12 +22,14 @@ namespace {
 using namespace FragmentValkyria::Player;
 
 RemainingPortion::RemainingPortion(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
+   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
 }
 
 void RemainingPortion::Init() {
    _grHandles = GetResServer().GetTextures("RemainingPortion");
-   _position = PortionPos;
+   _position = _param->GetVecParam("portion_pos");
    auto [x, y] = _position.GetVec2();
+   const auto DiffX = _param->GetIntParam("portion_diff_x");
    _xPositions = {
       static_cast<int>(x),
       static_cast<int>(x + DiffX),

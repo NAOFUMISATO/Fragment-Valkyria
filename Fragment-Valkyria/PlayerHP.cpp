@@ -46,13 +46,18 @@ PlayerHP::PlayerHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
 }
 
 void PlayerHP::Init() {
+   _hp = _gameMain.playerHp();
    // 画像ハンドルをResourceServerから取得する
    _grHandle = GetResServer().GetTexture("PlayerHP");
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
-   _oldFrontHP = OffSetRight;                                      // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化
+   auto [left, top, right, bottom] = _offSet.GetRectParams();
+   // 1フレーム前の前面バーのプレイヤーHPを線形補間により座標を求め初期化
+   _oldFrontHP = std::lerp(right, (right - left) * _hp / MaxHp + left, MaxRate);
    _frontColor = { FrontColorRed,FrontColorGreen,FrontColorBlue }; // 前面バーカラーを初期化
    _backColor = { BackColorRed,BackColorGreen,BackColorBlue };     // 背面バーカラーを初期化
    _position = DefalutPos;                                         // バーフレームの初期化
+   _shake = false;                                                 // 振動フラグOFF
+   _rateReset = false;                                             // 背面バー減少フラグをOFF
 }
 
 void PlayerHP::Update() {

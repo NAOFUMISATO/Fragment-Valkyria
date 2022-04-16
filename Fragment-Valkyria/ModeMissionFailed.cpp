@@ -8,24 +8,19 @@
  *********************************************************************/
 #include "ModeMissionFailed.h"
 #include "GameMain.h"
+#include "ParamModeGameOver.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto paramMap = AppFrame::Resource::LoadParamJson::GetParamMap("over", { "missionfailed_x","missionfailed_y","missionfailed_animespeed","bg_alpha" });
-   const int MissionFailedX = paramMap["missionfailed_x"];
-   const int MissionFailedY = paramMap["missionfailed_y"];
-   const int MissionFailedAnimeSpeed = paramMap["missionfailed_animespeed"];
-   const int BgAlpha = paramMap["bg_alpha"];
    constexpr auto BoxWidth = 1920;
    constexpr auto BoxHeight = 1080;
    constexpr auto DefaultGraphScale = 1.0;
    constexpr auto DefaultGraphAngle = 0.0;
-   constexpr auto FailedAnimeSpeed = 1;
 }
 
 using namespace FragmentValkyria::Mode;
 
 ModeMissionFailed::ModeMissionFailed(Game::GameMain& gameMain) :ModeBase{gameMain} {
+   _param = std::make_unique<Param::ParamModeGameOver>(_gameMain, "over");
 }
 
 void ModeMissionFailed::Init() {
@@ -55,14 +50,23 @@ void ModeMissionFailed::Update() {
    auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
    auto frame = gameCount - _animeCnt;
    auto allNum = std::get<0>(GetResServer().GetTextureInfo("MissionFailed").GetDivParams());
+   const auto FailedAnimeSpeed = _param->GetIntParam("missionfailed_animespeed");
    if (frame < allNum * FailedAnimeSpeed) {
       _animeNo = frame / FailedAnimeSpeed % allNum;
    }
 }
 
 void ModeMissionFailed::Render() {
-   SetDrawBlendMode(DX_BLENDMODE_ALPHA,BgAlpha);
+   /**
+    * \brief int型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _IntParam = [&](std::string paramName) {
+      return _param->GetIntParam(paramName);
+   };
+   SetDrawBlendMode(DX_BLENDMODE_ALPHA, _IntParam("bg_alpha"));
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   DrawGraph(MissionFailedX, MissionFailedY, _grHandles[_animeNo], true);
+   DrawGraph(_IntParam("missionfailed_x"), _IntParam("missionfailed_y"),_grHandles[_animeNo], true);
 }

@@ -22,37 +22,19 @@
 #include "EffectBossFall.h"
 #include "EffectPreliminaryLight.h"
 #include "EffectBossCrash.h"
+#include "ParamLargeEnemy.h"
 
 namespace {
-   // Jsonファイルから各値を取得する
-   auto largeEnemyParamMap = AppFrame::Resource::LoadParamJson::GetParamMap("largeenemy", {
-      "gatling_frame", "max_stun", "stun_decrease", "object_stun_value",
-      "bullet_stun_value", "hp", "gravity", "consecutive_fall_object_frame",
-      "consecutive_num", "action_cooltime", "object_max_num","max_wave","max_poorenemy" });
-   const int GatlingFrame = largeEnemyParamMap["gatling_frame"];                                                   //!< ガトリングを打つフレームの間隔
-   const double MaxStun = largeEnemyParamMap["max_stun"];                                                          //!< スタン値の最大値
-   const double StunDecrease = largeEnemyParamMap["stun_decrease"];                                                //!< 毎フレーム減らすスタン値の値
-   const double ObjectStunValue = largeEnemyParamMap["object_stun_value"];                                         //!< オブジェクト攻撃を受けた時に増えるスタン値
-   const double BulletStunValue = largeEnemyParamMap["bullet_stun_value"];                                         //!< 遠隔弱攻撃を受けた時に増えるスタン値
-   const double MaxHitPoint = largeEnemyParamMap["hp"];                                                            //!< ヒットポイントの最大値
-   const double Gravity = largeEnemyParamMap["gravity"];                                                           //!< 重力
-   const int ConsecutiveFallObjectFrame = largeEnemyParamMap["consecutive_fall_object_frame"];                     //!< オブジェクト連続落下攻撃のフレーム数
-   const int ConsecutiveNum = largeEnemyParamMap["consecutive_num"];                                               //!< オブジェクト連続落下攻撃の連続回数
-   const int ActionCoolTime = largeEnemyParamMap["action_cooltime"];                                               //!< 行動を行うクールタイム
-   const int MaxNum = largeEnemyParamMap["object_max_num"];                                                        //!< 落下オブジェクトの最大数
-   const int MaxWave= largeEnemyParamMap["max_wave"];                                                              //!< 最大ウェイブ数
-   const int MaxPoorEnemy = largeEnemyParamMap["max_poorenemy"];                                                   //!< 雑魚敵の最大数
-
-   constexpr auto FootStepHeight = 40.0;                                                                           //!< 走り状態時の足音発生高さ
-   constexpr auto LaserDiffPos = 150.0;                                                                            //!< レーザー生成位置に一番近い位置のフレームからのオフセット
-   constexpr auto LaserIrradiationTime = 155.f;                                                                    //!< アニメーション始まってからのレーザーの照射時間
-   constexpr auto MinWave = 2;
+   constexpr auto FootStepHeight = 40.0;         //!< 走り状態時の足音発生高さ
+   constexpr auto LaserDiffPos = 150.0;          //!< レーザー生成位置に一番近い位置のフレームからのオフセット
+   constexpr auto LaserIrradiationTime = 155.f;  //!< アニメーション始まってからのレーザーの照射時間
+   constexpr auto MinWave = 2;                   //!< 雑魚が出現する最小wave数
 }
 
 using namespace FragmentValkyria::Enemy;
 
 LargeEnemy::LargeEnemy(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-
+   _param = std::make_unique<Param::ParamLargeEnemy>(_gameMain,"largeenemy");
 }
 
 void LargeEnemy::Init() {
@@ -75,7 +57,7 @@ void LargeEnemy::Init() {
    // コリジョンフレームをナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _faceCollision, 3, 2, 1);
    // ヒットポイントの設定
-   _hp = MaxHitPoint;
+   _hp = _param->GetDoubleParam("hp");
    // 行動に追加する状態の文字列の動的配列を作成
    _actionList.emplace_back("FallObject");
    _actionList.emplace_back("Gatling");
@@ -150,6 +132,7 @@ void LargeEnemy::CreateFallObject() {
       ++_createNum;
    }
    // 生成されている落下オブジェクトの数が落下オブジェクトの最大数より大きいか確認
+   const auto MaxNum = _param->GetIntParam("object_max_num");
    if (_createNum > MaxNum) {
       // 生成されている落下オブジェクトの数が落下オブジェクトの最大数より大きかったらオブジェクトサーバーの各オブジェクトを取得
       for (auto&& object : _gameMain.objServer().runObjects()) {
@@ -263,7 +246,7 @@ void LargeEnemy::HitCheckFromFallObject() {
       // ダメージ量が0じゃなかった場合
       if (_collisionComponent->damage() != 0.0) {
          // スタン値を既定の値増やす
-         _stunValue += ObjectStunValue;
+         _stunValue += _param->GetDoubleParam("object_stun_value");
       }
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
@@ -286,7 +269,7 @@ void LargeEnemy::HitCheckFromBullet() {
       // ヒットポイントをダメージ量分減らす
       _hp -= _collisionComponent->damage();
       // スタン値を既定の値増やす
-      _stunValue += BulletStunValue;
+      _stunValue += _param->GetDoubleParam("bullet_stun_value");
       // ヒットポイントが0以下だった場合死亡状態へ
       if (_hp <= 0) {
          _stateServer->GoToState("Die");
@@ -313,7 +296,7 @@ void LargeEnemy::Move(const Vector4& moved) {
 
 void LargeEnemy::Action() {
    // ヒットポイントがヒットポイントの最大値の50％以下になった最初の行動の場合
-   if (_hp <= MaxHitPoint * 0.5 && _firstAngryAction) {
+   if (_hp <= _param->GetDoubleParam("hp") * 0.5 && _firstAngryAction) {
       // 各行動状態への文字列の動的配列にオブジェクト連続落下状態を追加
       _actionList.emplace_back("Consecutive");
       // オブジェクト連続落下状態へ
@@ -421,10 +404,18 @@ void LargeEnemy::SetAddRotate() {
 }
 
 void LargeEnemy::StunCheck() {
+   /**
+    * \brief double型の値を文字列で指定し、値管理クラスから取得する
+    * \param paramName 値を指定する文字列
+    * \return 文字列により指定された値
+    */
+   const auto _DoubleParam = [&](std::string paramName) {
+      return _param->GetDoubleParam(paramName);
+   };
    // スタン値の更新
-   _stunValue -= StunDecrease;
+   _stunValue -= _DoubleParam("stun_decrease");
    // スタン値が既定の値以上の場合
-   if (_stunValue >= MaxStun) {
+   if (_stunValue >= _DoubleParam("max_stun")) {
       // 気絶状態へ
       _stateServer->GoToState("Stun");
    }
@@ -451,7 +442,7 @@ void LargeEnemy::StateFall::Update() {
    // この状態に入ってからのフレーム数の取得
    auto cnt = _owner._gameMain.modeServer().frameCount() - _stateCnt;
    // 位置のY成分に足していく値の取得
-   auto addY = -0.5 * Gravity * cnt * cnt;
+   auto addY = -0.5 * _owner._param->GetDoubleParam("gravity") * cnt * cnt;
    // 位置の更新
    _owner._position.Add(0.0, addY, 0.0);
    // 位置のY成分が0以下だったら
@@ -488,7 +479,7 @@ void LargeEnemy::StateIdle::Update() {
    // この状態に入ってからの経過フレーム数の取得
    auto count = static_cast<int>(gameCount) - _stateCnt;
    // 一定フレーム数たったら行動をする
-   if (count >= ActionCoolTime) {
+   if (count >= _owner._param->GetIntParam("action_cooltime")) {
       _owner.Action();
    }
    // 当たり判定処理を行うクラスでプレイヤーがラージエネミーと当たっているか確認
@@ -541,7 +532,8 @@ void LargeEnemy::StateGatling::Enter() {
 
 void LargeEnemy::StateGatling::Update() {
    // 回転していない時のフレームカウントが既定の値よりも大きく既定のフレーム数経過し攻撃していない場合
-   if (_gatlingFrameCnt >= 100 && _gatlingFrameCnt % GatlingFrame == 0 && _owner._attack == false) {
+   if (_gatlingFrameCnt >= 100 && 
+      _gatlingFrameCnt % _owner._param->GetIntParam("gatling_frame") == 0 && _owner._attack == false) {
       // 向かせたい方向の設定
       _owner._rotateDir = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
       // 攻撃していると設定
@@ -611,7 +603,7 @@ void LargeEnemy::StateMove::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("walk_0", true);
    // 0か1をランダムに取得
-   auto result = /*AppFrame::Math::Utility::GetRandom(0, 1)*/true;
+   auto result = true;
    // 1だった場合
    if (result) {
       // プレイヤーへの向きのベクトルを取得
@@ -808,7 +800,8 @@ void LargeEnemy::StateFanGatling::Enter() {
 
 void LargeEnemy::StateFanGatling::Update() {
    // 回転していない時のフレームカウントが既定のフレーム数経過し攻撃しておらず既定のフレーム数よりも大きかったら
-   if (_fanGatlingFrameCnt % GatlingFrame == 0 && _owner._attack == false && _fanGatlingFrameCnt >= 100) {
+   if (_fanGatlingFrameCnt % _owner._param->GetIntParam("gatling_frame") == 0 &&
+      _owner._attack == false && _fanGatlingFrameCnt >= 100) {
       // プレイヤーへの向きのベクトルを回転させるマトリクスを作成
       Matrix44 dirRotate;
       dirRotate.RotateY(_owner._fanAngle, true);
@@ -892,7 +885,7 @@ void LargeEnemy::StateConsecutiveFallObject::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("object_attack", false, 1.0); 
    // 落下オブジェクトを生成する数を既定の値に設定
-   _fallObjectNum = ConsecutiveNum;
+   _fallObjectNum = _owner._param->GetIntParam("consecutive_num");
    auto efcPreliminary = std::make_unique<Effect::EffectPreliminaryLight>(_owner._gameMain, "PreliminaryLight");
    // ボスの向きの取得(ボスのZ座標が逆の為、反転させておく)
    auto bossDir = _owner.GetForward() * -1.0;
@@ -912,7 +905,7 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
       _cntInit = false;
    }
    auto count = _owner.gameMain().modeServer().frameCount() - _stateCnt;
-   if (!_cntInit && count % ConsecutiveFallObjectFrame == 0) {
+   if (!_cntInit && count % _owner._param->GetIntParam("consecutive_fall_object_frame") == 0) {
       // 落下オブジェクトの生成
       CreateFallObject();
       // カメラを振動させるためにカメラの振動に使うYの位置を0.0に設定
@@ -934,14 +927,14 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
 
 void LargeEnemy::StateFallObject::SetPoorSpawn() {
    auto&& runObjects = _owner.GetObjServer().runObjects();
-   auto activePoorEnemyCount = std::count_if(runObjects.begin(), runObjects.end(),
+   auto _ActivePoorEnemyCount = std::count_if(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の雑魚敵は何体いるか
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
    // 生存状態の雑魚敵が一定未満なら
-   if (activePoorEnemyCount <= MaxPoorEnemy) {
+   if (_ActivePoorEnemyCount <= _owner._param->GetIntParam("max_poorenemy")) {
       // ランダムなスポーンテーブルを割り当てる
-      auto random = AppFrame::Math::Utility::GetRandom(MinWave, MaxWave);
+      auto random = AppFrame::Math::Utility::GetRandom(MinWave, _owner._param->GetIntParam("max_wave"));
       _owner._gameMain.objFactory().SetSpawnTable("bosswave" + std::to_string(random));
    }
 }
