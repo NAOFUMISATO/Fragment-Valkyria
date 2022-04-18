@@ -14,7 +14,7 @@ namespace FragmentValkyria {
    /**
     * \brief プレイヤー
     */
-   namespace Player {
+   namespace Player { 
       /**
        * class プレイヤーの残弾表示クラス
        * \brief プレイヤーの弱攻撃の残弾を表示する

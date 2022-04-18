@@ -207,6 +207,8 @@ void PoorEnemyBase::StateDie::Draw() {
 
 void PoorEnemyBase::StateSideStep::SideStepDecide() {
    auto moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto [x, y, z] = moved.GetVec3();
+   moved = Vector4(x, 0.0, z);
    moved.Normalized();
    auto quarterRight = AppFrame::Math::Matrix44();
    auto quarterLeft = AppFrame::Math::Matrix44();

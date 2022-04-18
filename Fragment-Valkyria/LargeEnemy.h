@@ -252,7 +252,6 @@ namespace FragmentValkyria {
             void CreateFallObject();
             
             int _fallObjectNum{ 0 };            //!< 落下オブジェクトを生成する数
-            bool _cntInit{ true };
          };
          /**
          * \class ガトリング攻撃状態クラス
