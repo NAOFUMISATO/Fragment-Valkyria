@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamGatling.cpp
+ * \brief  ガトリングの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamGatling.h"
 #include "GameMain.h"
 

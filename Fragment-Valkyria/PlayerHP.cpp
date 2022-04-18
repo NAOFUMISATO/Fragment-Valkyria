@@ -134,7 +134,7 @@ void PlayerHP::BarShake(unsigned int count) {
    // HPバー振動の処理
    if (_shake) {
       // 振動し始めてから指定フレーム以内の処理
-      const auto ShakeFrame = _param->GetIntParam("shake_frame");
+      const auto ShakeFrame = static_cast<unsigned int>(_param->GetIntParam("shake_frame"));
       const auto DefalutPos = _param->GetVecParam("hp_pos");
       const auto ShakeWidth = _param->GetDoubleParam("shake_width");
       if (count - _shakeCnt <= ShakeFrame) {

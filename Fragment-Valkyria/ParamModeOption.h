@@ -1,7 +1,7 @@
 #pragma once
 /*****************************************************************//**
- * \file   ParamGatling.h
- * \brief  ガトリングの値管理クラス
+ * \file   ParamModeOption.h
+ * \brief   オプション画面の値管理クラス
  * 
  * \author NAOFUMISATO
  * \date   April 2022
@@ -20,17 +20,17 @@ namespace FragmentValkyria {
     */
    namespace Param {
       /**
-       * \class ガトリングの値管理クラス
-       * \brief ガトリングの値の読み込み、取得を行う
+       * \class オプション画面の値管理クラス
+       * \brief オプション画面の値の読み込み、取得を行う
        */
-      const class ParamGatling :public AppFrame::Param::ParamBase {
+      const class ParamModeOption :public AppFrame::Param::ParamBase {
       public:
          /**
           * \brief コンストラクタ
           * \param gameMain ゲーム本体クラスの参照
           * \param key jsonファイル名と一致する文字列
           */
-         ParamGatling(Game::GameMain& gameMain, std::string_view key);
+         ParamModeOption(Game::GameMain& gameMain, std::string_view key);
       };
    }
 }

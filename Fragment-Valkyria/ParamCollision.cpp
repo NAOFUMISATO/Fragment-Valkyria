@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamCollision.cpp
+ * \brief  当たり判定クラスの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamCollision.h"
 #include "GameMain.h"
 

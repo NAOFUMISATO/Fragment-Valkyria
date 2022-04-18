@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamLargeEnemyUI.cpp
+ * \brief  ボスUIの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamLargeEnemyUI.h"
 #include "GameMain.h"
 

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamModeClear.cpp
+ * \brief  クリア画面の値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamModeClear.h"
 #include "GameMain.h"
 

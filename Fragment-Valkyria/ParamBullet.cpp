@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamBullet.cpp
+ * \brief  ãUŒ‚’e‚Ì’lŠÇ—ƒNƒ‰ƒX
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamBullet.h"
 #include "GameMain.h"
 

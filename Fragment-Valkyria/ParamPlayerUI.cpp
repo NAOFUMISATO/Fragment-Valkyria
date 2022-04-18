@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamPlayerUI.cpp
+ * \brief  プレイヤーUIの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamPlayerUI.h"
 #include "GameMain.h"
 

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamFallObject.cpp
+ * \brief  落下オブジェクトの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamFallObject.h"
 #include "GameMain.h"
 

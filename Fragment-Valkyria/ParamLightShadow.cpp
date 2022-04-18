@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamLightShadow.cpp
+ * \brief  ライティング及び落ち影の処理を行うクラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamLightShadow.h"
 #include "GameMain.h"
 

@@ -372,7 +372,7 @@
     <ClInclude Include="ParamCameraComponent.h">
       <Filter>ヘッダー ファイル\Param</Filter>
     </ClInclude>
-    <ClInclude Include="ParamOption.h">
+    <ClInclude Include="ParamModeOption.h">
       <Filter>ヘッダー ファイル\Param</Filter>
     </ClInclude>
     <ClInclude Include="ParamLightShadow.h">
@@ -641,7 +641,7 @@
     <ClCompile Include="ParamCameraComponent.cpp">
       <Filter>ソース ファイル\Param</Filter>
     </ClCompile>
-    <ClCompile Include="ParamOption.cpp">
+    <ClCompile Include="ParamModeOption.cpp">
       <Filter>ソース ファイル\Param</Filter>
     </ClCompile>
     <ClCompile Include="ParamLightShadow.cpp">

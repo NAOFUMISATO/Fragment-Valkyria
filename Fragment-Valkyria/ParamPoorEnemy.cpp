@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamPoorEnemy.cpp
+ * \brief  G‹›“G‚Ì’lŠÇ—ƒNƒ‰ƒX
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamPoorEnemy.h"
 #include "GameMain.h"
 

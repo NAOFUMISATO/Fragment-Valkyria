@@ -1158,19 +1158,19 @@ void Player::StateRecovery::Update() {
     * \return 文字列により指定された値
     */
    const auto _DoubleParam = [&](std::string paramName) {
-      return _owner._collParam->GetDoubleParam(paramName);
+      return _owner._param->GetDoubleParam(paramName);
    };
    // 状態の基底クラスの更新処理
    StateBase::Update();
    // 回復状態のカウントが既定の値よりも大きいか確認
    if (_recoveryCnt > 60 * 1) {
+      const auto MaxHp = _DoubleParam("max_hp");
       // 回復状態のカウントが既定の値よりも大きい場合
       // 回復量の設定
-      auto recovery = _DoubleParam("max_hp") * _DoubleParam("recovery_rate");
+      auto recovery = MaxHp * _DoubleParam("recovery_rate");
       // ヒットポイントを回復量分増やす
       _owner._gameMain.playerHp(_owner._gameMain.playerHp() + recovery);
       // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
-      const auto MaxHp = _owner._param->GetDoubleParam("max_hp");
       if (_owner._gameMain.playerHp() >= MaxHp) {
          _owner._gameMain.playerHp(MaxHp);
       }

@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamCameraComponent.cpp
+ * \brief  カメラの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamCameraComponent.h"
 #include "GameMain.h"
 

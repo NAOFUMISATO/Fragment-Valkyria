@@ -1,3 +1,11 @@
+   
+/*****************************************************************//**
+ * \file   ParamModeGameOver.cpp
+ * \brief  ゲームオーバー画面の値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamModeGameOver.h"
 #include "GameMain.h"
 

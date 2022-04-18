@@ -228,7 +228,7 @@
     <ClInclude Include="ParamModeClear.h" />
     <ClInclude Include="ParamModeGameOver.h" />
     <ClInclude Include="ParamModeTitle.h" />
-    <ClInclude Include="ParamOption.h" />
+    <ClInclude Include="ParamModeOption.h" />
     <ClInclude Include="ParamPlayer.h" />
     <ClInclude Include="ParamPlayerUI.h" />
     <ClInclude Include="ParamPoorEnemy.h" />
@@ -321,7 +321,7 @@
     <ClCompile Include="ParamModeClear.cpp" />
     <ClCompile Include="ParamModeGameOver.cpp" />
     <ClCompile Include="ParamModeTitle.cpp" />
-    <ClCompile Include="ParamOption.cpp" />
+    <ClCompile Include="ParamModeOption.cpp" />
     <ClCompile Include="ParamPlayer.cpp" />
     <ClCompile Include="ParamPlayerUI.cpp" />
     <ClCompile Include="ParamPoorEnemy.cpp" />

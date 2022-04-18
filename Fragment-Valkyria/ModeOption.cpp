@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "ModeOption.h"
 #include "GameMain.h"
-#include "ParamOption.h"
+#include "ParamModeOption.h"
 
 namespace {
    constexpr auto BoxWidth = 1920;      //!< DxLib::DrawBox‰¡ƒTƒCƒY
@@ -26,7 +26,7 @@ namespace {
 using namespace FragmentValkyria::Mode;
 
 ModeOption::ModeOption(Game::GameMain& gameMain) : ModeBase { gameMain }{
-   _param = std::make_unique<Param::ParamOption>(_gameMain,"option");
+   _param = std::make_unique<Param::ParamModeOption>(_gameMain,"option");
 }
 
 void ModeOption::Init() {

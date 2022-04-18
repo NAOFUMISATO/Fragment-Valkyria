@@ -1,3 +1,11 @@
+
+/*****************************************************************//**
+ * \file   ParamModeTitle.cpp
+ * \brief  タイトルの値管理クラス
+ * 
+ * \author NAOFUMISATO
+ * \date   April 2022
+ *********************************************************************/
 #include "ParamModeTitle.h"
 #include "GameMain.h"
 
