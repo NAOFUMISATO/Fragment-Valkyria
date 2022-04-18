@@ -53,7 +53,9 @@ void PoorEnemyAlmighty::StateRush::Enter() {
    };
    _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
    _stateCnt = _owner._gameMain.modeServer().frameCount();
-   _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto [x, y, z] = moved.GetVec3();
+   _moved = Vector4(x, 0.0, z);
    _moved.Normalized();
    _moved = _moved * _DoubleParam("rush_speed");
 }

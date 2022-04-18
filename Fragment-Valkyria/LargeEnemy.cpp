@@ -892,17 +892,14 @@ void LargeEnemy::StateConsecutiveFallObject::Enter() {
    auto efcPos = rootFramePos + bossDir * 300.0;
    efcPreliminary->position(efcPos);
    _owner.GetEfcServer().Add(std::move(efcPreliminary));
-   _cntInit = true;
+   _stateCnt = _owner.gameMain().modeServer().frameCount();
+   //_cntInit = true;
 }
 
 void LargeEnemy::StateConsecutiveFallObject::Update() {
    // この状態に入ってからの経過フレーム数の取得
-   if (_owner._modelAnimeComponent->repeatedCount() > 0&& _cntInit) {
-      _stateCnt = _owner.gameMain().modeServer().frameCount();
-      _cntInit = false;
-   }
    auto count = _owner.gameMain().modeServer().frameCount() - _stateCnt;
-   if (!_cntInit && count % _owner._param->GetIntParam("consecutive_fall_object_frame") == 0) {
+   if (count % _owner._param->GetIntParam("consecutive_fall_object_frame") == 0) {
       // 落下オブジェクトの生成
       CreateFallObject();
       // カメラを振動させるためにカメラの振動に使うYの位置を0.0に設定
