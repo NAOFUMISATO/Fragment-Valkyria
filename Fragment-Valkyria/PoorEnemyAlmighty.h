@@ -92,7 +92,7 @@ namespace FragmentValkyria {
 
          private:
             PoorEnemyAlmighty& _owner;     //!< ‰“ŠuUŒ‚ƒ^ƒCƒv‚ÌŽG‹›“GƒNƒ‰ƒX‚ÌŽQÆ
-            int _remainingGatiling{ 5 };  //!< ƒKƒgƒŠƒ“ƒO‚ÌŽc’e”
+            int _remainingGatiling{ 5 };   //!< ƒKƒgƒŠƒ“ƒO‚ÌŽc’e”
          };
       };
    }
