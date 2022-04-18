@@ -244,7 +244,7 @@ void FallObject::SetCapsulePos() {
     * \return 文字列により指定された値
     */
    const auto _DoubleParam = [&](std::string paramName) {
-      return _param->GetDoubleParam(paramName);
+      return _collParam->GetDoubleParam(paramName);
    };
    // モデルの回転のマトリクスを作成
    auto [rx, ry, rz] = _rotation.GetVec3();
