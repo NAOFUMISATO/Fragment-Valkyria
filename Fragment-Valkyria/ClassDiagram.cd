@@ -1,0 +1,641 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FragmentValkyria::Create::ObjectFactory" Collapsed="true">
+    <Position X="32.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEBAQAAEAAAAEAABEAAAIAABAEAAAAAAAIBAAAA=</HashCode>
+      <FileName>ObjectFactory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::BulletCreator" Collapsed="true">
+    <Position X="3" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>BulletCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::CreatorBase" Collapsed="true">
+    <Position X="10.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAEAAAAAAAAEAAEAAAAAAAAAQ=</HashCode>
+      <FileName>CreatorBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::FallObjectCreator" Collapsed="true">
+    <Position X="9.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAA=</HashCode>
+      <FileName>FallObjectCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::GatlingCreator" Collapsed="true">
+    <Position X="12" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>GatlingCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::LargeEnemyCreator" Collapsed="true">
+    <Position X="14.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>LargeEnemyCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::LaserCreator" Collapsed="true">
+    <Position X="16.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>LaserCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::SpawnRecord" Collapsed="true">
+    <Position X="41.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQQBAAAAAAAIAAAAAAAAAAAgEAAAAA=</HashCode>
+      <FileName>SpawnRecord.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::PlayerCreator" Collapsed="true">
+    <Position X="18.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>PlayerCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::PoorEnemyAlmightyCreator" Collapsed="true">
+    <Position X="21" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAAAA=</HashCode>
+      <FileName>PoorEnemyAlmightyCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::PoorEnemyMeleeCreator" Collapsed="true">
+    <Position X="0.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>PoorEnemyMeleeCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::StageCreator" Collapsed="true">
+    <Position X="5.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>StageCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Create::PoorEnemyGatlingCreator" Collapsed="true">
+    <Position X="7.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAQ=</HashCode>
+      <FileName>PoorEnemyGatlingCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Object::ObjectServer" Collapsed="true">
+    <Position X="34.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAYAABAAAAAAAAAgAAAAAggAEAAAACAAABAFgABBAAA=</HashCode>
+      <FileName>ObjectServer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Object::ObjectBase" Collapsed="true">
+    <Position X="10.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgQAAAQQAiAIQgAQUISAMIICEAACQQAAEUACyAAgACA=</HashCode>
+      <FileName>ObjectBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Sprite::SpriteServer" Collapsed="true">
+    <Position X="32.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAAAAAAAAQAAAEAIIAAAAABAEAABAAAA=</HashCode>
+      <FileName>SpriteServer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Sprite::SpriteBase" Collapsed="true">
+    <Position X="8.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgCBSAgEAAgAEUIAAMIACEAAAAQgAEAACwCABASQ=</HashCode>
+      <FileName>SpriteBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Stage::LoadStageFromJson" Collapsed="true">
+    <Position X="41.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAIAAAAAAgAAAAEAAAAQAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>LoadStageFromJson.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Stage::StageModelComponent" Collapsed="true">
+    <Position X="36.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAACCBAAgIAAAgAgAKAAAAAAggABIwCAgRBAgA=</HashCode>
+      <FileName>StageModelComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Stage::Stage" Collapsed="true">
+    <Position X="21" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAABAAAIAgAAAEAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Stage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Stage::StageData" Collapsed="true">
+    <Position X="34.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQQAAAAAAAAAQAAAAAAAEBAgAAAACA=</HashCode>
+      <FileName>StageData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectServer" Collapsed="true">
+    <Position X="36.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYIAAAAAAAAAAAEAAAAAAAgEAAAAAAAABAEAABAAAA=</HashCode>
+      <FileName>EffectServer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBase" Collapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAIAAAAAIAgIQUJCAMhACEAQgAwiABAACggAgACA=</HashCode>
+      <FileName>EffectBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBossBeam" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectBossBeam.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBossCharge" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectBossCharge.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBossCrash" Collapsed="true">
+    <Position X="16.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAQAQAAIACAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectBossCrash.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBossStan" Collapsed="true">
+    <Position X="21.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectBossStan.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectBossFall" Collapsed="true">
+    <Position X="25.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectBossFall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectGatlingBullet" Collapsed="true">
+    <Position X="28" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAACAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectGatlingBullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectGatlingMuzzleFlash" Collapsed="true">
+    <Position X="30.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAAAAAIAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectGatlingMuzzleFlash.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectHeal" Collapsed="true">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectHeal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectObjectFall" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectObjectFall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectObjectHit" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAAAAAAIAAAACAAAAAAA=</HashCode>
+      <FileName>EffectObjectHit.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectObjectUp" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAACAACAAAA=</HashCode>
+      <FileName>EffectObjectUp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectPoorCrash" Collapsed="true">
+    <Position X="14.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAIAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectPoorCrash.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectWeakBullet" Collapsed="true">
+    <Position X="19" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectWeakBullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Effect::EffectPreliminaryLight" Collapsed="true">
+    <Position X="23.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAEAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>EffectPreliminaryLight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Game::GameMain" Collapsed="true">
+    <Position X="38" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YAQQAQAEAAAAQQwAAEAAAwAAEAAAgRXQUpAAQQBgAAI=</HashCode>
+      <FileName>GameMain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeAmg" Collapsed="true">
+    <Position X="25.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAABAAAAAAAAAQAAAAAAAAEAAAAABACAAIAAAA=</HashCode>
+      <FileName>ModeAmg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeBase" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAEUAAAAIAAAA=</HashCode>
+      <FileName>ModeBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeBoss" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIQAAAAABgAACAAIAAAAAAAAkAAEIAAAABACAAAAAgA=</HashCode>
+      <FileName>ModeBoss.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeClearResult" Collapsed="true">
+    <Position X="3.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAgAAAAQEAAEAAAAIBACAQAAAAA=</HashCode>
+      <FileName>ModeClearResult.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeGameOver" Collapsed="true">
+    <Position X="5.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAQAAAAAAAAAAAAAAAAUAAEAYAAABACAAAAAAA=</HashCode>
+      <FileName>ModeGameOver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeInGameBase" Collapsed="true">
+    <Position X="12.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQgAAAAAAIAAAAAAAAxAAAYEAAEAAAQIhAAAAAAAAA=</HashCode>
+      <FileName>ModeInGameBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeLoading" Collapsed="true">
+    <Position X="16.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAAAAAAAAAAAAAAAAAAgAAAAABACAAAAAQA=</HashCode>
+      <FileName>ModeLoading.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeMissionCompleted" Collapsed="true">
+    <Position X="19" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAEAAEAAAAABACAAAAAQA=</HashCode>
+      <FileName>ModeMissionCompleted.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeMissionFailed" Collapsed="true">
+    <Position X="21.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABAAAAAAAAAAAAAAAEAAEIAAAABACAQAAAQg=</HashCode>
+      <FileName>ModeMissionFailed.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeOption" Collapsed="true">
+    <Position X="23.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAABAAAAggAAIAAAIAAOAAEAQAAABACAAAAIAA=</HashCode>
+      <FileName>ModeOption.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModePoor" Collapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAIAQAAAAAAAACAAAAAAEAAEEAAAAhACAAAAAAA=</HashCode>
+      <FileName>ModePoor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeTeam" Collapsed="true">
+    <Position X="28" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAABAAAAAAAAAQAAAAAAAAECAAAABACAAAAAAA=</HashCode>
+      <FileName>ModeTeam.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeTitle" Collapsed="true">
+    <Position X="1" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAEgBAAAAEAAACABAAAAEAAEIQkAABACAAAgAAA=</HashCode>
+      <FileName>ModeTitle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeTutorial" Collapsed="true">
+    <Position X="12.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAABAABAAAAAAgAAAAAEIAEAAAAAlACAACAAAA=</HashCode>
+      <FileName>ModeTutorial.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Mode::ModeTutorialSelect" Collapsed="true">
+    <Position X="7.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAAAAAAAAAAAAAAAAAEAAEARAAABACAAwAAAA=</HashCode>
+      <FileName>ModeTutorialSelect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Model::ModelAnimeComponent" Collapsed="true">
+    <Position X="7.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQBAIRAAJAAAAAAgEAAAAAAgAAAAIAAUAQCAACCAgA=</HashCode>
+      <FileName>ModelAnimeComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Model::ModelComponent" Collapsed="true">
+    <Position X="7.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAgAABjABAAgIAAAGAABKAAAABAggAJIwCCgQBCgE=</HashCode>
+      <FileName>ModelComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Camera::CameraComponent" Collapsed="true">
+    <Position X="32.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBYENADQAAAAMABA5QAAMAiA0AAgAwIAAAACkIACSAI=</HashCode>
+      <FileName>CameraComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Collision::CollisionComponent" Collapsed="true">
+    <Position X="34.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgCEgSBQQQAggCAigAAAIABAAgEIAAAAAKEAAAAA0BA=</HashCode>
+      <FileName>CollisionComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::Bullet" Collapsed="true">
+    <Position X="14.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEQIAAAAAIAIAgAAAAAIAAIAAAMAAAAAAAACAAAQCAA=</HashCode>
+      <FileName>Bullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::Player" Collapsed="true">
+    <Position X="16.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AGQQAQAKAIAKCkIIBCAYyMBAUIEAAAAAAQwaSQAAEBE=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::RemainingPortion" Collapsed="true">
+    <Position X="16.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIBAAAAAAAggAAAAAAAAAAAAAAAAgAAIACAAAAAAA=</HashCode>
+      <FileName>RemainingPortion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::Reticle" Collapsed="true">
+    <Position X="0.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAAAAAAAAAgAAAAAAAAAAQAAAAAgAAAACAAAAAAA=</HashCode>
+      <FileName>Reticle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::PlayerHP" Collapsed="true">
+    <Position X="2.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ECQAAAAQEAAAAgAAAACAAABAAQAAEAgQIACCCRAgABA=</HashCode>
+      <FileName>PlayerHP.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Player::RemainingBullet" Collapsed="true">
+    <Position X="5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAAAggAAAAAAEAAAAAAAAAgAAIACAAAAAAA=</HashCode>
+      <FileName>RemainingBullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Lighting::LightAndShadow" Collapsed="true">
+    <Position X="39.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQCAAAQAAAAAAAAAAAAFAAAACAAAAAAABgAAAQAAAA=</HashCode>
+      <FileName>LightAndShadow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::FallObject" Collapsed="true">
+    <Position X="7.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEYIAoQgAAAIBgIABIACCAABEANAAIIAGAoGJAAAAEI=</HashCode>
+      <FileName>FallObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::Gatling" Collapsed="true">
+    <Position X="9.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAIAAAAIAIAgAAAIAIAAIAAAAEAAAAAABCAIAACAA=</HashCode>
+      <FileName>Gatling.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::LargeEnemy" Collapsed="true">
+    <Position X="12" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEQAAESBAoAKAgQIgCAIwAwBGAwAIgAAAgBCyBARAGY=</HashCode>
+      <FileName>LargeEnemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::LargeEnemyHP" Collapsed="true">
+    <Position X="14" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAAQAAAAAgAAAACAAABAAAAACAgQIAACCRAgABA=</HashCode>
+      <FileName>LargeEnemyHP.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::Laser" Collapsed="true">
+    <Position X="18.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAACAAAIAgAAAAAAAAAAAAAAAAAEAAAAAAQAAAA=</HashCode>
+      <FileName>Laser.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::PoorEnemyAlmighty" Collapsed="true">
+    <Position X="5.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAgAAAIAAAAAAAAAAAAAAQAAAAAACAAAAAAA=</HashCode>
+      <FileName>PoorEnemyAlmighty.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::PoorEnemyBase" Collapsed="true">
+    <Position X="3" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAKAhAASAAAQAAAEAAAAAAAAAAiiBAAAAA=</HashCode>
+      <FileName>PoorEnemyBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::PoorEnemyMelee" Collapsed="true">
+    <Position X="0.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAA=</HashCode>
+      <FileName>PoorEnemyMelee.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Enemy::PoorEnemyGatling" Collapsed="true">
+    <Position X="3" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAIAAAAAAAAAAAAAAAAAAAQACAAAAAAA=</HashCode>
+      <FileName>PoorEnemyGatling.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Clear::ClearScore" Collapsed="true">
+    <Position X="7.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAACAAAAAAAAAgAAAACAAAAAAA=</HashCode>
+      <FileName>ClearScore.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Clear::ClearTime" Collapsed="true">
+    <Position X="9.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAgAAAAAAAAAAAAAAAAgAAAACAAAAABg=</HashCode>
+      <FileName>ClearTime.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Tutorial::TutorialTips" Collapsed="true">
+    <Position X="11.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAgAAAEBAAAYgAABACAAKAQAA=</HashCode>
+      <FileName>TutorialTips.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamBullet" Collapsed="true">
+    <Position X="36.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>ParamBullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamCameraComponent" Collapsed="true">
+    <Position X="38" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamCameraComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamCollision" Collapsed="true">
+    <Position X="39.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamCollision.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamFallObject" Collapsed="true">
+    <Position X="41.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamFallObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamGatling" Collapsed="true">
+    <Position X="32.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamGatling.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamLargeEnemy" Collapsed="true">
+    <Position X="34.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamLargeEnemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamLargeEnemyUI" Collapsed="true">
+    <Position X="36.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamLargeEnemyUI.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamLightShadow" Collapsed="true">
+    <Position X="38" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamLightShadow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamModeClear" Collapsed="true">
+    <Position X="39.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>ParamModeClear.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamModeGameOver" Collapsed="true">
+    <Position X="41.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamModeGameOver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamModeTitle" Collapsed="true">
+    <Position X="34.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>ParamModeTitle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamModeOption" Collapsed="true">
+    <Position X="32.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamModeOption.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamPlayer" Collapsed="true">
+    <Position X="36.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>ParamPlayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamPlayerUI" Collapsed="true">
+    <Position X="38" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamPlayerUI.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FragmentValkyria::Param::ParamPoorEnemy" Collapsed="true">
+    <Position X="39.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamPoorEnemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

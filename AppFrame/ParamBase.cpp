@@ -23,7 +23,7 @@ namespace AppFrame {
 #ifndef _DEBUG
          // 指定のキーが無ければ空の文字列を返す
          if (!_intMap.contains(paramName.data())) {
-            return "";
+            return 0;
          }
 #else
          // 指定のキーが無ければ、エラーメッセージを出力する
@@ -44,7 +44,7 @@ namespace AppFrame {
 #ifndef _DEBUG
          // 指定のキーが無ければ空の文字列を返す
          if (!_floatMap.contains(paramName.data())) {
-            return "";
+            return 0.f;
          }
 #else
          // 指定のキーが無ければ、エラーメッセージを出力する
@@ -65,7 +65,7 @@ namespace AppFrame {
 #ifndef _DEBUG
          // 指定のキーが無ければ空の文字列を返す
          if (!_doubleMap.contains(paramName.data())) {
-            return "";
+            return 0.0;
          }
 #else
          // 指定のキーが無ければ、エラーメッセージを出力する
@@ -86,7 +86,7 @@ namespace AppFrame {
 #ifndef _DEBUG
          // 指定のキーが無ければ空の文字列を返す
          if (!_boolMap.contains(paramName.data())) {
-            return "";
+            return false;
          }
 #else
          // 指定のキーが無ければ、エラーメッセージを出力する
@@ -107,7 +107,7 @@ namespace AppFrame {
 #ifndef _DEBUG
          // 指定のキーが無ければ空の文字列を返す
          if (!_vecMap.contains(paramName.data())) {
-            return "";
+            return Math::Vector4();
          }
 #else
          // 指定のキーが無ければ、エラーメッセージを出力する
