@@ -65,8 +65,8 @@ namespace FragmentValkyria {
          void Render()override;
 
          static GameMain* GetInstance() {
-            GameBase* gameBase = &GameBase::GetInstance();
-            auto gameMain = dynamic_cast<GameMain*>(gameBase);
+            auto& gameBase = GameBase::GetInstance();
+            GameMain* gameMain = reinterpret_cast<GameMain*>(&gameBase);
             return gameMain;
          }
          /**

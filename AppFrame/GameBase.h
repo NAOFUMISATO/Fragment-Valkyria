@@ -33,7 +33,7 @@ namespace AppFrame {
        * \class アプリケーションの基底クラス
        * \brief ゲームごとに継承して定義する
        */
-      class GameBase:public AppFrame::Temp::Singleton<GameBase> {
+      class GameBase {
       protected:
          /**
           * \brief コンストラクタ
@@ -44,7 +44,7 @@ namespace AppFrame {
           */
          virtual ~GameBase() {};
       public:
-         friend class AppFrame::Temp::Singleton<GameBase>;
+         friend class GameBase;
          /**
           * \brief ゲームの状態列挙
           */
@@ -80,6 +80,10 @@ namespace AppFrame {
           */
          virtual void Render();
 
+         static GameBase& GetInstance() {
+            static GameBase instance;
+            return instance;
+         }
          /**
           * \brief モードサーバーの参照を取得
           * \return モードサーバーのポインタ
