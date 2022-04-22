@@ -18,7 +18,7 @@ namespace {
 }
 using namespace FragmentValkyria::Tutorial;
 
-TutorialTips::TutorialTips(Game::GameMain& gameMain, std::string_view tipsName) :Sprite::SpriteBase{ gameMain }, _tipsName{ tipsName }{
+TutorialTips::TutorialTips(std::string_view tipsName) : _tipsName{ tipsName }{
 }
 
 void TutorialTips::Init() {
@@ -92,7 +92,8 @@ void TutorialTips::StateJudge::Enter() {
    _isWeakReady = false;
    _isObjectReady = false;
    if (_owner._tipsNum[_owner._tipsName] == 6) {
-      _owner._gameMain.playerHp(50.0);
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->playerHp(50.0);
    }
 }
 
@@ -133,14 +134,16 @@ void TutorialTips::StateFadeOut::Update() {
    else {
       _owner.SetDead();
       if (_owner._tipsNum[_owner._tipsName] == 6) {
-         _owner._gameMain.isTutorialClear(true);
-         _owner._gameMain.modeServer().GoToMode("Loading", 'S');
+         auto gameInstance = Game::GameMain::GetInstance();
+         gameInstance->isTutorialClear(true);
+         gameInstance->modeServer().GoToMode("Loading", 'S');
       }
    }
 }
 
 void TutorialTips::StateJudge::MoveJudge(InputManager& input) {
-   auto [cameraSencivity, aimSencivity, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
    if (input.GetXJoypad().LeftStickX() > deadZone || input.GetXJoypad().LeftStickX() < -deadZone ||
       input.GetXJoypad().LeftStickY() < -deadZone || input.GetXJoypad().LeftStickY() > deadZone) {
       _owner._tipsClear["MoveClear"] = true;
@@ -149,7 +152,8 @@ void TutorialTips::StateJudge::MoveJudge(InputManager& input) {
 }
 
 void TutorialTips::StateJudge::CameraJudge(InputManager& input) {
-   auto [cameraSencivity, aimSencivity, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
    if (input.GetXJoypad().RightStickX() > deadZone || input.GetXJoypad().RightStickX() < -deadZone ||
       input.GetXJoypad().RightStickY() < -deadZone || input.GetXJoypad().RightStickY() > deadZone) {
       _owner._tipsClear["CameraClear"] = true;
@@ -175,7 +179,8 @@ void TutorialTips::StateJudge::ReloadJudge(InputManager& input) {
 }
 
 void TutorialTips::StateJudge::ObjectShootJudge(InputManager& input) {
-   for (auto& object : _owner._gameMain.objServer().runObjects()) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   for (auto& object : gameInstance->objServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          if (player.objectShoot()) {

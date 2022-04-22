@@ -19,7 +19,7 @@
 using namespace FragmentValkyria::Stage;
 using namespace FragmentValkyria;
 
-LoadStageFromJson::LoadStageFromJson(Game::GameMain& gameMain) :_gameMain{gameMain} {
+LoadStageFromJson::LoadStageFromJson() {
    ClearStageModels();
 }
 
@@ -58,7 +58,8 @@ void LoadStageFromJson::LoadStageModel(std::string_view key, StageData& stageDat
 
 void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    namespace AppMath = AppFrame::Math;
-   auto jsonDirectory = _gameMain.pathServer().GetCurrentPath("StageJson");
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto jsonDirectory = gameInstance->pathServer().GetCurrentPath("StageJson");
    auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
    std::ifstream reading(jsonPath, std::ios::in);
 #ifdef _DEBUG
@@ -75,7 +76,7 @@ void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    reading >> value;
    reading.close();
    auto stageArray = value[jsonName.generic_string()];
-   auto stageDirectory = _gameMain.pathServer().GetCurrentPath("Stage") / jsonName;
+   auto stageDirectory = gameInstance->pathServer().GetCurrentPath("Stage") / jsonName;
    for (auto& stageParam : stageArray) {
       const auto fileName = stageParam["filename"];
       const auto tx = stageParam["tx"];

@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamLargeEnemy::ParamLargeEnemy(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamLargeEnemy::ParamLargeEnemy(std::string_view key) :ParamBase{key } {
    LoadIntParam({ "gatling_frame",  "consecutive_fall_object_frame", 
       "consecutive_num", "action_cooltime", "crasheffect_count",
       "object_max_num","crasheffect_frame",

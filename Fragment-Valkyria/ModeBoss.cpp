@@ -37,20 +37,20 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeBoss::ModeBoss(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
+ModeBoss::ModeBoss() {
 }
 
 void ModeBoss::Enter() {
     using Vector4 = AppFrame::Math::Vector4;
 
    auto& objFactory = GetObjFactory();
-   objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>(_gameMain));
-   objFactory.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
-   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
-   objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
-   objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
-   objFactory.Register("Laser", std::make_unique<Create::LaserCreator>(_gameMain));
-   objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
+   objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>());
+   objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
+   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>());
+   objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
+   objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
+   objFactory.Register("Laser", std::make_unique<Create::LaserCreator>());
+   objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>());
 
    std::vector<std::string> spawnTableNames;
    for (int i = 1; MaxWave >= i; i++) {

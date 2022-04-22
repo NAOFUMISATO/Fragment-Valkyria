@@ -30,13 +30,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param game ゲーム本体クラスの参照
           */
-         Stage(Game::GameMain& game);
-         /**
-          * \brief 更新処理
-          */
-         void Update();
+         Stage();
          /**
           * \brief 描画処理
           */

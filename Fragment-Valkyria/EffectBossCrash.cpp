@@ -12,13 +12,14 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBossCrash::EffectBossCrash(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
-   _param = std::make_unique<Param::ParamLargeEnemy>(_gameMain,"largeenemy");
+EffectBossCrash::EffectBossCrash(std::string_view key) :EffectBase{key } {
+   _param = std::make_unique<Param::ParamLargeEnemy>("largeenemy");
    SetEffectLoadHandle(key);
 }
 
 void EffectBossCrash::Init() {
-   _efcCnt = _gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _efcCnt = gameInstance->modeServer().frameCount();
    EffectBase::Update();
 }
 
@@ -31,10 +32,11 @@ void EffectBossCrash::Update() {
    const auto _IntParam = [&](std::string paramName) {
       return _param->GetIntParam(paramName);
    };
-   auto frame = _gameMain.modeServer().frameCount() - _efcCnt;
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = gameInstance->modeServer().frameCount() - _efcCnt;
    if (frame % _IntParam("crasheffect_frame") == 0) {
       for (int i = 0; i < _IntParam("crasheffect_count"); i++) {
-         auto largeEnemyPos = _gameMain.objServer().GetVecData("LargeEnemyPos");
+         auto largeEnemyPos = gameInstance->objServer().GetVecData("LargeEnemyPos");
          const auto CrashDistance = _param->GetDoubleParam("crasheffect_distance");
          auto randomX = AppFrame::Math::Utility::GetRandom(-CrashDistance, CrashDistance);
          auto randomY = AppFrame::Math::Utility::GetRandom(0.0, CrashDistance);
@@ -45,5 +47,4 @@ void EffectBossCrash::Update() {
          EffectBase::Update();
       }
    }
-   
 }

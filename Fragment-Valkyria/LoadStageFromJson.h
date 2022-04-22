@@ -14,10 +14,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria{
-   // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * ステージ関係
     */
@@ -30,9 +26,8 @@ namespace FragmentValkyria{
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲームの参照
           */
-         LoadStageFromJson(Game::GameMain& gameMain);
+         LoadStageFromJson();
          /**
           * \brief ステージ情報の連想配列
           */
@@ -56,7 +51,6 @@ namespace FragmentValkyria{
          std::vector<std::pair<int ,StageData>> GetStageModels(std::string_view key);
 
       private:
-         Game::GameMain& _gameMain;                                   //!< ゲームの参照
          std::unordered_map<std::string, 
             std::vector<std::pair<int,StageData>>> _stageModelsMap;   //!< 各ステージ情報の連想配列
       };

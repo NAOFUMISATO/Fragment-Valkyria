@@ -13,9 +13,6 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief カメラ関係
     */
@@ -33,7 +30,7 @@ namespace FragmentValkyria {
          /**
           * \brief コンストラクタ
           */
-         CameraComponent(Game::GameMain& gameMain);
+         CameraComponent();
          /**
           * \brief 初期化処理
           */
@@ -137,6 +134,11 @@ namespace FragmentValkyria {
 
          std::unique_ptr<Param::ParamCameraComponent> _param;               //!< カメラ管理クラスの値管理クラスのポインタ
          std::unique_ptr<StateServer> _stateServer;                         //!< 状態の一括管理クラスのポインタ
+         double _zoomRateRadian{ 0.0 };                                     //!< ズームする割合のサインの値を求めるラジアン
+         double _upDownAngle{ 0.0 };                                        //!< カメラの上下の回転の角度
+         double _sideAngle{ 0.0 };                                          //!< カメラの左右の回転の角度
+         double _vibrationVelocity{ 0.0 };                                  //!< 振動させるときに使う速度
+         double _vibrationValue{ 60.0 };                                    //!< 振動した時のYの位置
          bool _zoom{ false };                                               //!< ズームするか
          Vector4 _position{ 0, 0, 0 };                                      //!< 位置
          Vector4 _target{ 0, 0, 0 };                                        //!< 注視点
@@ -151,12 +153,6 @@ namespace FragmentValkyria {
          Vector4 _plyPos{ 0, 0, 0 };                                        //!< プレイヤーの位置
          Matrix44 _rotateMatrix{ Matrix44() };                              //!< プレイヤーから位置へのベクトルと注視点へのベクトルを回転させるマトリクス
          Matrix44 _anyAxisMatrix{ Matrix44() };                             //!< ベクトルを90度回転させるためのマトリクス
-         Game::GameMain& _gameMain;                                         //!< ゲーム本体クラスの参照
-         double _zoomRateRadian{ 0.0 };                                     //!< ズームする割合のサインの値を求めるラジアン
-         double _upDownAngle{ 0.0 };                                        //!< カメラの上下の回転の角度
-         double _sideAngle{ 0.0 };                                          //!< カメラの左右の回転の角度
-         double _vibrationVelocity{ 0.0 };                                  //!< 振動させるときに使う速度
-         double _vibrationValue{ 60.0 };                                    //!< 振動した時のYの位置
          std::tuple<double, double, double> _nearFarFov{ 0.0,0.0,0.0 };     //!< カメラの描画限界(手前,奥)及び視野角のTuple型(透視変換に使用)
 
       public:

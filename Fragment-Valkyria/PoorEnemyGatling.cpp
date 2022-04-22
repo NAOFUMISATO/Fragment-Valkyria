@@ -16,8 +16,8 @@
 
 using namespace FragmentValkyria::Enemy;
 
-PoorEnemyGatling::PoorEnemyGatling(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain, "poorenemy");
+PoorEnemyGatling::PoorEnemyGatling() {
+   _param = std::make_unique<Param::ParamPoorEnemy>("poorenemy");
 }
 
 void PoorEnemyGatling::Init() {
@@ -27,22 +27,26 @@ void PoorEnemyGatling::Init() {
 
 void PoorEnemyGatling::CreateGatling() {
    auto gatlingFramePos = modelAnimeComponent().GetFrameChildPosion("root","mob_gun");
-   _gameMain.objServer().RegistVector("GatlingPos", gatlingFramePos);
-   _gameMain.objServer().RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
-   auto gatling = _gameMain.objFactory().Create("Gatling");
-   gameMain().objServer().Add(std::move(gatling));
+   auto& objServer = GetObjServer();
+   objServer.RegistVector("GatlingPos", gatlingFramePos);
+   objServer.RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto gatling = gameInstance->objFactory().Create("Gatling");
+   objServer.Add(std::move(gatling));
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("attack", true,
       _owner._param->GetDoubleParam("gatling_animespeed"));
    _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _stateCnt = gameInstance->modeServer().frameCount();
    _remainingGatiling = _owner._param->GetIntParam("max_gatling");
 }
 
 void PoorEnemyGatling::StateGatling::Update() {
-   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
    if (frame % _owner._param->GetIntParam("gatling_rate") == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;

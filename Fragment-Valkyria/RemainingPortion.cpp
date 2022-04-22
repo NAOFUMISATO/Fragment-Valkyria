@@ -21,8 +21,8 @@ namespace {
 
 using namespace FragmentValkyria::Player;
 
-RemainingPortion::RemainingPortion(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
+RemainingPortion::RemainingPortion() {
+   _param = std::make_unique<Param::ParamPlayerUI>( "playerui");
 }
 
 void RemainingPortion::Init() {
@@ -38,7 +38,8 @@ void RemainingPortion::Init() {
 }
 
 void RemainingPortion::Update() {
-   auto portionStock = _gameMain.playerPortion();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto portionStock = gameInstance->playerPortion();
    StockCheck(static_cast<int>(portionStock));
 }
 

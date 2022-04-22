@@ -16,7 +16,7 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeLoading::ModeLoading(Game::GameMain& gameMain) :ModeBase{ gameMain } {
+ModeLoading::ModeLoading() {
 }
 
 void ModeLoading::Init() {
@@ -29,10 +29,11 @@ void ModeLoading::Update() {
    if (GetASyncLoadNum() == 0) {
       SetUseASyncLoadFlag(false);
       GetLoadJson().LoadModels("ingame");
-      if (!_gameMain.isTutorialClear()) {
+      auto gameInstance = Game::GameMain::GetInstance();
+      if (!gameInstance->isTutorialClear()) {
          GetModeServer().GoToMode("Tutorial", 'S');
       }
-      else if (!_gameMain.isPoorClear()) {
+      else if (!gameInstance->isPoorClear()) {
          GetModeServer().GoToMode("Poor", 'L');
       }
       else {

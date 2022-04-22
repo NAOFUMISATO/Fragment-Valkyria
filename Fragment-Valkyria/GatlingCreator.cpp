@@ -14,16 +14,14 @@
 using namespace FragmentValkyria::Create;
 using namespace FragmentValkyria;
 
-GatlingCreator::GatlingCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
-
-}
-
 std::unique_ptr<Object::ObjectBase> GatlingCreator::Create() {
-   auto gatling = std::make_unique<Enemy::Gatling>(_gameMain);
-   auto startPos = _gameMain.objServer().GetVecData("GatlingPos");
+   auto gatling = std::make_unique<Enemy::Gatling>();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto startPos = gameInstance->objServer().GetVecData("GatlingPos");
    gatling->position(startPos);
 
-   auto state = std::make_unique<AppFrame::State::StateServer>("Chase", std::make_shared<Enemy::Gatling::StateChase>(*gatling));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Chase",
+      std::make_shared<Enemy::Gatling::StateChase>(*gatling));
    state->Register("Die", std::make_shared<Enemy::Gatling::StateDie>(*gatling));
    gatling->stateServer(std::move(state));
 

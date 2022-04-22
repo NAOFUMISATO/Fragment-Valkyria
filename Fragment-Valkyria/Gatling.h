@@ -28,9 +28,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         Gatling(Game::GameMain& gameMain);
+         Gatling();
          /**
          * \brief オブジェクトの種類を返す
          * \return プレイヤー

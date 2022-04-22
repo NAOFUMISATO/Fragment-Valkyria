@@ -19,8 +19,8 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeMissionFailed::ModeMissionFailed(Game::GameMain& gameMain) :ModeBase{gameMain} {
-   _param = std::make_unique<Param::ParamModeGameOver>(_gameMain, "over");
+ModeMissionFailed::ModeMissionFailed()  {
+   _param = std::make_unique<Param::ParamModeGameOver>("over");
 }
 
 void ModeMissionFailed::Init() {
@@ -41,13 +41,14 @@ void ModeMissionFailed::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeMissionFailed::Update() {
+   auto gameInstance = Game::GameMain::GetInstance();
    if (!_cntInit) {
-      _animeCnt = _gameMain.modeServer().frameCount();
+      _animeCnt = gameInstance->modeServer().frameCount();
       _cntInit = true;
       GetSoundComponent().Play("GameOverVoice");
       GetSoundComponent().Play("GameOver");
    }
-   auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
+   auto gameCount = static_cast<int>(gameInstance->modeServer().frameCount());
    auto frame = gameCount - _animeCnt;
    auto allNum = std::get<0>(GetResServer().GetTextureInfo("MissionFailed").GetDivParams());
    const auto FailedAnimeSpeed = _param->GetIntParam("missionfailed_animespeed");

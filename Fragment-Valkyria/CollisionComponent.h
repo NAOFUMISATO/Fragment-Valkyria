@@ -31,17 +31,17 @@ namespace FragmentValkyria {
           * \brief 当たり判定結果の列挙
           */
          enum class ReportId {
-            None,                      //!< 当たっていない
-            HitFromPlayer,             //!< プレイヤーと当たった
-            HitFromObjectRange,        //!< オブジェクトを持ち上げられる範囲にいる
-            HitFromIdleFallObject,     //!< 待機状態の落下するオブジェクトと当たった
-            HitFromFallObject,         //!< 落下している落下するオブジェクトと当たった
-            HitFromGatling,            //!< ガトリングと当たった
-            HitFromLargeEnemy,         //!< ボスと当たった
-            HitFromPoorEnemy,          //!< 雑魚敵と当たった
-            HitFromBullet,             //!< 遠隔弱攻撃の弾と当たった
-            HitFromLaser,              //!< レーザーと当たった
-            OutStage                   //!< ステージの外にいる
+            None,                  //!< 当たっていない
+            HitFromPlayer,         //!< プレイヤーと当たった
+            HitFromObjectRange,    //!< オブジェクトを持ち上げられる範囲にいる
+            HitFromIdleFallObject, //!< 待機状態の落下するオブジェクトと当たった
+            HitFromFallObject,     //!< 落下している落下するオブジェクトと当たった
+            HitFromGatling,        //!< ガトリングと当たった
+            HitFromLargeEnemy,     //!< ボスと当たった
+            HitFromPoorEnemy,      //!< 雑魚敵と当たった
+            HitFromBullet,         //!< 遠隔弱攻撃の弾と当たった
+            HitFromLaser,          //!< レーザーと当たった
+            OutStage               //!< ステージの外にいる
          };
          /**
           * \brief 当たり判定結果を管理するクラス

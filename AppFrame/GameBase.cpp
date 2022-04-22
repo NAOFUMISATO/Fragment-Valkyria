@@ -9,13 +9,6 @@
 #include "GameBase.h"
 #include <DxLib.h>
 #include <EffekseerForDxLib.h>
-#include "ModeServer.h"
-#include "InputManager.h"
-#include "ResourceServer.h"
-#include "SoundComponent.h"
-#include "CurrentPathServer.h"
-#include "LoadResourceJson.h"
-#include "TextureComponent.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -24,14 +17,7 @@ namespace AppFrame {
     * \brief ゲームベース
     */
    namespace Game {
-      GameBase* GameBase::_gameInstance = nullptr;
 
-      GameBase::GameBase() {
-         _gameInstance = this;
-      };
-
-      GameBase::~GameBase() {
-      };
       bool GameBase::Initialize(HINSTANCE hinstance) {
          //デバッグモードならウインドウモードに設定及び、デバッグログの出力を行う
 #ifndef _DEBUG
@@ -77,15 +63,15 @@ namespace AppFrame {
 
          _inputManager = std::make_unique<Input::InputManager>();
 
-         _resServer = std::make_unique<Resource::ResourceServer>(*this);
+         _resServer = std::make_unique<Resource::ResourceServer>();
 
-         _soundComponent = std::make_unique<Sound::SoundComponent>(*this);
+         _soundComponent = std::make_unique<Sound::SoundComponent>();
 
          _pathServer = std::make_unique<Path::CurrentPathServer>();
 
-         _loadresJson = std::make_unique<Resource::LoadResourceJson>(*this);
+         _loadresJson = std::make_unique<Resource::LoadResourceJson>();
 
-         _texComponent = std::make_unique<Texture::TextureComponent>(*this);
+         _texComponent = std::make_unique<Texture::TextureComponent>();
 
          return true;
       }

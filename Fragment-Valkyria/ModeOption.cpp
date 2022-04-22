@@ -25,8 +25,8 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeOption::ModeOption(Game::GameMain& gameMain) : ModeBase { gameMain }{
-   _param = std::make_unique<Param::ParamModeOption>(_gameMain,"option");
+ModeOption::ModeOption() {
+   _param = std::make_unique<Param::ParamModeOption>("option");
 }
 
 void ModeOption::Init() {
@@ -58,7 +58,8 @@ void ModeOption::Init() {
    _cameraSens = _DoubleParam("default_camera_sens");
    _aimSens = _DoubleParam("default_aim_sens");
    _deadZone =_param->GetIntParam("default_deadzone");
-   _gameMain.sensitivity(_cameraSens, _aimSens, _deadZone);
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->sensitivity(_cameraSens, _aimSens, _deadZone);
 }
 
 void ModeOption::Enter() {
@@ -70,7 +71,8 @@ void ModeOption::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeOption::Update() {
-   _gameMain.sensitivity(_cameraSens, _aimSens, _deadZone);
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->sensitivity(_cameraSens, _aimSens, _deadZone);
    _stateServer->Update();
 }
 
@@ -87,7 +89,8 @@ void ModeOption::StateBase::Update() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-   auto [cameraSencivity, aimSencivity, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
    auto& ajustHandle = _owner._handleMap["AdjustmentBar"];
    auto& cusorHandle = _owner._handleMap["BarCusor"];
    int ajustWidth, ajustHeight;

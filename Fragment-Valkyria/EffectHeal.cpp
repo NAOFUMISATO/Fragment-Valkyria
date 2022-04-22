@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectHeal::EffectHeal(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectHeal::EffectHeal(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

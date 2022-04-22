@@ -18,15 +18,10 @@
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-
-LargeEnemyCreator::LargeEnemyCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
-
-}
-
 std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    using Vector4 = AppFrame::Math::Vector4;
    // ラージエネミーの生成
-   auto largeEnemy = std::make_unique<Enemy::LargeEnemy>(_gameMain);
+   auto largeEnemy = std::make_unique<Enemy::LargeEnemy>();
    // ラージエネミーのアニメーション一括管理クラスの生成
    auto model = std::make_unique<Model::ModelAnimeComponent>(*largeEnemy);
    // モデルの設定
@@ -35,7 +30,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    largeEnemy->modelAnimeComponent(std::move(model));
 
    // ラージエネミーの状態一括管理クラスの生成
-   auto state = std::make_unique<AppFrame::State::StateServer>("Fall", std::make_shared<Enemy::LargeEnemy::StateFall>(*largeEnemy));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Fall",
+      std::make_shared<Enemy::LargeEnemy::StateFall>(*largeEnemy));
    // ラージエネミーの状態の追加登録
    state->Register("Idle", std::make_shared<Enemy::LargeEnemy::StateIdle>(*largeEnemy));
    state->Register("FallObject", std::make_shared<Enemy::LargeEnemy::StateFallObject>(*largeEnemy));
@@ -50,7 +46,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    largeEnemy->stateServer(std::move(state));
 
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _gameMain.objServer().runObjects()) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   for (auto&& object : gameInstance->objServer().runObjects()) {
       // プレイヤーでなければ処理をスキップして戻る
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -59,7 +56,7 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
       largeEnemy->cameraComponent(object->cameraComponent());
    }
 
-   _gameMain.sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>(_gameMain));
+   gameInstance->sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>());
 
    // ラージエネミーのインスタンスを返す
    return std::move(largeEnemy);

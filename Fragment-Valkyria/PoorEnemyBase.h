@@ -26,7 +26,7 @@ namespace FragmentValkyria {
           * \brief コンストラクタ
           * \param gameMain ゲーム本体クラスの参照
           */
-         PoorEnemyBase(Game::GameMain& gameMain);
+         PoorEnemyBase();
          /**
           * \brief 初期化処理
           */
@@ -58,6 +58,9 @@ namespace FragmentValkyria {
           * \brief プレイヤーのオブジェクト発射攻撃に当たった場合の処理
           */
          void HitCheckFromFallObject();
+         /**
+          * \brief ダメージリアクションの処理
+          */
          void DamageExpression();
 
          int _collNum{ 0 };                     //!< コリジョン番号保存用
@@ -89,7 +92,7 @@ namespace FragmentValkyria {
 
          protected:
             PoorEnemyBase& _owner;   //!< 雑魚敵基底クラスの参照
-            int _stateCnt;           //!< 状態遷移時に使用するフレーム保存用
+            int _stateCnt{0};        //!< 状態遷移時に使用するフレーム保存用
          };
 
          /**

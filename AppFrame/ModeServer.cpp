@@ -36,8 +36,8 @@ namespace AppFrame {
    namespace Mode {
       ModeServer::ModeServer(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
          // フェードイン、フェードアウトモードを登録する
-         Register("FadeIn", std::make_shared<ModeFadeIn>(mode->gameBase()));
-         Register("FadeOut", std::make_shared<ModeFadeOut>(mode->gameBase()));
+         Register("FadeIn", std::make_shared<ModeFadeIn>());
+         Register("FadeOut", std::make_shared<ModeFadeOut>());
          // 最初のモードを登録する
          Register(key, mode);
          // 最初のモードを挿入

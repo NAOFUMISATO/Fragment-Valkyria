@@ -12,10 +12,6 @@
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
-   //二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    /**
     * \brief 音源関係
     */
@@ -28,9 +24,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameBase アプリケーションの基底クラスの参照
           */
-         SoundComponent(Game::GameBase& gameBase) :_gameBase{ gameBase } {};
+         SoundComponent(){};
          /**
           * \brief デストラクタ
           */
@@ -67,9 +62,6 @@ namespace AppFrame {
           * \param pos 3Dサウンドの場合に再生する位置
           */
          void Play(std::string_view key, int playType, Math::Vector4 pos);
-
-      private:
-         Game::GameBase& _gameBase;   //!< ゲームベースの参照
       };
    }
 }

@@ -21,8 +21,8 @@ namespace{
 
 using namespace FragmentValkyria::Player;
 
-RemainingBullet::RemainingBullet(Game::GameMain& gameMain) :Sprite::SpriteBase{gameMain} {
-   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
+RemainingBullet::RemainingBullet() {
+   _param = std::make_unique<Param::ParamPlayerUI>("playerui");
 }
 
 void RemainingBullet::Init() {
@@ -40,7 +40,8 @@ void RemainingBullet::Init() {
 }
 
 void RemainingBullet::Update() {
-   auto bulletStock = _gameMain.playerBullet();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto bulletStock = gameInstance->playerBullet();
    StockCheck(static_cast<int>(bulletStock));
 }
 

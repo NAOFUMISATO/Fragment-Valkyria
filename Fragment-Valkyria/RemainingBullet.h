@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         RemainingBullet(Game::GameMain& gameMain);
+         RemainingBullet();
          /**
           * \brief 初期化処理
           */

@@ -21,13 +21,9 @@
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-PlayerCreator::PlayerCreator(Game::GameMain& gameMain) : CreatorBase{ gameMain } {
-
-}
-
 std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    // カメラの生成
-   auto camera = std::make_shared<Camera::CameraComponent>(_gameMain);
+   auto camera = std::make_shared<Camera::CameraComponent>();
    // カメラの位置の設定
    camera->SetPosition({ 0, 120, -500 });
    // カメラの注視点の設定
@@ -36,7 +32,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    camera->Init();
 
    // カメラの状態一括管理クラスの生成
-   auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal", std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
+   auto camerastate = std::make_unique<AppFrame::State::StateServer>("Normal",
+      std::make_shared <Camera::CameraComponent::StateNormal>(*camera));
    // カメラの状態の追加登録
    camerastate->Register("ZoomIn", std::make_shared<Camera::CameraComponent::StateZoomIn>(*camera));
    camerastate->Register("ShootReady", std::make_shared<Camera::CameraComponent::StateShootReady>(*camera));
@@ -45,8 +42,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    camera->stateServer(std::move(camerastate));
 
    // プレイヤーの生成
-   auto player = std::make_unique<Player::Player>(_gameMain);
-   /*player->position(gameMain.loadJson().GetVecParam())*/
+   auto player = std::make_unique<Player::Player>();
    // プレイヤーのカメラ管理クラスの設定
    player->cameraComponent(camera);
    player->position({0,0,-2000.0});
@@ -61,7 +57,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    player->modelAnimeComponent(std::move(model));
    
    // プレイヤーの状態一括管理クラスの生成
-   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
+   auto state = std::make_unique<AppFrame::State::StateServer>("Idle", 
+      std::make_shared <Player::Player::StateIdle>(*player));
    // プレイヤーの状態の追加登録
    state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
    state->Register("ShootReady", std::make_shared<Player::Player::StateShootReady>(*player));
@@ -74,11 +71,12 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    // プレイヤーの状態一括管理クラスの設定
    player->stateServer(std::move(state));
 
-   auto& sprServer = _gameMain.sprServer();
-   sprServer.Add(std::make_unique<Player::PlayerHP>(_gameMain));
-   sprServer.Add(std::make_unique<Player::RemainingBullet>(_gameMain));
-   sprServer.Add(std::make_unique<Player::RemainingPortion>(_gameMain));
-   sprServer.Add(std::make_unique<Player::Reticle>(_gameMain));
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto& sprServer = gameInstance->sprServer();
+   sprServer.Add(std::make_unique<Player::PlayerHP>());
+   sprServer.Add(std::make_unique<Player::RemainingBullet>());
+   sprServer.Add(std::make_unique<Player::RemainingPortion>());
+   sprServer.Add(std::make_unique<Player::Reticle>());
 
    // プレイヤーのインスタンスを返す
    return std::move(player);

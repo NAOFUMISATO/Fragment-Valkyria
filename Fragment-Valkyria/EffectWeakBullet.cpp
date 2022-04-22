@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectWeakBullet::EffectWeakBullet(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectWeakBullet::EffectWeakBullet(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

@@ -19,9 +19,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         ClearScore(Game::GameMain& gameMain);
+         ClearScore();
          /**
           * \brief 初期化処理
           */

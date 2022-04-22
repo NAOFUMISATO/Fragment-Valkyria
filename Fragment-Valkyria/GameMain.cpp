@@ -8,12 +8,6 @@
  *********************************************************************/
 #include "GameMain.h"
 #include "ModeTitle.h"
-#include "ObjectServer.h"
-#include "ObjectFactory.h"
-#include "LoadStageFromJson.h"
-#include "ObjectServer.h"
-#include "SpriteServer.h"
-#include "EffectServer.h"
 #include "ModeOption.h"
 #include "ModeAmg.h"
 #include "ModeTeam.h"
@@ -26,18 +20,13 @@
 #include "ModeBoss.h"
 #include "ModeTutorial.h"
 #include "ModeTutorialSelect.h"
-#include "ParamPlayer.h"
-#include "ParamModeTitle.h"
-#include "ParamCollision.h"
 
 using namespace FragmentValkyria::Game;
-
-GameMain gameMain;
 
 bool GameMain::Initialize(HINSTANCE hInstance) {
    if (!GameBase::Initialize(hInstance)) { return false; }
 
-   _objFactory = std::make_unique<Create::ObjectFactory>(*this);
+   _objFactory = std::make_unique<Create::ObjectFactory>();
 
    _objServer = std::make_unique<Object::ObjectServer>();
 
@@ -45,7 +34,7 @@ bool GameMain::Initialize(HINSTANCE hInstance) {
 
    _efcServer = std::make_unique<Effect::EffectServer>();
 
-   _loadStage = std::make_unique<Stage::LoadStageFromJson>(*this);
+   _loadStage = std::make_unique<Stage::LoadStageFromJson>();
    // 各ファイルへのカレントパスをサーバーに登録する
    CurrentPathRegist();
    // 各モード(シーン)をサーバーに登録する
@@ -94,19 +83,19 @@ void GameMain::CurrentPathRegist(){
 }
 
 void GameMain::ModeRegist() {
-   _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Amg", std::make_shared<Mode::ModeAmg>(*this));
-   _modeServer->Register("Team", std::make_shared<Mode::ModeTeam>(*this));
-   _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>(*this));
-   _modeServer->Register("Option", std::make_shared<Mode::ModeOption>(*this));
-   _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>(*this));
-   _modeServer->Register("TutorialSelect", std::make_shared<Mode::ModeTutorialSelect>(*this));
+   _modeServer = std::make_unique<AppFrame::Mode::ModeServer>("Amg", std::make_shared<Mode::ModeAmg>());
+   _modeServer->Register("Team", std::make_shared<Mode::ModeTeam>());
+   _modeServer->Register("Title", std::make_shared<Mode::ModeTitle>());
+   _modeServer->Register("Option", std::make_shared<Mode::ModeOption>());
+   _modeServer->Register("Loading", std::make_shared<Mode::ModeLoading>());
+   _modeServer->Register("TutorialSelect", std::make_shared<Mode::ModeTutorialSelect>());
    _loadresJson->LoadEffects("ingame");
    SetUseASyncLoadFlag(true);
-   _modeServer->Register("Tutorial", std::make_shared<Mode::ModeTutorial>(*this));
-   _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>(*this));
-   _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>(*this));
-   _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>(*this));
-   _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>(*this));
-   _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>(*this));
-   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>(*this));
+   _modeServer->Register("Tutorial", std::make_shared<Mode::ModeTutorial>());
+   _modeServer->Register("Poor", std::make_shared<Mode::ModePoor>());
+   _modeServer->Register("Boss", std::make_shared<Mode::ModeBoss>());
+   _modeServer->Register("MissionFailed", std::make_shared<Mode::ModeMissionFailed>());
+   _modeServer->Register("MissionCompleted", std::make_shared<Mode::ModeMissionCompleted>());
+   _modeServer->Register("GameOver", std::make_shared<Mode::ModeGameOver>());
+   _modeServer->Register("ClearResult", std::make_shared<Mode::ModeClearResult>());
 }

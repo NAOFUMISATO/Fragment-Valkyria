@@ -20,8 +20,8 @@ namespace {
 }
 using namespace FragmentValkyria::Clear;
 
-ClearTime::ClearTime(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
-   _param = std::make_unique<Param::ParamModeClear>(_gameMain,"clear");
+ClearTime::ClearTime() {
+   _param = std::make_unique<Param::ParamModeClear>("clear");
 }
 
 void ClearTime::Init() {
@@ -36,7 +36,8 @@ void ClearTime::Init() {
       static_cast<int>(x + NumberDiffX * FourthMultRate),
       static_cast<int>(x + NumberDiffX * FifthMultRate)
    };
-   auto timer = _gameMain.ingameTimer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto timer = gameInstance->ingameTimer();
    auto allSec = timer / 60;
    auto sec = allSec % 60;
    auto minute = allSec / 60;

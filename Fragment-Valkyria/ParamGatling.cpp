@@ -11,6 +11,6 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamGatling::ParamGatling(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamGatling::ParamGatling(std::string_view key) :ParamBase{key } {
    LoadDoubleParam({ "speed" });
 }

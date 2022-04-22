@@ -20,9 +20,6 @@
  */
 namespace AppFrame {
    // 二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    namespace Math {
       class Vector4;
    }
@@ -40,7 +37,7 @@ namespace AppFrame {
           * \brief コンストラクタ
           * \param gameBase ゲームベースの参照
           */
-         ParamBase(Game::GameBase& gameBase,std::string_view key);
+         ParamBase(std::string_view key);
          /**
           * \brief int型の値を連想配列から取得する
           * \param paramName 値名
@@ -104,7 +101,6 @@ namespace AppFrame {
           */
          nlohmann::json JsonSetUp();
 
-         Game::GameBase& _gameBase;                               //!< ゲームベースの参照
          std::string _key;                                        //!< jsonファイル名
          std::unordered_map<std::string, int> _intMap;            //!< int型の値を登録する連想配列
          std::unordered_map<std::string, float> _floatMap;        //!< float型の値を登録する連想配列

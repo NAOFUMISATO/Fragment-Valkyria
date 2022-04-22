@@ -22,9 +22,9 @@ namespace {
 
 using namespace FragmentValkyria::Player;
 
-PlayerHP::PlayerHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain, "playerui");
-   _playerParam = std::make_unique < Param::ParamPlayer>(_gameMain, "player");
+PlayerHP::PlayerHP() {
+   _param = std::make_unique<Param::ParamPlayerUI>("playerui");
+   _playerParam = std::make_unique < Param::ParamPlayer>("player");
 }
 
 void PlayerHP::Init() {
@@ -36,7 +36,8 @@ void PlayerHP::Init() {
    const auto _IntParam = [&](std::string paramName) {
       return static_cast<unsigned char>(_param->GetIntParam(paramName));
    };
-   _hp = _gameMain.playerHp();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _hp = gameInstance->playerHp();
    // 画像ハンドルをResourceServerから取得する
    _grHandle = GetResServer().GetTexture("PlayerHP");
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
@@ -56,11 +57,12 @@ void PlayerHP::Init() {
 void PlayerHP::Update() {
    using Utility = AppFrame::Math::Utility;
    // ゲームのフレームカウントをModeServerから取得
-   auto count = _gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto count = gameInstance->modeServer().frameCount();
    // HPバー振動の処理
    BarShake(count);
    // プレイヤーHPを取得
-   _hp = _gameMain.playerHp();
+   _hp = gameInstance->playerHp();
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / 

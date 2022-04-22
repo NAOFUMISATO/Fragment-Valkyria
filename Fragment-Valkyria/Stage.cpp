@@ -13,7 +13,7 @@
 
 using namespace FragmentValkyria::Stage;
 
-Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
+Stage::Stage() {
    _stageComponent = std::make_unique<StageModelComponent>(*this);
    _stageComponent->SetModels("Stage");
    _stageComponent->PixelLightingON();
@@ -34,9 +34,6 @@ Stage::Stage(Game::GameMain& game) : Object::ObjectBase{ game } {
    MV1SetFrameOpacityRate(bossCollHandle, bossCollNum, 1.0f);
    MV1SetFrameOpacityRate(objCollHandle, objCollNum, 0.2f);
 #endif
-}
-
-void Stage::Update() {
 }
 
 void Stage::Draw() {

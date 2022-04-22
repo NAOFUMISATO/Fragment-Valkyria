@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamModeTitle::ParamModeTitle(Game::GameMain& gameMain, std::string_view key) :ParamBase{gameMain,key} {
+ParamModeTitle::ParamModeTitle(std::string_view key) :ParamBase{key} {
    LoadIntParam({ "bg_x","bg_y","title_x","title_y",
       "title_animespeed","anybutton_x" ,"anybutton_y",
       "anybutton_animespeed","start_x","start_y",

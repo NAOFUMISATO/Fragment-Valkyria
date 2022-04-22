@@ -206,7 +206,6 @@
     <ClCompile Include="StateServer.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector4.cpp" />
-    <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="ModeServer.cpp" />
   </ItemGroup>
   <ItemGroup>

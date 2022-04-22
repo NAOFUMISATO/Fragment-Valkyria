@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectPreliminaryLight::EffectPreliminaryLight(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectPreliminaryLight::EffectPreliminaryLight(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Sprite;
 
-SpriteBase::SpriteBase(Game::GameMain& gameMain) : _gameMain{ gameMain }{
+SpriteBase::SpriteBase() {
 }
 
 void SpriteBase::Draw() {
@@ -23,19 +23,23 @@ void SpriteBase::Draw() {
 }
 
 SpriteServer& SpriteBase::GetSprServer() const {
-   return _gameMain.sprServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->sprServer();
 }
 
 AppFrame::Texture::TextureComponent& SpriteBase::GetTexComponent() const {
-   return _gameMain.texComponent();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->texComponent();
 }
 
 AppFrame::Resource::LoadResourceJson& SpriteBase::GetLoadJson() const {
-   return _gameMain.loadresJson();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->loadresJson();
 }
 
 AppFrame::Resource::ResourceServer& SpriteBase::GetResServer() const {
-   return _gameMain.resServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->resServer();
 }
 
 void SpriteBase::stateServer(std::unique_ptr<StateServer> state) {

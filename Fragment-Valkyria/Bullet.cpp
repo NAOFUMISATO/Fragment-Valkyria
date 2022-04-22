@@ -13,9 +13,9 @@
 
 using namespace FragmentValkyria::Player;
 
-Bullet::Bullet(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamBullet>(_gameMain,"weakbullet");
-   _collParam = std::make_unique < Param::ParamCollision>(_gameMain, "collision");
+Bullet::Bullet() {
+   _param = std::make_unique<Param::ParamBullet>("weakbullet");
+   _collParam = std::make_unique < Param::ParamCollision>("collision");
 }
 
 void Bullet::Init() {
@@ -87,7 +87,7 @@ void Bullet::StateBase::Draw() {
 }
 
 void Bullet::StateShoot::Enter() {
-   _owner._efcBullet = std::make_unique<Effect::EffectWeakBullet>(_owner._gameMain,"WeakBullet");
+   _owner._efcBullet = std::make_unique<Effect::EffectWeakBullet>("WeakBullet");
    _owner._efcBullet->Init();
    Update();
 }

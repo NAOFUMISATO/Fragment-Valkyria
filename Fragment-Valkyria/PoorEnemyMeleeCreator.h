@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         PoorEnemyMeleeCreator(Game::GameMain& gameMain);
+         PoorEnemyMeleeCreator() {};
 
       private:
          /**

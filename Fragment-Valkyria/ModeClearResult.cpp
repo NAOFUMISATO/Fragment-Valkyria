@@ -13,7 +13,7 @@
 
 using namespace FragmentValkyria::Mode;
 
-ModeClearResult::ModeClearResult(Game::GameMain& gameMain) : ModeBase{gameMain} {
+ModeClearResult::ModeClearResult() {
 }
 
 void ModeClearResult::Init() {
@@ -36,8 +36,8 @@ void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
 void ModeClearResult::Update() {
    if (_born) {
       auto& sprServer = GetSprServer();
-      sprServer.Add(std::make_unique<Clear::ClearTime>(_gameMain));
-      sprServer.Add(std::make_unique<Clear::ClearScore>(_gameMain));
+      sprServer.Add(std::make_unique<Clear::ClearTime>());
+      sprServer.Add(std::make_unique<Clear::ClearScore>());
       _born = false;
    }
    GetSprServer().Update();

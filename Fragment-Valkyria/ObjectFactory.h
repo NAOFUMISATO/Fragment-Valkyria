@@ -35,9 +35,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         ObjectFactory(Game::GameMain& gameMain);
+         ObjectFactory();
          /**
           * \brief オブジェクトの生成管理クラスの登録
           * \param type 生成管理クラスを関連付ける際に登録する任意の文字列
@@ -55,24 +54,40 @@ namespace FragmentValkyria {
           * \brief コンテナの全要素削除
           */
          void Clear();
-
+         /**
+          * \brief スポーンテーブルをセットする
+          * \param key セットするスポーンテーブル名
+          */
          void SetSpawnTable(std::string_view key);
-
+         /**
+          * \brief スポーンテーブルの更新を行う
+          */
          void UpdateSpawn();
-
+         /**
+          * \brief スポーンテーブル情報をjsonファイルから読み込む
+          * \param jsonName jsonファイル名
+          * \param tableNames スポーンテーブル名
+          */
          void LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string> tableNames);
-
-         void LoadSpawnTable(std::string_view key, SpawnTable& spawnTables);
-
+         /**
+          * \brief スポーンテーブル情報を連想配列に登録する
+          * \param key スポーンテーブル名
+          * \param spawnTable スポーンテーブル
+          */
+         void LoadSpawnTable(std::string_view key, SpawnTable& spawnTable);
+         /**
+          * \brief スポーンテーブルを連想配列から取得する
+          * \param key 取得するスポーンテーブル名
+          * \return スポーンテーブル
+          */
          SpawnTable GetSpawnTable(std::string_view key);
 
       private:
-         Game::GameMain& _gameMain;   //!< ゲーム本体クラスの参照
-         std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;   //!< オブジェクト生成管理クラスを登録する連想配列
-         std::unordered_map<std::string, SpawnTable> _spawnTableMap;
-         SpawnTable _spawnTable{ SpawnRecord() };
-         unsigned int _progress{ 0 };     //!< 進捗
-         unsigned int _spawnProgress{ 0 };//!< スポーンした数
+         std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap; //!< オブジェクト生成管理クラスを登録する連想配列
+         std::unordered_map<std::string, SpawnTable> _spawnTableMap;                //!< スポーンテーブル情報の連想配列
+         SpawnTable _spawnTable{ SpawnRecord() };                                   //!< スポーンテーブル情報クラス
+         unsigned int _progress{ 0 };                                               //!< 進捗
+         unsigned int _spawnProgress{ 0 };                                          //!< スポーンの進捗
       };
    }
 }

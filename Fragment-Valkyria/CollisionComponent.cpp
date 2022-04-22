@@ -31,7 +31,7 @@
 using namespace FragmentValkyria::Collision;
 
 CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owner } {
-   _param = std::make_unique<Param::ParamCollision>(_owner.gameMain(),"collision");
+   _param = std::make_unique<Param::ParamCollision>("collision");
    //当たり判定の結果を管理するクラスのポインタ作成
    _report = std::make_unique<Report>();
 }
@@ -736,7 +736,7 @@ void CollisionComponent::PlayerKnockBack() {
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
       // プレイヤーだった場合
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
@@ -747,7 +747,8 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
       }
    }
    // ステージのモデルハンドルと当たり判定のフレーム番号の取得
-   auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+   auto gameInstace = Game::GameMain::GetInstance();
+   auto modeBase = gameInstace->modeServer().GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
    auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
@@ -770,7 +771,7 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
 
 AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
       // プレイヤーだった場合
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          // プレイヤーが死亡モーションならば返す
@@ -781,7 +782,8 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
       }
    }
    // ステージのモデルハンドルと当たり判定のフレーム番号の取得
-   auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+   auto gameInstace = Game::GameMain::GetInstance();
+   auto modeBase = gameInstace->modeServer().GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
    auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_boss_c");
@@ -803,7 +805,7 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 }
 
 AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
-   for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          // プレイヤーが死亡モーションならば返す
          auto& player = dynamic_cast<Player::Player&>(*object);
@@ -812,7 +814,8 @@ AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& p
          };
       }
    }
-   auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+   auto gameInstace = Game::GameMain::GetInstance();
+   auto modeBase = gameInstace->modeServer().GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
 
@@ -832,7 +835,7 @@ AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& p
 }
 
 void CollisionComponent::OutStage() {
-   for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+   for (auto&& object : _owner.GetObjServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          // プレイヤーが死亡モーションならば返す
@@ -841,7 +844,8 @@ void CollisionComponent::OutStage() {
          };
       }
    }
-   auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+   auto gameInstace = Game::GameMain::GetInstance();
+   auto modeBase = gameInstace->modeServer().GetNowMode();
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 
@@ -864,7 +868,8 @@ void CollisionComponent::OutStage() {
 }
 
 bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
-   for (auto&& object : _owner.gameMain().objServer().runObjects()) {
+   auto gameInstace = Game::GameMain::GetInstance();
+   for (auto&& object : gameInstace->objServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          // プレイヤーが死亡モーションならば返す
@@ -873,7 +878,7 @@ bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
          };
       }
    }
-   auto modeBase = _owner.gameMain().modeServer().GetNowMode();
+   auto modeBase = gameInstace->modeServer().GetNowMode();
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 

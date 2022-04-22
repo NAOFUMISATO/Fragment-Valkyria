@@ -11,10 +11,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-   // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief 値管理関係
     */
@@ -29,7 +25,7 @@ namespace FragmentValkyria {
           * \brief 落下オブジェクトの値の読み込み、取得を行う
           * \class 落下オブジェクトの値管理クラス
           */
-         ParamFallObject(Game::GameMain& gameMain, std::string_view key);
+         ParamFallObject(std::string_view key);
       };
    }
 }

@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectGatlingBullet::EffectGatlingBullet(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectGatlingBullet::EffectGatlingBullet(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

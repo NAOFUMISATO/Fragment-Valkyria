@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBossFall::EffectBossFall(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectBossFall::EffectBossFall(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

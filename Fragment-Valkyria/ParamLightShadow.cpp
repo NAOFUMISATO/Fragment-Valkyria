@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamLightShadow::ParamLightShadow(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamLightShadow::ParamLightShadow(std::string_view key) :ParamBase{key } {
    LoadIntParam({ "fog_red","fog_green","fog_blue","shadow_resolution" });
    LoadFloatParam({ "fog_start","global_ambred","global_ambgreen","global_ambblue",
       "global_ambalpha","alllight_difred","alllight_difgreen","alllight_difblue",

@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         GatlingCreator(Game::GameMain& gameMain);
+         GatlingCreator() {};
       private:
          /**
           * \brief ガトリング攻撃の弾の位置、状態の登録を行う

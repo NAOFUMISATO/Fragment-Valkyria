@@ -11,9 +11,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief チュートリアル関係
     */
@@ -27,10 +24,9 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           * \param tipsName 表示するTIPSの画像に関連付けた文字列
           */
-         TutorialTips(Game::GameMain& gameMain,std::string_view tipsName);
+         TutorialTips(std::string_view tipsName);
          /**
           * \brief 初期化処理
           */

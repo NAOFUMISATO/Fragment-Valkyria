@@ -25,10 +25,9 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           * \param key ResourceServerに登録した任意の文字列のエフェクトキー
           */
-         EffectBossCrash(Game::GameMain& gameMain, std::string_view key);
+         EffectBossCrash( std::string_view key);
          /**
           * \brief 初期化処理
           */

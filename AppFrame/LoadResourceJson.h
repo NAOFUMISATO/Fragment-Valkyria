@@ -19,9 +19,6 @@
   */
 namespace AppFrame {
    //二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    namespace Math {
       class Vector4;
    }
@@ -40,9 +37,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameBase ゲームベースの参照
           */
-         LoadResourceJson(Game::GameBase& gameBase);
+         LoadResourceJson();
          /**
           * \brief デフォルトデストラクタ
           */
@@ -76,8 +72,6 @@ namespace AppFrame {
           * \return nlohmann::json型のオブジェクト
           */
          nlohmann::json JsonSetUp(const std::string_view pathName, const std::filesystem::path jsonName);
-
-         Game::GameBase& _gameBase;   //!< ゲームベースの参照
       };
    }
 }

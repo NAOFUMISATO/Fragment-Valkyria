@@ -9,10 +9,15 @@
 #include "CameraComponent.h"
 #include "GameMain.h"
 
+namespace {
+   constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
+   constexpr auto ScreenHeight = 1080;  //!< 縦画面サイズ
+}
+
 using namespace FragmentValkyria::Camera;
 
-CameraComponent::CameraComponent(Game::GameMain& gameMain) :_gameMain{gameMain} {
-   _param = std::make_unique<Param::ParamCameraComponent>(_gameMain, "cameracomponent");
+CameraComponent::CameraComponent() {
+   _param = std::make_unique<Param::ParamCameraComponent>("cameracomponent");
 }
 
 void CameraComponent::Init() {
@@ -61,7 +66,7 @@ AppFrame::Math::Matrix44 CameraComponent::GetCameraViewMatrix(AppFrame::Math::Ve
 }
 
 AppFrame::Math::Matrix44 CameraComponent::GetCameraProjectionMatrix(double cameraNear, double cameraFar, double fov) {
-   auto aspect = static_cast<float>(FragmentValkyria::ScreenHeight) / static_cast<float>(FragmentValkyria::ScreenWidth);
+   auto aspect = static_cast<float>(ScreenHeight) / static_cast<float>(ScreenWidth);
    Matrix44 projection_matrix = Matrix44();
    // 透視変換
    projection_matrix.Perspective(fov, aspect, cameraNear, cameraFar);
@@ -110,7 +115,8 @@ void CameraComponent::Vibration() {
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
    // ゲーム内感度の取得
-   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
    // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
    auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
    // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
@@ -347,7 +353,8 @@ void CameraComponent::StateZoomIn::Update() {
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
    // 感度の取得
-    auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+    auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
     // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
     auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
     // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす

@@ -24,9 +24,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         PoorEnemyAlmighty(Game::GameMain& gameMain);
+         PoorEnemyAlmighty();
          /**
           * \brief 初期化処理
           */

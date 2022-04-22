@@ -27,9 +27,9 @@ namespace {
 
 using namespace FragmentValkyria::Player;
 
-Player::Player(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPlayer>(_gameMain, "player");
-   _collParam = std::make_unique<Param::ParamCollision>(_gameMain, "collision");
+Player::Player() {
+   _param = std::make_unique<Param::ParamPlayer>("player");
+   _collParam = std::make_unique<Param::ParamCollision>("collision");
 }
 
 void Player::Init(){
@@ -196,7 +196,8 @@ void Player::HitCheckFromGatling() {
         // ノックバック量の設定
         _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
+        auto gameInstance = Game::GameMain::GetInstance();
+        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -249,7 +250,8 @@ void Player::HitCheckFromFallObject() {
             _knockBack = knockBackDelta * 10.0;
         }
         // ダメージ量分ヒットポイントを減らす
-        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
+        auto gameInstance = Game::GameMain::GetInstance();
+        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -279,7 +281,8 @@ void Player::HitCheckFromLaser() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
+        auto gameInstance = Game::GameMain::GetInstance();
+        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -305,7 +308,8 @@ void Player::HitCheckFromLargeEnemy() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackVec * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
+        auto gameInstance = Game::GameMain::GetInstance();
+        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // カメラのズームをしないと設定
@@ -329,7 +333,8 @@ void Player::HitCheckFromPoorEnemy() {
       // ノックバック量のベクトルを設定
       _knockBack = knockBackVec * 10.0;
       // ダメージ量分ヒットポイントを減らす
-      _gameMain.playerHp(_gameMain.playerHp() - _collisionComponent->damage());
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
       // ノックバックしていると設定
       _collisionComponent->knockBack(true);
       // カメラのズームをしないと設定
@@ -341,15 +346,17 @@ void Player::HitCheckFromPoorEnemy() {
 
 void Player::WeakAttack() {
     // 遠隔弱攻撃の弾を生成してオブジェクトサーバーへ追加
-    auto bullet = gameMain().objFactory().Create("Bullet");
-    gameMain().objServer().Add(std::move(bullet));
+   auto gameInstance = Game::GameMain::GetInstance();
+    auto bullet = gameInstance->objFactory().Create("Bullet");
+    gameInstance->objServer().Add(std::move(bullet));
 }
 
 void Player::StateBase::Update() {
    // 無敵時間中の場合
    if (_owner._invincibleCnt > 0) {
       // 無敵状態に入ってからのフレームカウント数の取得
-      auto cnt = _owner.gameMain().modeServer().frameCount() - _owner._invincibleModeCnt;
+      auto gameInstance = Game::GameMain::GetInstance();
+      auto cnt = gameInstance->modeServer().frameCount() - _owner._invincibleModeCnt;
       // 既定のフレーム数経過したら
       const auto blinkingFrame = _owner._param->GetIntParam("blinking_frame");
       if (cnt % (blinkingFrame * 2) == 0) {
@@ -396,7 +403,8 @@ void Player::StateBase::Draw() {
 }
 
 void Player::StateIdle::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("stay", true, 
       _owner._param->GetDoubleParam("idle_animespeed"));
@@ -414,7 +422,8 @@ void Player::StateIdle::Input(InputManager& input) {
       return _owner._param->GetIntParam(paramName);
    };
    // デッドゾーンの取得
-   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
    auto joypad = input.GetXJoypad();
    const auto DeadZoneRange = _IntParam("walk_dead_zone_range");
    // 左スティックが動いているか確認
@@ -471,12 +480,12 @@ void Player::StateIdle::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (joypad.XClick() && _owner._gameMain.playerBullet() < _IntParam("max_bullet")) {
+   if (joypad.XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (joypad.YClick() && _owner._gameMain.playerPortion() > 0 &&
-      _owner._gameMain.playerHp() < _owner._param->GetDoubleParam("max_hp")) {
+   if (joypad.YClick() && gameInstance->playerPortion() > 0 &&
+      gameInstance->playerHp() < _owner._param->GetDoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -505,7 +514,8 @@ void Player::StateIdle::Update() {
 }
 
 void Player::StateWalk::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // オブジェクトを持ち上げられると設定
    _owner._isLift = true;
    // モデルのアニメーションの設定
@@ -533,7 +543,8 @@ void Player::StateWalk::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Walk");
    // デッドゾーンの取得
-   auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
    // 移動しているかのフラグを作成して初期ではしていないと設定
    auto moved = false;
    // カメラから注視点への方向単位ベクトルをもとめる
@@ -625,12 +636,12 @@ void Player::StateWalk::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && _owner._gameMain.playerBullet() < _IntParam("max_bullet")) {
+   if (input.GetXJoypad().XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && _owner._gameMain.playerPortion() > 0 && 
-      _owner._gameMain.playerHp() < _DoubleParam("max_hp")) {
+   if (input.GetXJoypad().YClick() && gameInstance->playerPortion() > 0 &&
+      gameInstance->playerHp() < _DoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
    // 移動しているかのフラグが移動していないとなっているか確認
@@ -692,8 +703,9 @@ void Player::StateRun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("run_02", true,
       _owner._param->GetDoubleParam("run_animespeed"));
    // ゲームのフレームカウントの取得
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
-   auto count = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto count = gameInstance->modeServer().frameCount();
    // この状態へ入った時のゲームのフレームカウントの
    _footCnt = count;
 }
@@ -718,9 +730,10 @@ void Player::StateRun::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Run");
    // 左スティックの入力を数フレーム待つ
-   if ((_owner.gameMain().modeServer().frameCount() - _footCnt) % _IntParam("wait_frame") == 0) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   if ((gameInstance->modeServer().frameCount() - _footCnt) % _IntParam("wait_frame") == 0) {
       // デッドゾーンの取得
-      auto [cameraSens, aimSens, deadZone] = _owner._gameMain.sensitivity();
+      auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
       // 移動しているかのフラグを作成して初期ではしていないと設定
       auto moved = false;
       // カメラから注視点への方向単位ベクトルをもとめる
@@ -851,12 +864,12 @@ void Player::StateRun::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && _owner._gameMain.playerBullet() < _IntParam("max_bullet")) {
+   if (input.GetXJoypad().XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && _owner._gameMain.playerPortion() > 0 && 
-      _owner._gameMain.playerHp() < _DoubleParam("max_hp")) {
+   if (input.GetXJoypad().YClick() && gameInstance->playerPortion() > 0 &&
+      gameInstance->playerHp() < _DoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -887,7 +900,8 @@ void Player::StateRun::Update() {
 }
 
 void Player::StateShootReady::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true,
       _owner._param->GetDoubleParam("shootready_animespeed"));
@@ -959,7 +973,8 @@ void Player::StateShootReady::Exit() {
 }
 
 void Player::StateKnockBack::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner.modelAnimeComponent().ChangeAnime("damaged", false,
       _owner._param->GetDoubleParam("knockback_animespeed"));
@@ -986,7 +1001,8 @@ void Player::StateKnockBack::Update() {
       return;
    }
    // ヒットポイントが0以下だった場合死亡状態へ
-   if (_owner._gameMain.playerHp() <= 0) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   if (gameInstance->playerHp() <= 0) {
       _owner._stateServer->GoToState("Die");
    }
    // ヒットポイントが0以下じゃなかった場合
@@ -994,7 +1010,7 @@ void Player::StateKnockBack::Update() {
       // 無敵時間の設定
       _owner._invincibleCnt = _owner._param->GetIntParam("invincible_frame");
       // 無敵状態に入った時のモードサーバーのフレームカウント数の設定
-      _owner._invincibleModeCnt = _owner.gameMain().modeServer().frameCount();
+      _owner._invincibleModeCnt = gameInstance->modeServer().frameCount();
       // ノックバックしていないと設定
       _owner.collisionComponent().knockBack(false);
       // 当たり判定の結果を当たっていないと設定
@@ -1029,12 +1045,14 @@ void Player::StateDie::Update() {
       soundComponent.Stop("BossBattleBgm");
       soundComponent.Stop("TutorialBgm");
       // モードサーバーにゲームオーバーモードを挿入
-      _owner.gameMain().modeServer().PushBack("MissionFailed");
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->modeServer().PushBack("MissionFailed");
    }
 }
 
 void Player::StateWeakShootReady::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
@@ -1047,7 +1065,8 @@ void Player::StateWeakShootReady::Enter() {
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
    // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があるか確認
-   if (input.GetXJoypad().RBClick() && _owner._coolTime <= 0 && _owner._gameMain.playerBullet() > 0) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   if (input.GetXJoypad().RBClick() && _owner._coolTime <= 0 && gameInstance->playerBullet() > 0) {
       // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があった場合
       // 遠隔弱攻撃処理
       _owner.WeakAttack();
@@ -1057,7 +1076,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
       // 鳴らすサウンドの設定
       _owner.GetSoundComponent().Play("PlayerShoot");
       // 遠隔弱攻撃の残り弾数を減らす
-      _owner._gameMain.playerBullet(_owner._gameMain.playerBullet() - 1);
+      gameInstance->playerBullet(gameInstance->playerBullet() - 1);
       // クールタイムの設定
       _owner._coolTime = _owner._param->GetIntParam("cooltime");
    }
@@ -1098,7 +1117,8 @@ void Player::StateWeakShootReady::Exit() {
 }
 
 void Player::StateReload::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("reload", true,0.5);
    // リロード状態のカウントを0に設定
@@ -1112,7 +1132,8 @@ void Player::StateReload::Update() {
    StateBase::Update();
    // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
    if (_reloadCnt > 60 * 2) {
-      _owner._gameMain.playerBullet(5);
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->playerBullet(5);
       _owner._stateServer->GoToState("Idle");
    }
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -1138,12 +1159,13 @@ void Player::StateReload::Update() {
 }
 
 void Player::StateRecovery::Enter() {
-   _owner._stateCnt = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _owner._stateCnt = gameInstance->modeServer().frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("heal", false);
    // 回復状態のカウントを0に設定
    _recoveryCnt = 0;
-   auto efcHeal = std::make_unique<Effect::EffectHeal>(_owner._gameMain, "Heal");
+   auto efcHeal = std::make_unique<Effect::EffectHeal>("Heal");
    auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
    efcHeal->position(hipsFramePos);
    _owner.GetEfcServer().Add(std::move(efcHeal));
@@ -1169,13 +1191,14 @@ void Player::StateRecovery::Update() {
       // 回復量の設定
       auto recovery = MaxHp * _DoubleParam("recovery_rate");
       // ヒットポイントを回復量分増やす
-      _owner._gameMain.playerHp(_owner._gameMain.playerHp() + recovery);
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->playerHp(gameInstance->playerHp() + recovery);
       // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
-      if (_owner._gameMain.playerHp() >= MaxHp) {
-         _owner._gameMain.playerHp(MaxHp);
+      if (gameInstance->playerHp() >= MaxHp) {
+         gameInstance->playerHp(MaxHp);
       }
       // ポーションの数を一つ減らす
-      _owner._gameMain.playerPortion(_owner._gameMain.playerPortion() - 1);
+      gameInstance->playerPortion(gameInstance->playerPortion() - 1);
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }
@@ -1203,7 +1226,8 @@ void Player::StateRecovery::Update() {
 
 void Player::StateRun::FootStepSound() {
    // フレームカウントの取得
-   auto count = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto count = gameInstance->modeServer().frameCount();
    // カウントが一定以上経過しているか
    if (count - _footCnt >= FootStepStart) {
       // プレイヤーの両踵フレームの取得

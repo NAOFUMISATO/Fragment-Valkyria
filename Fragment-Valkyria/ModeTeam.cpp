@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Mode;
 
-ModeTeam::ModeTeam(Game::GameMain& gameMain) :ModeBase{ gameMain } {
+ModeTeam::ModeTeam() {
 }
 
 void ModeTeam::Init() {
@@ -23,11 +23,12 @@ void ModeTeam::Enter() {
 }
 
 void ModeTeam::Update() {
+   auto gameInstance = Game::GameMain::GetInstance();
    if (!_cntInit) {
-      _fadeCnt = _gameMain.modeServer().frameCount();
+      _fadeCnt = gameInstance->modeServer().frameCount();
       _cntInit = true;
    }
-   auto frame = _gameMain.modeServer().frameCount() - _fadeCnt;
+   auto frame = gameInstance->modeServer().frameCount() - _fadeCnt;
    if (frame > 30) {
       GetModeServer().GoToMode("Title");
    }

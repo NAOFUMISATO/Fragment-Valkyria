@@ -7,29 +7,15 @@
  * \date   December 2021
  *********************************************************************/
 #include "AppFrame.h"
+#include "LoadStageFromJson.h"
+#include "ObjectServer.h"
+#include "SpriteServer.h"
+#include "EffectServer.h"
+#include "ObjectFactory.h"
  /**
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
-   constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
-   constexpr auto ScreenHeight = 1080;  //!< 縦画面サイズ
-   constexpr auto ScreenDepth = 32;     //!< ビット数
-   // 二重インクルード防止
-   namespace Create {
-      class ObjectFactory;
-   }
-   namespace Object {
-      class ObjectServer;
-   }
-   namespace Sprite {
-      class SpriteServer;
-   }
-   namespace Stage {
-      class LoadStageFromJson;
-   }
-   namespace Effect {
-      class EffectServer;
-   }
    /**
     * \brief ゲーム本体
     */
@@ -38,9 +24,19 @@ namespace FragmentValkyria {
        * \class ゲーム本体クラス
        * \brief ゲームのメイン処理を回す
        */
-      class GameMain : public AppFrame::Game::GameBase {
+      class GameMain : public AppFrame::Game::GameBase{
          using GameBase = AppFrame::Game::GameBase;
+      private:
+         /**
+          * \brief コンストラクタ
+          */
+         GameMain() {};
+         /**
+          * \brief デストラクタ
+          */
+         virtual ~GameMain() {};
       public:
+         friend class GameMain;
          /**
           * \brief 初期化処理
           * \param hInstance WinMainの第一引数
@@ -68,6 +64,11 @@ namespace FragmentValkyria {
           */
          void Render()override;
 
+         static GameMain* GetInstance() {
+            GameBase* gameBase = &GameBase::GetInstance();
+            auto gameMain = dynamic_cast<GameMain*>(gameBase);
+            return gameMain;
+         }
          /**
           * \brief 雑魚戦をクリアしたかの判定を返す
           * \return クリアしていればtrue,でなければfalse
@@ -169,7 +170,7 @@ namespace FragmentValkyria {
           * \brief 画面設定の値を返す
           * \return 画面横サイズ、画面縦サイズ、画面ビット数
           */
-         inline virtual std::tuple<int, int, int>GraphSize() { return { ScreenWidth,ScreenHeight,ScreenDepth }; }
+         inline virtual std::tuple<int, int, int>GraphSize() { return { 1920,1080,32 }; }
          /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
@@ -207,7 +208,7 @@ namespace FragmentValkyria {
          void ModeRegist();
 
          bool _isPoorClear{ false };                            //!< 雑魚戦をクリアしたか
-         bool _isTutorialClear{ false };                          //!< チュートリアルを終了またはスキップしたか
+         bool _isTutorialClear{ false };                        //!< チュートリアルを終了またはスキップしたか
          unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
          std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
          std::tuple<double, int, int> _playerStatus;            //!< プレイヤーのステータスのTuple型

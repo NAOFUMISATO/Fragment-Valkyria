@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照を取得
           */
-         ModeClearResult(Game::GameMain& gameMain);
+         ModeClearResult();
          /**
           * \brief 初期化処理
           */

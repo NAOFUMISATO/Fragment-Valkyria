@@ -31,9 +31,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         CreatorBase(Game::GameMain& gameMain);
+         CreatorBase() {};
          /**
           * \brief デフォルトデストラクタ
           */
@@ -48,9 +47,6 @@ namespace FragmentValkyria {
           * \return Json読み込み用クラスの参照
           */
          inline AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
-
-      protected:
-         Game::GameMain& _gameMain;          //!< ゲーム本体の参照
       };
    }
 }

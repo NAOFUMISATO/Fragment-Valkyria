@@ -11,10 +11,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-   // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief モード関係
     */
@@ -28,9 +24,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         ModeTutorialSelect(Game::GameMain& gameMain);
+         ModeTutorialSelect();
          /**
           * \brief 初期化処理
           */

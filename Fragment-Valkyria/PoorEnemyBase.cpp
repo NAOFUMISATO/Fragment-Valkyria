@@ -26,8 +26,8 @@ namespace {
    constexpr auto FadeOutFrame = 60;
 }
 
-PoorEnemyBase::PoorEnemyBase(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain,"poorenemy");
+PoorEnemyBase::PoorEnemyBase() {
+   _param = std::make_unique<Param::ParamPoorEnemy>("poorenemy");
 }
 
 void PoorEnemyBase::Init() {
@@ -59,7 +59,7 @@ void PoorEnemyBase::Draw() {
 
 void PoorEnemyBase::Rotate() {
    auto [x, y, z] = _position.GetVec3();
-   auto toPlayer = _gameMain.objServer().GetVecData("PlayerPos") - Vector4(x, 0.0, z);
+   auto toPlayer = GetObjServer().GetVecData("PlayerPos") - Vector4(x, 0.0, z);
    toPlayer.Normalized();
    AppFrame::Math::Matrix44 rotate;
    rotate.RotateY(_rotation.GetY(), true);
@@ -81,7 +81,8 @@ void PoorEnemyBase::HitCheckFromBullet() {
          _stateServer->GoToState("Die");
       }
       else {
-         _damageCnt = _gameMain.modeServer().frameCount();
+         auto gameInstance = Game::GameMain::GetInstance();
+         _damageCnt = gameInstance->modeServer().frameCount();
       }
    }
 }
@@ -101,7 +102,8 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 }
 
 void PoorEnemyBase::DamageExpression() {
-   auto frame = static_cast<int>(_gameMain.modeServer().frameCount() - _damageCnt);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = static_cast<int>(gameInstance->modeServer().frameCount() - _damageCnt);
    if (frame < _param->GetIntParam("white_frame")) {
       _modelAnimeComponent->SetBlendModeAdd(0);
       _modelAnimeComponent->SetBlendModeAdd(1);
@@ -124,12 +126,14 @@ void PoorEnemyBase::StateBase::Draw() {
 void PoorEnemyBase::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("idle", true,
       _owner._param->GetDoubleParam("idle_animespeed"));
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _stateCnt = gameInstance->modeServer().frameCount();
 }
 
 void PoorEnemyBase::StateIdle::Update() {
    StateBase::Update();
-   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
    _owner.Rotate();
    // 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
    if (frame >= 60 * 5) {
@@ -180,16 +184,18 @@ void PoorEnemyBase::StateFall::Update() {
 void PoorEnemyBase::StateDie::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("idle", true,
       _owner._param->GetDoubleParam("die_animespeed"));
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _stateCnt = gameInstance->modeServer().frameCount();
    _opacityRate = MaxOpacityRate;
-   auto efcCrash = std::make_unique<Effect::EffectPoorCrash>(_owner._gameMain, "PoorCrash");
+   auto efcCrash = std::make_unique<Effect::EffectPoorCrash>("PoorCrash");
    efcCrash->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcCrash));
    _owner.GetSoundComponent().Play("PoorCrash",_owner._position);
 }
 
 void PoorEnemyBase::StateDie::Update() {
-   auto frame = _owner._gameMain.modeServer().frameCount() - _stateCnt;
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
    
    auto deltaRate = MaxOpacityRate / static_cast<float>(FadeOutFrame);
 

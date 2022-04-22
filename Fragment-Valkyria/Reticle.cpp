@@ -20,8 +20,8 @@ namespace {
 
 using namespace FragmentValkyria::Player;
 
-Reticle::Reticle(Game::GameMain& gameMain) : Sprite::SpriteBase{ gameMain }{
-   _param = std::make_unique<Param::ParamPlayerUI>(_gameMain,"playerui");
+Reticle::Reticle() {
+   _param = std::make_unique<Param::ParamPlayerUI>("playerui");
 }
 
 void Reticle::Init() {
@@ -30,7 +30,8 @@ void Reticle::Init() {
 }
 
 void Reticle::Update() {
-   for (auto&& object : _gameMain.objServer().runObjects()) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   for (auto&& object : gameInstance->objServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player&>(*object);
          _isAim = player.isAim();

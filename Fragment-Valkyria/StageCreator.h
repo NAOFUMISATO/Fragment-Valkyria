@@ -11,9 +11,6 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
-   namespace Lighting {
-      class LightAndShadow;
-   }
    /**
     * \brief オブジェクト生成関係
     */
@@ -24,8 +21,10 @@ namespace FragmentValkyria {
        */
       class StageCreator : public CreatorBase {
       public:
-          
-          StageCreator(Game::GameMain& gameMain);
+          /**
+           * \brief コンストラクタ
+           */
+         StageCreator() {};
 
       private:
          /**

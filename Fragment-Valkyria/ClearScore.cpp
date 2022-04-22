@@ -16,8 +16,8 @@ namespace {
 
 using namespace FragmentValkyria::Clear;
 
-ClearScore::ClearScore(Game::GameMain& gameMain) :SpriteBase{ gameMain } {
-   _param = std::make_unique < Param::ParamModeClear >(_gameMain,"clear");
+ClearScore::ClearScore() {
+   _param = std::make_unique < Param::ParamModeClear >("clear");
 }
 
 void ClearScore::Init() {
@@ -31,7 +31,8 @@ void ClearScore::Init() {
    };
    _position = _param->GetVecParam("score_pos");
    auto handles = GetResServer().GetTextures("ClearScore");
-   auto timer = static_cast<int>(_gameMain.ingameTimer());
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto timer = static_cast<int>(gameInstance->ingameTimer());
    const auto CScoreSec = _IntParam("c_scoresec");
    const auto BScoreSec = _IntParam("b_scoresec");
    const auto AScoreSec = _IntParam("a_scoresec");

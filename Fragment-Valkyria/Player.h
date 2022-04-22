@@ -34,9 +34,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         Player(Game::GameMain& gameMain);
+         Player();
          /**
           * \brief デフォルトデストラクタ
           */
@@ -165,6 +164,7 @@ namespace FragmentValkyria {
          Matrix44 _rightRotation{ Matrix44() };             //!< ベクトルを90度回転させるマトリクス
          Matrix44 _leftRotation{ Matrix44() };              //!< ベクトルを-90度回転させるマトリクス
          Matrix44 _backRotation{ Matrix44() };              //!< ベクトルを180度回転させるマトリクス
+
       public:
          /**
           * \class プレイヤー状態の基底クラス

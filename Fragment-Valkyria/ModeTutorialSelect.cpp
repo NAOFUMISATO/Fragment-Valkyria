@@ -20,7 +20,7 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeTutorialSelect::ModeTutorialSelect(Game::GameMain& gameMain) :ModeBase{ gameMain } {
+ModeTutorialSelect::ModeTutorialSelect() {
 }
 
 void ModeTutorialSelect::Init() {
@@ -75,7 +75,8 @@ void ModeTutorialSelect::StateYes::Input(InputManager& input) {
       _owner._stateServer->GoToState("No");
    }
    if (input.GetXJoypad().AClick() || input.GetKeyboard().SpaceClick()) {
-      _owner._gameMain.isTutorialClear(true);
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->isTutorialClear(true);
       _owner.GetSoundComponent().Play("SystemDecision");
       _owner.GetSoundComponent().Stop("TitleBgm");
       _owner.GetModeServer().GoToMode("Loading", 'S');

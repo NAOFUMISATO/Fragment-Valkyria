@@ -10,6 +10,7 @@
 #include "ModeServer.h"
 #include "GameBase.h"
 #include "TextureComponent.h"
+#include "LoadResourceJson.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -18,27 +19,32 @@ namespace AppFrame {
     * \brief モード関係
     */
    namespace Mode {
-      ModeBaseRoot::ModeBaseRoot(Game::GameBase& gameBase) :_gameBase{ gameBase } {
+      ModeBaseRoot::ModeBaseRoot() {
       };
 
       Resource::LoadResourceJson& ModeBaseRoot::GetLoadJson() const{ 
-         return _gameBase.loadresJson();
+         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
+         return gameInstance.loadresJson();
       }
 
       Mode::ModeServer& ModeBaseRoot::GetModeServer() const {
-         return _gameBase.modeServer(); 
+         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
+         return gameInstance.modeServer();
       }
 
       Resource::ResourceServer& ModeBaseRoot::GetResServer() const {
-         return _gameBase.resServer(); 
+         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
+         return gameInstance.resServer();
       }
 
       Sound::SoundComponent& ModeBaseRoot::GetSoundComponent() const {
-         return _gameBase.soundComponent(); 
+         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
+         return gameInstance.soundComponent();
       }
 
       Texture::TextureComponent& ModeBaseRoot::GetTexComponent() const {
-         return _gameBase.texComponent();
+         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
+         return gameInstance.texComponent();
       }
    }
 }

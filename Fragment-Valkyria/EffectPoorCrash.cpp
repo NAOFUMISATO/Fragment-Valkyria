@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectPoorCrash::EffectPoorCrash(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectPoorCrash::EffectPoorCrash(std::string_view key) :EffectBase{ key } {
    SetEffectLoadHandle(key);
 }
 

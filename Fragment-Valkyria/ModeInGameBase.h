@@ -14,9 +14,6 @@
  */
 namespace FragmentValkyria {
    // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    namespace Create {
       class ObjectFactory;
    }
@@ -33,9 +30,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param game ゲーム本体の参照
           */
-         ModeInGameBase(Game::GameMain& gameMain);
+         ModeInGameBase();
          /**
           * \brief 入口処理
           */

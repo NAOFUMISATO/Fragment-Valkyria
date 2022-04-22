@@ -25,9 +25,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         LaserCreator(Game::GameMain& gameMain);
+         LaserCreator() {};
       private:
          /**
          * \brief レーザーの位置、状態の登録を行う

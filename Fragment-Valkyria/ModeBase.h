@@ -12,9 +12,6 @@
   */
 namespace FragmentValkyria {
    // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    namespace Object {
       class ObjectServer;
    }
@@ -36,9 +33,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         ModeBase(Game::GameMain& gameMain);
+         ModeBase();
          /**
           * \brief オブジェクト一括管理クラスの参照をゲームベース経由で取得
           * \return オブジェクト一括管理クラスの参照
@@ -54,9 +50,6 @@ namespace FragmentValkyria {
           * \return エフェクト一括管理クラスの参照
           */
          Effect::EffectServer& GetEfcServer() const;
-
-      protected:
-         Game::GameMain& _gameMain; //!< ゲームクラスの参照
       };
    }
 }

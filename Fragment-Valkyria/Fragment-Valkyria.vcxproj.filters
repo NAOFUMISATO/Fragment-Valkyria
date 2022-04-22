@@ -252,9 +252,6 @@
     <ClInclude Include="ObjectServer.h">
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
-      <Filter>ヘッダー ファイル\Game</Filter>
-    </ClInclude>
     <ClInclude Include="PoorEnemyBase.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
@@ -383,6 +380,9 @@
     </ClInclude>
     <ClInclude Include="ParamPoorEnemy.h">
       <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -653,9 +653,11 @@
     <ClCompile Include="ParamPoorEnemy.cpp">
       <Filter>ソース ファイル\Param</Filter>
     </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

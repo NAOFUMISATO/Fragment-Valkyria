@@ -11,10 +11,6 @@
  * \brief プロジェクト名
  */
 namespace FragmentValkyria {
-   //二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief エフェクト関係
     */
@@ -58,10 +54,9 @@ namespace FragmentValkyria {
          };
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           * \param key ResourceServerに登録した任意の文字列のエフェクトキー
           */
-         EffectBase(Game::GameMain& gameMain,std::string_view key);
+         EffectBase(std::string_view key);
          /**
           * \brief 初期化処理
           */
@@ -188,7 +183,6 @@ namespace FragmentValkyria {
          void SetEfcColor();
 
       protected:
-         Game::GameMain& _gameMain;                    //!< ゲーム本体クラスの参照
          EffectState _efcState{ EffectState::Active }; //!< エフェクトの状態
          int _loadHandle{ -1 };                        //!< エフェクトを読み込むハンドル
          int _playHandle{ -1 };                        //!< エフェクトを再生するハンドル

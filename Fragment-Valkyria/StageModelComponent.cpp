@@ -36,7 +36,8 @@ void StageModelComponent::Draw() {
 }
 
 void StageModelComponent::SetModels(std::string_view key) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto [position, rotation, scale] = stageData.GetStageParams();
@@ -48,7 +49,8 @@ void StageModelComponent::SetModels(std::string_view key) {
 }
 
 void StageModelComponent::SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -59,7 +61,8 @@ void StageModelComponent::SetDifColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -70,7 +73,8 @@ void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -81,7 +85,8 @@ void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -92,7 +97,8 @@ void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetSpcPower(std::string_view key, std::string_view fileName, int index, float power) {
-   auto stageModels = _owner.gameMain().loadStage().GetStageModels(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto stageModels = gameInstance->loadStage().GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();

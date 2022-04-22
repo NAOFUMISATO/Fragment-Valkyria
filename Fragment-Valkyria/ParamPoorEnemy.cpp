@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamPoorEnemy::ParamPoorEnemy(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamPoorEnemy::ParamPoorEnemy(std::string_view key) :ParamBase{ key } {
    LoadIntParam({"max_wave","rush_frame","max_gatling" ,"gatling_rate","white_frame" });
    LoadDoubleParam({ "gravity","rotate_speed","step_distance","step_speed","rush_speed",
       "idle_animespeed","walk_animespeed", "rush_animespeed" ,"gatling_animespeed" ,

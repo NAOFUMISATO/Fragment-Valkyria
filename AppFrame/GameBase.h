@@ -9,38 +9,21 @@
 #include <memory>
 #include <tuple>
 #include <DxLib.h>
+#include "Singleton.h"
+#include "ModeServer.h"
+#include "InputManager.h"
+#include "ResourceServer.h"
+#include "SoundComponent.h"
+#include "CurrentPathServer.h"
+#include "LoadResourceJson.h"
+#include "TextureComponent.h"
  /**
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
    //二重インクルード防止
-   namespace Mode {
-      class ModeServer;
-   }
-   namespace Resource {
-      class ResourceServer;
-      class LoadResourceJson;
-   }
    namespace Input {
       class InputManager;
-   }
-   namespace Path {
-      class CurrentPathServer;
-   }
-   namespace Sound {
-      class SoundComponent;
-   }
-   namespace Effect {
-      class EffectServer;
-   }
-   namespace Object {
-      class ObjectServer;
-   }
-   namespace Texture {
-      class TextureComponent;
-   }
-   namespace Sprite {
-      class SpriteServer;
    }
    /**
     * \brief ゲームベース
@@ -50,8 +33,18 @@ namespace AppFrame {
        * \class アプリケーションの基底クラス
        * \brief ゲームごとに継承して定義する
        */
-      class GameBase {
+      class GameBase:public AppFrame::Temp::Singleton<GameBase> {
+      protected:
+         /**
+          * \brief コンストラクタ
+          */
+         GameBase() {};
+         /**
+          * \brief デストラクタ
+          */
+         virtual ~GameBase() {};
       public:
+         friend class AppFrame::Temp::Singleton<GameBase>;
          /**
           * \brief ゲームの状態列挙
           */
@@ -60,14 +53,6 @@ namespace AppFrame {
             Paused,  //!< 一時停止
             Quit     //!< 終了
          };
-         /**
-          * \brief コンストラクタ
-          */
-         GameBase();
-         /**
-          * \brief デストラクタ
-          */
-         virtual ~GameBase();
          /**
           * \brief 初期化処理
           * \param hInstance WinMainの第一引数
@@ -95,11 +80,6 @@ namespace AppFrame {
           */
          virtual void Render();
 
-         /**
-          * \brief ゲームの基底クラスのインスタンスを取得
-          * \return ゲームの基底クラスのインスタンス
-          */
-         inline static GameBase* gameInstance() { return _gameInstance; }
          /**
           * \brief モードサーバーの参照を取得
           * \return モードサーバーのポインタ
@@ -152,7 +132,6 @@ namespace AppFrame {
          inline virtual std::tuple<int, int, int> GraphSize() { return { 1280,1024,32 }; }
 
       protected:
-         static GameBase* _gameInstance;                           //!< ゲームのインスタンス
          GameState _gState{ GameState::Play };                     //!< ゲーム状態
          std::unique_ptr<Mode::ModeServer> _modeServer;            //!< モードの一括管理クラス
          std::unique_ptr<Resource::ResourceServer> _resServer;     //!< リソースの一括管理クラス

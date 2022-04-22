@@ -36,13 +36,14 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeTutorial::ModeTutorial(Game::GameMain& gameMain) : ModeInGameBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPlayer>(_gameMain,"player");
+ModeTutorial::ModeTutorial() {
+   _param = std::make_unique<Param::ParamPlayer>("player");
 }
 
 void ModeTutorial::Init() {
    GetLoadJson().LoadSounds("ingame");
-   _gameMain.loadStage().LoadStageModels("Stage");
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->loadStage().LoadStageModels("Stage");
 }
 
 void ModeTutorial::Enter() {
@@ -57,13 +58,13 @@ void ModeTutorial::Enter() {
    using Vector4 = AppFrame::Math::Vector4;
 
    auto& objFactory = GetObjFactory();
-   objFactory.Register("Player", std::make_unique<Create::PlayerCreator>(_gameMain));
-   objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>(_gameMain));
-   objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>(_gameMain));
-   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>(_gameMain));
-   objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>(_gameMain));
-   objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>(_gameMain));
-   objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>(_gameMain));
+   objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
+   objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
+   objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
+   objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>());
+   objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>());
+   objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>());
+   objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>());
 
    std::vector<std::string> spawnTableNames;
    for (int i = 1; MaxWave >= i; i++) {
@@ -76,7 +77,8 @@ void ModeTutorial::Enter() {
    auto& objServer = GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   _gameMain.playerStatus(_param->GetBoolParam("max_hp"), 
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->playerStatus(_param->GetBoolParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
    _born = true;
    GetSoundComponent().Stop("TitleBgm");
@@ -152,7 +154,8 @@ bool ModeTutorial::TipsAlive() {
 }
 
 void ModeTutorial::ClearJudge(std::string_view key) {
-   for (auto& sprite : _gameMain.sprServer().runSprites()) {
+   auto gameInstance = Game::GameMain::GetInstance();
+   for (auto& sprite : gameInstance->sprServer().runSprites()) {
       if (sprite->GetSprType() == Sprite::SpriteBase::SpriteType::TutorialTips) {
          auto& tips = dynamic_cast<Tutorial::TutorialTips&>(*sprite);
          if (tips.IsTipsClear(key)) {
@@ -163,7 +166,7 @@ void ModeTutorial::ClearJudge(std::string_view key) {
 }
 
 void ModeTutorial::TipsBorn(std::string_view key){
-   auto tips = std::make_unique<Tutorial::TutorialTips>(_gameMain, key);
+   auto tips = std::make_unique<Tutorial::TutorialTips>(key);
    GetSprServer().Add(std::move(tips));
 }
 

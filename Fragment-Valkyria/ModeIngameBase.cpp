@@ -24,12 +24,12 @@
 using namespace FragmentValkyria::Mode;
 using namespace FragmentValkyria;
 
-ModeInGameBase::ModeInGameBase(Game::GameMain& gameMain) : ModeBase{gameMain} {
+ModeInGameBase::ModeInGameBase() {
 }
 
 void ModeInGameBase::Enter() {
-   _lighting = std::make_unique<Lighting::LightAndShadow>(_gameMain);
-   _stage = std::make_unique<Stage::Stage>(_gameMain);
+   _lighting = std::make_unique<Lighting::LightAndShadow>();
+   _stage = std::make_unique<Stage::Stage>();
    Update();
 }
 
@@ -55,7 +55,8 @@ void ModeInGameBase::Update() {
    _stage->Update();
    GetEfcServer().Update();
    GetSprServer().Update();
-   _gameMain.IngameTimerCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->IngameTimerCount();
 }
 
 void ModeInGameBase::Render() {
@@ -84,7 +85,8 @@ void ModeInGameBase::Exit() {
 }
 
 Create::ObjectFactory& ModeInGameBase::GetObjFactory() const {
-   return _gameMain.objFactory();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->objFactory();
 }
 
 void ModeInGameBase::IndividualEffectClear() {

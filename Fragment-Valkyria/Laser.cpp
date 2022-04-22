@@ -16,8 +16,8 @@
 
 using namespace FragmentValkyria::Enemy;
 
-Laser::Laser(Game::GameMain& gameMain) : Object::ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamCollision>(_gameMain,"collision");
+Laser::Laser() {
+   _param = std::make_unique<Param::ParamCollision>("collision");
 }
 
 void Laser::Update() {
@@ -41,8 +41,9 @@ void Laser::StateBase::Draw() {
 
 void Laser::StateIrradiation::Enter() {
    // この状態になった時のゲームのフレームカウントの保存
-   _stateCnt = _owner.gameMain().modeServer().frameCount();
-   auto efcBeam = std::make_unique<Effect::EffectBossBeam>(_owner._gameMain,"BossBeam");
+   auto gameInstance = Game::GameMain::GetInstance();
+   _stateCnt = gameInstance->modeServer().frameCount();
+   auto efcBeam = std::make_unique<Effect::EffectBossBeam>("BossBeam");
    efcBeam->position(_owner._position);
    auto [x, y, z] = (_owner._end - _owner._position).GetVec3();
    auto efcDir = Vector4(0, std::atan2(-x, -z), 0);
@@ -51,7 +52,8 @@ void Laser::StateIrradiation::Enter() {
 }
 
 void Laser::StateIrradiation::Update() {
-   auto count = _owner.gameMain().modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto count = gameInstance->modeServer().frameCount();
    for (auto& object : _owner.GetObjServer().runObjects()) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
          auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(*object);

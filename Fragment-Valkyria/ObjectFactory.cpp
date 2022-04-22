@@ -18,7 +18,7 @@ namespace {
 using namespace FragmentValkyria;
 using namespace FragmentValkyria::Create;
 
-ObjectFactory::ObjectFactory(Game::GameMain& gameMain) : _gameMain{ gameMain } {
+ObjectFactory::ObjectFactory() {
    Clear();
 }
 
@@ -65,7 +65,8 @@ void ObjectFactory::UpdateSpawn() {
             auto&& object = Create(key);
             object->position(position);
             object->rotation(rotation);
-            _gameMain.objServer().Add(std::move(object));
+            auto gameInstance = Game::GameMain::GetInstance();
+            gameInstance->objServer().Add(std::move(object));
             ++_spawnProgress;
         }
     }
@@ -82,7 +83,8 @@ void ObjectFactory::LoadSpawnTable(std::string_view key, SpawnTable& spawnTable)
 
 void ObjectFactory::LoadSpawnTables(const std::filesystem::path jsonName, const std::vector<std::string> tableNames) {
    namespace AppMath = AppFrame::Math;
-   auto jsonDirectory = _gameMain.pathServer().GetCurrentPath("SpawnJson");
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto jsonDirectory = gameInstance->pathServer().GetCurrentPath("SpawnJson");
    auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
    std::ifstream reading(jsonPath, std::ios::in);
 #ifdef _DEBUG

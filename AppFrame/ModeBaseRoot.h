@@ -13,9 +13,6 @@
   */
 namespace AppFrame {
    // 二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    namespace Resource {
       class ResourceServer;
       class LoadResourceJson;
@@ -47,9 +44,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param appBase ゲームベースの参照
           */
-         ModeBaseRoot(Game::GameBase& gameBase);
+         ModeBaseRoot();
          /**
           * \brief デストラクタ
           */
@@ -80,11 +76,6 @@ namespace AppFrame {
           */
          virtual void Exit() {};
 
-         /**
-          * \brief ゲームベースの参照を取得
-          * \return ゲームベースの参照
-          */
-         inline Game::GameBase& gameBase() const { return _gameBase; }
          /**
           * \brief モード一括管理クラスの参照をゲームベース経由で取得
           * \return モード管理クラスの参照
@@ -117,9 +108,8 @@ namespace AppFrame {
          inline void fadeType(char fadeType) { _fadeType = fadeType; };
 
       protected:
-         Game::GameBase& _gameBase;                         //!< ゲームベースの参照
-         std::unique_ptr<Param::ParamBase> _param;          //!< 値管理用クラスのポインタ
-         char _fadeType{ 'M' };                             //!< フェード時間を指定する文字
+         std::unique_ptr<Param::ParamBase> _param; //!< 値管理用クラスのポインタ
+         char _fadeType{ 'M' };                    //!< フェード時間を指定する文字
       };
    }
 }

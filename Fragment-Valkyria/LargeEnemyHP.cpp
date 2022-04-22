@@ -22,8 +22,8 @@ namespace {
 
 using namespace FragmentValkyria::Enemy;
 
-LargeEnemyHP::LargeEnemyHP(Game::GameMain& gameMain) :Sprite::SpriteBase{ gameMain } {
-   _param = std::make_unique<Param::ParamLargeEnemyUI>(_gameMain, "bossui");
+LargeEnemyHP::LargeEnemyHP() {
+   _param = std::make_unique<Param::ParamLargeEnemyUI>("bossui");
 }
 
 void LargeEnemyHP::Init() {
@@ -63,9 +63,10 @@ void LargeEnemyHP::Update() {
    };
    using Utility = AppFrame::Math::Utility;
    // ゲームのフレームカウントをModeServerから取得
-   auto count = _gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto count = gameInstance->modeServer().frameCount();
    // ボスHPをObjectServerから取得
-   _hp = _gameMain.objServer().GetDoubleData("LargeEnemyHP");
+   _hp = gameInstance->objServer().GetDoubleData("LargeEnemyHP");
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / _DoubleParam("max_hp") + left, MaxRate);

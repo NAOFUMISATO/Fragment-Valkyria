@@ -22,7 +22,7 @@ namespace AppFrame {
     * \brief リソース関係
     */
    namespace Resource {
-      ResourceServer::ResourceServer(Game::GameBase& gameBase) : _gameBase(gameBase) {
+      ResourceServer::ResourceServer() {
          Init();
       }
 
@@ -40,8 +40,8 @@ namespace AppFrame {
       /*----------2D関係----------*/
 
       void ResourceServer::ClearTextures() {
-         for (auto&& [key, divGraph_handles] : _textures) {
-            auto&& [divGraph, handles] = divGraph_handles;
+         for (auto&& [key, divGraphAndHandles] : _textures) {
+            auto&& [divGraph, handles] = divGraphAndHandles;
             // 画像情報のコンテナを全て回し、画像の削除を行う
             for (auto&& handle : handles) {
                DeleteGraph(handle);

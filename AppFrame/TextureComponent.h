@@ -12,9 +12,6 @@
  */
 namespace AppFrame {
    // 二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    namespace Math {
       class Vector4;
    }
@@ -30,9 +27,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameBase ゲームベースの参照
           */
-         TextureComponent(Game::GameBase& gameBase);
+         TextureComponent();
          /**
           * \brief 画像の描画を簡易的に行う
           * \param x 画像左上X座標
@@ -117,9 +113,6 @@ namespace AppFrame {
           * \param animeSpeed アニメーションスピード
           */
          void TransDrawBillBoard(Math::Vector4 pos, double cx, double cy, double scale, double angle, std::vector<int> handles, int animeSpeed);
-
-      private:
-         Game::GameBase& _gameBase;   //!< ゲームベースの参照
       };
    }
 }

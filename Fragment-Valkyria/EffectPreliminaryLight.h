@@ -23,10 +23,9 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           * \param key エフェクトハンドルを登録した文字列
           */
-         EffectPreliminaryLight(Game::GameMain& gameMain, std::string_view key);
+         EffectPreliminaryLight( std::string_view key);
          /**
           * \brief 初期化処理
           */

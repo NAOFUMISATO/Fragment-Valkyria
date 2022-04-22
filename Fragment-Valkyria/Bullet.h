@@ -27,9 +27,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         Bullet(Game::GameMain& gameMain);
+         Bullet();
          /**
           * \brief オブジェクトの種類を返す
           * \return 弱攻撃弾

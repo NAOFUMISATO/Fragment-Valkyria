@@ -26,9 +26,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         PlayerHP(Game::GameMain& gameMain);
+         PlayerHP();
          /**
           * \brief 初期化処理
           */
@@ -53,6 +52,7 @@ namespace FragmentValkyria {
           * \param count ゲームのフレームカウント
           */
          void BarShake(unsigned int count);
+
          std::unique_ptr<Param::ParamPlayer> _playerParam;  //!< プレイヤークラスの値管理クラスのポインタ
          double _hp{ 100.0 };                               //!< ボスHP
          double _hpRange{ 100.0 };                          //!< ボス最大HP

@@ -27,9 +27,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         FallObject(Game::GameMain& gameMain);
+         FallObject();
          /**
           * \brief 初期化処理
           */

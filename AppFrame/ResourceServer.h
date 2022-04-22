@@ -17,10 +17,6 @@
   * \brief アプリケーションフレーム
   */
 namespace AppFrame {
-   //二重インクルード防止
-   namespace Game {
-      class GameBase;
-   }
    /**
     * \brief リソース関係
     */
@@ -33,9 +29,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameBase ゲームベースクラスの参照
           */
-         ResourceServer(Game::GameBase& gameBase);
+         ResourceServer();
          /**
           * \brief デフォルトデストラクタ
           */
@@ -157,7 +152,6 @@ namespace AppFrame {
          virtual std::pair<int, double> GetEffectInfo(std::string_view key);
 
       private:
-         Game::GameBase& _gameBase;                                  //!< ゲームベースの参照
          std::unordered_map<std::string, 
             std::pair<Texture, std::vector<int>>> _textures;         //!< 画像データクラスと画像ハンドルの連想配列
          std::unordered_map<std::string,std::tuple<std::vector<int>,

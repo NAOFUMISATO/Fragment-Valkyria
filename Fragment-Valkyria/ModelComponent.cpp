@@ -33,7 +33,8 @@ void ModelComponent::Draw() {
 }
 
 int ModelComponent::SetModel(std::string_view key, int no) {
-   auto [handle, actualNo] = _owner.gameMain().resServer().GetModel(key, no);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [handle, actualNo] = gameInstance->resServer().GetModel(key, no);
    _modelHandle = handle;
    _key = key;
    return actualNo;

@@ -18,8 +18,8 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeMissionCompleted::ModeMissionCompleted(Game::GameMain& gameMain) :ModeBase{ gameMain } {
-   _param = std::make_unique<Param::ParamModeClear>(_gameMain,"clear");
+ModeMissionCompleted::ModeMissionCompleted() {
+   _param = std::make_unique<Param::ParamModeClear>("clear");
 }
 
 void ModeMissionCompleted::Init() {

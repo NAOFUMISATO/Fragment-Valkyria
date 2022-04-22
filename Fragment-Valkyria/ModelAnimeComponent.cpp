@@ -86,7 +86,8 @@ void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate, 
       _blending = false; // ブレンド中かの判定をfalse
    }
    // 新しくアタッチするアニメ番号をResourceServerから取得する
-   _newAnimIndex = _owner.gameMain().resServer().GetModelAnimIndex(_key, animeName);
+   auto gameInstance = Game::GameMain::GetInstance();
+   _newAnimIndex = gameInstance->resServer().GetModelAnimIndex(_key, animeName);
 #ifndef _DEBUG
    if (_animIndex == _newAnimIndex) {
       return;

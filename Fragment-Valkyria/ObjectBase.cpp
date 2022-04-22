@@ -16,7 +16,7 @@
 
 using namespace FragmentValkyria::Object;
 
-ObjectBase::ObjectBase(Game::GameMain& gameMain) : _gameMain{gameMain} {
+ObjectBase::ObjectBase() {
    _collisionComponent = std::make_unique<Collision::CollisionComponent>(*this);
 }
 
@@ -45,23 +45,28 @@ void ObjectBase::cameraComponent(std::shared_ptr<Camera::CameraComponent> camera
 }
 
 ObjectServer& ObjectBase::GetObjServer() const {
-   return _gameMain.objServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->objServer();
 }
 
 FragmentValkyria::Effect::EffectServer& ObjectBase::GetEfcServer() const {
-   return _gameMain.efcServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->efcServer();
 }
 
 AppFrame::Texture::TextureComponent& ObjectBase::GetTexComponent() const {
-   return _gameMain.texComponent();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->texComponent();
 }
 
 AppFrame::Sound::SoundComponent& ObjectBase::GetSoundComponent() const {
-   return _gameMain.soundComponent();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->soundComponent();
 }
 
 AppFrame::Resource::LoadResourceJson& ObjectBase::GetLoadJson() const {
-   return _gameMain.loadresJson();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->loadresJson();
 }
 
 void ObjectBase::stateServer(std::unique_ptr<StateServer> state) {

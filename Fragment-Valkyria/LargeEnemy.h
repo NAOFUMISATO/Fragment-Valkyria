@@ -26,9 +26,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         LargeEnemy(Game::GameMain& gameMain);
+         LargeEnemy();
          /**
           * \brief オブジェクトの種別を返す
           * \return ラージエネミー

@@ -11,6 +11,6 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamBullet::ParamBullet(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamBullet::ParamBullet(std::string_view key) :ParamBase{key } {
    LoadDoubleParam({"speed" });
 }

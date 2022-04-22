@@ -84,9 +84,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WinMain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameBase.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
@@ -167,9 +164,6 @@
     <ClInclude Include="ResourceServer.h">
       <Filter>ヘッダー ファイル\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>ヘッダー ファイル\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="StateBaseRoot.h">
       <Filter>ヘッダー ファイル\State</Filter>
     </ClInclude>
@@ -226,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="ParamBase.h">
       <Filter>ヘッダー ファイル\Param</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ヘッダー ファイル\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

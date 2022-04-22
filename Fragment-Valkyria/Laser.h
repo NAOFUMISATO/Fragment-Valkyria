@@ -24,9 +24,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         Laser(Game::GameMain& gameMain);
+         Laser();
          /**
           * \brief 更新処理
           */

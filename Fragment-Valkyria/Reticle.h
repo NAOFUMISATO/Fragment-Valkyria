@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体クラスの参照
           */
-         Reticle(Game::GameMain& gameMain);
+         Reticle();
          /**
           * \brief 初期化処理
           */

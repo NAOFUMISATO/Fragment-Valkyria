@@ -23,9 +23,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         LargeEnemyCreator(Game::GameMain& gameMain);
+         LargeEnemyCreator() {};
       private:
          /**
           * \brief ラージエネミーの位置、アニメーション、状態の登録を行う

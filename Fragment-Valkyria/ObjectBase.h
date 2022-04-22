@@ -12,9 +12,6 @@
   */
 namespace FragmentValkyria {
    // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    namespace Model {
       class ModelAnimeComponent;
    }
@@ -68,9 +65,8 @@ namespace FragmentValkyria {
          };
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         ObjectBase(Game::GameMain& gameMain);
+         ObjectBase();
          /**
           * \brief デストラクタ
           */
@@ -133,11 +129,6 @@ namespace FragmentValkyria {
             forwardVec.Normalized();
             return forwardVec;
          }
-         /**
-          * \brief ゲームクラスの参照を取得
-          * \return ゲームクラスの参照
-          */
-         inline Game::GameMain& gameMain() const { return _gameMain; }
          /**
           * \brief アニメーション一括管理クラスの設定
           * \param model アニメーション管理クラスのインスタンス
@@ -246,7 +237,6 @@ namespace FragmentValkyria {
           */
          inline void objState(ObjectState state) { _objState = state; }
 
-         Game::GameMain& _gameMain;                                          //!< ゲーム本体クラスの参照
          std::unique_ptr<AppFrame::Param::ParamBase> _param;                 //!< 値管理用クラスのポインタ
          std::unique_ptr<StateServer> _stateServer;                          //!< 状態の一括管理クラスのポインタ
          std::unique_ptr<Model::ModelAnimeComponent> _modelAnimeComponent;   //!< モデルのアニメーション管理クラスのポインタ

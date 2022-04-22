@@ -10,7 +10,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectObjectHit::EffectObjectHit(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectObjectHit::EffectObjectHit(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

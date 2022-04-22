@@ -20,13 +20,13 @@
 using namespace FragmentValkyria::Enemy;
 
 namespace {
-   constexpr auto DefaultPointAngle = 0.0;                                       //!< 落ちる場所のビルボードの回転角度
-   constexpr auto UpEffectDiffY = 20.0;                                          //!< エフェクトの高さ
+   constexpr auto DefaultPointAngle = 0.0;  //!< 落ちる場所のビルボードの回転角度
+   constexpr auto UpEffectDiffY = 20.0;     //!< エフェクトの高さ
 }
 
-FallObject::FallObject(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamFallObject>(_gameMain,"fallobject");
-   _collParam = std::make_unique<Param::ParamCollision>(_gameMain, "collision");
+FallObject::FallObject() {
+   _param = std::make_unique<Param::ParamFallObject>("fallobject");
+   _collParam = std::make_unique<Param::ParamCollision>("collision");
 }
 
 void FallObject::Init() {
@@ -41,8 +41,8 @@ void FallObject::Init() {
 
    // フレーム1をナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collision);
-
-   _fallPointHandles = _gameMain.resServer().GetTextures("FallPoint");
+   auto gameInstance = Game::GameMain::GetInstance();
+   _fallPointHandles = gameInstance->resServer().GetTextures("FallPoint");
 }
 
 void FallObject::Input(InputManager& input) {
@@ -80,7 +80,7 @@ void FallObject::HitCheckFromLargeEnemy() {
    // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromLargeEnemy) {
       // ラージエネミーと当たっていたら死亡状態へ
-      auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
+      auto efcHit = std::make_unique<Effect::EffectObjectHit>("ObjectHit");
       efcHit->position(_position);
       GetEfcServer().Add(std::move(efcHit));
       GetSoundComponent().Play("ObjectHit", _position);
@@ -103,7 +103,7 @@ void FallObject::HitCheckFromPoorEnemy() {
    auto report = _collisionComponent->report();
    // 当たり判定結果の確認
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemy) {
-      auto efcHit = std::make_unique<Effect::EffectObjectHit>(_gameMain, "ObjectHit");
+      auto efcHit = std::make_unique<Effect::EffectObjectHit>("ObjectHit");
       efcHit->position(_position);
       GetEfcServer().Add(std::move(efcHit));
       GetSoundComponent().Play("ObjectHit",_position);
@@ -326,7 +326,7 @@ void FallObject::StateFall::Update() {
       auto [oldPosX, oldPosY, oldPosZ] = _owner._position.GetVec3();
       // 位置の高さを無くして設定
       _owner._position = AppFrame::Math::Vector4(oldPosX, 0.0, oldPosZ);
-      auto efcFall = std::make_unique<Effect::EffectObjectFall>(_owner._gameMain, "ObjectFall");
+      auto efcFall = std::make_unique<Effect::EffectObjectFall>("ObjectFall");
       efcFall->position(_owner._position);
       efcFall->speed(2.0);
       _owner.GetEfcServer().Add(std::move(efcFall));
@@ -368,7 +368,7 @@ void FallObject::StateFall::Draw() {
 void FallObject::StateUp::Enter() {
    // 残留オブジェクトでないと設定
    _owner.residual(false);
-   _owner._efcUp = std::make_unique<Effect::EffectObjectUp>(_owner._gameMain, "ObjectUp");
+   _owner._efcUp = std::make_unique<Effect::EffectObjectUp>("ObjectUp");
    auto efcPos = _owner._position;
    efcPos.SetY(_owner._position.GetY() + UpEffectDiffY);
    _owner._efcUp->position(efcPos);

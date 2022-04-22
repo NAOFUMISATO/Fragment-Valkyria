@@ -29,7 +29,7 @@ namespace AppFrame {
     * \brief ÉÇÅ[Éhä÷åWñºëOãÛä‘
     */
    namespace Mode {
-      ModeFadeBase::ModeFadeBase(Game::GameBase& gameBase) : ModeBaseRoot(gameBase){
+      ModeFadeBase::ModeFadeBase() {
       }
 
       void ModeFadeBase::Render() {
@@ -38,7 +38,7 @@ namespace AppFrame {
          SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
       }
 
-      ModeFadeIn::ModeFadeIn(Game::GameBase& gameBase) : ModeFadeBase(gameBase) {
+      ModeFadeIn::ModeFadeIn() {
       }
 
       void ModeFadeIn::Enter() {
@@ -64,7 +64,7 @@ namespace AppFrame {
          }
       }
 
-      ModeFadeOut::ModeFadeOut(Game::GameBase& gameBase) : ModeFadeBase(gameBase) {
+      ModeFadeOut::ModeFadeOut() {
       }
 
       void ModeFadeOut::Enter() {

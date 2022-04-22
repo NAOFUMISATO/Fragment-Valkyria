@@ -17,9 +17,9 @@
 
 using namespace FragmentValkyria::Enemy;
 
-Gatling::Gatling(Game::GameMain& gameMain) : ObjectBase{ gameMain } {
-   _param = std::make_unique<Param::ParamGatling>(_gameMain,"gatling");
-   _collParam = std::make_unique<Param::ParamCollision>(_gameMain, "collision");
+Gatling::Gatling() {
+   _param = std::make_unique<Param::ParamGatling>("gatling");
+   _collParam = std::make_unique<Param::ParamCollision>("collision");
 }
 
 void Gatling::Init() {
@@ -93,10 +93,10 @@ void Gatling::StateBase::Draw() {
 }
 
 void Gatling::StateChase::Enter() {
-   auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>(_owner._gameMain,"GatlingMuzzleFlash");
+   auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>("GatlingMuzzleFlash");
    efcMuzzleFlash->position(_owner._position);
    _owner.GetEfcServer().Add(std::move(efcMuzzleFlash));
-   _owner._efcGatling = std::make_unique<Effect::EffectGatlingBullet>(_owner._gameMain, "GatlingBullet");
+   _owner._efcGatling = std::make_unique<Effect::EffectGatlingBullet>("GatlingBullet");
    _owner._efcGatling->Init();
    Update();
 }

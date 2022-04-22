@@ -40,8 +40,8 @@ namespace {
 
 using namespace FragmentValkyria::Lighting;
 
-LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
-   _param = std::make_unique<Param::ParamLightShadow>(_gameMain, "lightshadow");
+LightAndShadow::LightAndShadow() {
+   _param = std::make_unique<Param::ParamLightShadow>("lightshadow");
    /**
     * \brief int型の値を文字列で指定し、値管理クラスから取得する
     * \param paramName 値を指定する文字列
@@ -134,7 +134,8 @@ LightAndShadow::LightAndShadow(Game::GameMain& gameMain) :_gameMain{gameMain} {
 void LightAndShadow::Update() {
    namespace AppMath = AppFrame::Math;
    // プレイヤーの頭位置をObjectServerから取得
-   auto playerHeadPos= _gameMain.objServer().GetVecData("PlayerHeadPos");
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto playerHeadPos= gameInstance->objServer().GetVecData("PlayerHeadPos");
    // プレイヤー頭座標から固定光源座標へのベクトルを求め正規化し、シャドウマップの向きとする
    auto shadowDirection = (playerHeadPos - _lightPosition).Normalize();
    // シャドウマップの向きを更新
@@ -145,7 +146,8 @@ void LightAndShadow::Render() {
    // シャドウマップの描画を行う
    ShadowMap_DrawSetup(_shadowHandle);
    // シャドウマップ描画用にObjectServerの描画を回す
-   _gameMain.objServer().Render();
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->objServer().Render();
    // シャドウマップの描画を終了する
    ShadowMap_DrawEnd();
    // 使用するシャドウマップハンドルの設定

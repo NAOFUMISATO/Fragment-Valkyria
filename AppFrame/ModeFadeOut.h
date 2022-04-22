@@ -23,9 +23,8 @@ namespace AppFrame {
       public:
          /**
           * \brief コンストラクタ
-          * \param appBase アプリケーションフレームの基底クラスの参照
           */
-         ModeFadeOut(Game::GameBase& gameBase);
+         ModeFadeOut();
          /**
           * \brief 初期化処理
           */

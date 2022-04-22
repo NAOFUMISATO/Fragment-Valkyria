@@ -13,17 +13,20 @@
 
 using namespace FragmentValkyria::Mode;
 
-ModeBase::ModeBase(Game::GameMain& gameMain) : ModeBaseRoot{ gameMain }, _gameMain{ gameMain } {
+ModeBase::ModeBase() {
 }
 
 FragmentValkyria::Object::ObjectServer& ModeBase::GetObjServer() const {
-   return _gameMain.objServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->objServer();
 }
 
 FragmentValkyria::Sprite::SpriteServer& ModeBase::GetSprServer() const {
-   return _gameMain.sprServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->sprServer();
 }
 
 FragmentValkyria::Effect::EffectServer& ModeBase::GetEfcServer() const {
-   return _gameMain.efcServer();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->efcServer();
 }

@@ -17,8 +17,8 @@ namespace {
 
 using namespace FragmentValkyria::Mode;
 
-ModeGameOver::ModeGameOver(Game::GameMain& gameMain) :ModeBase{ gameMain } {
-   _param = std::make_unique<Param::ParamModeGameOver>(_gameMain,"over");
+ModeGameOver::ModeGameOver() {
+   _param = std::make_unique<Param::ParamModeGameOver>("over");
 }
 
 void ModeGameOver::Init() {
@@ -78,7 +78,8 @@ void ModeGameOver::StateContinue::Input(InputManager& input){
       _owner._stateServer->GoToState("Exit");
    }
    if (input.GetXJoypad().AClick()) {
-      _owner._gameMain.isPoorClear(false);
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->isPoorClear(false);
       _owner.GetSoundComponent().Stop("TutorialBgm");
       _owner.GetSoundComponent().Stop("PoorBattleBgm");
       _owner.GetSoundComponent().Stop("BossBattleBgm");

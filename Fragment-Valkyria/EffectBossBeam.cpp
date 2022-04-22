@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBossBeam::EffectBossBeam(Game::GameMain& gameMain, std::string_view key) :EffectBase{ gameMain,key } {
+EffectBossBeam::EffectBossBeam(std::string_view key) :EffectBase{key } {
    SetEffectLoadHandle(key);
 }
 

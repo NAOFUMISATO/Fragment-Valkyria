@@ -12,9 +12,7 @@
 using namespace FragmentValkyria::Create;
 using namespace FragmentValkyria;
 
-CreatorBase::CreatorBase(Game::GameMain& gameMain) :_gameMain{gameMain} {
-}
-
 AppFrame::Resource::LoadResourceJson& CreatorBase::GetLoadJson() const {
-   return _gameMain.loadresJson();
+   auto gameInstance = Game::GameMain::GetInstance();
+   return gameInstance->loadresJson();
 }

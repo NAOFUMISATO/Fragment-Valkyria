@@ -20,8 +20,8 @@ namespace {
    constexpr auto FirstInputFrame = 120;   //!< エニイボタンから移行後、ゲーム開始を受け付けないフレーム数
 }
 
-ModeTitle::ModeTitle(Game::GameMain& gameMain) :ModeBase{ gameMain } {
-   _param = std::make_unique<Param::ParamModeTitle>(_gameMain, "title");
+ModeTitle::ModeTitle() {
+   _param = std::make_unique<Param::ParamModeTitle>("title");
 }
 
 void ModeTitle::Init() {
@@ -58,8 +58,9 @@ void ModeTitle::Enter() {
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
-   _gameMain.isTutorialClear(false);
-   _gameMain.isPoorClear(false);
+   auto gameInstance = Game::GameMain::GetInstance();
+   gameInstance->isTutorialClear(false);
+   gameInstance->isPoorClear(false);
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
@@ -76,12 +77,13 @@ void ModeTitle::Render() {
 }
 
 void ModeTitle::LogoAnimation() {
+   auto gameInstance = Game::GameMain::GetInstance();
    if (!_cntInit) {
       GetSoundComponent().Play("TitleVoice");
-      _logoCnt = _gameMain.modeServer().frameCount();
+      _logoCnt = gameInstance->modeServer().frameCount();
       _cntInit = true;
    }
-   auto gameCount = static_cast<int>(_gameMain.modeServer().frameCount());
+   auto gameCount = static_cast<int>(gameInstance->modeServer().frameCount());
    auto frame = gameCount - _logoCnt;
    auto allNum = std::get<0>(GetResServer().GetTextureInfo("TitleLogo").GetDivParams());
    const int TitleAnimeSpeed = _param->GetIntParam("title_animespeed");
@@ -245,7 +247,8 @@ void ModeTitle::StateEndSelect::Input(InputManager& input) {
    }
    if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
       _owner.GetSoundComponent().Play("SystemDecision");
-      _owner._gameMain.ShutDown();
+      auto gameInstance = Game::GameMain::GetInstance();
+      gameInstance->ShutDown();
    }
 }
 

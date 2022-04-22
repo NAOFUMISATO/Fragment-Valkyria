@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Param;
 
-ParamCollision::ParamCollision(Game::GameMain& gameMain, std::string_view key) :ParamBase{ gameMain,key } {
+ParamCollision::ParamCollision(std::string_view key) :ParamBase{key } {
    LoadDoubleParam({ "fallobject_range","ply_radius","ply_capsule_pos1","ply_capsule_pos2" ,
       "gatling_radius","fallobject_drum_capsule_pos1","fallobject_drum_capsule_pos2",
       "fallobject_drum_radius","laser_radius","bullet_radius","weak_object_damage",

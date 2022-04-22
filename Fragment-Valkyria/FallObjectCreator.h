@@ -24,9 +24,8 @@ namespace FragmentValkyria {
       public:
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         FallObjectCreator(Game::GameMain& gameMain);
+         FallObjectCreator() {};
       private:
          /**
          * \brief 落下オブジェクトのアニメーション、状態の登録を行う

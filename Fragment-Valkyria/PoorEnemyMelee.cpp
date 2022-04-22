@@ -16,8 +16,8 @@
 
 using namespace FragmentValkyria::Enemy;
 
-PoorEnemyMelee::PoorEnemyMelee(Game::GameMain& gameMain) : PoorEnemyBase{ gameMain } {
-   _param = std::make_unique<Param::ParamPoorEnemy>(_gameMain,"poorenemy");
+PoorEnemyMelee::PoorEnemyMelee() {
+   _param = std::make_unique<Param::ParamPoorEnemy>("poorenemy");
 }
 
 void PoorEnemyMelee::Init() {
@@ -43,14 +43,16 @@ void PoorEnemyMelee::StateRush::Enter() {
       return _owner._param->GetDoubleParam(paramName);
    };
    _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
-   _stateCnt = _owner._gameMain.modeServer().frameCount();
+   auto gameInstance = Game::GameMain::GetInstance();
+   _stateCnt = gameInstance->modeServer().frameCount();
    _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
    _moved = _moved * _DoubleParam("rush_speed");
 }
 
 void PoorEnemyMelee::StateRush::Update() {
-   auto frame = static_cast<int>(_owner._gameMain.modeServer().frameCount() - _stateCnt);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto frame = static_cast<int>(gameInstance->modeServer().frameCount() - _stateCnt);
    if (frame <= _owner._param->GetIntParam("rush_frame")) {
       _owner.Rush(_moved);
    }

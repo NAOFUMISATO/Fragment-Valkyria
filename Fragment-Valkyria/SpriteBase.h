@@ -11,10 +11,6 @@
   * \brief プロジェクト名
   */
 namespace FragmentValkyria {
-   // 二重インクルード防止
-   namespace Game {
-      class GameMain;
-   }
    /**
     * \brief スプライト関係
     */
@@ -55,9 +51,8 @@ namespace FragmentValkyria {
          };
          /**
           * \brief コンストラクタ
-          * \param gameMain ゲーム本体の参照
           */
-         SpriteBase(Game::GameMain& gameMain);
+         SpriteBase();
          /**
           * \brief デフォルトデストラクタ
           */
@@ -84,11 +79,6 @@ namespace FragmentValkyria {
           * \return 派生先で定義
           */
          virtual SpriteType GetSprType() const = 0;
-         /**
-          * \brief ゲーム本体クラスの参照を取得
-          * \return ゲーム本体クラスの参照
-          */
-         inline Game::GameMain& gameMain() const { return _gameMain; }
          /**
           * \brief 死亡しているかの判定
           * \return 死亡していればtrue、でなければfalseを返す
@@ -156,7 +146,6 @@ namespace FragmentValkyria {
           */
          inline void sprState(SpriteState state) { _sprState = state; }
 
-         Game::GameMain& _gameMain;                           //!< ゲーム本体クラスの参照
          std::unique_ptr<AppFrame::Param::ParamBase> _param;  //!< 値管理用クラスのポインタ
          std::unique_ptr<StateServer> _stateServer;           //!< 状態の一括管理クラスのポインタ
          SpriteState _sprState{ SpriteState::Active };        //!< オブジェクトの状態

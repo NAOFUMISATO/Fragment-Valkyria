@@ -11,7 +11,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBase::EffectBase(Game::GameMain& gameMain,std::string_view key) : _gameMain{gameMain} {
+EffectBase::EffectBase(std::string_view key) {
 }
 
 void EffectBase::Update() {
@@ -23,7 +23,8 @@ void EffectBase::Update() {
 }
 
 void EffectBase::SetEffectLoadHandle(std::string_view key) {
-   auto [handle, speed] = _gameMain.resServer().GetEffectInfo(key);
+   auto gameInstance = Game::GameMain::GetInstance();
+   auto [handle, speed] = gameInstance->resServer().GetEffectInfo(key);
    _loadHandle = handle;
    _speed = speed;
 }
