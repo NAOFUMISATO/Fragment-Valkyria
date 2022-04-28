@@ -60,7 +60,8 @@ namespace AppFrame {
          _alpha += _deltaAlpha;
          if (_alpha <= AlphaMin) {
             _alpha = AlphaMin;
-            GetModeServer().PopBack();
+            auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+            modeServer.PopBack();
          }
       }
 
@@ -87,8 +88,9 @@ namespace AppFrame {
          _alpha += _deltaAlpha;
          if (_alpha >= AlphaMax) {
             _alpha = AlphaMax;
-            GetModeServer().PopBack();
-            GetModeServer().PopBack();
+            auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+            modeServer.PopBack();
+            modeServer.PopBack();
          }
       }
 

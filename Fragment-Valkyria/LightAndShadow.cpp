@@ -7,7 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "LightAndShadow.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 
 namespace {
@@ -134,8 +134,8 @@ LightAndShadow::LightAndShadow() {
 void LightAndShadow::Update() {
    namespace AppMath = AppFrame::Math;
    // プレイヤーの頭位置をObjectServerから取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto playerHeadPos= gameInstance->objServer().GetVecData("PlayerHeadPos");
+   auto& gameInstance = Game::Game::GetInstance();
+   auto playerHeadPos= gameInstance.objServer().GetVecData("PlayerHeadPos");
    // プレイヤー頭座標から固定光源座標へのベクトルを求め正規化し、シャドウマップの向きとする
    auto shadowDirection = (playerHeadPos - _lightPosition).Normalize();
    // シャドウマップの向きを更新
@@ -146,8 +146,8 @@ void LightAndShadow::Render() {
    // シャドウマップの描画を行う
    ShadowMap_DrawSetup(_shadowHandle);
    // シャドウマップ描画用にObjectServerの描画を回す
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->objServer().Render();
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.objServer().Render();
    // シャドウマップの描画を終了する
    ShadowMap_DrawEnd();
    // 使用するシャドウマップハンドルの設定

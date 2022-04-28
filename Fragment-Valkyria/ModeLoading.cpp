@@ -7,11 +7,13 @@
  * \date   March 2022
  *********************************************************************/
 #include "ModeLoading.h"
-#include "GameMain.h"
+#include "Game.h"
 
 namespace {
-   constexpr auto DefaultScale = 1.0;
+   constexpr auto LoadingX = 1420;
+   constexpr auto LoadingY = 880;
    constexpr auto DefaultAngle = 0.0;
+   constexpr auto DefaultScale = 1.0;
 }
 
 using namespace FragmentValkyria::Mode;
@@ -20,29 +22,36 @@ ModeLoading::ModeLoading() {
 }
 
 void ModeLoading::Init() {
-   GetLoadJson().LoadTextures("ingame");
-   _grHandle = GetResServer().GetTexture("LoadingBg");
-   _grHandles = GetResServer().GetTextures("Loading");
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadTextures("ingame");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandle = resServer.GetTexture("LoadingBg");
+   _grHandles = resServer.GetTextures("Loading");
 }
 
 void ModeLoading::Update() {
    if (GetASyncLoadNum() == 0) {
       SetUseASyncLoadFlag(false);
-      GetLoadJson().LoadModels("ingame");
-      auto gameInstance = Game::GameMain::GetInstance();
-      if (!gameInstance->isTutorialClear()) {
-         GetModeServer().GoToMode("Tutorial", 'S');
+      auto& gameInstance = Game::Game::GetInstance();
+      auto& loadresJson = gameInstance.loadresJson();
+      loadresJson.LoadModels("ingame");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      if (!gameInstance.isTutorialClear()) {
+         modeServer.GoToMode("Tutorial", 'S');
       }
-      else if (!gameInstance->isPoorClear()) {
-         GetModeServer().GoToMode("Poor", 'L');
+      else if (!gameInstance.isPoorClear()) {
+         modeServer.GoToMode("Poor", 'L');
       }
       else {
-         GetModeServer().GoToMode("Boss", 'L');
+         modeServer.GoToMode("Boss", 'L');
       }
    }
 }
 
 void ModeLoading::Render() {
-   GetTexComponent().DrawTexture(0,0, DefaultScale, DefaultAngle,_grHandle);
-   GetTexComponent().DrawTexture(1420, 880, DefaultScale, DefaultAngle, _grHandles,1);
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(0,0,
+      DefaultScale, DefaultAngle,_grHandle);
+   texComponent.DrawTexture(LoadingX, LoadingY,
+      DefaultScale, DefaultAngle, _grHandles,1);
 }

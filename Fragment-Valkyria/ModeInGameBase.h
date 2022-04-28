@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 #include "LightAndShadow.h"
 #include "Stage.h"
 /**
@@ -25,7 +25,7 @@ namespace FragmentValkyria {
        * \class モードインゲームクラス
        * \brief インゲームの処理を回す
        */
-      class ModeInGameBase : public ModeBase {
+      class ModeInGameBase : public AppFrame::Mode::ModeBase {
          using Vector4 = AppFrame::Math::Vector4;
       public:
          /**
@@ -53,11 +53,7 @@ namespace FragmentValkyria {
           * \brief 出口処理
           */
          void Exit() override;
-         /**
-          * \brief オブジェクト生成一括管理クラスの参照をゲームメイン経由で取得
-          * \return オブジェクト生成一括管理クラスの参照
-          */
-         Create::ObjectFactory& GetObjFactory() const;
+
          /**
           * \brief ステージの参照の取得
           * \return ステージの参照

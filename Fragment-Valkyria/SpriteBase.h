@@ -113,26 +113,6 @@ namespace FragmentValkyria {
           * \return 状態管理クラス
           */
          inline StateServer& stateServer() const { return *_stateServer; }
-         /**
-          * \brief スプライトサーバーの参照をゲーム本体クラス経由で取得
-          * \return スプライトサーバーの参照
-          */
-         SpriteServer& GetSprServer() const;
-         /**
-          * \brief jsonファイル管理クラスの参照をゲーム本体クラス経由で取得
-          * \return jsonファイル管理クラスの参照
-          */
-         AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
-         /**
-          * \brief 画像簡易描画クラスの参照をゲーム本体クラス経由で取得
-          * \return 画像簡易描画クラスの参照
-          */
-         AppFrame::Texture::TextureComponent& GetTexComponent() const;
-         /**
-          * \brief リソースサーバーの参照をゲーム本体クラス経由で取得
-          * \return リソースサーバーの参照
-          */
-         AppFrame::Resource::ResourceServer& GetResServer() const;
 
       protected:
          /**

@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <windows.h>
 #endif
-#include "GameMain.h"
+#include "Game.h"
 #include "StageData.h"
 #include <utility>
 
@@ -58,8 +58,8 @@ void LoadStageFromJson::LoadStageModel(std::string_view key, StageData& stageDat
 
 void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    namespace AppMath = AppFrame::Math;
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto jsonDirectory = gameInstance->pathServer().GetCurrentPath("StageJson");
+   auto& pathServer = AppFrame::Path::CurrentPathServer::GetInstance();
+   auto jsonDirectory = pathServer.GetCurrentPath("StageJson");
    auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
    std::ifstream reading(jsonPath, std::ios::in);
 #ifdef _DEBUG
@@ -76,7 +76,7 @@ void LoadStageFromJson::LoadStageModels(const std::filesystem::path jsonName) {
    reading >> value;
    reading.close();
    auto stageArray = value[jsonName.generic_string()];
-   auto stageDirectory = gameInstance->pathServer().GetCurrentPath("Stage") / jsonName;
+   auto stageDirectory = pathServer.GetCurrentPath("Stage") / jsonName;
    for (auto& stageParam : stageArray) {
       const auto fileName = stageParam["filename"];
       const auto tx = stageParam["tx"];

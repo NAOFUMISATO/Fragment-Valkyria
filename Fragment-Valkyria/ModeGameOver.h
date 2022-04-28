@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   February 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードゲームオーバークラス
        * \brief ゲームオーバー画面を表示する
        */
-      class ModeGameOver:public ModeBase {
+      class ModeGameOver:public AppFrame::Mode::ModeBase {
          using InputManager = AppFrame::Input::InputManager;
       public:
          /**

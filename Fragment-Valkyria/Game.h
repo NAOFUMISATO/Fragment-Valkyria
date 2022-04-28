@@ -24,51 +24,72 @@ namespace FragmentValkyria {
        * \class ゲーム本体クラス
        * \brief ゲームのメイン処理を回す
        */
-      class GameMain : public AppFrame::Game::GameBase{
-         using GameBase = AppFrame::Game::GameBase;
+      class Game : public AppFrame::Temp::Singleton<Game>{
       private:
          /**
           * \brief コンストラクタ
           */
-         GameMain() {};
+         Game() {};
          /**
           * \brief デストラクタ
           */
-         virtual ~GameMain() {};
+         ~Game() {};
       public:
-         friend class GameMain;
+         friend class AppFrame::Temp::Singleton<Game>;
+         /**
+          * \brief ゲームの状態列挙
+          */
+         enum class GameState {
+            Play,    //!< 実行中
+            Paused,  //!< 一時停止
+            Quit     //!< 終了
+         };
          /**
           * \brief 初期化処理
           * \param hInstance WinMainの第一引数
           * \return 初期化に成功したらtrue、失敗したらfalseを返す
           */
-         bool Initialize(HINSTANCE hInstance)override;
+         bool Initialize(HINSTANCE hInstance);
          /**
           * \brief 実行
           */
-         void Run()override;
+         void Run();
          /**
           * \brief 停止
           */
-         void ShutDown()override;
+         void ShutDown();
          /**
           * \brief 入力処理
           */
-         void Input()override;
+         void Input();
          /**
           * \brief 更新処理
           */
-         void Update()override;
+         void Update();
          /**
           * \brief 描画処理
           */
-         void Render()override;
-
-         static GameMain* GetInstance() {
-            auto& gameBase = GameBase::GetInstance();
-            GameMain* gameMain = reinterpret_cast<GameMain*>(&gameBase);
-            return gameMain;
-         }
+         void Render();
+         /**
+          * \brief 入力の一括管理クラスの参照を取得
+          * \return 入力の一括管理クラスのポインタ
+          */
+         inline AppFrame::Input::InputManager& inputManager() const { return *_inputManager; }
+         /**
+          * \brief サウンド管理サーバーの参照を取得
+          * \return サウンド管理サーバーのポインタ
+          */
+         inline AppFrame::Sound::SoundComponent& soundComponent() const { return *_soundComponent; }
+         /**
+          * \brief jsonファイル管理の参照を取得
+          * \return jsonファイル管理のポインタ
+          */
+         inline AppFrame::Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
+         /**
+          * \brief 画像の簡易描画クラスの参照を取得
+          * \return 画像の簡易描画クラスのポインタ
+          */
+         inline AppFrame::Texture::TextureComponent& texComponent() const { return *_texComponent; }
          /**
           * \brief 雑魚戦をクリアしたかの判定を返す
           * \return クリアしていればtrue,でなければfalse
@@ -167,11 +188,6 @@ namespace FragmentValkyria {
             _playerStatus = std::make_tuple(hp, bullet, portion);
          }
          /**
-          * \brief 画面設定の値を返す
-          * \return 画面横サイズ、画面縦サイズ、画面ビット数
-          */
-         inline virtual std::tuple<int, int, int>GraphSize() { return { 1920,1080,32 }; }
-         /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
           */
@@ -207,16 +223,21 @@ namespace FragmentValkyria {
           */
          void ModeRegist();
 
-         bool _isPoorClear{ false };                            //!< 雑魚戦をクリアしたか
-         bool _isTutorialClear{ false };                        //!< チュートリアルを終了またはスキップしたか
-         unsigned int _ingameTimer{ 0 };                        //!< ゲーム内タイマー
-         std::tuple<double, double, int> _sensitivity;          //!< ゲーム内感度及びデッドゾーン値のTuple型
-         std::tuple<double, int, int> _playerStatus;            //!< プレイヤーのステータスのTuple型
-         std::unique_ptr<Object::ObjectServer> _objServer;      //!< オブジェクトの一括管理クラス
-         std::unique_ptr<Sprite::SpriteServer> _sprServer;      //!< スプライトの一括管理クラス
-         std::unique_ptr<Effect::EffectServer> _efcServer;      //!< エフェクトの一括管理クラス
-         std::unique_ptr<Create::ObjectFactory> _objFactory;    //!< オブジェクト生成一括管理クラスのユニークポインタ
-         std::unique_ptr<Stage::LoadStageFromJson> _loadStage;  //!< ステージ情報管理クラスのユニークポインタ
+         GameState _gState{ GameState::Play };                               //!< ゲーム状態
+         bool _isPoorClear{ false };                                         //!< 雑魚戦をクリアしたか
+         bool _isTutorialClear{ false };                                     //!< チュートリアルを終了またはスキップしたか
+         unsigned int _ingameTimer{ 0 };                                     //!< ゲーム内タイマー
+         std::tuple<double, double, int> _sensitivity;                       //!< ゲーム内感度及びデッドゾーン値のTuple型
+         std::tuple<double, int, int> _playerStatus;                         //!< プレイヤーのステータスのTuple型
+         std::unique_ptr<AppFrame::Input::InputManager> _inputManager;       //!< 入力の一括管理クラス
+         std::unique_ptr<AppFrame::Sound::SoundComponent> _soundComponent;   //!< サウンドの一括管理クラス
+         std::unique_ptr<AppFrame::Resource::LoadResourceJson> _loadresJson; //!< jsonファイル管理クラス
+         std::unique_ptr<AppFrame::Texture::TextureComponent> _texComponent; //!< 画像の簡易描画クラス
+         std::unique_ptr<Object::ObjectServer> _objServer;                   //!< オブジェクトの一括管理クラス
+         std::unique_ptr<Sprite::SpriteServer> _sprServer;                   //!< スプライトの一括管理クラス
+         std::unique_ptr<Effect::EffectServer> _efcServer;                   //!< エフェクトの一括管理クラス
+         std::unique_ptr<Create::ObjectFactory> _objFactory;                 //!< オブジェクト生成一括管理クラスのユニークポインタ
+         std::unique_ptr<Stage::LoadStageFromJson> _loadStage;               //!< ステージ情報管理クラスのユニークポインタ
       };
    }
 }

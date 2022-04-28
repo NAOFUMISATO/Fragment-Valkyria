@@ -10,7 +10,7 @@
 #include "Stage.h"
 #include "StageData.h"
 #include "LoadStageFromJson.h"
-#include "GameMain.h"
+#include "Game.h"
 #include <utility>
 
 using namespace FragmentValkyria::Stage;
@@ -18,7 +18,6 @@ StageModelComponent::StageModelComponent(Object::ObjectBase& owner) : _owner{ ow
 }
 
 void StageModelComponent::Init() {
-
 }
 
 void StageModelComponent::Update() {
@@ -36,8 +35,8 @@ void StageModelComponent::Draw() {
 }
 
 void StageModelComponent::SetModels(std::string_view key) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto [position, rotation, scale] = stageData.GetStageParams();
@@ -49,8 +48,8 @@ void StageModelComponent::SetModels(std::string_view key) {
 }
 
 void StageModelComponent::SetDifColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -61,8 +60,8 @@ void StageModelComponent::SetDifColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -73,8 +72,8 @@ void StageModelComponent::SetSpcColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -85,8 +84,8 @@ void StageModelComponent::SetEmiColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fileName, int index, float red, float green, float blue) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();
@@ -97,8 +96,8 @@ void StageModelComponent::SetAmbColor(std::string_view key, std::string_view fil
 }
 
 void StageModelComponent::SetSpcPower(std::string_view key, std::string_view fileName, int index, float power) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto stageModels = gameInstance->loadStage().GetStageModels(key);
+   auto& loadStage = Game::Game::GetInstance().loadStage();
+   auto stageModels = loadStage.GetStageModels(key);
    for (auto& stageModel : stageModels) {
       auto [handle, stageData] = stageModel;
       auto stageName = stageData.fileName();

@@ -13,6 +13,7 @@
 #include <tuple>
 #include "Texture.h"
 #include "SoundData.h"
+#include "Singleton.h"
  /**
   * \brief アプリケーションフレーム
   */
@@ -25,8 +26,8 @@ namespace AppFrame {
        * \class リソースの一括管理クラス
        * \brief リソースを読み込み、一括管理を行う
        */
-      class ResourceServer {
-      public:
+      class ResourceServer:public Temp::Singleton<ResourceServer> {
+      private:
          /**
           * \brief コンストラクタ
           */
@@ -35,6 +36,8 @@ namespace AppFrame {
           * \brief デフォルトデストラクタ
           */
          virtual ~ResourceServer() = default;
+      public:
+         friend class Temp::Singleton<ResourceServer>;
          /**
           * \brief リソース初期化
           */

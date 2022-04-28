@@ -10,7 +10,7 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "EffectPoorCrash.h"
 #include "EffectServer.h"
@@ -24,6 +24,7 @@ namespace {
    constexpr auto StepDistanceLimit = 100.0;
    constexpr auto MaxOpacityRate = 1.0f;
    constexpr auto FadeOutFrame = 60;
+   constexpr auto RandomSec = 5;
 }
 
 PoorEnemyBase::PoorEnemyBase() {
@@ -59,7 +60,8 @@ void PoorEnemyBase::Draw() {
 
 void PoorEnemyBase::Rotate() {
    auto [x, y, z] = _position.GetVec3();
-   auto toPlayer = GetObjServer().GetVecData("PlayerPos") - Vector4(x, 0.0, z);
+   auto& objServer = Game::Game::GetInstance().objServer();
+   auto toPlayer = objServer.GetVecData("PlayerPos") - Vector4(x, 0.0, z);
    toPlayer.Normalized();
    AppFrame::Math::Matrix44 rotate;
    rotate.RotateY(_rotation.GetY(), true);
@@ -81,8 +83,8 @@ void PoorEnemyBase::HitCheckFromBullet() {
          _stateServer->GoToState("Die");
       }
       else {
-         auto gameInstance = Game::GameMain::GetInstance();
-         _damageCnt = gameInstance->modeServer().frameCount();
+         auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+         _damageCnt = modeServer.frameCount();
       }
    }
 }
@@ -102,8 +104,8 @@ void PoorEnemyBase::HitCheckFromFallObject() {
 }
 
 void PoorEnemyBase::DamageExpression() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = static_cast<int>(gameInstance->modeServer().frameCount() - _damageCnt);
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = static_cast<int>(modeServer.frameCount() - _damageCnt);
    if (frame < _param->GetIntParam("white_frame")) {
       _modelAnimeComponent->SetBlendModeAdd(0);
       _modelAnimeComponent->SetBlendModeAdd(1);
@@ -126,17 +128,17 @@ void PoorEnemyBase::StateBase::Draw() {
 void PoorEnemyBase::StateIdle::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("idle", true,
       _owner._param->GetDoubleParam("idle_animespeed"));
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
 }
 
 void PoorEnemyBase::StateIdle::Update() {
    StateBase::Update();
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = modeServer.frameCount() - _stateCnt;
    _owner.Rotate();
    // 一定フレーム数たったら残っている行動のなかからランダムに行動を選びその行動をする
-   if (frame >= 60 * 5) {
+   if (frame >= OneFrame * RandomSec) {
       if (_owner._action.empty()) {
          _owner._action = _owner._actionList;
       }
@@ -184,18 +186,19 @@ void PoorEnemyBase::StateFall::Update() {
 void PoorEnemyBase::StateDie::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("idle", true,
       _owner._param->GetDoubleParam("die_animespeed"));
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
    _opacityRate = MaxOpacityRate;
    auto efcCrash = std::make_unique<Effect::EffectPoorCrash>("PoorCrash");
    efcCrash->position(_owner._position);
-   _owner.GetEfcServer().Add(std::move(efcCrash));
-   _owner.GetSoundComponent().Play("PoorCrash",_owner._position);
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.efcServer().Add(std::move(efcCrash));
+   gameInstance.soundComponent().Play("PoorCrash",_owner._position);
 }
 
 void PoorEnemyBase::StateDie::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = modeServer.frameCount() - _stateCnt;
    
    auto deltaRate = MaxOpacityRate / static_cast<float>(FadeOutFrame);
 
@@ -212,7 +215,8 @@ void PoorEnemyBase::StateDie::Draw() {
 }
 
 void PoorEnemyBase::StateSideStep::SideStepDecide() {
-   auto moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto& objServer = Game::Game::GetInstance().objServer();
+   auto moved = objServer.GetVecData("PlayerPos") - _owner._position;
    auto [x, y, z] = moved.GetVec3();
    moved = Vector4(x, 0.0, z);
    moved.Normalized();

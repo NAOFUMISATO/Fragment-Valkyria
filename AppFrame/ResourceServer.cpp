@@ -12,7 +12,6 @@
 #endif
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
-#include "GameBase.h"
 #include "CurrentPathServer.h"
  /**
   * \brief アプリケーションフレーム

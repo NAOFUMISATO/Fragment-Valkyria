@@ -147,9 +147,6 @@
     <ClInclude Include="EffectBase.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="ModeBase.h">
-      <Filter>ヘッダー ファイル\Mode</Filter>
-    </ClInclude>
     <ClInclude Include="LargeEnemyCreator.h">
       <Filter>ヘッダー ファイル\Create</Filter>
     </ClInclude>
@@ -381,12 +378,12 @@
     <ClInclude Include="ParamPoorEnemy.h">
       <Filter>ヘッダー ファイル\Param</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
+    <ClInclude Include="Game.h">
       <Filter>ヘッダー ファイル\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameMain.cpp">
+    <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル\Game</Filter>
     </ClCompile>
     <ClCompile Include="ModeBoss.cpp">
@@ -424,9 +421,6 @@
     </ClCompile>
     <ClCompile Include="EffectBase.cpp">
       <Filter>ソース ファイル\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="ModeBase.cpp">
-      <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="LargeEnemyCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>

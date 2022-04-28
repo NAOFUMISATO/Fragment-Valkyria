@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "LargeEnemyHP.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamLargeEnemyUI.h"
 
@@ -37,7 +37,8 @@ void LargeEnemyHP::Init() {
    };
    _hp = _param->GetDoubleParam("max_hp");
    // 画像ハンドルをResourceServerから取得する
-   _grHandle = GetResServer().GetTexture("BossHP");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandle = resServer.GetTexture("BossHP");
    // オフセット位置初期化
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };
    // 1フレーム前の前面バーのプレイヤーHPをオフセット右座標で初期化
@@ -63,10 +64,11 @@ void LargeEnemyHP::Update() {
    };
    using Utility = AppFrame::Math::Utility;
    // ゲームのフレームカウントをModeServerから取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto count = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto count = modeServer.frameCount();
    // ボスHPをObjectServerから取得
-   _hp = gameInstance->objServer().GetDoubleData("LargeEnemyHP");
+   auto& gameInstance = Game::Game::GetInstance();
+   _hp = gameInstance.objServer().GetDoubleData("LargeEnemyHP");
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / _DoubleParam("max_hp") + left, MaxRate);

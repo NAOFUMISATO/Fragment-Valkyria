@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "RemainingPortion.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamPlayerUI.h"
 
@@ -26,7 +26,8 @@ RemainingPortion::RemainingPortion() {
 }
 
 void RemainingPortion::Init() {
-   _grHandles = GetResServer().GetTextures("RemainingPortion");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("RemainingPortion");
    _position = _param->GetVecParam("portion_pos");
    auto [x, y] = _position.GetVec2();
    const auto DiffX = _param->GetIntParam("portion_diff_x");
@@ -38,8 +39,8 @@ void RemainingPortion::Init() {
 }
 
 void RemainingPortion::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto portionStock = gameInstance->playerPortion();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto portionStock = gameInstance.playerPortion();
    StockCheck(static_cast<int>(portionStock));
 }
 
@@ -47,9 +48,10 @@ void RemainingPortion::Draw() {
    auto [x, y] = _position.GetVec2();
    auto [firstFlag, secondFlag, thirdFlag] = _stockFlag;
    auto [firstX, secondX, thirdX] = _xPositions;
-   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
-   GetTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
-   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
+   texComponent.DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
+   texComponent.DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
 }
 
 void RemainingPortion::StockCheck(int stock) {

@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   March 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モード読み込み中クラス
        * \brief 読み込み中画面を表示させる
        */
-      class ModeLoading :public ModeBase {
+      class ModeLoading :public AppFrame::Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

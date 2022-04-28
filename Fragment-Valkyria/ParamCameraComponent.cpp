@@ -7,7 +7,6 @@
  * \date   April 2022
  *********************************************************************/
 #include "ParamCameraComponent.h"
-#include "GameMain.h"
 
 using namespace FragmentValkyria::Param;
 

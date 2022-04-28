@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "ModeTitle.h"
 #include "ParamModeTitle.h"
-#include "GameMain.h"
+#include "Game.h"
 using namespace FragmentValkyria::Mode;
 
 namespace {
@@ -25,11 +25,11 @@ ModeTitle::ModeTitle() {
 }
 
 void ModeTitle::Init() {
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadSounds("outgame");
 
-   GetLoadJson().LoadSounds("outgame");
-
-   auto& resServer = GetResServer();
-   
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+    
    _handleMap = {
       {"TitleBg",          resServer.GetTextures("TitleBg") },
       {"TitleLogo",        resServer.GetTextures("TitleLogo") },
@@ -54,13 +54,13 @@ void ModeTitle::Init() {
 }
 
 void ModeTitle::Enter() {
-   GetSoundComponent().PlayLoop("TitleBgm");
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.soundComponent().PlayLoop("TitleBgm");
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->isTutorialClear(false);
-   gameInstance->isPoorClear(false);
+   gameInstance.isTutorialClear(false);
+   gameInstance.isPoorClear(false);
 }
 
 void ModeTitle::Input(AppFrame::Input::InputManager& input) {
@@ -77,15 +77,17 @@ void ModeTitle::Render() {
 }
 
 void ModeTitle::LogoAnimation() {
-   auto gameInstance = Game::GameMain::GetInstance();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (!_cntInit) {
-      GetSoundComponent().Play("TitleVoice");
-      _logoCnt = gameInstance->modeServer().frameCount();
+      gameInstance.soundComponent().Play("TitleVoice");
+      _logoCnt = modeServer.frameCount();
       _cntInit = true;
    }
-   auto gameCount = static_cast<int>(gameInstance->modeServer().frameCount());
+   auto gameCount = static_cast<int>(modeServer.frameCount());
    auto frame = gameCount - _logoCnt;
-   auto allNum = std::get<0>(GetResServer().GetTextureInfo("TitleLogo").GetDivParams());
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   auto allNum = std::get<0>(resServer.GetTextureInfo("TitleLogo").GetDivParams());
    const int TitleAnimeSpeed = _param->GetIntParam("title_animespeed");
    if (frame < allNum * TitleAnimeSpeed) {
       _logoHandle = _handleMap["TitleLogo"][(frame / TitleAnimeSpeed) % allNum];
@@ -102,20 +104,20 @@ void ModeTitle::StateBase::Draw() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-
-   _owner.GetTexComponent().TransDrawTexture(_IntParam("bg_x"), _IntParam("bg_y"), TitleBgCX, TitleBgCY,
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.TransDrawTexture(_IntParam("bg_x"), _IntParam("bg_y"), TitleBgCX, TitleBgCY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["TitleBg"], DefaultAnimeSpeed, false, false);
    DrawGraph(_IntParam("title_x"), _IntParam("title_y"), _owner._logoHandle, true);
    if (!_owner._pushAnyButton) {
-      _owner.GetTexComponent().DrawTexture(_IntParam("anybutton_x"), _IntParam("anybutton_y"), 
+      texComponent.DrawTexture(_IntParam("anybutton_x"), _IntParam("anybutton_y"),
          DefaultGraphScale, DefaultGraphAngle, handleMap["AnyButton"], _IntParam("anybutton_animespeed"));
    }
    if (_owner._pushAnyButton) {
-      _owner.GetTexComponent().DrawTexture(_IntParam("start_x"), _IntParam("start_y"), 
+      texComponent.DrawTexture(_IntParam("start_x"), _IntParam("start_y"),
          DefaultGraphScale, DefaultGraphAngle, _owner._startDrawHandles, _IntParam("start_animespeed"));
-      _owner.GetTexComponent().DrawTexture(_IntParam("option_x"), _IntParam("option_y"), 
+      texComponent.DrawTexture(_IntParam("option_x"), _IntParam("option_y"),
          DefaultGraphScale, DefaultGraphAngle, _owner._optionDrawHandles, _IntParam("option_animespeed"));
-      _owner.GetTexComponent().DrawTexture(_IntParam("end_x"), _IntParam("end_y"), 
+      texComponent.DrawTexture(_IntParam("end_x"), _IntParam("end_y"),
          DefaultGraphScale, DefaultGraphAngle, _owner._endDrawHandles, _IntParam("end_animespeed"));
    }
 }
@@ -144,14 +146,16 @@ void ModeTitle::StateAnyButton::Input(InputManager& input){
    if (_IsInput({ joypad.XClick(), joypad.YClick(),joypad.AClick(),
       joypad.BClick(),keyboard.UpClick(),keyboard.DownClick(),
       keyboard.RightClick(),keyboard.LeftClick(),keyboard.SpaceClick() })) {
-      _owner.GetSoundComponent().Play("SystemDecision");
+      auto& soundComponent= Game::Game::GetInstance().soundComponent();
+      soundComponent.Play("SystemDecision");
       _owner._stateServer->GoToState("StartSelect");
    }
 }
 
 void ModeTitle::StateAnyButton::Exit() {
    _owner._pushAnyButton = true;
-   _owner._firstInputCnt = _owner.GetModeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._firstInputCnt = modeServer.frameCount();
 }
 
 
@@ -171,16 +175,17 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    };
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
-
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (_IsInput(joypad.DDownClick(), keyboard.DownClick())) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
-   auto frameCount = _owner.GetModeServer().frameCount() - _owner._firstInputCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frameCount = modeServer.frameCount() - _owner._firstInputCnt;
    if (frameCount > FirstInputFrame) {
       if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
-         _owner.GetSoundComponent().Play("SystemDecision");
-         _owner.GetModeServer().GoToMode("TutorialSelect", 'S');
+         soundComponent.Play("SystemDecision");
+         modeServer.GoToMode("TutorialSelect", 'S');
       }
    }
 }
@@ -206,17 +211,19 @@ void ModeTitle::StateOptionSelect::Input(InputManager& input) {
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
 
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("StartSelect");
    }
    if (_IsInput(joypad.DDownClick(), keyboard.DownClick())) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("EndSelect");
    }
    if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
-      _owner.GetSoundComponent().Play("SystemSelect");
-      _owner.GetModeServer().PushBack("Option");
+      soundComponent.Play("SystemSelect");
+      modeServer.PushBack("Option");
    }
 }
 
@@ -240,15 +247,16 @@ void ModeTitle::StateEndSelect::Input(InputManager& input) {
    };
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
-
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& soundComponent = gameInstance.soundComponent();
    if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
    }
    if (_IsInput(joypad.AClick(), keyboard.SpaceClick())) {
-      _owner.GetSoundComponent().Play("SystemDecision");
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->ShutDown();
+      soundComponent.Play("SystemDecision");
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.ShutDown();
    }
 }
 

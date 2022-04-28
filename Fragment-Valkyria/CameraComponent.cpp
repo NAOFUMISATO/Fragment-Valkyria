@@ -7,7 +7,7 @@
  * \date   December 2021
  *********************************************************************/
 #include "CameraComponent.h"
-#include "GameMain.h"
+#include "Game.h"
 
 namespace {
    constexpr auto ScreenWidth = 1920;   //!< 横画面サイズ
@@ -115,8 +115,8 @@ void CameraComponent::Vibration() {
 
 void CameraComponent::StateNormal::Input(InputManager& input) {
    // ゲーム内感度の取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance.sensitivity();
    // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
    auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
    // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす
@@ -353,8 +353,8 @@ void CameraComponent::StateZoomIn::Update() {
 
 void CameraComponent::StateShootReady::Input(InputManager& input) {
    // 感度の取得
-   auto gameInstance = Game::GameMain::GetInstance();
-    auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+    auto [cameraSens, aimSens, deadZone] = gameInstance.sensitivity();
     // デッドゾーンの範囲を設定するためにデフォルトのデットゾーンに掛ける値の設定
     auto deadZoneMulti = _owner._param->GetIntParam("dead_zone_divide_value") / deadZone;
     // 右スティックが上に傾いていたらカメラの上下の回転の角度を増やす

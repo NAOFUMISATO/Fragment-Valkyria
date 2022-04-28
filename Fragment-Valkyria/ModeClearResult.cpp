@@ -10,6 +10,7 @@
 #include "ClearTime.h"
 #include "ClearScore.h"
 #include "SpriteServer.h"
+#include "Game.h"
 
 using namespace FragmentValkyria::Mode;
 
@@ -17,7 +18,8 @@ ModeClearResult::ModeClearResult() {
 }
 
 void ModeClearResult::Init() {
-   _bgHandle = GetResServer().GetTexture("ClearBg");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _bgHandle = resServer.GetTexture("ClearBg");
 }
 
 void ModeClearResult::Enter() {
@@ -25,29 +27,34 @@ void ModeClearResult::Enter() {
 }
 
 void ModeClearResult::Input(AppFrame::Input::InputManager& input) {
-   GetSprServer().Input(input);
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.sprServer().Input(input);
    if (input.GetXJoypad().AClick()) {
-      GetSoundComponent().Stop("BossBattleBgm");
-      GetSoundComponent().Stop("ClearResult");
-      GetModeServer().GoToMode("Title");
+      auto& soundComponent = gameInstance.soundComponent();
+      soundComponent.Stop("BossBattleBgm");
+      soundComponent.Stop("ClearResult");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Title");
    }
 }
 
 void ModeClearResult::Update() {
+   auto& sprServer = Game::Game::GetInstance().sprServer();
    if (_born) {
-      auto& sprServer = GetSprServer();
       sprServer.Add(std::make_unique<Clear::ClearTime>());
       sprServer.Add(std::make_unique<Clear::ClearScore>());
       _born = false;
    }
-   GetSprServer().Update();
+   sprServer.Update();
 }
 
 void ModeClearResult::Render() {
-   GetTexComponent().DrawTexture(0,0,1.0,0.0,_bgHandle);
-   GetSprServer().Render();
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.texComponent().DrawTexture(0,0,1.0,0.0,_bgHandle);
+   gameInstance.sprServer().Render();
 }
 
 void ModeClearResult::Exit() {
-   GetSprServer().Clear();
+   auto& sprServer = Game::Game::GetInstance().sprServer();
+   sprServer.Clear();
 }

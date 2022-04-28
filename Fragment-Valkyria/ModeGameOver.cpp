@@ -7,7 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ModeGameOver.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ParamModeGameOver.h"
 
 namespace {
@@ -22,7 +22,7 @@ ModeGameOver::ModeGameOver() {
 }
 
 void ModeGameOver::Init() {
-   auto& resServer = GetResServer();
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _handleMap = {
       {"OverBg",resServer.GetTextures("OverBg")},
       {"ContinueSelect",resServer.GetTextures("ContinueSelect")},
@@ -31,7 +31,8 @@ void ModeGameOver::Init() {
       {"ExitNoSelect",resServer.GetTextures("ExitNoSelect")}
    };
 
-   _stateServer = std::make_unique<AppFrame::State::StateServer>("Continue", std::make_shared <StateContinue>(*this));
+   _stateServer = std::make_unique<AppFrame::State::StateServer>("Continue", 
+      std::make_shared <StateContinue>(*this));
    _stateServer->Register("Exit", std::make_shared<StateExit>(*this));
 }
 
@@ -61,11 +62,12 @@ void ModeGameOver::StateBase::Draw() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-   _owner.GetTexComponent().DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle,
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle,
       _owner._handleMap["OverBg"][0]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("continue_x"), _IntParam("continue_y"), 
+   texComponent.DrawTexture(_IntParam("continue_x"), _IntParam("continue_y"),
       DefaultGraphScale, DefaultGraphAngle, _owner._continueDrawHandles, 2);
-   _owner.GetTexComponent().DrawTexture(_IntParam("exit_x"), _IntParam("exit_y"),
+   texComponent.DrawTexture(_IntParam("exit_x"), _IntParam("exit_y"),
       DefaultGraphScale, DefaultGraphAngle, _owner._exitDrawHandles, 2);
 }
 
@@ -78,13 +80,15 @@ void ModeGameOver::StateContinue::Input(InputManager& input){
       _owner._stateServer->GoToState("Exit");
    }
    if (input.GetXJoypad().AClick()) {
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->isPoorClear(false);
-      _owner.GetSoundComponent().Stop("TutorialBgm");
-      _owner.GetSoundComponent().Stop("PoorBattleBgm");
-      _owner.GetSoundComponent().Stop("BossBattleBgm");
-      _owner.GetSoundComponent().Stop("GameOver");
-      _owner.GetModeServer().GoToMode("Loading",'S');
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.isPoorClear(false);
+      auto& soundComponent = gameInstance.soundComponent();
+      soundComponent.Stop("TutorialBgm");
+      soundComponent.Stop("PoorBattleBgm");
+      soundComponent.Stop("BossBattleBgm");
+      soundComponent.Stop("GameOver");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Loading",'S');
    }
 }
 
@@ -101,11 +105,13 @@ void ModeGameOver::StateExit::Input(InputManager& input) {
       _owner._stateServer->GoToState("Continue");
    }
    if (input.GetXJoypad().AClick()) {
-      _owner.GetSoundComponent().Stop("TutorialBgm");
-      _owner.GetSoundComponent().Stop("PoorBattleBgm");
-      _owner.GetSoundComponent().Stop("BossBattleBgm");
-      _owner.GetSoundComponent().Stop("GameOver");
-      _owner.GetModeServer().GoToMode("Title");
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      soundComponent.Stop("TutorialBgm");
+      soundComponent.Stop("PoorBattleBgm");
+      soundComponent.Stop("BossBattleBgm");
+      soundComponent.Stop("GameOver");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Title");
    }
 }
 

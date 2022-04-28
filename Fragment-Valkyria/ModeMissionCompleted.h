@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   February 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードミッション完遂クラス
        * \brief ゲームクリア時に表示する
        */
-      class ModeMissionCompleted :public ModeBase {
+      class ModeMissionCompleted :public AppFrame::Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

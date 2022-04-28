@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   March 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードチュートリアル選択クラス
        * \brief チュートリアルを行うかどうか選択する
        */
-      class ModeTutorialSelect :public ModeBase {
+      class ModeTutorialSelect :public AppFrame::Mode::ModeBase {
          using InputManager = AppFrame::Input::InputManager;
       public:
          /**

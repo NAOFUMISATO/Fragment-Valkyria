@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectBossCharge.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 
 using namespace FragmentValkyria::Effect;
@@ -21,7 +21,7 @@ void EffectBossCharge::Init() {
 }
 
 void EffectBossCharge::Update() {
-   auto& objServer = Game::GameMain::GetInstance()->objServer();
+   auto& objServer = Game::Game::GetInstance().objServer();
    auto laserPos = objServer.GetVecData("LaserPos");
    _position = laserPos;
    auto bossPos = objServer.GetVecData("LargeEnemyPos");

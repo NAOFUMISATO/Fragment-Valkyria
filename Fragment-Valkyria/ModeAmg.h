@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   March 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードAMGロゴクラス
        * \brief AMGロゴの描画を行う
        */
-      class ModeAmg :public ModeBase {
+      class ModeAmg :public AppFrame::Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

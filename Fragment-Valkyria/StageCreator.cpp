@@ -8,7 +8,6 @@
  *********************************************************************/
 #include "StageCreator.h"
 #include "Stage.h"
-#include "GameMain.h"
 #include "ObjectBase.h"
 #include "LightAndShadow.h"
 using namespace FragmentValkyria;

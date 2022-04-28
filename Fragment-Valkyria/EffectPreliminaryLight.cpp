@@ -7,7 +7,6 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectPreliminaryLight.h"
-#include "GameMain.h"
 
 using namespace FragmentValkyria::Effect;
 

@@ -7,7 +7,6 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectBossBeam.h"
-#include "GameMain.h"
 
 using namespace FragmentValkyria::Effect;
 

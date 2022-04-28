@@ -7,6 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "Gatling.h"
+#include "Game.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectServer.h"
@@ -24,7 +25,8 @@ Gatling::Gatling() {
 
 void Gatling::Init() {
    // 移動する方向のベクトルの設定
-   _moveDirection = GetObjServer().GetVecData("GatlingMoveDirection");
+   auto& objServer = Game::Game::GetInstance().objServer();
+   _moveDirection = objServer.GetVecData("GatlingMoveDirection");
    // 移動する方向のベクトルの各成分を分解
    auto [x, y, z] = _moveDirection.GetVec3();
    // 移動する方向のベクトルの高さをなくす
@@ -95,7 +97,8 @@ void Gatling::StateBase::Draw() {
 void Gatling::StateChase::Enter() {
    auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>("GatlingMuzzleFlash");
    efcMuzzleFlash->position(_owner._position);
-   _owner.GetEfcServer().Add(std::move(efcMuzzleFlash));
+   auto& efcServer = Game::Game::GetInstance().efcServer();
+   efcServer.Add(std::move(efcMuzzleFlash));
    _owner._efcGatling = std::make_unique<Effect::EffectGatlingBullet>("GatlingBullet");
    _owner._efcGatling->Init();
    Update();

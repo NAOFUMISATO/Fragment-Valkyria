@@ -9,7 +9,7 @@
 #include "LaserCreator.h"
 #include <algorithm>
 #include "Laser.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectServer.h"
 
@@ -19,8 +19,8 @@ using namespace FragmentValkyria::Create;
 std::unique_ptr<Object::ObjectBase> LaserCreator::Create() {
    // ÉåÅ[ÉUÅ[ÇÃê∂ê¨
    auto laser = std::make_unique<Enemy::Laser>();
-   auto gameInstace = Game::GameMain::GetInstance();
-   for (auto&& objects : gameInstace->objServer().runObjects()) {
+   auto& gameInstace = Game::Game::GetInstance();
+   for (auto&& objects : gameInstace.objServer().runObjects()) {
       
       if (objects->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
          continue;
@@ -34,9 +34,9 @@ std::unique_ptr<Object::ObjectBase> LaserCreator::Create() {
 
       break;
    }
-   auto laegeEnemyPos = gameInstace->objServer().GetVecData("LargeEnemyPos");
+   auto laegeEnemyPos = gameInstace.objServer().GetVecData("LargeEnemyPos");
 
-   auto laserDirection = gameInstace->objServer().GetVecData("LaserDirectionPos") - laegeEnemyPos;
+   auto laserDirection = gameInstace.objServer().GetVecData("LaserDirectionPos") - laegeEnemyPos;
    laserDirection.Normalized();
    auto endPos = laegeEnemyPos + laserDirection * 10000 + Vector4(0.0, laser->position().GetY(), 0.0);
    laser->end(endPos);

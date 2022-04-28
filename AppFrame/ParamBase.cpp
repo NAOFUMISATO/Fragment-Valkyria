@@ -7,8 +7,10 @@
  * \date   April 2022
  *********************************************************************/
 #include "ParamBase.h"
-#include "GameBase.h"
 #include "CurrentPathServer.h"
+#ifdef _DEBUG
+#include "windows.h"
+#endif
 
 namespace AppFrame {
    /**
@@ -197,8 +199,8 @@ namespace AppFrame {
 
       void ParamBase::LoadVecParam(std::vector<std::string_view> paramNames) {
          // 値情報を格納しているjsonフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
-         auto jsonDirectory = gameInstance.pathServer().GetCurrentPath("ParamJson");
+         auto& pathInstance = Path::CurrentPathServer::GetInstance();
+         auto jsonDirectory = pathInstance.GetCurrentPath("ParamJson");
          auto jsonPath = (jsonDirectory / _key).generic_string() + ".json";
          // 指定したjsonファイルを読み取り専用で開く
          std::ifstream reading(jsonPath, std::ios::in);
@@ -245,8 +247,8 @@ namespace AppFrame {
 
       nlohmann::json ParamBase::JsonSetUp() {
          // 値情報を格納しているjsonフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
-         auto jsonDirectory = gameInstance.pathServer().GetCurrentPath("ParamJson");
+         auto& pathInstance = Path::CurrentPathServer::GetInstance();
+         auto jsonDirectory = pathInstance.GetCurrentPath("ParamJson");
          auto jsonPath = (jsonDirectory / _key).generic_string() + ".json";
          // 指定したjsonファイルを読み取り専用で開く
          std::ifstream reading(jsonPath, std::ios::in);

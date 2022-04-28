@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   February 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードオプションクラス
        * \brief オプション画面を表示し、各設定を行う
        */
-      class ModeOption :public ModeBase {
+      class ModeOption :public AppFrame::Mode::ModeBase {
          using InputManager = AppFrame::Input::InputManager;
       public:
          /**

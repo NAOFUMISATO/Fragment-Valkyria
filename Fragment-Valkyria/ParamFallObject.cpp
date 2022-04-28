@@ -7,7 +7,6 @@
  * \date   April 2022
  *********************************************************************/
 #include "ParamFallObject.h"
-#include "GameMain.h"
 
 using namespace FragmentValkyria::Param;
 

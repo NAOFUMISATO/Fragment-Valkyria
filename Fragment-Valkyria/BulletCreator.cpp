@@ -9,7 +9,7 @@
 #include "BulletCreator.h"
 #include "Bullet.h"
 #include "Player.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ModelAnimeComponent.h"
 
@@ -18,8 +18,8 @@ using namespace FragmentValkyria::Create;
 
 std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
    auto bullet = std::make_unique<Player::Bullet>();
-   auto gameInstance = Game::GameMain::GetInstance();
-   for (auto&& object : gameInstance->objServer().runObjects()) {
+   auto& gameInstance = Game::Game::GetInstance();
+   for (auto&& object : gameInstance.objServer().runObjects()) {
 
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;

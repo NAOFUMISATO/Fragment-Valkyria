@@ -9,7 +9,7 @@
 #include "PlayerCreator.h"
 #include "Player.h"
 #include "ObjectBase.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "CameraComponent.h"
 #include "ModelAnimeComponent.h"
 #include "PlayerHP.h"
@@ -71,8 +71,8 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    // プレイヤーの状態一括管理クラスの設定
    player->stateServer(std::move(state));
 
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto& sprServer = gameInstance->sprServer();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& sprServer = gameInstance.sprServer();
    sprServer.Add(std::make_unique<Player::PlayerHP>());
    sprServer.Add(std::make_unique<Player::RemainingBullet>());
    sprServer.Add(std::make_unique<Player::RemainingPortion>());

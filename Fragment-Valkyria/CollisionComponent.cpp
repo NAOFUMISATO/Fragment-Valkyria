@@ -10,7 +10,7 @@
 #include "ModelAnimeComponent.h"
 #include "FallObject.h"
 #include "Gatling.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "Player.h"
 #include "Stage.h"
 #include "StageModelComponent.h"
@@ -22,7 +22,6 @@
 #include "ObjectBase.h"
 #include "ObjectServer.h"
 #include "Player.h"
-#include "GameMain.h"
 #ifdef _DEBUG
 #include <stdexcept>
 #include <windows.h>
@@ -38,7 +37,8 @@ CollisionComponent::CollisionComponent(Object::ObjectBase& owner) : _owner{ owne
 
 void CollisionComponent::PlayerFromObjectRange() {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーじゃなければ何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -64,7 +64,8 @@ void CollisionComponent::PlayerFromObjectRange() {
       // 落下するオブジェクトを持ち上げられる範囲の球の半径
       const auto FallObjectRange = _param->GetDoubleParam("fallobject_range");
       // オブジェクトサーバーの各オブジェクトを取得
-      for (auto&& object : _owner.GetObjServer().runObjects()) {
+      auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+      for (auto&& object : runObjects) {
          // 当たり判定の結果がプレイヤーと当たっているか確認
          if (object->collisionComponent().report().id() == ReportId::HitFromPlayer) {
             // プレイヤーと当たっているオブジェクトがあった場合
@@ -145,7 +146,8 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
    // モデルのコリジョンのフレーム番号取得
    auto collision = MV1SearchFrame(objectModel, fallObject.collisionName().data());
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -201,7 +203,8 @@ void CollisionComponent::GatlingFromObjectModel() {
    // モデルのコリジョンのフレーム番号取得
    auto collision = MV1SearchFrame(objectModel, fallObject.collisionName().data());
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // ガトリングじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
          continue;
@@ -248,7 +251,8 @@ void CollisionComponent::GatlingFromPlayer() {
    // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(capsulePos1, capsulePos2, casuleRadius);
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // ガトリングじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Gatling) {
          continue;
@@ -300,7 +304,8 @@ void CollisionComponent::LargeEnemyFromObjectModel() {
    // カプセルの半径
    auto capsuleRadian = static_cast<float>(_DoubleParam("fallobject_drum_radius"));
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // ラージエネミーじゃない場合何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
          continue;
@@ -375,7 +380,8 @@ void CollisionComponent::LargeEnemyFromBullet() {
    // 遠隔弱攻撃の弾の半径を設定
    auto bulletRadius = static_cast<float>(_DoubleParam("bullet_radius"));
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()){
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects){
       // ラージエネミーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::LargeEnemy) {
          continue;
@@ -458,7 +464,8 @@ void CollisionComponent::FallObjectFromLaser() {
    // 自前のカプセルを定義
    auto fallObjectCapsule = std::make_tuple(fallObjectCapsulePos1, fallObjectCapsulePos2, fallObjectRadius);
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // レーザーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
          continue;
@@ -511,7 +518,8 @@ void CollisionComponent::PlayerFromLaser() {
    // 自前のカプセルを定義
    AppFrame::Math::Capsule playerCapsule = std::make_tuple(plyCapsulePos1, plyCapsulePos2, playerCapsuleRadius);
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // レーザーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Laser) {
          continue;
@@ -554,7 +562,8 @@ void CollisionComponent::LargeEnemyFromPlayer() {
    //ラージエネミーのモデルのコリジョンフレーム番号の取得
    auto collision = _owner.modelAnimeComponent().FindFrame("S301_typeCO");
    //オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       //プレイヤーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -603,7 +612,8 @@ void CollisionComponent::PoorEnemyFromPlayer() {
    //ラージエネミーのモデルのコリジョンフレーム番号の取得
    auto collision = _owner.modelAnimeComponent().FindFrame("mob");
    //オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       //プレイヤーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -652,7 +662,8 @@ void CollisionComponent::BulletFromPoorEnemy() {
    //モデルのコリジョンフレームの取得
    auto collision = _owner.modelAnimeComponent().FindFrame("mob");
    //オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       //遠隔弱攻撃の弾じゃなかったらなにもしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Bullet) {
          continue;
@@ -696,7 +707,8 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
    //カプセルの半径
    auto capsuleRadian = static_cast<float>(_DoubleParam("fallobject_drum_radius"));
    //オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       //ガトリング攻撃をしてくる雑魚敵じゃなければ何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::PoorEnemy) {
          continue;
@@ -721,7 +733,8 @@ void CollisionComponent::PoorEnemyGatlingFromObjectModel() {
 
 void CollisionComponent::PlayerKnockBack() {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーじゃなかったら何もしない
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -736,7 +749,8 @@ void CollisionComponent::PlayerKnockBack() {
 
 AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos, const Vector4& moved) {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーだった場合
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
@@ -747,8 +761,8 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
       }
    }
    // ステージのモデルハンドルと当たり判定のフレーム番号の取得
-   auto gameInstace = Game::GameMain::GetInstance();
-   auto modeBase = gameInstace->modeServer().GetNowMode();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto modeBase = modeServer.GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
    auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_character_c");
@@ -771,7 +785,8 @@ AppFrame::Math::Vector4 CollisionComponent::PlayerCheckStage(const Vector4& pos,
 
 AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
    // オブジェクトサーバーの各オブジェクトを取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーだった場合
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          // プレイヤーが死亡モーションならば返す
@@ -782,8 +797,8 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
       }
    }
    // ステージのモデルハンドルと当たり判定のフレーム番号の取得
-   auto gameInstace = Game::GameMain::GetInstance();
-   auto modeBase = gameInstace->modeServer().GetNowMode();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto modeBase = modeServer.GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
    auto [handle, collision] = stageComponent.GetHandleAndFrameNum("stage_boss_c");
@@ -805,7 +820,8 @@ AppFrame::Math::Vector4 CollisionComponent::LargeEnemyCheckStage(const Vector4& 
 }
 
 AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& pos, const Vector4& moved) {
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          // プレイヤーが死亡モーションならば返す
          auto& player = dynamic_cast<Player::Player&>(*object);
@@ -814,8 +830,8 @@ AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& p
          };
       }
    }
-   auto gameInstace = Game::GameMain::GetInstance();
-   auto modeBase = gameInstace->modeServer().GetNowMode();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto modeBase = modeServer.GetNowMode();
    auto modeIngame = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeIngame->GetStage().stageComponent();
 
@@ -835,7 +851,8 @@ AppFrame::Math::Vector4 CollisionComponent::PoorEnemyCheckStage(const Vector4& p
 }
 
 void CollisionComponent::OutStage() {
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          // プレイヤーが死亡モーションならば返す
@@ -844,8 +861,8 @@ void CollisionComponent::OutStage() {
          };
       }
    }
-   auto gameInstace = Game::GameMain::GetInstance();
-   auto modeBase = gameInstace->modeServer().GetNowMode();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto modeBase = modeServer.GetNowMode();
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 
@@ -868,8 +885,8 @@ void CollisionComponent::OutStage() {
 }
 
 bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
-   auto gameInstace = Game::GameMain::GetInstance();
-   for (auto&& object : gameInstace->objServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          // プレイヤーが死亡モーションならば返す
@@ -878,7 +895,8 @@ bool CollisionComponent::IsLineFromStage(const Vector4& pos) {
          };
       }
    }
-   auto modeBase = gameInstace->modeServer().GetNowMode();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto modeBase = modeServer.GetNowMode();
    auto modeInGameBase = std::dynamic_pointer_cast<Mode::ModeInGameBase>(modeBase);
    auto stageComponent = modeInGameBase->GetStage().stageComponent();
 

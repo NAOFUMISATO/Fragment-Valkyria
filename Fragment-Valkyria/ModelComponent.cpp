@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "ModelComponent.h"
 #include "ObjectBase.h"
-#include "GameMain.h"
+#include "Game.h"
 
 using namespace FragmentValkyria::Model;
 
@@ -33,8 +33,8 @@ void ModelComponent::Draw() {
 }
 
 int ModelComponent::SetModel(std::string_view key, int no) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [handle, actualNo] = gameInstance->resServer().GetModel(key, no);
+   auto& resServer= AppFrame::Resource::ResourceServer::GetInstance();
+   auto [handle, actualNo] = resServer.GetModel(key, no);
    _modelHandle = handle;
    _key = key;
    return actualNo;

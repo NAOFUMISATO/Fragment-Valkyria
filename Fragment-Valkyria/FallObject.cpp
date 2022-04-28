@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "FallObject.h"
 #include "CollisionComponent.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "Player.h"
 #include "ModelAnimeComponent.h"
 #include "EffectObjectFall.h"
@@ -41,8 +41,8 @@ void FallObject::Init() {
 
    // フレーム1をナビメッシュとして使用
    MV1SetupCollInfo(modelHandle, _collision);
-   auto gameInstance = Game::GameMain::GetInstance();
-   _fallPointHandles = gameInstance->resServer().GetTextures("FallPoint");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _fallPointHandles = resServer.GetTextures("FallPoint");
 }
 
 void FallObject::Input(InputManager& input) {
@@ -82,8 +82,9 @@ void FallObject::HitCheckFromLargeEnemy() {
       // ラージエネミーと当たっていたら死亡状態へ
       auto efcHit = std::make_unique<Effect::EffectObjectHit>("ObjectHit");
       efcHit->position(_position);
-      GetEfcServer().Add(std::move(efcHit));
-      GetSoundComponent().Play("ObjectHit", _position);
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.efcServer().Add(std::move(efcHit));
+      gameInstance.soundComponent().Play("ObjectHit", _position);
       _stateServer->GoToState("Die");
    }
 }
@@ -105,8 +106,9 @@ void FallObject::HitCheckFromPoorEnemy() {
    if (report.id() == Collision::CollisionComponent::ReportId::HitFromPoorEnemy) {
       auto efcHit = std::make_unique<Effect::EffectObjectHit>("ObjectHit");
       efcHit->position(_position);
-      GetEfcServer().Add(std::move(efcHit));
-      GetSoundComponent().Play("ObjectHit",_position);
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.efcServer().Add(std::move(efcHit));
+      gameInstance.soundComponent().Play("ObjectHit",_position);
       // 雑魚敵と当たったら死亡状態へ
       _stateServer->GoToState("Die");
    }
@@ -151,7 +153,8 @@ void FallObject::Save() {
    // 回転のベクトルを設定
    _rotation = Vector4(xyz, xyz, xyz);
    // オブジェクト一括管理クラスのオブジェクトの取得
-   for (auto&& object : GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーじゃない場合処理をスキップしてfor文を回す
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -194,7 +197,8 @@ void FallObject::Up() {
       return _param->GetDoubleParam(paramName);
    };
    // オブジェクト一括管理クラスのオブジェクトの取得
-   for (auto&& object : GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーじゃない場合処理をスキップしてfor文を回す
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -329,7 +333,8 @@ void FallObject::StateFall::Update() {
       auto efcFall = std::make_unique<Effect::EffectObjectFall>("ObjectFall");
       efcFall->position(_owner._position);
       efcFall->speed(2.0);
-      _owner.GetEfcServer().Add(std::move(efcFall));
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.efcServer().Add(std::move(efcFall));
       // 残留オブジェクトでない場合死亡状態へ
       if (!_owner._residual) {
          _owner._stateServer->GoToState("Die");
@@ -337,7 +342,7 @@ void FallObject::StateFall::Update() {
       // 残留オブジェクトの場合待機状態へ
       else {
          _owner._stateServer->GoToState("Idle");
-         _owner.GetSoundComponent().Play("ObjectFall",_owner._position);
+         gameInstance.soundComponent().Play("ObjectFall",_owner._position);
       }
    }
    // カプセルの位置の設定
@@ -361,7 +366,8 @@ void FallObject::StateFall::Draw() {
    FallObject::StateBase::Draw();
    auto pointPosition = _owner._position;
    pointPosition.SetY(_DoubleParam("fallpoint_pos_y"));
-   _owner.GetTexComponent().DrawBillBoard(pointPosition, _DoubleParam("fallpoint_scale"),
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawBillBoard(pointPosition, _DoubleParam("fallpoint_scale"),
       DefaultPointAngle, _owner._fallPointHandles, _owner._param->GetIntParam("fallpoint_animespeed"));
 }
 
@@ -395,7 +401,8 @@ void FallObject::StateUp::Update() {
 
 void FallObject::StateSave::Enter() {
    // オブジェクト一括管理クラスの各オブジェクトの取得
-   for (auto&& object : _owner.GetObjServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーでなければ処理をスキップしてfor文を回す
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -431,7 +438,8 @@ void FallObject::StateSave::Update() {
 
 void FallObject::StateShoot::Enter() {
    // カメラの注視点へのベクトルを設定
-   _owner._shootVec = _owner.GetObjServer().GetVecData("CamTarget") - _owner._position;
+   auto& objServer = Game::Game::GetInstance().objServer();
+   _owner._shootVec = objServer.GetVecData("CamTarget") - _owner._position;
    // 単位化する
    _owner._shootVec.Normalized();
 }

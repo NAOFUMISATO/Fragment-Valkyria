@@ -15,7 +15,7 @@
 namespace FragmentValkyria {
    // 二重インクルード防止
    namespace Game {
-      class GameMain;
+      class Game;
    }
    namespace Object {
       class ObjectBase;

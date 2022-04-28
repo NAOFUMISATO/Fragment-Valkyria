@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "TutorialTips.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "Player.h"
 #include "CollisionComponent.h"
@@ -30,7 +30,8 @@ void TutorialTips::Init() {
       {"ObjectShootPromotion",5 },
       {"HealPromotion",       6 }
    };
-   _grHandle = GetResServer().GetTexture(_tipsName);
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandle = resServer.GetTexture(_tipsName);
    _tipsClear = {
       {"MoveClear",       false },
       {"CameraClear",     false },
@@ -92,8 +93,8 @@ void TutorialTips::StateJudge::Enter() {
    _isWeakReady = false;
    _isObjectReady = false;
    if (_owner._tipsNum[_owner._tipsName] == 6) {
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->playerHp(50.0);
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.playerHp(50.0);
    }
 }
 
@@ -134,26 +135,28 @@ void TutorialTips::StateFadeOut::Update() {
    else {
       _owner.SetDead();
       if (_owner._tipsNum[_owner._tipsName] == 6) {
-         auto gameInstance = Game::GameMain::GetInstance();
-         gameInstance->isTutorialClear(true);
-         gameInstance->modeServer().GoToMode("Loading", 'S');
+         auto& gameInstance = Game::Game::GetInstance();
+         gameInstance.isTutorialClear(true);
+         auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+         modeServer.GoToMode("Loading", 'S');
       }
    }
 }
 
 void TutorialTips::StateJudge::MoveJudge(InputManager& input) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
-   if (input.GetXJoypad().LeftStickX() > deadZone || input.GetXJoypad().LeftStickX() < -deadZone ||
-      input.GetXJoypad().LeftStickY() < -deadZone || input.GetXJoypad().LeftStickY() > deadZone) {
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance.sensitivity();
+   auto joypad = input.GetXJoypad();
+   if (joypad.LeftStickX() > deadZone || joypad.LeftStickX() < -deadZone ||
+      joypad.LeftStickY() < -deadZone || joypad.LeftStickY() > deadZone) {
       _owner._tipsClear["MoveClear"] = true;
       _owner._stateServer->GoToState("FadeOut");
    }
 }
 
 void TutorialTips::StateJudge::CameraJudge(InputManager& input) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance.sensitivity();
    if (input.GetXJoypad().RightStickX() > deadZone || input.GetXJoypad().RightStickX() < -deadZone ||
       input.GetXJoypad().RightStickY() < -deadZone || input.GetXJoypad().RightStickY() > deadZone) {
       _owner._tipsClear["CameraClear"] = true;
@@ -179,8 +182,8 @@ void TutorialTips::StateJudge::ReloadJudge(InputManager& input) {
 }
 
 void TutorialTips::StateJudge::ObjectShootJudge(InputManager& input) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   for (auto& object : gameInstance->objServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);
          if (player.objectShoot()) {

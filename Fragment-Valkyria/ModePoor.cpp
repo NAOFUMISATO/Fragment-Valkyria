@@ -12,7 +12,7 @@
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "LargeEnemyCreator.h"
 #include "LargeEnemy.h"
 #include "LaserCreator.h"
@@ -45,7 +45,8 @@ void ModePoor::Enter() {
    };
    using Vector4 = AppFrame::Math::Vector4;
 
-   auto& objFactory = GetObjFactory();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& objFactory = gameInstance.objFactory();
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
@@ -65,15 +66,16 @@ void ModePoor::Enter() {
 
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用
-   auto& objServer = GetObjServer();
+   auto& objServer = gameInstance.objServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   GetSoundComponent().PlayLoop("PoorBattleBgm");
+   auto& soundComponent = gameInstance.soundComponent();
+   soundComponent.PlayLoop("PoorBattleBgm");
    _wave = 1;
    _playSound = true;
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->ingameTimer(0);
-   gameInstance->playerStatus(_playerParam->GetDoubleParam("max_hp"),
+
+   gameInstance.ingameTimer(0);
+   gameInstance.playerStatus(_playerParam->GetDoubleParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
    ModeInGameBase::Enter();
 }
@@ -81,10 +83,11 @@ void ModePoor::Enter() {
 void ModePoor::Input(AppFrame::Input::InputManager& input) {
 #ifdef _DEBUG
    if (input.GetXJoypad().BackClick()) {
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->isPoorClear(true);
-      GetSoundComponent().Stop("PoorBattleBgm");
-      GetModeServer().GoToMode("Loading",'S');
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.isPoorClear(true);
+      gameInstance.soundComponent().Stop("PoorBattleBgm");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Loading",'S');
    }
 #endif
    ModeInGameBase::Input(input);
@@ -92,7 +95,8 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
 
 void ModePoor::Update() {
    if (_playSound) {
-      GetSoundComponent().Play("PoorBattleStartVoice");
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      soundComponent.Play("PoorBattleStartVoice");
       _playSound = false;
    }
    ModeInGameBase::Update();
@@ -105,7 +109,8 @@ void ModePoor::Render() {
 
 void ModePoor::WaveProcess() {
    // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
-   auto&& runObjects = GetObjServer().runObjects();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto&& runObjects = gameInstance.objServer().runObjects();
    // 動的配列に一致する要素があるか判定を行う
    auto _IsActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
@@ -115,14 +120,14 @@ void ModePoor::WaveProcess() {
    if (!_IsActiveEnemy) {
       // 最大waveに達したならモード遷移を行う
       if (_wave >= _param->GetIntParam("max_wave")) {
-         GetSoundComponent().Play("PoorBattleEndVoice");
-         auto gameInstance = Game::GameMain::GetInstance();
-         gameInstance->isPoorClear(true);
-         GetModeServer().GoToMode("Loading", 'S');
+         gameInstance.soundComponent().Play("PoorBattleEndVoice");
+         gameInstance.isPoorClear(true);
+         auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+         modeServer.GoToMode("Loading", 'S');
          return;
       }
       // 次のwaveのスポーンテーブルを設定する
-      GetObjFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));
+      gameInstance.objFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));
       // waveを進める
       _wave++;
    }

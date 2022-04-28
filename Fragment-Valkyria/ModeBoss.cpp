@@ -11,7 +11,7 @@
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "LargeEnemyCreator.h"
 #include "LargeEnemy.h"
 #include "LaserCreator.h"
@@ -41,9 +41,12 @@ ModeBoss::ModeBoss() {
 }
 
 void ModeBoss::Enter() {
-    using Vector4 = AppFrame::Math::Vector4;
+   using Vector4 = AppFrame::Math::Vector4;
+   
+   auto& gameInstance = Game::Game::GetInstance();
 
-   auto& objFactory = GetObjFactory();
+   auto& objFactory = gameInstance.objFactory();
+   // 各生成管理クラスを登録
    objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>());
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFactory.Register("FallObject", std::make_unique<Create::FallObjectCreator>());
@@ -53,26 +56,31 @@ void ModeBoss::Enter() {
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>());
 
    std::vector<std::string> spawnTableNames;
+   // 各スポーンテーブルを登録
    for (int i = 1; MaxWave >= i; i++) {
       std::string tableName = "bosswave" + std::to_string(i);
       spawnTableNames.emplace_back(tableName);
    }
    objFactory.LoadSpawnTables("boss",  spawnTableNames );
-
+   // 最初のスポーンテーブルを設定する
    objFactory.SetSpawnTable("bosswave1");
-
+   // プレイヤー生成
    auto player = objFactory.Create("Player");
-   // アクターサーバーに登録※個別アクセス用
-   auto& objServer = GetObjServer();
+   // オブジェクトサーバーにプレイヤー位置を登録
+   auto& objServer = gameInstance.objServer();
    objServer.RegistVector("PlayerPos", player->position());
+   // オブジェクトサーバーにプレイヤーを登録
    objServer.Add(std::move(player));
-   GetSoundComponent().Stop("PoorBattleBgm");
+
+   gameInstance.soundComponent().Stop("PoorBattleBgm");
+
    ModeInGameBase::Enter();
+   // ライティング処理に使用する変数を初期化
+   _lightOnCount = 0;
    _red = 0.1f;
+   _cntInit = false;
    _lighting->SetDifColor(_red, 0.1f, 0.1f);
    _lighting->SetAmbColor(_red, 0.1f, 0.1f);
-   _cntInit = false;
-   _lightOnCount = 0;
 }
 
 void ModeBoss::Input(AppFrame::Input::InputManager& input) {
@@ -80,8 +88,9 @@ void ModeBoss::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeBoss::Update() {
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (!_cntInit) {
-      _lightCnt = GetModeServer().frameCount();
+      _lightCnt = modeServer.frameCount();
       _cntInit = true;
       
    }
@@ -93,17 +102,21 @@ void ModeBoss::Update() {
 void ModeBoss::Render() {
    ModeInGameBase::Render();
 #ifdef _DEBUG
-   auto bossHp = GetObjServer().GetDoubleData("LargeEnemyHP");
-   DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),"ボスHP : %f", bossHp);
+   auto& objServer = Game::Game::GetInstance().objServer();
+   auto bossHp = objServer.GetDoubleData("LargeEnemyHP");
+   DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),
+      "ボスHP : %f", bossHp);
 #endif
 }
 
 void ModeBoss::LightStaging() {
-   auto frame = GetModeServer().frameCount() - _lightCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto frame = modeServer.frameCount() - _lightCnt;
    if (_lightOnCount < 4) {
       if (_plus) {
          if (frame == 1) {
-            GetSoundComponent().Play("Buzzer");
+            soundComponent.Play("Buzzer");
          }
          _red += 0.02f;
          if (_red > 0.5f) {
@@ -125,6 +138,6 @@ void ModeBoss::LightStaging() {
       _lighting->SetAmbColor(DefaultAmbRed, DefaultAmbGreen, DefaultAmbBlue);
    }
    if (frame == PlaySoundFrame) {
-      GetSoundComponent().Play("LightOn");
+      soundComponent.Play("LightOn");
    }
 }

@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "ModeMissionCompleted.h"
 #include "ParamModeClear.h"
+#include "Game.h"
 
 namespace {
    constexpr auto BoxWidth = 1920;
@@ -23,19 +24,23 @@ ModeMissionCompleted::ModeMissionCompleted() {
 }
 
 void ModeMissionCompleted::Init() {
-   GetLoadJson().LoadTextures("clear");
-   _grHandles = GetResServer().GetTextures("MissionCompleted");
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadTextures("clear");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("MissionCompleted");
 }
 
 void ModeMissionCompleted::Enter() {
-   GetSoundComponent().Play("GameClearVoice");
-   GetSoundComponent().Play("ClearResult");
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   soundComponent.Play("GameClearVoice");
+   soundComponent.Play("ClearResult");
 }
 
 void ModeMissionCompleted::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().AClick()) {
-      GetModeServer().PopBack();
-      GetModeServer().GoToMode("ClearResult", 'S');
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.PopBack();
+      modeServer.GoToMode("ClearResult", 'S');
    }
 }
 
@@ -51,6 +56,7 @@ void ModeMissionCompleted::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _IntParam("bg_alpha"));
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   GetTexComponent().DrawTexture(_IntParam("missioncomp_x"), _IntParam("missioncomp_y"), 
+   auto& texComponent= Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(_IntParam("missioncomp_x"), _IntParam("missioncomp_y"),
       DefaultGraphScale, DefaultGraphAngle, _grHandles, _IntParam("missioncomp_animespeed"));
 }

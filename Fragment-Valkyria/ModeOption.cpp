@@ -7,7 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ModeOption.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ParamModeOption.h"
 
 namespace {
@@ -38,8 +38,10 @@ void ModeOption::Init() {
    const auto _DoubleParam = [&](std::string paramName) {
       return _param->GetDoubleParam(paramName);
    };
-   GetLoadJson().LoadTextures("option");
-   auto& resServer = GetResServer();
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadTextures("option");
+
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _handleMap = {
       {"AdjustmentBar",  resServer.GetTexture("AdjustmentBar")},
       {"AimSensivity",   resServer.GetTexture("AimSensivity")},
@@ -58,8 +60,8 @@ void ModeOption::Init() {
    _cameraSens = _DoubleParam("default_camera_sens");
    _aimSens = _DoubleParam("default_aim_sens");
    _deadZone =_param->GetIntParam("default_deadzone");
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->sensitivity(_cameraSens, _aimSens, _deadZone);
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.sensitivity(_cameraSens, _aimSens, _deadZone);
 }
 
 void ModeOption::Enter() {
@@ -71,8 +73,8 @@ void ModeOption::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeOption::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->sensitivity(_cameraSens, _aimSens, _deadZone);
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.sensitivity(_cameraSens, _aimSens, _deadZone);
    _stateServer->Update();
 }
 
@@ -89,8 +91,8 @@ void ModeOption::StateBase::Update() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSencivity, aimSencivity, deadZone] = gameInstance.sensitivity();
    auto& ajustHandle = _owner._handleMap["AdjustmentBar"];
    auto& cusorHandle = _owner._handleMap["BarCusor"];
    int ajustWidth, ajustHeight;
@@ -125,31 +127,32 @@ void ModeOption::StateBase::Draw() {
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
    auto handleMap = _owner._handleMap;
-   _owner.GetTexComponent().DrawTexture(_IntParam("camerasens_x"), _IntParam("camerasens_y"),
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(_IntParam("camerasens_x"), _IntParam("camerasens_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["CameraSensivity"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("camerabar_x"), _IntParam("camerabar_y"),
+   texComponent.DrawTexture(_IntParam("camerabar_x"), _IntParam("camerabar_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("aimsens_x"), _IntParam("aimsens_y"),
+   texComponent.DrawTexture(_IntParam("aimsens_x"), _IntParam("aimsens_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["AimSensivity"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("aimbar_x"), _IntParam("aimbar_y"),
+   texComponent.DrawTexture(_IntParam("aimbar_x"), _IntParam("aimbar_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("deadzone_x"), _IntParam("deadzone_y"),
+   texComponent.DrawTexture(_IntParam("deadzone_x"), _IntParam("deadzone_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["DeadZone"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("deadzonebar_x"), _IntParam("deadzonebar_y"),
+   texComponent.DrawTexture(_IntParam("deadzonebar_x"), _IntParam("deadzonebar_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["AdjustmentBar"]);
-   _owner.GetTexComponent().DrawTexture(_IntParam("return_x"), _IntParam("return_y"),
+   texComponent.DrawTexture(_IntParam("return_x"), _IntParam("return_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["Return"]);
    auto [cameraCusorPosX, cameraCusorPosY] = _owner._cameraCusorPos;
    auto [aimCusorPosX, aimCusorPosY] = _owner._aimCusorPos;
    auto [deadzoneCusorPosX, deadzoneCusorPosY] = _owner._deadzoneCusorPos;
-   _owner.GetTexComponent().DrawTexture(cameraCusorPosX, cameraCusorPosY,
+   texComponent.DrawTexture(cameraCusorPosX, cameraCusorPosY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
-   _owner.GetTexComponent().DrawTexture(aimCusorPosX, aimCusorPosY,
+   texComponent.DrawTexture(aimCusorPosX, aimCusorPosY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
-   _owner.GetTexComponent().DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY,
+   texComponent.DrawTexture(deadzoneCusorPosX, deadzoneCusorPosY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["BarCusor"]);
    auto [selectCusorPosX, selectCusorPosY] = _owner._selectCusorPos;
-   _owner.GetTexComponent().DrawTexture(selectCusorPosX, selectCusorPosY, 
+   texComponent.DrawTexture(selectCusorPosX, selectCusorPosY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["OptionCusor"]);
 }
 
@@ -166,20 +169,21 @@ void ModeOption::StateCameraSencivitySelect::Enter() {
 }
 
 void ModeOption::StateCameraSencivitySelect::Input(AppFrame::Input::InputManager& input) {
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (input.GetXJoypad().DUpClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("ReturnSelect");
    }
    if (input.GetXJoypad().DDownClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("AimSencivitySelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._cameraSens < SensivityMax) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._cameraSens += SensivityMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._cameraSens > SensivityMin) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._cameraSens -= SensivityMin;
    }
 }
@@ -197,20 +201,21 @@ void ModeOption::StateAimSencivitySelect::Enter() {
 }
 
 void ModeOption::StateAimSencivitySelect::Input(AppFrame::Input::InputManager& input) {
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (input.GetXJoypad().DUpClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("CameraSencivitySelect");
    }
    if (input.GetXJoypad().DDownClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("DeadZoneSelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._aimSens < SensivityMax) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._aimSens += SensivityMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._aimSens > SensivityMin) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._aimSens -= SensivityMin;
    }
 }
@@ -228,20 +233,21 @@ void ModeOption::StateDeadZoneSelect::Enter() {
 }
 
 void ModeOption::StateDeadZoneSelect::Input(AppFrame::Input::InputManager& input) {
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (input.GetXJoypad().DUpClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("AimSencivitySelect");
    }
    if (input.GetXJoypad().DDownClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("ReturnSelect");
    }
    if (input.GetXJoypad().DRightClick() && _owner._deadZone < DeadZoneMax) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._deadZone += DeadZoneMin;
    }
    if (input.GetXJoypad().DLeftClick() && _owner._deadZone > DeadZoneMin) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._deadZone -= DeadZoneMin;
    }
 }
@@ -259,16 +265,18 @@ void ModeOption::StateReturnSelect::Enter() {
 }
 
 void ModeOption::StateReturnSelect::Input(AppFrame::Input::InputManager& input) {
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (input.GetXJoypad().DUpClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("DeadZoneSelect");
    }
    if (input.GetXJoypad().DDownClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("CameraSencivitySelect");
    }
    if (input.GetXJoypad().AClick()) {
-      _owner.GetSoundComponent().Play("SystemDecision");
-      _owner.GetModeServer().PopBack();
+      soundComponent.Play("SystemDecision");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.PopBack();
    }
 }

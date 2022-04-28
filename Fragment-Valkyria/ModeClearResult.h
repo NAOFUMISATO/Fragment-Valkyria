@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   February 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードクリア画面クラス
        * \brief クリア画面及びクリアタイムの表示を行う
        */
-      class ModeClearResult : public ModeBase {
+      class ModeClearResult : public AppFrame::Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

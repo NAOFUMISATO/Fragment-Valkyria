@@ -7,7 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ClearTime.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ParamModeClear.h"
 
 namespace {
@@ -25,7 +25,8 @@ ClearTime::ClearTime() {
 }
 
 void ClearTime::Init() {
-   _grHandles = GetResServer().GetTextures("NumberAndColon");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("NumberAndColon");
    _position = _param->GetVecParam("time_pos");
    auto [x, y] = _position.GetVec2();
    const auto NumberDiffX= _param->GetIntParam("number_diffx");
@@ -36,8 +37,8 @@ void ClearTime::Init() {
       static_cast<int>(x + NumberDiffX * FourthMultRate),
       static_cast<int>(x + NumberDiffX * FifthMultRate)
    };
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto timer = gameInstance->ingameTimer();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto timer = gameInstance.ingameTimer();
    auto allSec = timer / 60;
    auto sec = allSec % 60;
    auto minute = allSec / 60;
@@ -54,15 +55,16 @@ void ClearTime::Draw(){
    auto [x, y] = _position.GetVec2();
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
    auto [firstNo, secondNo, thirdNo, fourthNo, fifthNo] = _animeNos;
-   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), 
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(firstX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[fifthNo]);
-   GetTexComponent().DrawTexture(secondX, static_cast<int>(y),
+   texComponent.DrawTexture(secondX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[fourthNo]);
-   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), 
+   texComponent.DrawTexture(thirdX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[thirdNo]);
-   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), 
+   texComponent.DrawTexture(fourthX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[secondNo]);
-   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y),
+   texComponent.DrawTexture(fifthX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[firstNo]);
 }
 

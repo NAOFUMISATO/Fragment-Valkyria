@@ -7,7 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "Laser.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "EffectBossBeam.h"
 #include "EffectServer.h"
 #include "ObjectServer.h"
@@ -41,20 +41,22 @@ void Laser::StateBase::Draw() {
 
 void Laser::StateIrradiation::Enter() {
    // この状態になった時のゲームのフレームカウントの保存
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
    auto efcBeam = std::make_unique<Effect::EffectBossBeam>("BossBeam");
    efcBeam->position(_owner._position);
    auto [x, y, z] = (_owner._end - _owner._position).GetVec3();
    auto efcDir = Vector4(0, std::atan2(-x, -z), 0);
    efcBeam->rotation(efcDir);
-   _owner.GetEfcServer().Add(std::move(efcBeam));
+   auto& efcServer = Game::Game::GetInstance().efcServer();
+   efcServer.Add(std::move(efcBeam));
 }
 
 void Laser::StateIrradiation::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto count = gameInstance->modeServer().frameCount();
-   for (auto& object : _owner.GetObjServer().runObjects()) {
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto count = modeServer.frameCount();
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
          auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(*object);
          if (!largeEnemy.isLaser()) {

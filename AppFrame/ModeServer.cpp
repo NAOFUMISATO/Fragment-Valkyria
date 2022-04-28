@@ -14,7 +14,7 @@
 #include <DxLib.h>
 #include "Utility.h"
 #endif
-#include "ModeBaseRoot.h"
+#include "ModeBase.h"
 #include "ModeFadeIn.h"
 #include "ModeFadeOut.h"
 
@@ -34,19 +34,13 @@ namespace AppFrame {
     * \brief モード関係
     */
    namespace Mode {
-      ModeServer::ModeServer(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
+      ModeServer::ModeServer() {
          // フェードイン、フェードアウトモードを登録する
          Register("FadeIn", std::make_shared<ModeFadeIn>());
          Register("FadeOut", std::make_shared<ModeFadeOut>());
-         // 最初のモードを登録する
-         Register(key, mode);
-         // 最初のモードを挿入
-         PushBack(key);
-         // 最初のモードの上にフェードインを挿入
-         PushBack("FadeIn");
       }
 
-      void ModeServer::Register(std::string_view key, std::shared_ptr<ModeBaseRoot> mode) {
+      void ModeServer::Register(std::string_view key, std::shared_ptr<ModeBase> mode) {
          // レジストリを走査し、指定のキーがあれば削除する
          if (_modeRegistry.contains(key.data())) {
             _modeRegistry.erase(key.data()); 
@@ -139,7 +133,7 @@ namespace AppFrame {
          _modeList.insert(std::prev(_modeList.end()), insertMode);
       }
 
-      std::shared_ptr<ModeBaseRoot> ModeServer::GetMode(std::string_view key) {
+      std::shared_ptr<ModeBase> ModeServer::GetMode(std::string_view key) {
 #ifndef _DEBUG
          //指定のキーがなければnullを返す
          if (!_modeRegistry.contains(key.data())) {
@@ -277,7 +271,7 @@ namespace AppFrame {
          _modeList.push_back(pushMode);
       }
 
-      std::shared_ptr<ModeBaseRoot> ModeServer::GetNowMode() {
+      std::shared_ptr<ModeBase> ModeServer::GetNowMode() {
          // 末尾のモードを取得する
          return _modeList.back();
       }

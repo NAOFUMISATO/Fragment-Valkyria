@@ -7,12 +7,11 @@
  * \date   December 2021
  *********************************************************************/
 #include "ModelAnimeComponent.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectBase.h"
 using namespace FragmentValkyria::Model;
 
 ModelAnimeComponent::ModelAnimeComponent(Object::ObjectBase& owner) : ModelComponent{ owner } {
-
 }
 
 ModelAnimeComponent::~ModelAnimeComponent() {
@@ -86,8 +85,8 @@ void ModelAnimeComponent::ChangeAnime(std::string_view animeName, bool repeate, 
       _blending = false; // ブレンド中かの判定をfalse
    }
    // 新しくアタッチするアニメ番号をResourceServerから取得する
-   auto gameInstance = Game::GameMain::GetInstance();
-   _newAnimIndex = gameInstance->resServer().GetModelAnimIndex(_key, animeName);
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _newAnimIndex = resServer.GetModelAnimIndex(_key, animeName);
 #ifndef _DEBUG
    if (_animIndex == _newAnimIndex) {
       return;

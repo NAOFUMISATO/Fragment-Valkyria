@@ -6,15 +6,15 @@
  * \author NAOFUMISATO
  * \date   November 2021
  *********************************************************************/
-#include "GameMain.h"
+#include "Game.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-   auto gameInstance = FragmentValkyria::Game::GameMain::GetInstance();
-   auto success = gameInstance->Initialize(hInstance);
+   auto& gameInstance = FragmentValkyria::Game::Game::GetInstance();
+   auto success = gameInstance.Initialize(hInstance);
    // ƒƒCƒ“ƒ‹[ƒv
    if (success) {
-      gameInstance->Run();
+      gameInstance.Run();
    }
-   gameInstance->ShutDown();
+   gameInstance.ShutDown();
    return 0;
 }

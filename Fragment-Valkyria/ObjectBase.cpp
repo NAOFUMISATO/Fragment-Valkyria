@@ -7,12 +7,9 @@
  * \date   December 2021
  *********************************************************************/
 #include "ObjectBase.h"
-#include "GameMain.h"
 #include "ModelAnimeComponent.h"
 #include "CameraComponent.h"
 #include "CollisionComponent.h"
-#include "ObjectServer.h"
-#include "EffectServer.h"
 
 using namespace FragmentValkyria::Object;
 
@@ -42,31 +39,6 @@ void ObjectBase::modelAnimeComponent(std::unique_ptr<Model::ModelAnimeComponent>
 
 void ObjectBase::cameraComponent(std::shared_ptr<Camera::CameraComponent> camera) {
    _cameraComponent = camera;
-}
-
-ObjectServer& ObjectBase::GetObjServer() const {
-   auto gameInstance = Game::GameMain::GetInstance();
-   return gameInstance->objServer();
-}
-
-FragmentValkyria::Effect::EffectServer& ObjectBase::GetEfcServer() const {
-   auto gameInstance = Game::GameMain::GetInstance();
-   return gameInstance->efcServer();
-}
-
-AppFrame::Texture::TextureComponent& ObjectBase::GetTexComponent() const {
-   auto gameInstance = Game::GameMain::GetInstance();
-   return gameInstance->texComponent();
-}
-
-AppFrame::Sound::SoundComponent& ObjectBase::GetSoundComponent() const {
-   auto gameInstance = Game::GameMain::GetInstance();
-   return gameInstance->soundComponent();
-}
-
-AppFrame::Resource::LoadResourceJson& ObjectBase::GetLoadJson() const {
-   auto gameInstance = Game::GameMain::GetInstance();
-   return gameInstance->loadresJson();
 }
 
 void ObjectBase::stateServer(std::unique_ptr<StateServer> state) {

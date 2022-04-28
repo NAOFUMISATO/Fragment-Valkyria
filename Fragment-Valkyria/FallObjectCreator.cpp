@@ -9,7 +9,7 @@
 #include "FallObjectCreator.h"
 #include "CollisionComponent.h"
 #include "FallObject.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectServer.h"
 

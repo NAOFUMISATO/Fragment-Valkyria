@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "ModeTutorialSelect.h"
-#include "GameMain.h"
+#include "Game.h"
 
 namespace {
    constexpr auto TutorialIsSkipX = 500;
@@ -24,9 +24,10 @@ ModeTutorialSelect::ModeTutorialSelect() {
 }
 
 void ModeTutorialSelect::Init() {
-   GetLoadJson().LoadTextures("tutorial");
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadTextures("tutorial");
 
-   auto& resServer = GetResServer();
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _handleMap = {
       {"TutorialCusor",   resServer.GetTexture("TutorialCusor")},
       {"TutorialIsSkip",  resServer.GetTexture("TutorialIsSkip")},
@@ -57,11 +58,12 @@ void ModeTutorialSelect::Render() {
 }
 
 void ModeTutorialSelect::StateBase::Draw() {
-   _owner.GetTexComponent().DrawTexture(0, 0, 1.0, 0.0, _owner._handleMap["TutorialSelectBg"]);
-   _owner.GetTexComponent().DrawTexture(TutorialIsSkipX, TutorialIsSkipY, 1.0, 0.0, _owner._handleMap["TutorialIsSkip"]);
-   _owner.GetTexComponent().DrawTexture(YesX, YesY, 1.0, 0.0, _owner._handleMap["Yes"]);
-   _owner.GetTexComponent().DrawTexture(NoX, NoY, 1.0, 0.0, _owner._handleMap["No"]);
-   _owner.GetTexComponent().DrawTexture(_owner._cusorX, _owner._cusorY, 1.0, 0.0, _owner._handleMap["TutorialCusor"]);
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(0, 0, 1.0, 0.0, _owner._handleMap["TutorialSelectBg"]);
+   texComponent.DrawTexture(TutorialIsSkipX, TutorialIsSkipY, 1.0, 0.0, _owner._handleMap["TutorialIsSkip"]);
+   texComponent.DrawTexture(YesX, YesY, 1.0, 0.0, _owner._handleMap["Yes"]);
+   texComponent.DrawTexture(NoX, NoY, 1.0, 0.0, _owner._handleMap["No"]);
+   texComponent.DrawTexture(_owner._cusorX, _owner._cusorY, 1.0, 0.0, _owner._handleMap["TutorialCusor"]);
 }
 
 void ModeTutorialSelect::StateYes::Enter() {
@@ -70,16 +72,19 @@ void ModeTutorialSelect::StateYes::Enter() {
 }
 
 void ModeTutorialSelect::StateYes::Input(InputManager& input) {
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& soundComponent = gameInstance.soundComponent();
    if (input.GetXJoypad().DDownClick() || input.GetKeyboard().DownClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("No");
    }
    if (input.GetXJoypad().AClick() || input.GetKeyboard().SpaceClick()) {
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->isTutorialClear(true);
-      _owner.GetSoundComponent().Play("SystemDecision");
-      _owner.GetSoundComponent().Stop("TitleBgm");
-      _owner.GetModeServer().GoToMode("Loading", 'S');
+      
+      gameInstance.isTutorialClear(true);
+      soundComponent.Play("SystemDecision");
+      soundComponent.Stop("TitleBgm");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Loading", 'S');
    }
 }
 
@@ -89,13 +94,15 @@ void ModeTutorialSelect::StateNo::Enter() {
 }
 
 void ModeTutorialSelect::StateNo::Input(InputManager& input) {
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
    if (input.GetXJoypad().DUpClick() || input.GetKeyboard().UpClick()) {
-      _owner.GetSoundComponent().Play("SystemSelect");
+      soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("Yes");
    }
    if (input.GetXJoypad().AClick() || input.GetKeyboard().SpaceClick()) {
-      _owner.GetSoundComponent().Play("SystemDecision");
-      _owner.GetSoundComponent().Stop("TitleBgm"); 
-      _owner.GetModeServer().GoToMode("Loading",'S');
+      soundComponent.Play("SystemDecision");
+      soundComponent.Stop("TitleBgm");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.GoToMode("Loading",'S');
    }
 }

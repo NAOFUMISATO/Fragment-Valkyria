@@ -7,7 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "RemainingBullet.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamPlayerUI.h"
 
@@ -26,7 +26,8 @@ RemainingBullet::RemainingBullet() {
 }
 
 void RemainingBullet::Init() {
-   _grHandles = GetResServer().GetTextures("RemainingBullet");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("RemainingBullet");
    _position = _param->GetVecParam("bullet_pos");
    auto [x,y] = _position.GetVec2();
    const auto DiffX = _param->GetIntParam("bullet_diff_x");
@@ -40,8 +41,8 @@ void RemainingBullet::Init() {
 }
 
 void RemainingBullet::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto bulletStock = gameInstance->playerBullet();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto bulletStock = gameInstance.playerBullet();
    StockCheck(static_cast<int>(bulletStock));
 }
 
@@ -49,11 +50,12 @@ void RemainingBullet::Draw() {
    auto [x, y] = _position.GetVec2();
    auto [firstFlag, secondFlag, thirdFlag, fourthFlag, fifthFlag] = _stockFlag;
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
-   GetTexComponent().DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
-   GetTexComponent().DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
-   GetTexComponent().DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
-   GetTexComponent().DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthFlag]);
-   GetTexComponent().DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthFlag]);
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
+   texComponent.DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
+   texComponent.DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);
+   texComponent.DrawTexture(fourthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fourthFlag]);
+   texComponent.DrawTexture(fifthX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[fifthFlag]);
 }
 
 void RemainingBullet::StockCheck(int stock) {

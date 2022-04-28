@@ -8,7 +8,7 @@
  *********************************************************************/
 #include "GatlingCreator.h"
 #include "Gatling.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 
 using namespace FragmentValkyria::Create;
@@ -16,8 +16,8 @@ using namespace FragmentValkyria;
 
 std::unique_ptr<Object::ObjectBase> GatlingCreator::Create() {
    auto gatling = std::make_unique<Enemy::Gatling>();
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto startPos = gameInstance->objServer().GetVecData("GatlingPos");
+   auto& gameInstance = Game::Game::GetInstance();
+   auto startPos = gameInstance.objServer().GetVecData("GatlingPos");
    gatling->position(startPos);
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Chase",

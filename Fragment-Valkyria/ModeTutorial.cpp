@@ -7,14 +7,14 @@
  * \date   March 2022
  *********************************************************************/
 #include "ModeTutorial.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
 #include "BulletCreator.h"
 #include "FallObjectCreator.h"
 #include "ObjectServer.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "LargeEnemyCreator.h"
 #include "LargeEnemy.h"
 #include "LaserCreator.h"
@@ -41,9 +41,9 @@ ModeTutorial::ModeTutorial() {
 }
 
 void ModeTutorial::Init() {
-   GetLoadJson().LoadSounds("ingame");
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->loadStage().LoadStageModels("Stage");
+   auto& gameInstance = Game::Game::GetInstance();
+   gameInstance.loadresJson().LoadSounds("ingame");
+   gameInstance.loadStage().LoadStageModels("Stage");
 }
 
 void ModeTutorial::Enter() {
@@ -57,7 +57,8 @@ void ModeTutorial::Enter() {
    };
    using Vector4 = AppFrame::Math::Vector4;
 
-   auto& objFactory = GetObjFactory();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& objFactory = gameInstance.objFactory();
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
@@ -74,15 +75,15 @@ void ModeTutorial::Enter() {
    objFactory.LoadSpawnTables("tutorial", spawnTableNames);
    objFactory.SetSpawnTable("tutorialwave1");
    auto player = objFactory.Create("Player");
-   auto& objServer = GetObjServer();
+   auto& objServer = gameInstance.objServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   auto gameInstance = Game::GameMain::GetInstance();
-   gameInstance->playerStatus(_param->GetBoolParam("max_hp"),
+   gameInstance.playerStatus(_param->GetBoolParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
+   auto& soundComponent = gameInstance.soundComponent();
+   soundComponent.Stop("TitleBgm");
+   soundComponent.PlayLoop("TutorialBgm");
    _born = true;
-   GetSoundComponent().Stop("TitleBgm");
-   GetSoundComponent().PlayLoop("TutorialBgm");
    ModeInGameBase::Enter();
 }
 
@@ -112,6 +113,7 @@ void ModeTutorial::Input(InputManager& input) {
 }
 
 void ModeTutorial::Update() {
+   auto& objFactory = Game::Game::GetInstance().objFactory();
    if (!TipsAlive()) {
       switch (_tutorialProgress) {
       case 1:
@@ -122,14 +124,14 @@ void ModeTutorial::Update() {
          break;
       case 3:
          TipsBorn("WeakBulletPromotion");
-         GetObjFactory().SetSpawnTable("tutorialwave2");
+         objFactory.SetSpawnTable("tutorialwave2");
          break;
       case 4:
          TipsBorn("ReloadPromotion");
          break;
       case 5:
          TipsBorn("ObjectShootPromotion");
-         GetObjFactory().SetSpawnTable("tutorialwave3");
+         objFactory.SetSpawnTable("tutorialwave3");
          break;
       case 6:
          TipsBorn("HealPromotion");
@@ -144,7 +146,7 @@ void ModeTutorial::Render() {
 }
 
 bool ModeTutorial::TipsAlive() {
-   auto&& runSprites = GetSprServer().runSprites();
+   auto& runSprites = Game::Game::GetInstance().sprServer().runSprites();
    // 動的配列に一致する要素があるか判定を行う
    auto isActiveTips = std::any_of(runSprites.begin(), runSprites.end(),
       [](std::unique_ptr<Sprite::SpriteBase>& spr) {
@@ -154,8 +156,8 @@ bool ModeTutorial::TipsAlive() {
 }
 
 void ModeTutorial::ClearJudge(std::string_view key) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   for (auto& sprite : gameInstance->sprServer().runSprites()) {
+   auto& runSprites = Game::Game::GetInstance().sprServer().runSprites();
+   for (auto& sprite : runSprites) {
       if (sprite->GetSprType() == Sprite::SpriteBase::SpriteType::TutorialTips) {
          auto& tips = dynamic_cast<Tutorial::TutorialTips&>(*sprite);
          if (tips.IsTipsClear(key)) {
@@ -167,20 +169,22 @@ void ModeTutorial::ClearJudge(std::string_view key) {
 
 void ModeTutorial::TipsBorn(std::string_view key){
    auto tips = std::make_unique<Tutorial::TutorialTips>(key);
-   GetSprServer().Add(std::move(tips));
+   auto& sprServer = Game::Game::GetInstance().sprServer();
+   sprServer.Add(std::move(tips));
 }
 
 void ModeTutorial::FallObjectRespawn() {
    // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
-   auto&& runObjects = GetObjServer().runObjects();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& runObjects = gameInstance.objServer().runObjects();
    // 動的配列に一致する要素があるか判定を行う
    auto isActiveFallObject = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の落下オブジェクトはあるか
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::FallObject) && obj->IsActive(); });
    if (!isActiveFallObject) {
-      auto fallObject = GetObjFactory().Create("FallObject");
+      auto fallObject = gameInstance.objFactory().Create("FallObject");
       fallObject->position({ 0,0,0 });
-      GetObjServer().Add(std::move(fallObject));
+      gameInstance.objServer().Add(std::move(fallObject));
    }
 }

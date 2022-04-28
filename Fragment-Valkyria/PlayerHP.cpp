@@ -7,7 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "PlayerHP.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamPlayerUI.h"
 
@@ -36,10 +36,11 @@ void PlayerHP::Init() {
    const auto _IntParam = [&](std::string paramName) {
       return static_cast<unsigned char>(_param->GetIntParam(paramName));
    };
-   auto gameInstance = Game::GameMain::GetInstance();
-   _hp = gameInstance->playerHp();
+   auto& gameInstance = Game::Game::GetInstance();
+   _hp = gameInstance.playerHp();
    // 画像ハンドルをResourceServerから取得する
-   _grHandle = GetResServer().GetTexture("PlayerHP");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandle = resServer.GetTexture("PlayerHP");
    _offSet = { OffSetLeft,OffSetTop,OffSetRight,OffSetBottom };    // オフセット位置初期化
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 1フレーム前の前面バーのプレイヤーHPを線形補間により座標を求め初期化
@@ -57,12 +58,13 @@ void PlayerHP::Init() {
 void PlayerHP::Update() {
    using Utility = AppFrame::Math::Utility;
    // ゲームのフレームカウントをModeServerから取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto count = gameInstance->modeServer().frameCount();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto count = modeServer.frameCount();
    // HPバー振動の処理
    BarShake(count);
    // プレイヤーHPを取得
-   _hp = gameInstance->playerHp();
+   _hp = gameInstance.playerHp();
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / 

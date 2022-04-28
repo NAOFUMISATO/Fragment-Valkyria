@@ -6,7 +6,7 @@
  * \author NAOFUMISATO
  * \date   February 2022
  *********************************************************************/
-#include "ModeBase.h"
+#include "AppFrame.h"
 /**
  * \brief プロジェクト名
  */
@@ -19,7 +19,7 @@ namespace FragmentValkyria {
        * \class モードミッション失敗クラス
        * \brief プレイヤー死亡時に表示する
        */
-      class ModeMissionFailed :public ModeBase {
+      class ModeMissionFailed :public AppFrame::Mode::ModeBase {
       public:
          /**
           * \brief コンストラクタ

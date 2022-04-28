@@ -10,7 +10,7 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamPoorEnemy.h"
 
@@ -36,11 +36,11 @@ void PoorEnemyAlmighty::Rush(const Vector4& moved) {
 
 void PoorEnemyAlmighty::CreateGatling() {
    auto gatlingFramePos = _modelAnimeComponent->GetFrameChildPosion("root", "mob_gun");
-   auto& objServer = GetObjServer();
+   auto& objServer = Game::Game::GetInstance().objServer();
    objServer.RegistVector("GatlingPos", gatlingFramePos);
    objServer.RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto gatling = gameInstance->objFactory().Create("Gatling");
+   auto& gameInstance = Game::Game::GetInstance();
+   auto gatling = gameInstance.objFactory().Create("Gatling");
    objServer.Add(std::move(gatling));
 }
 
@@ -54,9 +54,10 @@ void PoorEnemyAlmighty::StateRush::Enter() {
       return _owner._param->GetDoubleParam(paramName);
    };
    _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
-   auto moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
+   auto& objServer = Game::Game::GetInstance().objServer();
+   auto moved = objServer.GetVecData("PlayerPos") - _owner._position;
    auto [x, y, z] = moved.GetVec3();
    _moved = Vector4(x, 0.0, z);
    _moved.Normalized();
@@ -64,8 +65,8 @@ void PoorEnemyAlmighty::StateRush::Enter() {
 }
 
 void PoorEnemyAlmighty::StateRush::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = static_cast<int>(gameInstance->modeServer().frameCount() - _stateCnt);
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = static_cast<int>(modeServer.frameCount() - _stateCnt);
    if (frame <= _owner._param->GetIntParam("rush_frame")) {
       _owner.Rush(_moved);
    }
@@ -78,15 +79,16 @@ void PoorEnemyAlmighty::StateRush::Update() {
 void PoorEnemyAlmighty::StateGatling::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("attack", true, 
       _owner._param->GetDoubleParam("gatling_animespeed"));
-   _owner._gatlingMoveDirection = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
+   auto& objServer = Game::Game::GetInstance().objServer();
+   _owner._gatlingMoveDirection = objServer.GetVecData("PlayerPos") - _owner._position;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
    _remainingGatiling = _owner._param->GetIntParam("max_gatling");
 }
 
 void PoorEnemyAlmighty::StateGatling::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = gameInstance->modeServer().frameCount() - _stateCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = modeServer.frameCount() - _stateCnt;
    if (frame % _owner._param->GetIntParam("gatling_rate") == 0) {
       _owner.CreateGatling();
       --_remainingGatiling;

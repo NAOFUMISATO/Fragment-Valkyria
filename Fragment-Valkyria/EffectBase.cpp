@@ -7,7 +7,7 @@
  * \date   January 2022
  *********************************************************************/
 #include "EffectBase.h"
-#include "GameMain.h"
+#include "Game.h"
 
 using namespace FragmentValkyria::Effect;
 
@@ -23,8 +23,8 @@ void EffectBase::Update() {
 }
 
 void EffectBase::SetEffectLoadHandle(std::string_view key) {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [handle, speed] = gameInstance->resServer().GetEffectInfo(key);
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   auto [handle, speed] = resServer.GetEffectInfo(key);
    _loadHandle = handle;
    _speed = speed;
 }

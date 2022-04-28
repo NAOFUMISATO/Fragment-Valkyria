@@ -7,7 +7,11 @@
  * \date   March 2022
  *********************************************************************/
 #include "ModeTeam.h"
-#include "GameMain.h"
+#include "Game.h"
+
+namespace {
+   constexpr auto FadeFrame = 30;
+}
 
 using namespace FragmentValkyria::Mode;
 
@@ -15,7 +19,8 @@ ModeTeam::ModeTeam() {
 }
 
 void ModeTeam::Init() {
-   _grHandle = GetResServer().GetTexture("TeamLogo");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandle = resServer.GetTexture("TeamLogo");
 }
 
 void ModeTeam::Enter() {
@@ -23,17 +28,18 @@ void ModeTeam::Enter() {
 }
 
 void ModeTeam::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (!_cntInit) {
-      _fadeCnt = gameInstance->modeServer().frameCount();
+      _fadeCnt = modeServer.frameCount();
       _cntInit = true;
    }
-   auto frame = gameInstance->modeServer().frameCount() - _fadeCnt;
-   if (frame > 30) {
-      GetModeServer().GoToMode("Title");
+   auto frame = modeServer.frameCount() - _fadeCnt;
+   if (frame > FadeFrame) {
+      modeServer.GoToMode("Title");
    }
 }
 
 void ModeTeam::Render() {
-  GetTexComponent().DrawTexture(0, 0, 1.0, 0.0, _grHandle);
+   auto& texComponent = Game::Game::GetInstance().texComponent();
+   texComponent.DrawTexture(0, 0, 1.0, 0.0, _grHandle);
 }

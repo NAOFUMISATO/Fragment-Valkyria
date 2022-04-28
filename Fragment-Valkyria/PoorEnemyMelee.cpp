@@ -10,7 +10,7 @@
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
 #include "ObjectFactory.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamPoorEnemy.h"
 
@@ -43,16 +43,17 @@ void PoorEnemyMelee::StateRush::Enter() {
       return _owner._param->GetDoubleParam(paramName);
    };
    _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
-   auto gameInstance = Game::GameMain::GetInstance();
-   _stateCnt = gameInstance->modeServer().frameCount();
-   _moved = _owner.GetObjServer().GetVecData("PlayerPos") - _owner._position;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
+   auto& objServer = Game::Game::GetInstance().objServer();
+   _moved = objServer.GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
    _moved = _moved * _DoubleParam("rush_speed");
 }
 
 void PoorEnemyMelee::StateRush::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = static_cast<int>(gameInstance->modeServer().frameCount() - _stateCnt);
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = static_cast<int>(modeServer.frameCount() - _stateCnt);
    if (frame <= _owner._param->GetIntParam("rush_frame")) {
       _owner.Rush(_moved);
    }

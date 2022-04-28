@@ -14,7 +14,7 @@
 #include "CameraComponent.h"
 #include "CollisionComponent.h"
 #include "ModelAnimeComponent.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "EffectHeal.h"
 #include "EffectServer.h"
 #include "ParamPlayer.h"
@@ -61,16 +61,17 @@ void Player::Update() {
    // カメラの更新
    _cameraComponent->Update();
    // オブジェクトサーバーに位置を通知
-   GetObjServer().RegistVector("PlayerPos", _position);
+   auto& objServer = Game::Game::GetInstance().objServer();
+   objServer.RegistVector("PlayerPos", _position);
    // オブジェクトサーバーに回転を通知
-   GetObjServer().RegistVector("PlayerRot", _rotation);
+   objServer.RegistVector("PlayerRot", _rotation);
    // オブジェクトサーバーにフォワードベクトルを通知
-   GetObjServer().RegistVector("PlayerFor",GetForward());
+   objServer.RegistVector("PlayerFor",GetForward());
    auto headFramePos = modelAnimeComponent().GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Head");
-   GetObjServer().RegistVector("PlayerHeadPos", headFramePos);
-   GetObjServer().RegistVector("CamTarget", _cameraComponent->GetTarget());
+   objServer.RegistVector("PlayerHeadPos", headFramePos);
+   objServer.RegistVector("CamTarget", _cameraComponent->GetTarget());
    // オブジェクトサーバーにカメラの位置を通知
-   GetObjServer().RegistVector("CamPos", _cameraComponent->GetPos());
+   objServer.RegistVector("CamPos", _cameraComponent->GetPos());
 }
 
 void Player::Draw() {
@@ -196,8 +197,8 @@ void Player::HitCheckFromGatling() {
         // ノックバック量の設定
         _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        auto gameInstance = Game::GameMain::GetInstance();
-        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
+        auto& gameInstance = Game::Game::GetInstance();
+        gameInstance.playerHp(gameInstance.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -250,8 +251,8 @@ void Player::HitCheckFromFallObject() {
             _knockBack = knockBackDelta * 10.0;
         }
         // ダメージ量分ヒットポイントを減らす
-        auto gameInstance = Game::GameMain::GetInstance();
-        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
+        auto& gameInstance = Game::Game::GetInstance();
+        gameInstance.playerHp(gameInstance.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -281,8 +282,8 @@ void Player::HitCheckFromLaser() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackDelta * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        auto gameInstance = Game::GameMain::GetInstance();
-        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
+        auto& gameInstance = Game::Game::GetInstance();
+        gameInstance.playerHp(gameInstance.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // 当たり判定の結果を当たっていないと設定
@@ -308,8 +309,8 @@ void Player::HitCheckFromLargeEnemy() {
         // ノックバック量のベクトルを設定
         _knockBack = knockBackVec * 10.0;
         // ダメージ量分ヒットポイントを減らす
-        auto gameInstance = Game::GameMain::GetInstance();
-        gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
+        auto& gameInstance = Game::Game::GetInstance();
+        gameInstance.playerHp(gameInstance.playerHp() - _collisionComponent->damage());
         // ノックバックしていると設定
         _collisionComponent->knockBack(true);
         // カメラのズームをしないと設定
@@ -333,8 +334,8 @@ void Player::HitCheckFromPoorEnemy() {
       // ノックバック量のベクトルを設定
       _knockBack = knockBackVec * 10.0;
       // ダメージ量分ヒットポイントを減らす
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->playerHp(gameInstance->playerHp() - _collisionComponent->damage());
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.playerHp(gameInstance.playerHp() - _collisionComponent->damage());
       // ノックバックしていると設定
       _collisionComponent->knockBack(true);
       // カメラのズームをしないと設定
@@ -346,17 +347,17 @@ void Player::HitCheckFromPoorEnemy() {
 
 void Player::WeakAttack() {
     // 遠隔弱攻撃の弾を生成してオブジェクトサーバーへ追加
-   auto gameInstance = Game::GameMain::GetInstance();
-    auto bullet = gameInstance->objFactory().Create("Bullet");
-    gameInstance->objServer().Add(std::move(bullet));
+   auto& gameInstance = Game::Game::GetInstance();
+    auto bullet = gameInstance.objFactory().Create("Bullet");
+    gameInstance.objServer().Add(std::move(bullet));
 }
 
 void Player::StateBase::Update() {
    // 無敵時間中の場合
    if (_owner._invincibleCnt > 0) {
       // 無敵状態に入ってからのフレームカウント数の取得
-      auto gameInstance = Game::GameMain::GetInstance();
-      auto cnt = gameInstance->modeServer().frameCount() - _owner._invincibleModeCnt;
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      auto cnt = modeServer.frameCount() - _owner._invincibleModeCnt;
       // 既定のフレーム数経過したら
       const auto blinkingFrame = _owner._param->GetIntParam("blinking_frame");
       if (cnt % (blinkingFrame * 2) == 0) {
@@ -403,8 +404,8 @@ void Player::StateBase::Draw() {
 }
 
 void Player::StateIdle::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("stay", true, 
       _owner._param->GetDoubleParam("idle_animespeed"));
@@ -422,8 +423,8 @@ void Player::StateIdle::Input(InputManager& input) {
       return _owner._param->GetIntParam(paramName);
    };
    // デッドゾーンの取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance.sensitivity();
    auto joypad = input.GetXJoypad();
    const auto DeadZoneRange = _IntParam("walk_dead_zone_range");
    // 左スティックが動いているか確認
@@ -480,12 +481,12 @@ void Player::StateIdle::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (joypad.XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
+   if (joypad.XClick() && gameInstance.playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (joypad.YClick() && gameInstance->playerPortion() > 0 &&
-      gameInstance->playerHp() < _owner._param->GetDoubleParam("max_hp")) {
+   if (joypad.YClick() && gameInstance.playerPortion() > 0 &&
+      gameInstance.playerHp() < _owner._param->GetDoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -514,8 +515,8 @@ void Player::StateIdle::Update() {
 }
 
 void Player::StateWalk::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // オブジェクトを持ち上げられると設定
    _owner._isLift = true;
    // モデルのアニメーションの設定
@@ -543,8 +544,8 @@ void Player::StateWalk::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Walk");
    // デッドゾーンの取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
+   auto& gameInstance = Game::Game::GetInstance();
+   auto [cameraSens, aimSens, deadZone] = gameInstance.sensitivity();
    // 移動しているかのフラグを作成して初期ではしていないと設定
    auto moved = false;
    // カメラから注視点への方向単位ベクトルをもとめる
@@ -636,12 +637,12 @@ void Player::StateWalk::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
+   if (input.GetXJoypad().XClick() && gameInstance.playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && gameInstance->playerPortion() > 0 &&
-      gameInstance->playerHp() < _DoubleParam("max_hp")) {
+   if (input.GetXJoypad().YClick() && gameInstance.playerPortion() > 0 &&
+      gameInstance.playerHp() < _DoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
    // 移動しているかのフラグが移動していないとなっているか確認
@@ -703,9 +704,9 @@ void Player::StateRun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("run_02", true,
       _owner._param->GetDoubleParam("run_animespeed"));
    // ゲームのフレームカウントの取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
-   auto count = gameInstance->modeServer().frameCount();
+   auto& modeServer= AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
+   auto count = modeServer.frameCount();
    // この状態へ入った時のゲームのフレームカウントの
    _footCnt = count;
 }
@@ -730,10 +731,11 @@ void Player::StateRun::Input(InputManager& input) {
    // 待機状態の落下オブジェクトと当たっているか確認
    _owner.HitCheckFromIdleFallObject("Run");
    // 左スティックの入力を数フレーム待つ
-   auto gameInstance = Game::GameMain::GetInstance();
-   if ((gameInstance->modeServer().frameCount() - _footCnt) % _IntParam("wait_frame") == 0) {
+   auto& gameInstance = Game::Game::GetInstance();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   if ((modeServer.frameCount() - _footCnt) % _IntParam("wait_frame") == 0) {
       // デッドゾーンの取得
-      auto [cameraSens, aimSens, deadZone] = gameInstance->sensitivity();
+      auto [cameraSens, aimSens, deadZone] = gameInstance.sensitivity();
       // 移動しているかのフラグを作成して初期ではしていないと設定
       auto moved = false;
       // カメラから注視点への方向単位ベクトルをもとめる
@@ -864,12 +866,12 @@ void Player::StateRun::Input(InputManager& input) {
       _owner._cameraComponent->SetZoom(true);
    }
    // Xボタンが押されていて、遠隔弱攻撃の残り弾数が遠隔弱攻撃の最大弾数未満だったら装填状態へ
-   if (input.GetXJoypad().XClick() && gameInstance->playerBullet() < _IntParam("max_bullet")) {
+   if (input.GetXJoypad().XClick() && gameInstance.playerBullet() < _IntParam("max_bullet")) {
       _owner._stateServer->GoToState("Reload");
    }
    // Yボタンが押されていて、ポーションの数が0より大きくヒットポイントが最大ヒットポイント未満だったら回復状態へ
-   if (input.GetXJoypad().YClick() && gameInstance->playerPortion() > 0 &&
-      gameInstance->playerHp() < _DoubleParam("max_hp")) {
+   if (input.GetXJoypad().YClick() && gameInstance.playerPortion() > 0 &&
+      gameInstance.playerHp() < _DoubleParam("max_hp")) {
       _owner._stateServer->GoToState("Recovery");
    }
 }
@@ -900,14 +902,15 @@ void Player::StateRun::Update() {
 }
 
 void Player::StateShootReady::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true,
       _owner._param->GetDoubleParam("shootready_animespeed"));
    // 鳴らすサウンドの設定
-   _owner.GetSoundComponent().Play("PlayerShootReady");
-   _owner.GetSoundComponent().Play("PlayerObjectUpVoice");
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   soundComponent.Play("PlayerShootReady");
+   soundComponent.Play("PlayerObjectUpVoice");
    // アニメーションは変えていないと設定
    _changeAnim = false;
    // エイム中と設定
@@ -924,8 +927,9 @@ void Player::StateShootReady::Input(InputManager& input) {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
       // 鳴らすサウンドの設定
-      _owner.GetSoundComponent().Play("PlayerShoot");
-      _owner.GetSoundComponent().Play("PlayerObjectShootVoice");
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      soundComponent.Play("PlayerShoot");
+      soundComponent.Play("PlayerObjectShootVoice");
       // モデルのアニメーションの設定
       _owner._modelAnimeComponent->ChangeAnime("H_attack_attack",false, 
          _owner._param->GetDoubleParam("shoot_animespeed"));
@@ -973,12 +977,13 @@ void Player::StateShootReady::Exit() {
 }
 
 void Player::StateKnockBack::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner.modelAnimeComponent().ChangeAnime("damaged", false,
       _owner._param->GetDoubleParam("knockback_animespeed"));
-   _owner.GetSoundComponent().Play("PlayerDamageVoice");
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   soundComponent.Play("PlayerDamageVoice");
    // ノックバックする時間の設定
    _owner._freezeTime = 30;
    // オブジェクトを持ち上げられないと設定
@@ -1001,8 +1006,8 @@ void Player::StateKnockBack::Update() {
       return;
    }
    // ヒットポイントが0以下だった場合死亡状態へ
-   auto gameInstance = Game::GameMain::GetInstance();
-   if (gameInstance->playerHp() <= 0) {
+   auto& gameInstance = Game::Game::GetInstance();
+   if (gameInstance.playerHp() <= 0) {
       _owner._stateServer->GoToState("Die");
    }
    // ヒットポイントが0以下じゃなかった場合
@@ -1010,7 +1015,8 @@ void Player::StateKnockBack::Update() {
       // 無敵時間の設定
       _owner._invincibleCnt = _owner._param->GetIntParam("invincible_frame");
       // 無敵状態に入った時のモードサーバーのフレームカウント数の設定
-      _owner._invincibleModeCnt = gameInstance->modeServer().frameCount();
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      _owner._invincibleModeCnt = modeServer.frameCount();
       // ノックバックしていないと設定
       _owner.collisionComponent().knockBack(false);
       // 当たり判定の結果を当たっていないと設定
@@ -1040,23 +1046,24 @@ void Player::StateDie::Update() {
    }
    // ゲームオーバーまでのフレーム数がたった場合
    else {
-      auto& soundComponent = _owner.GetSoundComponent();
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
       soundComponent.Stop("PoorBattleBgm");
       soundComponent.Stop("BossBattleBgm");
       soundComponent.Stop("TutorialBgm");
       // モードサーバーにゲームオーバーモードを挿入
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->modeServer().PushBack("MissionFailed");
+      auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.PushBack("MissionFailed");
    }
 }
 
 void Player::StateWeakShootReady::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
-   _owner.GetSoundComponent().Play("WeakShootReady");
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   soundComponent.Play("WeakShootReady");
    // エイム中と設定
    _owner._isAim = true;
    // オブジェクトを持ち上げられないと設定
@@ -1065,8 +1072,9 @@ void Player::StateWeakShootReady::Enter() {
 
 void Player::StateWeakShootReady::Input(InputManager& input) {
    // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があるか確認
-   auto gameInstance = Game::GameMain::GetInstance();
-   if (input.GetXJoypad().RBClick() && _owner._coolTime <= 0 && gameInstance->playerBullet() > 0) {
+   auto& gameInstance = Game::Game::GetInstance();
+   if (input.GetXJoypad().RBClick() && _owner._coolTime <= 0 && 
+      gameInstance.playerBullet() > 0) {
       // RBボタンが押されていてクールタイムがなく、遠隔弱攻撃の残り弾数があった場合
       // 遠隔弱攻撃処理
       _owner.WeakAttack();
@@ -1074,9 +1082,10 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
       _owner._modelAnimeComponent->ChangeAnime("L_attack_attack", false, 
          _owner._param->GetDoubleParam("shoot_animespeed"));
       // 鳴らすサウンドの設定
-      _owner.GetSoundComponent().Play("PlayerShoot");
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      soundComponent.Play("PlayerShoot");
       // 遠隔弱攻撃の残り弾数を減らす
-      gameInstance->playerBullet(gameInstance->playerBullet() - 1);
+      gameInstance.playerBullet(gameInstance.playerBullet() - 1);
       // クールタイムの設定
       _owner._coolTime = _owner._param->GetIntParam("cooltime");
    }
@@ -1117,23 +1126,24 @@ void Player::StateWeakShootReady::Exit() {
 }
 
 void Player::StateReload::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("reload", true,0.5);
    // リロード状態のカウントを0に設定
    _reloadCnt = 0;
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
-   _owner.GetSoundComponent().Play("Reload");
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   soundComponent.Play("Reload");
 }
 
 void Player::StateReload::Update() {
    StateBase::Update();
    // リロード状態のカウントが既定の値よりも大きかったら待機状態へ
    if (_reloadCnt > 60 * 2) {
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->playerBullet(5);
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.playerBullet(5);
       _owner._stateServer->GoToState("Idle");
    }
    // 当たり判定処理を行うクラスでプレイヤーがガトリングと当たっているか確認
@@ -1159,8 +1169,8 @@ void Player::StateReload::Update() {
 }
 
 void Player::StateRecovery::Enter() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _owner._stateCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _owner._stateCnt = modeServer.frameCount();
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("heal", false);
    // 回復状態のカウントを0に設定
@@ -1168,7 +1178,8 @@ void Player::StateRecovery::Enter() {
    auto efcHeal = std::make_unique<Effect::EffectHeal>("Heal");
    auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
    efcHeal->position(hipsFramePos);
-   _owner.GetEfcServer().Add(std::move(efcHeal));
+   auto& efcServer = Game::Game::GetInstance().efcServer();
+   efcServer.Add(std::move(efcHeal));
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
 }
@@ -1191,14 +1202,14 @@ void Player::StateRecovery::Update() {
       // 回復量の設定
       auto recovery = MaxHp * _DoubleParam("recovery_rate");
       // ヒットポイントを回復量分増やす
-      auto gameInstance = Game::GameMain::GetInstance();
-      gameInstance->playerHp(gameInstance->playerHp() + recovery);
+      auto& gameInstance = Game::Game::GetInstance();
+      gameInstance.playerHp(gameInstance.playerHp() + recovery);
       // ヒットポイントが最大値よりも大きくなった場合ヒットポイントを最大値にする
-      if (gameInstance->playerHp() >= MaxHp) {
-         gameInstance->playerHp(MaxHp);
+      if (gameInstance.playerHp() >= MaxHp) {
+         gameInstance.playerHp(MaxHp);
       }
       // ポーションの数を一つ減らす
-      gameInstance->playerPortion(gameInstance->playerPortion() - 1);
+      gameInstance.playerPortion(gameInstance.playerPortion() - 1);
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
    }
@@ -1226,8 +1237,9 @@ void Player::StateRecovery::Update() {
 
 void Player::StateRun::FootStepSound() {
    // フレームカウントの取得
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto count = gameInstance->modeServer().frameCount();
+   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto count = modeServer.frameCount();
    // カウントが一定以上経過しているか
    if (count - _footCnt >= FootStepStart) {
       // プレイヤーの両踵フレームの取得
@@ -1243,7 +1255,7 @@ void Player::StateRun::FootStepSound() {
       else {
          // 右足音が鳴るフラグがtrueか
          if (_footRightStep) {
-            _owner.GetSoundComponent().Play("PlayerRightFootStep");  // 足音の再生
+            soundComponent.Play("PlayerRightFootStep");  // 足音の再生
             _footRightStep = false;                                  // 足音が鳴るフラグをfalse
          }
       }
@@ -1254,8 +1266,7 @@ void Player::StateRun::FootStepSound() {
       else {
          // 左足音が鳴るフラグがtrueか
          if (_footLeftStep) {
-            auto& soundServer = _owner.GetSoundComponent();
-            soundServer.Play("PlayerLeftFootStep");  // 足音の再生
+            soundComponent.Play("PlayerLeftFootStep");  // 足音の再生
             _footLeftStep = false;                   // 足音が鳴るフラグをfalse
          }
       }

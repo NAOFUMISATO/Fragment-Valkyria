@@ -7,7 +7,7 @@
  * \date   February 2022
  *********************************************************************/
 #include "ModeMissionFailed.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ParamModeGameOver.h"
 
 namespace {
@@ -24,8 +24,10 @@ ModeMissionFailed::ModeMissionFailed()  {
 }
 
 void ModeMissionFailed::Init() {
-   GetLoadJson().LoadTextures("over");
-   _grHandles = GetResServer().GetTextures("MissionFailed");
+   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   loadresJson.LoadTextures("over");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("MissionFailed");
 }
 
 void ModeMissionFailed::Enter() {
@@ -35,22 +37,26 @@ void ModeMissionFailed::Enter() {
 
 void ModeMissionFailed::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().AClick()) {
-      GetModeServer().PopBack();
-      GetModeServer().GoToMode("GameOver", 'S');
+      auto&  modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      modeServer.PopBack();
+      modeServer.GoToMode("GameOver", 'S');
    }
 }
 
 void ModeMissionFailed::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (!_cntInit) {
-      _animeCnt = gameInstance->modeServer().frameCount();
+      _animeCnt = modeServer.frameCount();
       _cntInit = true;
-      GetSoundComponent().Play("GameOverVoice");
-      GetSoundComponent().Play("GameOver");
+      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      soundComponent.Play("GameOverVoice");
+      soundComponent.Play("GameOver");
    }
-   auto gameCount = static_cast<int>(gameInstance->modeServer().frameCount());
+   auto gameCount = static_cast<int>(modeServer.frameCount());
    auto frame = gameCount - _animeCnt;
-   auto allNum = std::get<0>(GetResServer().GetTextureInfo("MissionFailed").GetDivParams());
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   auto divParams = resServer.GetTextureInfo("MissionFailed").GetDivParams();
+   auto allNum = std::get<0>(divParams);
    const auto FailedAnimeSpeed = _param->GetIntParam("missionfailed_animespeed");
    if (frame < allNum * FailedAnimeSpeed) {
       _animeNo = frame / FailedAnimeSpeed % allNum;

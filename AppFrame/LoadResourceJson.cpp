@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <windows.h>
 #endif
-#include "GameBase.h"
 #include "CurrentPathServer.h"
 #include "ResourceServer.h"
 #include "Vector4.h"
@@ -36,8 +35,8 @@ namespace AppFrame {
          // jsonファイルを開き、オブジェクトを取り出す
          auto textureArray = JsonSetUp("TextureJson", jsonName);
          // 画像を格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
-         auto textureDirectory = gameInstance.pathServer().GetCurrentPath("Texture") / jsonName;
+         auto& pathInstance = Path::CurrentPathServer::GetInstance();
+         auto textureDirectory = pathInstance.GetCurrentPath("Texture") / jsonName;
          // トップレベルの配列を全て回し、格納している画像情報を全て取り出す
          for (auto& textureData : textureArray) {
             const auto keyName = textureData["keyname"];    // キー
@@ -52,7 +51,8 @@ namespace AppFrame {
             // Textureクラスを生成し、画像情報を登録
             Texture tex = Texture(texturePath, allNum, xNum, yNum, xSize, ySize);
             // 取り出したキーと画像情報を登録したTextureクラスをResourceServerに登録する
-            gameInstance.resServer().LoadTexture(keyName, tex);
+            auto& resServerInstance = ResourceServer::GetInstance();
+            resServerInstance.LoadTexture(keyName, tex);
          }
       }
 
@@ -60,16 +60,17 @@ namespace AppFrame {
          // jsonファイルを開き、オブジェクトを取り出す
          auto modelArray = JsonSetUp("ModelJson", jsonName);
          // トップレベルの配列を全て回し、格納しているモデル情報を全て取り出す
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
          for (auto& modelData : modelArray) {
             const auto keyName = modelData["keyname"];   //!< キー(モデルフォルダへのファイルパスと兼用)
             const auto fileName = modelData["filename"]; //!< ファイル名
             // モデルを格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-            auto modelDirectory = gameInstance.pathServer().GetCurrentPath("Model") / keyName;
+            auto& pathInstance = Path::CurrentPathServer::GetInstance();
+            auto modelDirectory = pathInstance.GetCurrentPath("Model") / keyName;
             // ファイルへのパスを形成
             const auto modelPath = (modelDirectory / fileName).generic_string();
             // 取り出したキーとモデルへのファイルパスをResourceServerに登録する
-            gameInstance.resServer().LoadModel(keyName, modelPath);
+            auto& resServerInstance = ResourceServer::GetInstance();
+            resServerInstance.LoadModel(keyName, modelPath);
          }
       }
 
@@ -77,8 +78,8 @@ namespace AppFrame {
          // jsonファイルを開き、オブジェクトを取り出す
          auto soundArray = JsonSetUp("SoundJson", jsonName);
          // 音源を格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
-         auto soundDirectory = gameInstance.pathServer().GetCurrentPath("Sound") / jsonName;
+         auto& pathInstance = Path::CurrentPathServer::GetInstance();
+         auto soundDirectory = pathInstance.GetCurrentPath("Sound") / jsonName;
          // トップレベルの配列を全て回し、格納している音源情報を全て取り出す
          for (auto& soundParam : soundArray) {
             const auto keyName = soundParam["keyname"];    // キー
@@ -92,7 +93,8 @@ namespace AppFrame {
             // 音源データを作成
             auto soundData = SoundData(soundPath, volume, is3Dsound, radius);
             // 取り出したキー及び音源データと事前読み込みの有無のペアをResourceServerに登録する
-            gameInstance.resServer().LoadSound(keyName, std::make_pair(soundData, isLoad));
+            auto& resServerInstance = ResourceServer::GetInstance();
+            resServerInstance.LoadSound(keyName, std::make_pair(soundData, isLoad));
          }
       }
 
@@ -100,25 +102,26 @@ namespace AppFrame {
          // jsonファイルを開き、オブジェクトを取り出す
          auto effectArray = JsonSetUp("EffectJson", jsonName);
          // トップレベルの配列を全て回し、格納しているエフェクト情報を全て取り出す
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
          for (auto& effectData : effectArray) {
             const auto keyName = effectData["keyname"];    // キー
             const auto fileName = effectData["filename"];  // ファイル名
             const auto scale = effectData["scale"];        // 初期拡大率
             const auto speed = effectData["speed"];        // 初期再生速度
             // エフェクトを格納しているフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-            auto effectDirectory = gameInstance.pathServer().GetCurrentPath("Effect") / keyName;
+            auto& pathInstance = Path::CurrentPathServer::GetInstance();
+            auto effectDirectory = pathInstance.GetCurrentPath("Effect") / keyName;
             // ファイルへのパスを形成
             const auto effectPath = (effectDirectory / fileName).generic_string();
             // 取り出したキー及びエフェクトへのファイルパスと初期拡大率と初期再生速度のtuple型をResourceServerに登録する
-            gameInstance.resServer().LoadEffect(keyName, std::make_tuple(effectPath, scale, speed));
+            auto& resServerInstance = ResourceServer::GetInstance();
+            resServerInstance.LoadEffect(keyName, std::make_tuple(effectPath, scale, speed));
          }
       }
 
       nlohmann::json LoadResourceJson::JsonSetUp(const std::string_view pathName, const std::filesystem::path jsonName) {
          // 値情報を格納しているjsonフォルダへのパスを、ゲーム本体側で定義したパスサーバーから取得する
-         auto& gameInstance = AppFrame::Game::GameBase::GetInstance();
-         auto jsonDirectory = gameInstance.pathServer().GetCurrentPath(pathName);
+         auto& pathInstance = Path::CurrentPathServer::GetInstance();
+         auto jsonDirectory = pathInstance.GetCurrentPath(pathName);
          auto jsonPath = (jsonDirectory / jsonName).generic_string() + ".json";
          // 指定したjsonファイルを読み取り専用で開く
          std::ifstream reading(jsonPath, std::ios::in);

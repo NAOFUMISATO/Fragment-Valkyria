@@ -8,6 +8,7 @@
  *********************************************************************/
 #include "Bullet.h"
 #include "CollisionComponent.h"
+#include "Game.h"
 #include "ObjectServer.h"
 #include "ParamBullet.h"
 
@@ -20,7 +21,8 @@ Bullet::Bullet() {
 
 void Bullet::Init() {
    // カメラの注視点へのベクトルを取得
-   _moved = GetObjServer().GetVecData("CamTarget") - _position;
+   auto& objServer = Game::Game::GetInstance().objServer();
+   _moved = objServer.GetVecData("CamTarget") - _position;
    // 単位化する
    _moved.Normalized();
 }

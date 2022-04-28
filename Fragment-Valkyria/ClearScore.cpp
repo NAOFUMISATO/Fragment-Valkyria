@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "ClearScore.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ParamModeClear.h"
 
 namespace {
@@ -30,9 +30,10 @@ void ClearScore::Init() {
       return _param->GetIntParam(paramName);
    };
    _position = _param->GetVecParam("score_pos");
-   auto handles = GetResServer().GetTextures("ClearScore");
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto timer = static_cast<int>(gameInstance->ingameTimer());
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   auto handles = resServer.GetTextures("ClearScore");
+   auto& gameInstance = Game::Game::GetInstance();
+   auto timer = static_cast<int>(gameInstance.ingameTimer());
    const auto CScoreSec = _IntParam("c_scoresec");
    const auto BScoreSec = _IntParam("b_scoresec");
    const auto AScoreSec = _IntParam("a_scoresec");

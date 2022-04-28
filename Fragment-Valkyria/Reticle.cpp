@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "Reticle.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "Player.h"
 #include "ObjectServer.h"
 #include "PlayerHP.h"
@@ -25,13 +25,14 @@ Reticle::Reticle() {
 }
 
 void Reticle::Init() {
-   _grHandles = GetResServer().GetTextures("Reticle");
+   auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
+   _grHandles = resServer.GetTextures("Reticle");
    _position = _param->GetVecParam("reticle_pos");
 }
 
 void Reticle::Update() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   for (auto&& object : gameInstance->objServer().runObjects()) {
+   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   for (auto&& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player&>(*object);
          _isAim = player.isAim();
@@ -42,7 +43,8 @@ void Reticle::Update() {
 void Reticle::Draw() {
    if (_isAim) {
       auto [x, y, z] = _position.GetVec3();
-      GetTexComponent().DrawTexture(static_cast<int>(x), static_cast<int>(y),
+      auto& texComponent = Game::Game::GetInstance().texComponent();
+      texComponent.DrawTexture(static_cast<int>(x), static_cast<int>(y),
          DefaultScale, DefaultAngle, _grHandles, _param->GetIntParam("reticle_animespeed"));
    }
 }

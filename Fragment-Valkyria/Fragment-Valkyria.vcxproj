@@ -187,7 +187,7 @@
     <ClInclude Include="EffectWeakBullet.h" />
     <ClInclude Include="FallObject.h" />
     <ClInclude Include="FallObjectCreator.h" />
-    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Gatling.h" />
     <ClInclude Include="GatlingCreator.h" />
     <ClInclude Include="LargeEnemy.h" />
@@ -198,7 +198,6 @@
     <ClInclude Include="LightAndShadow.h" />
     <ClInclude Include="LoadStageFromJson.h" />
     <ClInclude Include="ModeAmg.h" />
-    <ClInclude Include="ModeBase.h" />
     <ClInclude Include="ModeBoss.h" />
     <ClInclude Include="ModeClearResult.h" />
     <ClInclude Include="ModeGameOver.h" />
@@ -283,7 +282,7 @@
     <ClCompile Include="FallObjectCreator.cpp" />
     <ClCompile Include="GatlingCreator.cpp" />
     <ClCompile Include="LargeEnemy.cpp" />
-    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="LargeEnemyCreator.cpp" />
     <ClCompile Include="LargeEnemyHP.cpp" />
     <ClCompile Include="Laser.cpp" />
@@ -291,7 +290,6 @@
     <ClCompile Include="LightAndShadow.cpp" />
     <ClCompile Include="LoadStageFromJson.cpp" />
     <ClCompile Include="ModeAmg.cpp" />
-    <ClCompile Include="ModeBase.cpp" />
     <ClCompile Include="ModeBoss.cpp" />
     <ClCompile Include="ModeClearResult.cpp" />
     <ClCompile Include="ModeGameOver.cpp" />

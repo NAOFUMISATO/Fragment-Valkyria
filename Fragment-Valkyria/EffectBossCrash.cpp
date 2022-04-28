@@ -7,7 +7,7 @@
  * \date   March 2022
  *********************************************************************/
 #include "EffectBossCrash.h"
-#include "GameMain.h"
+#include "Game.h"
 #include "ObjectServer.h"
 
 using namespace FragmentValkyria::Effect;
@@ -18,8 +18,8 @@ EffectBossCrash::EffectBossCrash(std::string_view key) :EffectBase{key } {
 }
 
 void EffectBossCrash::Init() {
-   auto gameInstance = Game::GameMain::GetInstance();
-   _efcCnt = gameInstance->modeServer().frameCount();
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _efcCnt = modeServer.frameCount();
    EffectBase::Update();
 }
 
@@ -32,11 +32,12 @@ void EffectBossCrash::Update() {
    const auto _IntParam = [&](std::string paramName) {
       return _param->GetIntParam(paramName);
    };
-   auto gameInstance = Game::GameMain::GetInstance();
-   auto frame = gameInstance->modeServer().frameCount() - _efcCnt;
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto frame = modeServer.frameCount() - _efcCnt;
    if (frame % _IntParam("crasheffect_frame") == 0) {
       for (int i = 0; i < _IntParam("crasheffect_count"); i++) {
-         auto largeEnemyPos = gameInstance->objServer().GetVecData("LargeEnemyPos");
+         auto& gameInstance = Game::Game::GetInstance();
+         auto largeEnemyPos = gameInstance.objServer().GetVecData("LargeEnemyPos");
          const auto CrashDistance = _param->GetDoubleParam("crasheffect_distance");
          auto randomX = AppFrame::Math::Utility::GetRandom(-CrashDistance, CrashDistance);
          auto randomY = AppFrame::Math::Utility::GetRandom(0.0, CrashDistance);
