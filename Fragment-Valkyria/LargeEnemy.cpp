@@ -531,8 +531,9 @@ void LargeEnemy::StateFallObject::Update() {
 }
 
 void LargeEnemy::StateGatling::Enter() {
-   // ガトリング攻撃をするための回転をしていない時に経過させるフレームカウントの設定
-   _gatlingFrameCnt = 0;
+   // この状態になった時のゲームのフレームカウントの保存
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   _stateCnt = modeServer.frameCount();
    // ガトリングの弾を打つ回数の設定
    _owner._gatlingCnt = 10;
    // 向かせたい方向のベクトルを大きくする値を設定
@@ -541,42 +542,36 @@ void LargeEnemy::StateGatling::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("gatoring", true);
 }
 
-void LargeEnemy::StateGatling::Update() {
-   // 回転していない時のフレームカウントが既定の値よりも大きく既定のフレーム数経過し攻撃していない場合
-   if (_gatlingFrameCnt >= 100 && 
-      _gatlingFrameCnt % _owner._param->GetIntParam("gatling_frame") == 0 &&
-      _owner._attack == false) {
+void LargeEnemy::StateGatling::Update() {    // この状態に入ってからのフレーム数の取得
+   auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+   auto cnt = modeServer.frameCount() - _stateCnt;
+   // 既定のフレーム数経過していた場合
+   auto& gameInstance = Game::Game::GetInstance();
+   if (cnt >= 100 &&
+      cnt % _owner._param->GetIntParam("gatling_frame") == 0 && _owner._attack == false) {
       // 向かせたい方向の設定
       auto& objServer = Game::Game::GetObjServer();
       _owner._rotateDir = objServer.GetVecData("PlayerPos") - _owner._position;
       // 攻撃していると設定
       _owner._attack = true;
-      // 回転していると設定
-      _owner._rotating = true;
-      // 回転していない時のフレームカウントの更新
-      ++_gatlingFrameCnt;
    }
    // 攻撃しているか確認
    if (_owner._attack) {
       // 攻撃している場合
       // 攻撃をする方向へ回転させる
-      _owner.AreaRotate(_owner._rotating);
-      // 回転が終了しているか確認
-      if (!_owner._rotating) {
-         // 終了していたらガトリングを生成
-         _owner.CreateGatling();
-         // ガトリングの弾を打つ回数の更新
-         --_owner._gatlingCnt;
-         // 鳴らすサウンドの設定
-         auto& soundComponent= Game::Game::GetSoundComponent();
-         soundComponent.Play("BossGatling", _owner._position);
-         // 攻撃していないと設定
-         _owner._attack = false;
-      }
-   }
-   // 攻撃していない場合回転していない時のフレームカウントの更新をする
-   else {
-      ++_gatlingFrameCnt;
+      auto [x, y, z] = _owner._rotateDir.GetVec3();
+      auto radian = std::atan2(-x, -z);
+      auto angle = AppFrame::Math::Utility::RadianToDegree(radian);
+      _owner._rotation.SetY(angle);
+      // ガトリングを生成
+      _owner.CreateGatling();
+      // ガトリングの弾を打つ回数の更新
+      --_owner._gatlingCnt;
+      // 鳴らすサウンドの設定
+      auto& soundComponent = gameInstance.soundComponent();
+      soundComponent.Play("BossGatling", _owner._position);
+      // 攻撃していないと設定
+      _owner._attack = false;
    }
    // ガトリングを打つ回数が0以下になったら待機状態へ
    if (_owner._gatlingCnt <= 0) {

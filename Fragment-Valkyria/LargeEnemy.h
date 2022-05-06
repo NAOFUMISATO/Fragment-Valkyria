@@ -271,8 +271,6 @@ namespace FragmentValkyria {
              * \brief 更新処理
              */
             void Update() override;
-         private:
-            int _gatlingFrameCnt{ 0 };      //!< ガトリング攻撃をするための回転していない時に経過させるフレームカウント
          };
          /**
          * \class 扇状ガトリング攻撃状態クラス

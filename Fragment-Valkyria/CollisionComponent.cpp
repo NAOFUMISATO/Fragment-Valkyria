@@ -190,6 +190,8 @@ void CollisionComponent::PlayerFromFallObjectModel(bool fall) {
             object->collisionComponent().hitPos(_owner.position());
             // プレイヤーの当たり判定の結果に待機状態の落下するオブジェクトと当たったと設定
             object->collisionComponent().report().id(ReportId::HitFromIdleFallObject);
+            // 落下するオブジェクトの当たり判定の結果に当たっていないと設定
+            _owner.collisionComponent().report().id(ReportId::None);
          }
       }
    }
