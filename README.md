@@ -21,6 +21,7 @@ OS : Windows10
 
 
 ■ プログラムファイル(cpp / h)の文字コードについて
+
 DXライブラリ が Shift_JIS で作成されておりヘッダーをincludeする都合上自身の
 プログラムファイルを UTF-8 にしてしまうとVisual Studio の方がインテリセンス
 機能などが誤動作を起こすのでShift_JIS に統一しております。
@@ -28,6 +29,7 @@ DXライブラリ が Shift_JIS で作成されておりヘッダーをinclude�
 
 
 ■ プログラムについて
+
  本プログラムは、自作した AppFrame というフレームワーク部分とそのAppFrame
 を使ってゲームロジック部分を組んだ Game の2 つの Visual Studioプロジェクト
 に分かれています。
@@ -37,5 +39,4 @@ DXライブラリ が Shift_JIS で作成されておりヘッダーをinclude�
 しています。
 
 
-■AppFrame及びFragmentValkyriaクラスダイアグラム
-「FragmentValkyriaクラスダイアグラム.pdf」ファイル参照。（[FragmentValkyriaクラスダイアグラム.pdf](https://github.com/NAOFUMISATO/Fragment-Valkyria/files/8641152/FragmentValkyria.pdf)）
+■AppFrame及びFragmentValkyriaクラスダイアグラム（[FragmentValkyriaクラスダイアグラム.pdf](https://github.com/NAOFUMISATO/Fragment-Valkyria/files/8641152/FragmentValkyria.pdf)）
