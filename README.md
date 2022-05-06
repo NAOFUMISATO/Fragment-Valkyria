@@ -1,14 +1,22 @@
 # Fragment-Valkyria
 
 AMG冬季共同制作3Dゲーム作品
+
 ジャンル：3Dシューティングアクション
 
 ■ プログラム環境
+
 OS : Windows10
+
 開発環境 : Visual Studio 2019
+
 開発言語 : C++11~20
-使用ライブラリ：DXライブラリ(https://dxlib.xsrv.jp/)
-       ：nlohmann.json(https://github.com/nlohmann/json/)
+
+使用ライブラリ
+
+：DXライブラリ(https://dxlib.xsrv.jp/)
+
+：nlohmann.json(https://github.com/nlohmann/json/)
 
 
 
