@@ -50,7 +50,7 @@ void RemainingBullet::Draw() {
    auto [x, y] = _position.GetVec2();
    auto [firstFlag, secondFlag, thirdFlag, fourthFlag, fifthFlag] = _stockFlag;
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(firstX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[firstFlag]);
    texComponent.DrawTexture(secondX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[secondFlag]);
    texComponent.DrawTexture(thirdX, static_cast<int>(y), DefalutScale, DefalutAngle, _grHandles[thirdFlag]);

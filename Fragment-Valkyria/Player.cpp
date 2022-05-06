@@ -61,7 +61,7 @@ void Player::Update() {
    // カメラの更新
    _cameraComponent->Update();
    // オブジェクトサーバーに位置を通知
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    objServer.RegistVector("PlayerPos", _position);
    // オブジェクトサーバーに回転を通知
    objServer.RegistVector("PlayerRot", _rotation);
@@ -347,9 +347,10 @@ void Player::HitCheckFromPoorEnemy() {
 
 void Player::WeakAttack() {
     // 遠隔弱攻撃の弾を生成してオブジェクトサーバーへ追加
-   auto& gameInstance = Game::Game::GetInstance();
-    auto bullet = gameInstance.objFactory().Create("Bullet");
-    gameInstance.objServer().Add(std::move(bullet));
+   auto& objFactory = Game::Game::GetObjFactory();
+    auto bullet = objFactory.Create("Bullet");
+    auto& objServer = Game::Game::GetObjServer();
+    objServer.Add(std::move(bullet));
 }
 
 void Player::StateBase::Update() {
@@ -908,7 +909,7 @@ void Player::StateShootReady::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("H_attack_pose_move", true,
       _owner._param->GetDoubleParam("shootready_animespeed"));
    // 鳴らすサウンドの設定
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("PlayerShootReady");
    soundComponent.Play("PlayerObjectUpVoice");
    // アニメーションは変えていないと設定
@@ -927,7 +928,7 @@ void Player::StateShootReady::Input(InputManager& input) {
       // 待機状態へ
       _owner._stateServer->GoToState("Idle");
       // 鳴らすサウンドの設定
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Play("PlayerShoot");
       soundComponent.Play("PlayerObjectShootVoice");
       // モデルのアニメーションの設定
@@ -982,7 +983,7 @@ void Player::StateKnockBack::Enter() {
    // モデルのアニメーションの設定
    _owner.modelAnimeComponent().ChangeAnime("damaged", false,
       _owner._param->GetDoubleParam("knockback_animespeed"));
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("PlayerDamageVoice");
    // ノックバックする時間の設定
    _owner._freezeTime = 30;
@@ -1046,7 +1047,7 @@ void Player::StateDie::Update() {
    }
    // ゲームオーバーまでのフレーム数がたった場合
    else {
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Stop("PoorBattleBgm");
       soundComponent.Stop("BossBattleBgm");
       soundComponent.Stop("TutorialBgm");
@@ -1062,7 +1063,7 @@ void Player::StateWeakShootReady::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("L_attack_pose_loop", true);
    // 鳴らすサウンドの設定
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("WeakShootReady");
    // エイム中と設定
    _owner._isAim = true;
@@ -1082,7 +1083,7 @@ void Player::StateWeakShootReady::Input(InputManager& input) {
       _owner._modelAnimeComponent->ChangeAnime("L_attack_attack", false, 
          _owner._param->GetDoubleParam("shoot_animespeed"));
       // 鳴らすサウンドの設定
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Play("PlayerShoot");
       // 遠隔弱攻撃の残り弾数を減らす
       gameInstance.playerBullet(gameInstance.playerBullet() - 1);
@@ -1134,7 +1135,7 @@ void Player::StateReload::Enter() {
    _reloadCnt = 0;
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("Reload");
 }
 
@@ -1178,7 +1179,7 @@ void Player::StateRecovery::Enter() {
    auto efcHeal = std::make_unique<Effect::EffectHeal>("Heal");
    auto hipsFramePos = _owner._modelAnimeComponent->GetFrameChildPosion("Kamilla_kari_Reference", "Kamilla_kari_Hips");
    efcHeal->position(hipsFramePos);
-   auto& efcServer = Game::Game::GetInstance().efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcHeal));
    // オブジェクトを持ち上げられないと設定
    _owner._isLift = false;
@@ -1237,7 +1238,7 @@ void Player::StateRecovery::Update() {
 
 void Player::StateRun::FootStepSound() {
    // フレームカウントの取得
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    auto count = modeServer.frameCount();
    // カウントが一定以上経過しているか

@@ -21,7 +21,7 @@ Bullet::Bullet() {
 
 void Bullet::Init() {
    // カメラの注視点へのベクトルを取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _moved = objServer.GetVecData("CamTarget") - _position;
    // 単位化する
    _moved.Normalized();

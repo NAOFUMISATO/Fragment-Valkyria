@@ -546,7 +546,6 @@ void LargeEnemy::StateGatling::Update() {    // この状態に入ってからのフレーム数
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    auto cnt = modeServer.frameCount() - _stateCnt;
    // 既定のフレーム数経過していた場合
-   auto& gameInstance = Game::Game::GetInstance();
    if (cnt >= 100 &&
       cnt % _owner._param->GetIntParam("gatling_frame") == 0 && _owner._attack == false) {
       // 向かせたい方向の設定
@@ -568,7 +567,7 @@ void LargeEnemy::StateGatling::Update() {    // この状態に入ってからのフレーム数
       // ガトリングの弾を打つ回数の更新
       --_owner._gatlingCnt;
       // 鳴らすサウンドの設定
-      auto& soundComponent = gameInstance.soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Play("BossGatling", _owner._position);
       // 攻撃していないと設定
       _owner._attack = false;

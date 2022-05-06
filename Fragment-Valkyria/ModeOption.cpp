@@ -38,7 +38,7 @@ void ModeOption::Init() {
    const auto _DoubleParam = [&](std::string paramName) {
       return _param->GetDoubleParam(paramName);
    };
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("option");
 
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
@@ -127,7 +127,7 @@ void ModeOption::StateBase::Draw() {
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
    auto handleMap = _owner._handleMap;
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(_IntParam("camerasens_x"), _IntParam("camerasens_y"),
       DefaultGraphScale, DefaultGraphAngle, handleMap["CameraSensivity"]);
    texComponent.DrawTexture(_IntParam("camerabar_x"), _IntParam("camerabar_y"),
@@ -169,7 +169,7 @@ void ModeOption::StateCameraSencivitySelect::Enter() {
 }
 
 void ModeOption::StateCameraSencivitySelect::Input(AppFrame::Input::InputManager& input) {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DUpClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("ReturnSelect");
@@ -201,7 +201,7 @@ void ModeOption::StateAimSencivitySelect::Enter() {
 }
 
 void ModeOption::StateAimSencivitySelect::Input(AppFrame::Input::InputManager& input) {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DUpClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("CameraSencivitySelect");
@@ -233,7 +233,7 @@ void ModeOption::StateDeadZoneSelect::Enter() {
 }
 
 void ModeOption::StateDeadZoneSelect::Input(AppFrame::Input::InputManager& input) {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DUpClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("AimSencivitySelect");
@@ -265,7 +265,7 @@ void ModeOption::StateReturnSelect::Enter() {
 }
 
 void ModeOption::StateReturnSelect::Input(AppFrame::Input::InputManager& input) {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DUpClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("DeadZoneSelect");

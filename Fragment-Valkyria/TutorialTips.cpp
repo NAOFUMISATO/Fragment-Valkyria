@@ -182,7 +182,7 @@ void TutorialTips::StateJudge::ReloadJudge(InputManager& input) {
 }
 
 void TutorialTips::StateJudge::ObjectShootJudge(InputManager& input) {
-   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    for (auto& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player::Player&>(*object);

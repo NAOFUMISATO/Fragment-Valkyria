@@ -31,7 +31,7 @@ void Reticle::Init() {
 }
 
 void Reticle::Update() {
-   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    for (auto&& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::Player) {
          auto& player = dynamic_cast<Player&>(*object);
@@ -43,7 +43,7 @@ void Reticle::Update() {
 void Reticle::Draw() {
    if (_isAim) {
       auto [x, y, z] = _position.GetVec3();
-      auto& texComponent = Game::Game::GetInstance().texComponent();
+      auto& texComponent = Game::Game::GetTexComponent();
       texComponent.DrawTexture(static_cast<int>(x), static_cast<int>(y),
          DefaultScale, DefaultAngle, _grHandles, _param->GetIntParam("reticle_animespeed"));
    }

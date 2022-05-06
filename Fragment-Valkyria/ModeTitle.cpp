@@ -25,11 +25,11 @@ ModeTitle::ModeTitle() {
 }
 
 void ModeTitle::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadSounds("outgame");
 
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
-    
+
    _handleMap = {
       {"TitleBg",          resServer.GetTextures("TitleBg") },
       {"TitleLogo",        resServer.GetTextures("TitleLogo") },
@@ -54,11 +54,12 @@ void ModeTitle::Init() {
 }
 
 void ModeTitle::Enter() {
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.soundComponent().PlayLoop("TitleBgm");
+   auto& soundComponent = Game::Game::GetSoundComponent();
+   soundComponent.PlayLoop("TitleBgm");
    _stateServer->PushBack("AnyButton");
    _logoHandle = _handleMap["TitleLogo"][0];
    _cntInit = false;
+   auto& gameInstance = Game::Game::GetInstance();
    gameInstance.isTutorialClear(false);
    gameInstance.isPoorClear(false);
 }
@@ -77,10 +78,10 @@ void ModeTitle::Render() {
 }
 
 void ModeTitle::LogoAnimation() {
-   auto& gameInstance = Game::Game::GetInstance();
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (!_cntInit) {
-      gameInstance.soundComponent().Play("TitleVoice");
+      auto& soundComponent = Game::Game::GetSoundComponent();
+      soundComponent.Play("TitleVoice");
       _logoCnt = modeServer.frameCount();
       _cntInit = true;
    }
@@ -104,7 +105,7 @@ void ModeTitle::StateBase::Draw() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.TransDrawTexture(_IntParam("bg_x"), _IntParam("bg_y"), TitleBgCX, TitleBgCY,
       DefaultGraphScale, DefaultGraphAngle, handleMap["TitleBg"], DefaultAnimeSpeed, false, false);
    DrawGraph(_IntParam("title_x"), _IntParam("title_y"), _owner._logoHandle, true);
@@ -146,7 +147,7 @@ void ModeTitle::StateAnyButton::Input(InputManager& input){
    if (_IsInput({ joypad.XClick(), joypad.YClick(),joypad.AClick(),
       joypad.BClick(),keyboard.UpClick(),keyboard.DownClick(),
       keyboard.RightClick(),keyboard.LeftClick(),keyboard.SpaceClick() })) {
-      auto& soundComponent= Game::Game::GetInstance().soundComponent();
+      auto& soundComponent= Game::Game::GetSoundComponent();
       soundComponent.Play("SystemDecision");
       _owner._stateServer->GoToState("StartSelect");
    }
@@ -175,7 +176,7 @@ void ModeTitle::StateStartSelect::Input(InputManager& input) {
    };
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (_IsInput(joypad.DDownClick(), keyboard.DownClick())) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");
@@ -211,7 +212,7 @@ void ModeTitle::StateOptionSelect::Input(InputManager& input) {
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
 
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
       soundComponent.Play("SystemSelect");
@@ -247,8 +248,7 @@ void ModeTitle::StateEndSelect::Input(InputManager& input) {
    };
    auto joypad = input.GetXJoypad();      // XInput対応ジョイパッドの入力管理クラスの参照
    auto keyboard = input.GetKeyboard();   // キーボードの入力管理クラスの参照
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& soundComponent = gameInstance.soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (_IsInput(joypad.DUpClick(), keyboard.UpClick())) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("OptionSelect");

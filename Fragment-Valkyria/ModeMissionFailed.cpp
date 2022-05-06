@@ -24,7 +24,7 @@ ModeMissionFailed::ModeMissionFailed()  {
 }
 
 void ModeMissionFailed::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("over");
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _grHandles = resServer.GetTextures("MissionFailed");
@@ -48,7 +48,7 @@ void ModeMissionFailed::Update() {
    if (!_cntInit) {
       _animeCnt = modeServer.frameCount();
       _cntInit = true;
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Play("GameOverVoice");
       soundComponent.Play("GameOver");
    }

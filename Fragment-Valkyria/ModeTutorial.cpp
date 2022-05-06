@@ -41,9 +41,12 @@ ModeTutorial::ModeTutorial() {
 }
 
 void ModeTutorial::Init() {
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.loadresJson().LoadSounds("ingame");
-   gameInstance.loadStage().LoadStageModels("Stage");
+   // 音源の読み込み
+   auto& loadresJson = Game::Game::GetLoadresJson();
+   loadresJson.LoadSounds("ingame");
+   // ステージリソースの読み込み
+   auto& loadStage = Game::Game::GetLoadStage();
+   loadStage.LoadStageModels("Stage");
 }
 
 void ModeTutorial::Enter() {
@@ -55,10 +58,8 @@ void ModeTutorial::Enter() {
    const auto _IntParam = [&](std::string paramName) {
       return _param->GetIntParam(paramName);
    };
-   using Vector4 = AppFrame::Math::Vector4;
-
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& objFactory = gameInstance.objFactory();
+   // 各生成管理クラスの登録
+   auto& objFactory = Game::Game::GetObjFactory();
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
@@ -66,24 +67,31 @@ void ModeTutorial::Enter() {
    objFactory.Register("PoorEnemyGatling", std::make_unique<Create::PoorEnemyGatlingCreator>());
    objFactory.Register("PoorEnemyMelee", std::make_unique<Create::PoorEnemyMeleeCreator>());
    objFactory.Register("PoorEnemyAlmighty", std::make_unique<Create::PoorEnemyAlmightyCreator>());
-
+   // スポーンテーブルの読み込み
    std::vector<std::string> spawnTableNames;
    for (int i = 1; MaxWave >= i; i++) {
       std::string tableName = "tutorialwave" + std::to_string(i);
       spawnTableNames.emplace_back(tableName);
    }
    objFactory.LoadSpawnTables("tutorial", spawnTableNames);
+   // 最初のスポーンテーブルを設定
    objFactory.SetSpawnTable("tutorialwave1");
+   // プレイヤー生成
    auto player = objFactory.Create("Player");
-   auto& objServer = gameInstance.objServer();
+   auto& objServer = Game::Game::GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
+   // プレイヤーの現在のステータスを反映
+   auto& gameInstance = Game::Game::GetInstance();
    gameInstance.playerStatus(_param->GetBoolParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
-   auto& soundComponent = gameInstance.soundComponent();
+   // 音源の再生
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Stop("TitleBgm");
    soundComponent.PlayLoop("TutorialBgm");
+
    _born = true;
+
    ModeInGameBase::Enter();
 }
 
@@ -113,7 +121,7 @@ void ModeTutorial::Input(InputManager& input) {
 }
 
 void ModeTutorial::Update() {
-   auto& objFactory = Game::Game::GetInstance().objFactory();
+   auto& objFactory = Game::Game::GetObjFactory();
    if (!TipsAlive()) {
       switch (_tutorialProgress) {
       case 1:
@@ -146,7 +154,7 @@ void ModeTutorial::Render() {
 }
 
 bool ModeTutorial::TipsAlive() {
-   auto& runSprites = Game::Game::GetInstance().sprServer().runSprites();
+   auto& runSprites = Game::Game::GetSprServer().runSprites();
    // 動的配列に一致する要素があるか判定を行う
    auto isActiveTips = std::any_of(runSprites.begin(), runSprites.end(),
       [](std::unique_ptr<Sprite::SpriteBase>& spr) {
@@ -156,7 +164,7 @@ bool ModeTutorial::TipsAlive() {
 }
 
 void ModeTutorial::ClearJudge(std::string_view key) {
-   auto& runSprites = Game::Game::GetInstance().sprServer().runSprites();
+   auto& runSprites = Game::Game::GetSprServer().runSprites();
    for (auto& sprite : runSprites) {
       if (sprite->GetSprType() == Sprite::SpriteBase::SpriteType::TutorialTips) {
          auto& tips = dynamic_cast<Tutorial::TutorialTips&>(*sprite);
@@ -169,22 +177,22 @@ void ModeTutorial::ClearJudge(std::string_view key) {
 
 void ModeTutorial::TipsBorn(std::string_view key){
    auto tips = std::make_unique<Tutorial::TutorialTips>(key);
-   auto& sprServer = Game::Game::GetInstance().sprServer();
+   auto& sprServer = Game::Game::GetSprServer();
    sprServer.Add(std::move(tips));
 }
 
 void ModeTutorial::FallObjectRespawn() {
    // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& runObjects = gameInstance.objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    // 動的配列に一致する要素があるか判定を行う
    auto isActiveFallObject = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の落下オブジェクトはあるか
          return (obj->GetObjType() == Object::ObjectBase::ObjectType::FallObject) && obj->IsActive(); });
    if (!isActiveFallObject) {
-      auto fallObject = gameInstance.objFactory().Create("FallObject");
+      auto fallObject = Game::Game::GetObjFactory().Create("FallObject");
       fallObject->position({ 0,0,0 });
-      gameInstance.objServer().Add(std::move(fallObject));
+      auto& objServer = Game::Game::GetObjServer();
+      objServer.Add(std::move(fallObject));
    }
 }

@@ -45,8 +45,8 @@ void ModePoor::Enter() {
    };
    using Vector4 = AppFrame::Math::Vector4;
 
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& objFactory = gameInstance.objFactory();
+   
+   auto& objFactory = Game::Game::GetObjFactory();
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
    objFactory.Register("Gatling", std::make_unique<Create::GatlingCreator>());
    objFactory.Register("Bullet", std::make_unique<Create::BulletCreator>());
@@ -66,14 +66,14 @@ void ModePoor::Enter() {
 
    auto player = objFactory.Create("Player");
    // アクターサーバーに登録※個別アクセス用
-   auto& objServer = gameInstance.objServer();
+   auto& objServer = Game::Game::GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   auto& soundComponent = gameInstance.soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.PlayLoop("PoorBattleBgm");
    _wave = 1;
    _playSound = true;
-
+   auto& gameInstance = Game::Game::GetInstance();
    gameInstance.ingameTimer(0);
    gameInstance.playerStatus(_playerParam->GetDoubleParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
@@ -85,7 +85,8 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
    if (input.GetXJoypad().BackClick()) {
       auto& gameInstance = Game::Game::GetInstance();
       gameInstance.isPoorClear(true);
-      gameInstance.soundComponent().Stop("PoorBattleBgm");
+      auto& soundComponent = Game::Game::GetSoundComponent();
+      soundComponent.Stop("PoorBattleBgm");
       auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
       modeServer.GoToMode("Loading",'S');
    }
@@ -95,7 +96,7 @@ void ModePoor::Input(AppFrame::Input::InputManager& input) {
 
 void ModePoor::Update() {
    if (_playSound) {
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Play("PoorBattleStartVoice");
       _playSound = false;
    }
@@ -109,25 +110,28 @@ void ModePoor::Render() {
 
 void ModePoor::WaveProcess() {
    // オブジェクト一括管理クラスから処理を回す用の動的配列を取得する
-   auto& gameInstance = Game::Game::GetInstance();
-   auto&& runObjects = gameInstance.objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    // 動的配列に一致する要素があるか判定を行う
    auto _IsActiveEnemy = std::any_of(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の雑魚敵はいるか
-         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && obj->IsActive(); });
+         return (obj->GetObjType() == Object::ObjectBase::ObjectType::PoorEnemy) && 
+            obj->IsActive(); });
    // 生存状態の雑魚敵がいないか
    if (!_IsActiveEnemy) {
       // 最大waveに達したならモード遷移を行う
       if (_wave >= _param->GetIntParam("max_wave")) {
-         gameInstance.soundComponent().Play("PoorBattleEndVoice");
+         auto& soundComponent = Game::Game::GetSoundComponent();
+         soundComponent.Play("PoorBattleEndVoice");
+         auto& gameInstance = Game::Game::GetInstance();
          gameInstance.isPoorClear(true);
          auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
          modeServer.GoToMode("Loading", 'S');
          return;
       }
       // 次のwaveのスポーンテーブルを設定する
-      gameInstance.objFactory().SetSpawnTable("poorwave" + std::to_string(_wave + 1));
+      auto& objFactory = Game::Game::GetObjFactory();
+      objFactory.SetSpawnTable("poorwave" + std::to_string(_wave + 1));
       // waveを進める
       _wave++;
    }

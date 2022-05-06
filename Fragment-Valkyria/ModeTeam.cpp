@@ -40,6 +40,6 @@ void ModeTeam::Update() {
 }
 
 void ModeTeam::Render() {
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(0, 0, 1.0, 0.0, _grHandle);
 }

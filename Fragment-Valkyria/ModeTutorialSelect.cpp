@@ -24,9 +24,10 @@ ModeTutorialSelect::ModeTutorialSelect() {
 }
 
 void ModeTutorialSelect::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   // 画像の読み込み
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("tutorial");
-
+   // 各画像を画像ハンドルマップに登録
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _handleMap = {
       {"TutorialCusor",   resServer.GetTexture("TutorialCusor")},
@@ -35,7 +36,7 @@ void ModeTutorialSelect::Init() {
       {"No",              resServer.GetTexture("No")},
       {"Yes",             resServer.GetTexture("Yes")}
    };
-
+   // 各状態の登録
    _stateServer = std::make_unique<AppFrame::State::StateServer>("No", std::make_shared <StateNo>(*this));
    _stateServer->Register("Yes", std::make_shared<StateYes>(*this));
 }
@@ -58,7 +59,7 @@ void ModeTutorialSelect::Render() {
 }
 
 void ModeTutorialSelect::StateBase::Draw() {
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(0, 0, 1.0, 0.0, _owner._handleMap["TutorialSelectBg"]);
    texComponent.DrawTexture(TutorialIsSkipX, TutorialIsSkipY, 1.0, 0.0, _owner._handleMap["TutorialIsSkip"]);
    texComponent.DrawTexture(YesX, YesY, 1.0, 0.0, _owner._handleMap["Yes"]);
@@ -72,14 +73,13 @@ void ModeTutorialSelect::StateYes::Enter() {
 }
 
 void ModeTutorialSelect::StateYes::Input(InputManager& input) {
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& soundComponent = gameInstance.soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DDownClick() || input.GetKeyboard().DownClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("No");
    }
    if (input.GetXJoypad().AClick() || input.GetKeyboard().SpaceClick()) {
-      
+      auto& gameInstance = Game::Game::GetInstance();
       gameInstance.isTutorialClear(true);
       soundComponent.Play("SystemDecision");
       soundComponent.Stop("TitleBgm");
@@ -94,7 +94,7 @@ void ModeTutorialSelect::StateNo::Enter() {
 }
 
 void ModeTutorialSelect::StateNo::Input(InputManager& input) {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (input.GetXJoypad().DUpClick() || input.GetKeyboard().UpClick()) {
       soundComponent.Play("SystemSelect");
       _owner._stateServer->GoToState("Yes");
