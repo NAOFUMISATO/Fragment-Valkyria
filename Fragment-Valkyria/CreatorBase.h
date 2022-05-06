@@ -42,11 +42,6 @@ namespace FragmentValkyria {
           * \return 派生先で定義
           */
          virtual std::unique_ptr<Object::ObjectBase> Create() = 0;
-         /**
-          * \brief ゲーム本体クラスからJson読み込み用クラスの参照の取得
-          * \return Json読み込み用クラスの参照
-          */
-         inline AppFrame::Resource::LoadResourceJson& GetLoadJson() const;
       };
    }
 }

@@ -16,8 +16,8 @@ using namespace FragmentValkyria;
 
 std::unique_ptr<Object::ObjectBase> GatlingCreator::Create() {
    auto gatling = std::make_unique<Enemy::Gatling>();
-   auto& gameInstance = Game::Game::GetInstance();
-   auto startPos = gameInstance.objServer().GetVecData("GatlingPos");
+   auto& objServer = Game::Game::GetObjServer();
+   auto startPos = objServer.GetVecData("GatlingPos");
    gatling->position(startPos);
 
    auto state = std::make_unique<AppFrame::State::StateServer>("Chase",

@@ -38,10 +38,12 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
       auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
       modeServer.PushBack("Option");
    }
-   auto& gameInstance = Game::Game::GetInstance();
-    gameInstance.objServer().Input(input);
-    gameInstance.efcServer().Input(input);
-    gameInstance.sprServer().Input(input);
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.Input(input);
+    auto& efcServer = Game::Game::GetEfcServer();
+    efcServer.Input(input);
+    auto& sprServer = Game::Game::GetSprServer();
+    sprServer.Input(input);
 #ifdef _DEBUG
    _padLeftX = input.GetXJoypad().LeftStickX();
    _padLeftY = input.GetXJoypad().LeftStickY();
@@ -51,26 +53,30 @@ void ModeInGameBase::Input(AppFrame::Input::InputManager& input) {
 }
 
 void ModeInGameBase::Update() {
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.objFactory().UpdateSpawn();
-   gameInstance.objServer().Update();
+   auto& objFactory = Game::Game::GetObjFactory();
+   objFactory.UpdateSpawn();
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.Update();
    _lighting->Update();
    _stage->Update();
-   gameInstance.efcServer().Update();
-   gameInstance.sprServer().Update();
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Update();
+   auto& sprServer = Game::Game::GetSprServer();
+   sprServer.Update();
+   auto& gameInstance = Game::Game::GetInstance();
    gameInstance.IngameTimerCount();
 }
 
 void ModeInGameBase::Render() {
    _lighting->Render();
    _stage->Draw();
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.objServer().Render();
-
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.Render();
    SetUseShadowMap(0, -1);
-
-   gameInstance.efcServer().Render();
-   gameInstance.sprServer().Render();
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Render();
+   auto& sprServer = Game::Game::GetSprServer();
+   sprServer.Render();
 
 #ifdef _DEBUG
    DebugDraw();
@@ -80,18 +86,22 @@ void ModeInGameBase::Render() {
 void ModeInGameBase::Exit() {
    IndividualEffectClear();
    auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.objServer().Clear();
-   gameInstance.efcServer().Clear();
-   gameInstance.sprServer().Clear();
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.Clear();
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Clear();
+   auto& sprServer = Game::Game::GetSprServer();
+   sprServer.Clear();
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    resServer.ClearModels();
-   gameInstance.objFactory().Clear();
+   auto& objFactory = Game::Game::GetObjFactory();
+   objFactory.Clear();
    DeleteLightHandleAll();
 }
 
 void ModeInGameBase::IndividualEffectClear() {
-   auto& gameInstance = Game::Game::GetInstance();
-   for (auto& object : gameInstance.objServer().runObjects()) {
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
+   for (auto& object : runObjects) {
       using enum Object::ObjectBase::ObjectType;
       if (object->GetObjType() == Gatling) {
          auto& gatling = dynamic_cast<Enemy::Gatling&>(*object);
@@ -112,7 +122,7 @@ void ModeInGameBase::DebugDraw() {
    namespace AppMath = AppFrame::Math;
    using Utility = AppMath::Utility;
    // プレイヤー情報
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto playerHp = objServer.GetDoubleData("PlayerHP");
    DrawFormatString(0, 960, GetColor(255, 255, 255), "プレイヤーHP : %f", playerHp);
    auto playerPos = objServer.GetVecData("PlayerPos");

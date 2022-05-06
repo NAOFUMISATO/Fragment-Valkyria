@@ -36,8 +36,8 @@ void EffectBossCrash::Update() {
    auto frame = modeServer.frameCount() - _efcCnt;
    if (frame % _IntParam("crasheffect_frame") == 0) {
       for (int i = 0; i < _IntParam("crasheffect_count"); i++) {
-         auto& gameInstance = Game::Game::GetInstance();
-         auto largeEnemyPos = gameInstance.objServer().GetVecData("LargeEnemyPos");
+         auto& objServer = Game::Game::GetObjServer();
+         auto largeEnemyPos = objServer.GetVecData("LargeEnemyPos");
          const auto CrashDistance = _param->GetDoubleParam("crasheffect_distance");
          auto randomX = AppFrame::Math::Utility::GetRandom(-CrashDistance, CrashDistance);
          auto randomY = AppFrame::Math::Utility::GetRandom(0.0, CrashDistance);

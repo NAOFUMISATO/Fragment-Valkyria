@@ -24,14 +24,14 @@ ModeMissionCompleted::ModeMissionCompleted() {
 }
 
 void ModeMissionCompleted::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("clear");
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _grHandles = resServer.GetTextures("MissionCompleted");
 }
 
 void ModeMissionCompleted::Enter() {
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("GameClearVoice");
    soundComponent.Play("ClearResult");
 }
@@ -56,7 +56,7 @@ void ModeMissionCompleted::Render() {
    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _IntParam("bg_alpha"));
    DrawBox(0, 0, BoxWidth, BoxHeight, AppFrame::Math::Utility::GetColorCode(0, 0, 0), TRUE);
    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-   auto& texComponent= Game::Game::GetInstance().texComponent();
+   auto& texComponent= Game::Game::GetTexComponent();
    texComponent.DrawTexture(_IntParam("missioncomp_x"), _IntParam("missioncomp_y"),
       DefaultGraphScale, DefaultGraphAngle, _grHandles, _IntParam("missioncomp_animespeed"));
 }

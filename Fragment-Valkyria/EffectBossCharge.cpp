@@ -12,7 +12,7 @@
 
 using namespace FragmentValkyria::Effect;
 
-EffectBossCharge::EffectBossCharge(std::string_view key) :EffectBase{key } {
+EffectBossCharge::EffectBossCharge(std::string_view key) :EffectBase{ key } {
    SetEffectLoadHandle(key);
 }
 
@@ -21,7 +21,7 @@ void EffectBossCharge::Init() {
 }
 
 void EffectBossCharge::Update() {
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto laserPos = objServer.GetVecData("LaserPos");
    _position = laserPos;
    auto bossPos = objServer.GetVecData("LargeEnemyPos");

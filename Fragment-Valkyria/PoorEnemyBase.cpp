@@ -60,7 +60,7 @@ void PoorEnemyBase::Draw() {
 
 void PoorEnemyBase::Rotate() {
    auto [x, y, z] = _position.GetVec3();
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto toPlayer = objServer.GetVecData("PlayerPos") - Vector4(x, 0.0, z);
    toPlayer.Normalized();
    AppFrame::Math::Matrix44 rotate;
@@ -191,9 +191,10 @@ void PoorEnemyBase::StateDie::Enter() {
    _opacityRate = MaxOpacityRate;
    auto efcCrash = std::make_unique<Effect::EffectPoorCrash>("PoorCrash");
    efcCrash->position(_owner._position);
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.efcServer().Add(std::move(efcCrash));
-   gameInstance.soundComponent().Play("PoorCrash",_owner._position);
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Add(std::move(efcCrash));
+   auto& soundComponent = Game::Game::GetSoundComponent();
+   soundComponent.Play("PoorCrash",_owner._position);
 }
 
 void PoorEnemyBase::StateDie::Update() {
@@ -215,7 +216,7 @@ void PoorEnemyBase::StateDie::Draw() {
 }
 
 void PoorEnemyBase::StateSideStep::SideStepDecide() {
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto moved = objServer.GetVecData("PlayerPos") - _owner._position;
    auto [x, y, z] = moved.GetVec3();
    moved = Vector4(x, 0.0, z);

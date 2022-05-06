@@ -65,8 +65,8 @@ void ObjectFactory::UpdateSpawn() {
             auto&& object = Create(key);
             object->position(position);
             object->rotation(rotation);
-            auto& gameInstance = Game::Game::GetInstance();
-            gameInstance.objServer().Add(std::move(object));
+            auto& objServer = Game::Game::GetObjServer();
+            objServer.Add(std::move(object));
             ++_spawnProgress;
         }
     }

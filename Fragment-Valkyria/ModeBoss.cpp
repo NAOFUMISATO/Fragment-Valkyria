@@ -42,10 +42,8 @@ ModeBoss::ModeBoss() {
 
 void ModeBoss::Enter() {
    using Vector4 = AppFrame::Math::Vector4;
-   
-   auto& gameInstance = Game::Game::GetInstance();
 
-   auto& objFactory = gameInstance.objFactory();
+   auto& objFactory = Game::Game::GetObjFactory();
    // 各生成管理クラスを登録
    objFactory.Register("LargeEnemy", std::make_unique<Create::LargeEnemyCreator>());
    objFactory.Register("Player", std::make_unique<Create::PlayerCreator>());
@@ -67,12 +65,12 @@ void ModeBoss::Enter() {
    // プレイヤー生成
    auto player = objFactory.Create("Player");
    // オブジェクトサーバーにプレイヤー位置を登録
-   auto& objServer = gameInstance.objServer();
+   auto& objServer = Game::Game::GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    // オブジェクトサーバーにプレイヤーを登録
    objServer.Add(std::move(player));
-
-   gameInstance.soundComponent().Stop("PoorBattleBgm");
+   auto& soundComponent = Game::Game::GetSoundComponent();
+   soundComponent.Stop("PoorBattleBgm");
 
    ModeInGameBase::Enter();
    // ライティング処理に使用する変数を初期化
@@ -102,7 +100,7 @@ void ModeBoss::Update() {
 void ModeBoss::Render() {
    ModeInGameBase::Render();
 #ifdef _DEBUG
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto bossHp = objServer.GetDoubleData("LargeEnemyHP");
    DrawFormatString(0, 940, AppFrame::Math::Utility::GetColorCode(255, 255, 255),
       "ボスHP : %f", bossHp);
@@ -111,7 +109,7 @@ void ModeBoss::Render() {
 
 void ModeBoss::LightStaging() {
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    auto frame = modeServer.frameCount() - _lightCnt;
    if (_lightOnCount < 4) {
       if (_plus) {

@@ -45,7 +45,7 @@ void PoorEnemyMelee::StateRush::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("walk", true, _DoubleParam("rush_animespeed"));
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    _stateCnt = modeServer.frameCount();
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _moved = objServer.GetVecData("PlayerPos") - _owner._position;
    _moved.Normalized();
    _moved = _moved * _DoubleParam("rush_speed");

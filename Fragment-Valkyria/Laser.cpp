@@ -48,14 +48,14 @@ void Laser::StateIrradiation::Enter() {
    auto [x, y, z] = (_owner._end - _owner._position).GetVec3();
    auto efcDir = Vector4(0, std::atan2(-x, -z), 0);
    efcBeam->rotation(efcDir);
-   auto& efcServer = Game::Game::GetInstance().efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcBeam));
 }
 
 void Laser::StateIrradiation::Update() {
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    auto count = modeServer.frameCount();
-   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    for (auto& object : runObjects) {
       if (object->GetObjType() == Object::ObjectBase::ObjectType::LargeEnemy) {
          auto& largeEnemy = dynamic_cast<Enemy::LargeEnemy&>(*object);

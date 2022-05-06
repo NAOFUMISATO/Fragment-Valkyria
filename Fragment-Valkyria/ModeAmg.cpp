@@ -19,7 +19,7 @@ ModeAmg::ModeAmg() {
 }
 
 void ModeAmg::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("title");
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _grHandle = resServer.GetTexture("AmgLogo");
@@ -42,7 +42,7 @@ void ModeAmg::Update() {
 }
 
 void ModeAmg::Render() {
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(0, 0, 1.0, 0.0, _grHandle);
 }
 

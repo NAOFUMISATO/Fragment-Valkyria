@@ -67,8 +67,8 @@ void LargeEnemyHP::Update() {
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    auto count = modeServer.frameCount();
    // ボスHPをObjectServerから取得
-   auto& gameInstance = Game::Game::GetInstance();
-   _hp = gameInstance.objServer().GetDoubleData("LargeEnemyHP");
+   auto& objServer = Game::Game::GetObjServer();
+   _hp = objServer.GetDoubleData("LargeEnemyHP");
    auto [left, top, right, bottom] = _offSet.GetRectParams();
    // 現在の前面HPバー右座標を線形補間で計算
    auto frontHP = std::lerp(right, (right - left) * _hp / _DoubleParam("max_hp") + left, MaxRate);

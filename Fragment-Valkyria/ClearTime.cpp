@@ -55,7 +55,7 @@ void ClearTime::Draw(){
    auto [x, y] = _position.GetVec2();
    auto [firstX, secondX, thirdX, fourthX, fifthX] = _xPositions;
    auto [firstNo, secondNo, thirdNo, fourthNo, fifthNo] = _animeNos;
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(firstX, static_cast<int>(y),
       DefalutScale, DefalutAngle, _grHandles[fifthNo]);
    texComponent.DrawTexture(secondX, static_cast<int>(y),

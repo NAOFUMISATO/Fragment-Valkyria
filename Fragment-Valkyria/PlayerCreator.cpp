@@ -71,8 +71,7 @@ std::unique_ptr<Object::ObjectBase> PlayerCreator::Create() {
    // プレイヤーの状態一括管理クラスの設定
    player->stateServer(std::move(state));
 
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& sprServer = gameInstance.sprServer();
+   auto& sprServer = Game::Game::GetSprServer();
    sprServer.Add(std::make_unique<Player::PlayerHP>());
    sprServer.Add(std::make_unique<Player::RemainingBullet>());
    sprServer.Add(std::make_unique<Player::RemainingPortion>());

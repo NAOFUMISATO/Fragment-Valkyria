@@ -262,7 +262,6 @@
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ClearTime.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
-    <ClCompile Include="CreatorBase.cpp" />
     <ClCompile Include="EffectBase.cpp" />
     <ClCompile Include="EffectBossBeam.cpp" />
     <ClCompile Include="EffectBossCrash.cpp" />

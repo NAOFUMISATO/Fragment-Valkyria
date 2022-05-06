@@ -62,7 +62,7 @@ void ModeGameOver::StateBase::Draw() {
    const auto _IntParam = [&](std::string paramName) {
       return _owner._param->GetIntParam(paramName);
    };
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(0, 0, DefaultGraphScale, DefaultGraphAngle,
       _owner._handleMap["OverBg"][0]);
    texComponent.DrawTexture(_IntParam("continue_x"), _IntParam("continue_y"),
@@ -82,7 +82,7 @@ void ModeGameOver::StateContinue::Input(InputManager& input){
    if (input.GetXJoypad().AClick()) {
       auto& gameInstance = Game::Game::GetInstance();
       gameInstance.isPoorClear(false);
-      auto& soundComponent = gameInstance.soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Stop("TutorialBgm");
       soundComponent.Stop("PoorBattleBgm");
       soundComponent.Stop("BossBattleBgm");
@@ -105,7 +105,7 @@ void ModeGameOver::StateExit::Input(InputManager& input) {
       _owner._stateServer->GoToState("Continue");
    }
    if (input.GetXJoypad().AClick()) {
-      auto& soundComponent = Game::Game::GetInstance().soundComponent();
+      auto& soundComponent = Game::Game::GetSoundComponent();
       soundComponent.Stop("TutorialBgm");
       soundComponent.Stop("PoorBattleBgm");
       soundComponent.Stop("BossBattleBgm");

@@ -84,7 +84,7 @@ void LargeEnemy::Update() {
    // モデルの更新
    _modelAnimeComponent->Update();
    // オブジェクトサーバーの参照を取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    // オブジェクトサーバーに位置を通知
    objServer.RegistVector("LargeEnemyPos", _position);
    // オブジェクトサーバーにヒットポイントを通知
@@ -97,7 +97,7 @@ void LargeEnemy::Draw() {
 }
 
 void LargeEnemy::CreateGatling() {
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    // ガトリングを生成する位置を取得
    auto gatlingFramePos = _modelAnimeComponent->GetFrameChildPosion("root", "gatling3");
    // ガトリングを生成する座標を設定
@@ -107,16 +107,17 @@ void LargeEnemy::CreateGatling() {
    // オブジェクトサーバーにガトリングを打つ向きを通知
    objServer.RegistVector("GatlingMoveDirection", gatlingDirection);
    // ガトリングを生成してオブジェクトサーバーへ追加
-   auto& gameInstance = Game::Game::GetInstance();
-   auto gatling = gameInstance.objFactory().Create("Gatling");
+   auto& objFactory = Game::Game::GetObjFactory();
+   auto gatling = objFactory.Create("Gatling");
    objServer.Add(std::move(gatling));
 }
 
 void LargeEnemy::CreateLaser() {
    // レーザーを生成してオブジェクトサーバーへ追加
-   auto& gameInstance = Game::Game::GetInstance();
-   auto laser = gameInstance.objFactory().Create("Laser");
-   gameInstance.objServer().Add(std::move(laser));
+   auto& objFactory = Game::Game::GetObjFactory();
+   auto laser = objFactory.Create("Laser");
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.Add(std::move(laser));
 }
 
 void LargeEnemy::CreateFallObject() {
@@ -125,7 +126,7 @@ void LargeEnemy::CreateFallObject() {
    // 生成する数を生成されている落下オブジェクトの数に設定
    _createNum = 3;
    // 存在している落下オブジェクトの数を取得
-   auto& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
    auto fallObjectNum = std::count_if(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<FragmentValkyria::Object::ObjectBase>& object) {
          return object->GetObjType() == Object::ObjectBase::ObjectType::FallObject; });
@@ -166,7 +167,7 @@ void LargeEnemy::CreateFallObject() {
    auto randomTransMatrix = Matrix44();
    randomTransMatrix.RotateY(randomdegree, true);
    // プレイヤーの位置の取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto playerPos = objServer.GetVecData("PlayerPos");
    // プレイヤーへのベクトルの取得
    auto MoveVec = playerPos - _position;
@@ -193,8 +194,8 @@ void LargeEnemy::CreateFallObject() {
    };
    // 落下オブジェクトを生成しオブジェクトサーバーに追加
    for (auto i = 0; i < 4; ++i) {
-      auto& gameInstance = Game::Game::GetInstance();
-      auto fallObject = gameInstance.objFactory().Create("FallObject");
+      auto& objFactory = Game::Game::GetObjFactory();
+      auto fallObject = objFactory.Create("FallObject");
       // 生成された回数目の位置の配列の要素に位置を設定
       fallObject->position(startPosition[i]);
       objServer.Add(std::move(fallObject));
@@ -203,7 +204,7 @@ void LargeEnemy::CreateFallObject() {
 
 void LargeEnemy::SetLaserPosition() {
    // オブジェクトサーバーの各オブジェクトの取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto& runObjects = objServer.runObjects();
    for (auto&& objects : runObjects) {
       // 落下オブジェクトか確認
@@ -466,10 +467,10 @@ void LargeEnemy::StateFall::Update() {
 void LargeEnemy::StateFall::Exit() {
    auto efcFall = std::make_unique<Effect::EffectBossFall>("BossFall");
    efcFall->position(_owner._position);
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.efcServer().Add(std::move(efcFall));
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Add(std::move(efcFall));
    _owner._cameraComponent->SetVibValue(0.0);
-   auto& soundComponent = gameInstance.soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("BossBattleStartVoice");
    soundComponent.PlayLoop("BossBattleBgm");
 }
@@ -542,11 +543,11 @@ void LargeEnemy::StateGatling::Enter() {
 
 void LargeEnemy::StateGatling::Update() {
    // 回転していない時のフレームカウントが既定の値よりも大きく既定のフレーム数経過し攻撃していない場合
-   auto& gameInstance = Game::Game::GetInstance();
    if (_gatlingFrameCnt >= 100 && 
-      _gatlingFrameCnt % _owner._param->GetIntParam("gatling_frame") == 0 &&_owner._attack == false) {
+      _gatlingFrameCnt % _owner._param->GetIntParam("gatling_frame") == 0 &&
+      _owner._attack == false) {
       // 向かせたい方向の設定
-      auto& objServer = gameInstance.objServer();
+      auto& objServer = Game::Game::GetObjServer();
       _owner._rotateDir = objServer.GetVecData("PlayerPos") - _owner._position;
       // 攻撃していると設定
       _owner._attack = true;
@@ -567,7 +568,7 @@ void LargeEnemy::StateGatling::Update() {
          // ガトリングの弾を打つ回数の更新
          --_owner._gatlingCnt;
          // 鳴らすサウンドの設定
-         auto& soundComponent= gameInstance.soundComponent();
+         auto& soundComponent= Game::Game::GetSoundComponent();
          soundComponent.Play("BossGatling", _owner._position);
          // 攻撃していないと設定
          _owner._attack = false;
@@ -595,7 +596,7 @@ void LargeEnemy::StateDie::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("dead", false, 0.5);
    auto efcCrash = std::make_unique<Effect::EffectBossCrash>("BossCrash");
-   auto& efcServer = Game::Game::GetInstance().efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcCrash));
 }
 
@@ -623,7 +624,7 @@ void LargeEnemy::StateMove::Enter() {
    // 1だった場合
    if (result) {
       // プレイヤーへの向きのベクトルを取得
-      auto& objServer = Game::Game::GetInstance().objServer();
+      auto& objServer = Game::Game::GetObjServer();
       _owner._moved = objServer.GetVecData("PlayerPos") - _owner._position;
       // 単位化する
       _owner._moved.Normalized();
@@ -670,7 +671,7 @@ void LargeEnemy::StateMove::Update() {
          // 移動後にプレイヤーへの向きを取得する場合
          if (_endGetplyPos) {
             // プレイヤーへの向きのベクトルを取得
-            auto& objServer = Game::Game::GetInstance().objServer();
+            auto& objServer = Game::Game::GetObjServer();
             _owner._moved = objServer.GetVecData("PlayerPos") - _owner._position;
             // 単位化する
             _owner._moved.Normalized();
@@ -711,8 +712,7 @@ void LargeEnemy::StateLaser::Enter() {
    // レーザーを生成する位置を設定
    _owner.SetLaserPosition();
    // 攻撃する方向を設定
-   auto& gameInstance = Game::Game::GetInstance();
-   auto& objServer = gameInstance.objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _owner._rotateDir = objServer.GetVecData("LaserDirectionPos") - _owner._position;
    // 向かせたい方向のベクトルを大きくする値を設定
    _owner._rotateEnlarge = 10.0;
@@ -727,7 +727,7 @@ void LargeEnemy::StateLaser::Enter() {
    // モデルのアニメーションの設定
    _owner._modelAnimeComponent->ChangeAnime("beem", false);
    // 鳴らすサウンドの設定
-   auto& soundComponent = gameInstance.soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    soundComponent.Play("BossCharge",_owner._position);
    // レーザー生成位置を取得
    auto laserPos = GetLaserPos();
@@ -738,7 +738,7 @@ void LargeEnemy::StateLaser::Enter() {
    // エフェクトの位置設定
    efcCharge->position(laserPos);
    // エフェクトサーバーに登録
-   auto& efcServer = gameInstance.efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcCharge));
 
 }
@@ -754,7 +754,6 @@ void LargeEnemy::StateLaser::Update() {
    auto playTime = _owner._modelAnimeComponent->playTime();
    // 攻撃する方向へ回転させる
    _owner.AreaRotate(_owner._rotating);
-   auto& gameInstance = Game::Game::GetInstance();
    if (repeated >= 1) {
       _owner._stateServer->GoToState("Idle");
    }
@@ -773,7 +772,8 @@ void LargeEnemy::StateLaser::Update() {
          // レーザーを生成する
          _owner.CreateLaser();
          // 鳴らすサウンドの設定
-         gameInstance.soundComponent().Play("BossBeam", _owner._position);
+         auto& soundComponent = Game::Game::GetSoundComponent();
+         soundComponent.Play("BossBeam", _owner._position);
          // 攻撃していないと設定
          _owner._attack = false;
       }
@@ -787,12 +787,13 @@ void LargeEnemy::StateLaser::Update() {
    // スタン値の更新と確認
    _owner.StunCheck();
    // レーザー生成位置をオブジェクトサーバーに登録
-   gameInstance.objServer().RegistVector("LaserPos", GetLaserPos());
+   auto& objServer = Game::Game::GetObjServer();
+   objServer.RegistVector("LaserPos", GetLaserPos());
 }
 
 void LargeEnemy::StateLaser::Exit() {
    // ビーム関連エフェクトを再生していたなら停止する
-   auto& runEffects = Game::Game::GetInstance().efcServer().runEffects();
+   auto& runEffects = Game::Game::GetEfcServer().runEffects();
    for (auto& effect : runEffects) {
       // 列挙型のusing宣言
       using enum Effect::EffectBase::EffectType;
@@ -818,7 +819,7 @@ void LargeEnemy::StateFanGatling::Enter() {
    // 最初に扇状にガトリング攻撃をするときの向きのベクトルを取得するときベクトルを回転させる角度を設定
    _owner._fanAngle = -45.0;
    // プレイヤーへの向きを取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _owner._rotateDir = objServer.GetVecData("PlayerPos") - _owner._position;
    // 向かせたい方向のベクトルを大きくする値を設定
    _owner._rotateEnlarge = 50.0;
@@ -855,7 +856,7 @@ void LargeEnemy::StateFanGatling::Update() {
          // 扇状にガトリング攻撃をするときの向きのベクトルを取得するときベクトルを回転させる角度を設定
          _owner._fanAngle = 10.0;
          // 鳴らすサウンドの設定 
-         auto& soundComponent = Game::Game::GetInstance().soundComponent();
+         auto& soundComponent = Game::Game::GetSoundComponent();
          soundComponent.Play("BossGatling",_owner._position);
          // 攻撃していないと設定
          _owner._attack = false;
@@ -885,9 +886,10 @@ void LargeEnemy::StateStun::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("stan", true, 0.5);
    auto efcStan = std::make_unique<Effect::EffectBossStan>("BossStan");
    efcStan->position(_owner._position);
-   auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.efcServer().Add(std::move(efcStan));
-   gameInstance.soundComponent().Play("BossStan");
+   auto& efcServer = Game::Game::GetEfcServer();
+   efcServer.Add(std::move(efcStan));
+   auto& soundComponent = Game::Game::GetSoundComponent();
+   soundComponent.Play("BossStan");
 
 }
 
@@ -924,7 +926,7 @@ void LargeEnemy::StateConsecutiveFallObject::Enter() {
    // 指定座標分ずらす
    auto efcPos = rootFramePos + bossDir * 300.0;
    efcPreliminary->position(efcPos);
-   auto& efcServer = Game::Game::GetInstance().efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcPreliminary));
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    _stateCnt = modeServer.frameCount();
@@ -955,7 +957,7 @@ void LargeEnemy::StateConsecutiveFallObject::Update() {
 }
 
 void LargeEnemy::StateFallObject::SetPoorSpawn() {
-   auto&& runObjects = Game::Game::GetInstance().objServer().runObjects();
+   auto&& runObjects = Game::Game::GetObjServer().runObjects();
    auto _ActivePoorEnemyCount = std::count_if(runObjects.begin(), runObjects.end(),
       [](std::unique_ptr<Object::ObjectBase>& obj) {
          // 生存状態の雑魚敵は何体いるか
@@ -964,8 +966,8 @@ void LargeEnemy::StateFallObject::SetPoorSpawn() {
    if (_ActivePoorEnemyCount <= _owner._param->GetIntParam("max_poorenemy")) {
       // ランダムなスポーンテーブルを割り当てる
       auto random = AppFrame::Math::Utility::GetRandom(MinWave, _owner._param->GetIntParam("max_wave"));
-      auto& gameInstance = Game::Game::GetInstance();
-      gameInstance.objFactory().SetSpawnTable("bosswave" + std::to_string(random));
+      auto& objFactory = Game::Game::GetObjFactory();
+      objFactory.SetSpawnTable("bosswave" + std::to_string(random));
    }
 }
 
@@ -980,7 +982,7 @@ void LargeEnemy::StateMove::FootStepSound() {
    auto rightFootY = rightFootFramePos.GetY();
    auto leftFootY = leftFootFramePos.GetY();
    // 右前足の接地部分フレームは一定以上高さか
-   auto& soundComponent = Game::Game::GetInstance().soundComponent();
+   auto& soundComponent = Game::Game::GetSoundComponent();
    if (rightFootY >= FootStepHeight) {
       _footRightStep = true;    // 足音が鳴るフラグをtrue
    }
@@ -988,7 +990,7 @@ void LargeEnemy::StateMove::FootStepSound() {
       // 右足音が鳴るフラグをtrueか
       if (_footRightStep) {
          soundComponent.Play("BossFootStep", _owner._position);   // 足音の再生
-         _footRightStep = false;                                              // 足音が鳴るフラグをfalse
+         _footRightStep = false;                                  // 足音が鳴るフラグをfalse
       }
    }
    // 左前足の接地部分フレームは一定以上高さか
@@ -999,7 +1001,7 @@ void LargeEnemy::StateMove::FootStepSound() {
       // 左足音が鳴るフラグをtrueか
       if (_footLeftStep) {
          soundComponent.Play("BossFootStep", _owner._position);   // 足音の再生
-         _footLeftStep = false;                                               // 足音が鳴るフラグをfalse
+         _footLeftStep = false;                                   // 足音が鳴るフラグをfalse
       }
    }
 }
@@ -1016,13 +1018,13 @@ AppFrame::Math::Vector4 LargeEnemy::StateLaser::GetLaserPos() {
 
 void LargeEnemy::StateConsecutiveFallObject::CreateFallObject() {
    // プレイヤーの位置の取得
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    auto plyPos = objServer.GetVecData("PlayerPos");
    // プレイヤーの位置に一定の高さを足す
    plyPos.Add(0.0, 500.0, 0.0);
    // 落下オブジェクトの生成
-   auto& gameInstance = Game::Game::GetInstance();
-   auto fallObjectBase = gameInstance.objFactory().Create("FallObject");
+   auto& objFactory = Game::Game::GetObjFactory();
+   auto fallObjectBase = objFactory.Create("FallObject");
    // 落下オブジェクトの参照型にキャスト
    auto& fallObject = dynamic_cast<Enemy::FallObject&>(*fallObjectBase);
    // プレイヤーの位置に一定の高さを足した値を位置に設定

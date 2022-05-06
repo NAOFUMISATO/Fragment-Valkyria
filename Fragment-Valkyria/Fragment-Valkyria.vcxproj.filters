@@ -428,9 +428,6 @@
     <ClCompile Include="FallObjectCreator.cpp">
       <Filter>ソース ファイル\Create</Filter>
     </ClCompile>
-    <ClCompile Include="CreatorBase.cpp">
-      <Filter>ソース ファイル\Create</Filter>
-    </ClCompile>
     <ClCompile Include="Gatling.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>

@@ -25,7 +25,7 @@ Gatling::Gatling() {
 
 void Gatling::Init() {
    // 移動する方向のベクトルの設定
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _moveDirection = objServer.GetVecData("GatlingMoveDirection");
    // 移動する方向のベクトルの各成分を分解
    auto [x, y, z] = _moveDirection.GetVec3();
@@ -97,7 +97,7 @@ void Gatling::StateBase::Draw() {
 void Gatling::StateChase::Enter() {
    auto efcMuzzleFlash = std::make_unique<Effect::EffectGatlingMuzzleFlash>("GatlingMuzzleFlash");
    efcMuzzleFlash->position(_owner._position);
-   auto& efcServer = Game::Game::GetInstance().efcServer();
+   auto& efcServer = Game::Game::GetEfcServer();
    efcServer.Add(std::move(efcMuzzleFlash));
    _owner._efcGatling = std::make_unique<Effect::EffectGatlingBullet>("GatlingBullet");
    _owner._efcGatling->Init();

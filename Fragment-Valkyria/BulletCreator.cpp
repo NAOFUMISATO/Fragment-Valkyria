@@ -18,9 +18,8 @@ using namespace FragmentValkyria::Create;
 
 std::unique_ptr<Object::ObjectBase> BulletCreator::Create() {
    auto bullet = std::make_unique<Player::Bullet>();
-   auto& gameInstance = Game::Game::GetInstance();
-   for (auto&& object : gameInstance.objServer().runObjects()) {
-
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
+   for (auto&& object : runObjects) {
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
       }

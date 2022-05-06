@@ -27,18 +27,18 @@ void PoorEnemyGatling::Init() {
 
 void PoorEnemyGatling::CreateGatling() {
    auto gatlingFramePos = modelAnimeComponent().GetFrameChildPosion("root","mob_gun");
-   auto& objServer =Game::Game::GetInstance().objServer();
+   auto& objServer =Game::Game::GetObjServer();
    objServer.RegistVector("GatlingPos", gatlingFramePos);
    objServer.RegistVector("GatlingMoveDirection", _gatlingMoveDirection);
-   auto& gameInstance = Game::Game::GetInstance();
-   auto gatling = gameInstance.objFactory().Create("Gatling");
+   auto& objFactory = Game::Game::GetObjFactory();
+   auto gatling = objFactory.Create("Gatling");
    objServer.Add(std::move(gatling));
 }
 
 void PoorEnemyGatling::StateGatling::Enter() {
    _owner._modelAnimeComponent->ChangeAnime("attack", true,
       _owner._param->GetDoubleParam("gatling_animespeed"));
-   auto& objServer = Game::Game::GetInstance().objServer();
+   auto& objServer = Game::Game::GetObjServer();
    _owner._gatlingMoveDirection = objServer.GetVecData("PlayerPos") - _owner._position;
    auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
    _stateCnt = modeServer.frameCount();

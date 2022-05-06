@@ -70,26 +70,7 @@ namespace FragmentValkyria {
           * \brief 描画処理
           */
          void Render();
-         /**
-          * \brief 入力の一括管理クラスの参照を取得
-          * \return 入力の一括管理クラスのポインタ
-          */
-         inline AppFrame::Input::InputManager& inputManager() const { return *_inputManager; }
-         /**
-          * \brief サウンド管理サーバーの参照を取得
-          * \return サウンド管理サーバーのポインタ
-          */
-         inline AppFrame::Sound::SoundComponent& soundComponent() const { return *_soundComponent; }
-         /**
-          * \brief jsonファイル管理の参照を取得
-          * \return jsonファイル管理のポインタ
-          */
-         inline AppFrame::Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
-         /**
-          * \brief 画像の簡易描画クラスの参照を取得
-          * \return 画像の簡易描画クラスのポインタ
-          */
-         inline AppFrame::Texture::TextureComponent& texComponent() const { return *_texComponent; }
+
          /**
           * \brief 雑魚戦をクリアしたかの判定を返す
           * \return クリアしていればtrue,でなければfalse
@@ -188,15 +169,87 @@ namespace FragmentValkyria {
             _playerStatus = std::make_tuple(hp, bullet, portion);
          }
          /**
+          * \brief ゲームインスタンスからサウンド管理サーバーの取得
+          * \return サウンド管理サーバーの参照
+          */
+         inline static AppFrame::Sound::SoundComponent& GetSoundComponent() {
+            return Game::GetInstance().soundComponent();
+         }
+         /**
+          * \brief ゲームインスタンスからjsonファイル管理クラスの取得
+          * \return jsonファイル管理クラスの参照
+          */
+         inline static AppFrame::Resource::LoadResourceJson& GetLoadresJson() {
+            return Game::GetInstance().loadresJson();
+         }
+         /**
+          * \brief ゲームインスタンスから画像の簡易描画クラスの取得
+          * \return 画像の簡易描画クラスの参照
+          */
+         inline static AppFrame::Texture::TextureComponent& GetTexComponent() {
+            return Game::GetInstance().texComponent();
+         }
+         /**
+          * \brief ゲームインスタンスからオブジェクトの生成一括管理クラスの取得
+          * \return オブジェクトの生成一括管理クラスの参照
+          */
+         inline static Create::ObjectFactory& GetObjFactory() {
+            return Game::GetInstance().objFactory();
+         }
+         /**
+          * \brief ゲームインスタンスからステージ情報管理クラスの取得
+          * \return ステージ情報管理クラスの参照
+          */
+         inline static Stage::LoadStageFromJson& GetLoadStage(){
+            return Game::GetInstance().loadStage();
+         }
+         /**
+          * \brief ゲームインスタンスからオブジェクトサーバーの取得
+          * \return オブジェクトサーバーの参照
+          */
+         inline static Object::ObjectServer& GetObjServer() {
+            return Game::GetInstance().objServer();
+         }
+         /**
+          * \brief ゲームインスタンスからスプライトサーバーの取得
+          * \return スプライトサーバーの参照
+          */
+         inline static Sprite::SpriteServer& GetSprServer() {
+            return Game::GetInstance().sprServer();
+         }
+         /**
+          * \brief ゲームインスタンスからエフェクトサーバーの取得
+          * \return エフェクトサーバーの参照
+          */
+         inline static Effect::EffectServer& GetEfcServer() {
+            return Game::GetInstance().efcServer();
+         }
+      private:
+         /**
+          * \brief サウンド管理サーバーの参照を取得
+          * \return サウンド管理サーバーのポインタ
+          */
+         inline AppFrame::Sound::SoundComponent& soundComponent() const { return *_soundComponent; }
+         /**
+          * \brief jsonファイル管理クラスの参照を取得
+          * \return jsonファイル管理クラスのポインタ
+          */
+         inline AppFrame::Resource::LoadResourceJson& loadresJson() const { return *_loadresJson; }
+         /**
+          * \brief 画像の簡易描画クラスの参照を取得
+          * \return 画像の簡易描画クラスのポインタ
+          */
+         inline AppFrame::Texture::TextureComponent& texComponent() const { return *_texComponent; }
+         /**
           * \brief オブジェクトの生成一括管理クラスの取得
           * \return オブジェクトの生成一括管理クラスの参照
           */
-         Create::ObjectFactory& objFactory() const { return *_objFactory; }
+         inline Create::ObjectFactory& objFactory() const { return *_objFactory; }
          /**
           * \brief ステージ情報管理クラスの取得
           * \return ステージ情報管理クラスの参照
           */
-         Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
+         inline Stage::LoadStageFromJson& loadStage() const { return *_loadStage; }
          /**
           * \brief オブジェクトサーバーの参照を取得
           * \return オブジェクトサーバーの参照
@@ -212,8 +265,6 @@ namespace FragmentValkyria {
           * \return エフェクトサーバーのポインタ
           */
          inline Effect::EffectServer& efcServer() const { return *_efcServer; }
-
-      private:
          /**
           * \brief ファイルへのカレントパスを登録する
           */

@@ -22,7 +22,7 @@ ModeLoading::ModeLoading() {
 }
 
 void ModeLoading::Init() {
-   auto& loadresJson = Game::Game::GetInstance().loadresJson();
+   auto& loadresJson = Game::Game::GetLoadresJson();
    loadresJson.LoadTextures("ingame");
    auto& resServer = AppFrame::Resource::ResourceServer::GetInstance();
    _grHandle = resServer.GetTexture("LoadingBg");
@@ -32,10 +32,10 @@ void ModeLoading::Init() {
 void ModeLoading::Update() {
    if (GetASyncLoadNum() == 0) {
       SetUseASyncLoadFlag(false);
-      auto& gameInstance = Game::Game::GetInstance();
-      auto& loadresJson = gameInstance.loadresJson();
+      auto& loadresJson = Game::Game::GetLoadresJson();
       loadresJson.LoadModels("ingame");
       auto& modeServer = AppFrame::Mode::ModeServer::GetInstance();
+      auto& gameInstance = Game::Game::GetInstance();
       if (!gameInstance.isTutorialClear()) {
          modeServer.GoToMode("Tutorial", 'S');
       }
@@ -49,7 +49,7 @@ void ModeLoading::Update() {
 }
 
 void ModeLoading::Render() {
-   auto& texComponent = Game::Game::GetInstance().texComponent();
+   auto& texComponent = Game::Game::GetTexComponent();
    texComponent.DrawTexture(0,0,
       DefaultScale, DefaultAngle,_grHandle);
    texComponent.DrawTexture(LoadingX, LoadingY,

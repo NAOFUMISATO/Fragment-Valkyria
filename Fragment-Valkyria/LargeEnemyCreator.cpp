@@ -46,8 +46,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
    largeEnemy->stateServer(std::move(state));
 
    // オブジェクトサーバーの各オブジェクトを取得
-   auto& gameInstance = Game::Game::GetInstance();
-   for (auto&& object : gameInstance.objServer().runObjects()) {
+   auto& runObjects = Game::Game::GetObjServer().runObjects();
+   for (auto&& object : runObjects) {
       // プレイヤーでなければ処理をスキップして戻る
       if (object->GetObjType() != Object::ObjectBase::ObjectType::Player) {
          continue;
@@ -55,8 +55,8 @@ std::unique_ptr<Object::ObjectBase> LargeEnemyCreator::Create() {
       // ラージエネミーのカメラ管理クラスをプレイヤーのカメラ管理クラスに設定
       largeEnemy->cameraComponent(object->cameraComponent());
    }
-
-   gameInstance.sprServer().Add(std::make_unique<Enemy::LargeEnemyHP>());
+   auto& sprServer = Game::Game::GetSprServer();
+   sprServer.Add(std::make_unique<Enemy::LargeEnemyHP>());
 
    // ラージエネミーのインスタンスを返す
    return std::move(largeEnemy);
