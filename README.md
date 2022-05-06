@@ -38,6 +38,4 @@ DXライブラリ が Shift_JIS で作成されておりヘッダーをinclude�
 
 
 ■AppFrame及びFragmentValkyriaクラスダイアグラム
-「FragmentValkyriaクラスダイアグラム.pdf」ファイル参照。↓↓↓
-
-[FragmentValkyriaクラスダイアグラム.pdf](https://github.com/NAOFUMISATO/Fragment-Valkyria/files/8641152/FragmentValkyria.pdf)
+「FragmentValkyriaクラスダイアグラム.pdf」ファイル参照。（[FragmentValkyriaクラスダイアグラム.pdf](https://github.com/NAOFUMISATO/Fragment-Valkyria/files/8641152/FragmentValkyria.pdf)）
