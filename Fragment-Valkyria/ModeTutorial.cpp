@@ -81,9 +81,9 @@ void ModeTutorial::Enter() {
    auto& objServer = Game::Game::GetObjServer();
    objServer.RegistVector("PlayerPos", player->position());
    objServer.Add(std::move(player));
-   // プレイヤーの現在のステータスを反映
+   // プレイヤーの現在のステータスを最大に反映
    auto& gameInstance = Game::Game::GetInstance();
-   gameInstance.playerStatus(_param->GetBoolParam("max_hp"),
+   gameInstance.playerStatus(_param->GetDoubleParam("max_hp"),
       _IntParam("max_bullet"), _IntParam("max_portion"));
    // 音源の再生
    auto& soundComponent = Game::Game::GetSoundComponent();
