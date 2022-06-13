@@ -3,7 +3,7 @@
  * \file   Matrix44.cpp
  * \brief  4éüå≥çsóÒ
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <cmath>

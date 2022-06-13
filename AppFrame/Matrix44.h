@@ -3,7 +3,7 @@
  * \file   Matrix44.h
  * \brief  4éüå≥çsóÒÉNÉâÉX
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <cstdint>

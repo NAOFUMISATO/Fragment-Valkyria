@@ -3,7 +3,7 @@
  * \file   DxUtility.h
  * \brief  DxLibä÷êîópéZèpÉNÉâÉX
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <DxLib.h>

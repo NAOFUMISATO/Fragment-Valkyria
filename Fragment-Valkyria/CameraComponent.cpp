@@ -3,7 +3,7 @@
  * \file   CameraComponent.cpp
  * \brief  ÉJÉÅÉâä«óù
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "CameraComponent.h"

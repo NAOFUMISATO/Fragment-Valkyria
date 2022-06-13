@@ -3,7 +3,7 @@
  * \file   PlayerCreator.cpp
  * \brief  ÉvÉåÉCÉÑÅ[ÇÃê∂ê¨
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "PlayerCreator.h"

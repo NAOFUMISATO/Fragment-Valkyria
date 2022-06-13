@@ -3,7 +3,7 @@
  * \file   PoorEnemyGatling.cpp
  * \brief  ƒKƒgƒŠƒ“ƒOUŒ‚‚ğ‚µ‚Ä‚­‚éG‹›“G‚Ìˆ—‚ğ‰ñ‚·ƒNƒ‰ƒX
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "PoorEnemyGatling.h"

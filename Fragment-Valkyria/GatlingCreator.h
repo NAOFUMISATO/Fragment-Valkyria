@@ -3,7 +3,7 @@
  * \file   GatlingCreator.h
  * \brief  ガトリング攻撃の弾の生成管理クラス
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "CreatorBase.h"

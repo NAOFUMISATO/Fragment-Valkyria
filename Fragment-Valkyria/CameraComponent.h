@@ -3,7 +3,7 @@
  * \file   CameraComponent.h
  * \brief  ƒJƒƒ‰ŠÇ—ƒNƒ‰ƒX
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "AppFrame.h"

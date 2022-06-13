@@ -3,7 +3,7 @@
  * \file   PoorEnemyGatling.h
  * \brief  遠隔攻撃タイプの雑魚敵クラス
  * 
- * \author AHMD2000,NAOFUMISATO
+ * \author YUSUKEAHAMEDO,NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
 #include "PoorEnemyBase.h"

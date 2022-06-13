@@ -3,7 +3,7 @@
  * \file   Utility.h
  * \brief  有用算術クラス
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <tuple>

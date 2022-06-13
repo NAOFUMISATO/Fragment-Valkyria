@@ -3,7 +3,7 @@
  * \file   Player.cpp
  * \brief  プレイヤーの処理を回すクラス
  *
- * \author AHMD2000,NAOFUMISATO
+ * \author YUSUKEAHAMEDO,NAOFUMISATO
  * \date   December 2021
  *********************************************************************/
 #include "Player.h"

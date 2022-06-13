@@ -3,7 +3,7 @@
  * \file   LaserCreator.h
  * \brief  レーザー生成管理クラス
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "CreatorBase.h"
