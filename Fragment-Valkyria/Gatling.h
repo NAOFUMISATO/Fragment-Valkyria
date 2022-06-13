@@ -3,7 +3,7 @@
  * \file   Gatling.h
  * \brief  ガトリング攻撃の弾の処理を回すクラス
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "ObjectBase.h"

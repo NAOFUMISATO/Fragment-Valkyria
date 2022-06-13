@@ -3,7 +3,7 @@
  * \file   BulletCreator.cpp
  * \brief  âìäué„çUåÇÇÃê∂ê¨
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "BulletCreator.h"

@@ -3,7 +3,7 @@
  * \file   Vector4.h
  * \brief  4次元ベクトルクラス
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <tuple>

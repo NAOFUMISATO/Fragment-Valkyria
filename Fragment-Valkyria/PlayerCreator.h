@@ -3,7 +3,7 @@
  * \file   PlayerCreator.h
  * \brief  プレイヤーの生成管理クラス
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "CreatorBase.h"

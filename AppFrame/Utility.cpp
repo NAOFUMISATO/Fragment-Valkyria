@@ -3,7 +3,7 @@
  * \file   Utility.cpp
  * \brief  óLópéZèp
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include <random>

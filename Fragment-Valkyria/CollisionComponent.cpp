@@ -3,7 +3,7 @@
  * \file   CollisionServer.cpp
  * \brief  “–‚½‚è”»’èˆ—‚ğs‚¤ƒNƒ‰ƒX
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "CollisionComponent.h"

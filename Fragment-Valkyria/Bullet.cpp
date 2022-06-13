@@ -3,7 +3,7 @@
  * \file   Bullet.cpp
  * \brief  プレイヤーの遠隔弱攻撃の弾の処理を回すクラス
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "Bullet.h"

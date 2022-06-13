@@ -3,7 +3,7 @@
  * \file   Player.h
  * \brief  プレイヤーの処理を回すクラス
  *
- * \author NAOFUMISATO, AHMD2000
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "ObjectBase.h"

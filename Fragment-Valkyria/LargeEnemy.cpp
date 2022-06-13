@@ -3,7 +3,7 @@
  * \file   LargeEnemy.cpp
  * \brief  ラージエネミーの処理を回すクラス
  * 
- * \author AHMD2000, NAOFUMISATO
+ * \author YUSUKEAHAMEDO, NAOFUMISATO
  * \date   January 2022
  *********************************************************************/
 #include "LargeEnemy.h"

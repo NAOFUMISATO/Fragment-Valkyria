@@ -3,7 +3,7 @@
  * \file   FallObjectCreator.cpp
  * \brief  落下オブジェクトの生成
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "FallObjectCreator.h"

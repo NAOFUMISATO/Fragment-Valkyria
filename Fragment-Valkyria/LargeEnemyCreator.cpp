@@ -3,7 +3,7 @@
  * \file   LargeEnemyCreator.cpp
  * \brief  ラージエネミー生成
  * 
- * \author AHMD2000
+ * \author YUSUKEAHAMEDO
  * \date   January 2022
  *********************************************************************/
 #include "LargeEnemyCreator.h"

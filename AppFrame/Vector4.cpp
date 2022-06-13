@@ -3,7 +3,7 @@
  * \file   Vector4.cpp
  * \brief  4ŽŸŒ³ƒxƒNƒgƒ‹
  *
- * \author NAOFUMISATO
+ * \author NAOFUMISATO, YUSUKEAHAMEDO
  * \date   December 2021
  *********************************************************************/
 #include "Vector4.h"
